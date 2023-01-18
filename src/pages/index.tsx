@@ -7,6 +7,7 @@ import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import ButtonHeader from '@/components/Button/ButtonHeader'
+import LayoutClient from './../components/Layout/LayoutClient'
 
 const { Header, Footer, Content } = Layout
 const { Search } = Input
@@ -24,33 +25,9 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        <Layout>
-          <Header className='!bg-white'>
-            <Row className='flex'>
-              <Col span={15}>
-                <Image width='150px' src='/logo_pth.png' preview={false} />
-                <Search
-                  placeholder='input search text'
-                  onSearch={onSearch}
-                  style={{ width: 200 }}
-                />
-              </Col>
-              <Col span={9}>
-                <ButtonHeader name='Quản lý cửa hàng' />
-                <ButtonHeader
-                  name='Giỏ hàng'
-                  iconInput={<ShoppingCartOutlined />}
-                />
-                <ButtonHeader
-                  name='Đăng nhập'
-                  iconInput={<FontAwesomeIcon icon={faUser} />}
-                />
-              </Col>
-            </Row>
-          </Header>
-          <Content>abc</Content>
-          <Footer>Footer</Footer>
-        </Layout>
+        <LayoutClient>
+          content
+        </LayoutClient>
       </main>
     </>
   )
