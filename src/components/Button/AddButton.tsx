@@ -1,11 +1,9 @@
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { Button } from 'antd'
 import { Colors } from '@/constants'
+import { ButtonProps } from '@/utils/types/componentType'
 
-export default function AddButton(props: {
-  label: string
-  iconInput?: ReactNode
-}) {
+export default function AddButton(props: ButtonProps) {
   const [isHover, setIsHover] = useState(false)
 
   return (
@@ -27,6 +25,7 @@ export default function AddButton(props: {
       onMouseLeave={() => {
         setIsHover(false)
       }}
+      onClick={props?.onclick}
     >
       {props.label}
     </Button>
