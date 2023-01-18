@@ -10,7 +10,7 @@ const BranchManagement = memo(() => {
     </div>
   )
 
-  return <LayoutAdmin content={content} />
+  return <LayoutAdmin content={content} selected={0} />
 })
 
 BranchManagement.displayName = 'Branch Management'

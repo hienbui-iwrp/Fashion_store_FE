@@ -8,7 +8,8 @@
   --foreground-rgb: 0, 0, 0;
   --admin-primary-color: #14794f;
   --admin-seconday-color: #00d272;
-  --grey-white-color: #aaa;
+  --grey-white-color: #bbb;
+  --admin-bg-color: #f0fdf4;
 }
 
 * {
@@ -27,6 +28,7 @@ a {
   color: var(--grey-white-color) !important;
   font-size: 13px !important;
   min-height: 46px;
+  font-weight: 500 !important;
 }
 
 .ant-menu-item span:nth-child(1),
@@ -43,7 +45,7 @@ a {
   background-color: rgba(249, 117, 8, 0) !important;
   width: 100% !important;
   margin-left: 0 !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   background-image: linear-gradient(
     to right,
     var(--admin-seconday-color),
