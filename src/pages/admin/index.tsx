@@ -10,7 +10,6 @@ const BranchManagement = memo(() => {
     </div>
   )
 
-  console.log(content)
   return <LayoutAdmin content={content} />
 })
 

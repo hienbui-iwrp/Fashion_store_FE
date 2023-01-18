@@ -1,13 +1,14 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono',
-    'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono',
-    'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
   --foreground-rgb: 0, 0, 0;
   --admin-primary-color: #14794f;
-  --admin-primary-color: #00d272;
+  --admin-seconday-color: #00d272;
+  --grey-white-color: #aaa;
 }
 
 * {
@@ -19,6 +20,82 @@
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.ant-menu-item,
+.ant-menu-submenu {
+  color: var(--grey-white-color) !important;
+  font-size: 13px !important;
+  min-height: 46px;
+}
+
+.ant-menu-item span:nth-child(1),
+.ant-menu-submenu span:nth-child(1) {
+  padding-left: 20px;
+}
+
+.ant-menu-submenu:hover div span {
+  color: white !important;
+}
+
+.ant-menu-item-selected,
+.ant-menu-submenu-selected {
+  background-color: rgba(249, 117, 8, 0) !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  font-weight: 600 !important;
+  background-image: linear-gradient(
+    to right,
+    var(--admin-seconday-color),
+    rgba(0, 210, 114, 0.7),
+    rgba(0, 210, 114, 0.2),
+    rgba(229, 106, 6, 0)
+  ) !important;
+  color: white !important;
+  border-radius: 0 !important;
+  overflow: visible;
+  font-size: 15px !important;
+}
+
+.ant-menu-item-selected::before,
+.ant-menu-submenu-selected::before {
+  content: '';
+  min-height: 46px;
+  width: 6px;
+  background-color: white;
+  position: absolute;
+  left: -2px;
+}
+
+.ant-menu-submenu .ant-menu-item {
+  margin: 0 !important;
+  background-color: #004e45 !important;
+  width: 100% !important;
+  border-radius: 0;
+  font-weight: 400 !important;
+  background-image: none !important;
+  color: var(--grey-white-color) !important;
+}
+
+.ant-menu-submenu-selected .ant-menu-item-selected {
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.ant-menu-submenu-selected div {
+  color: white !important;
+}
+
+.ant-menu-submenu i {
+  color: var(--grey-white-color) !important;
+}
+.ant-menu-submenu-selected i {
+  color: white !important;
+}
+
+.ant-menu-submenu-selected .ant-menu-item-selected::before {
+  height: 0;
+  width: 0;
 }
 
 @tailwind base;
