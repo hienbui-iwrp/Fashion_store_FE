@@ -1,49 +1,65 @@
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Image } from 'antd'
 import type { MenuProps } from 'antd'
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  HomeOutlined,
-} from '@ant-design/icons'
+import { HomeOutlined } from '@ant-design/icons'
 import React, { memo } from 'react'
-import styles from '@/styles/BranchManagement.module.css'
+import styles from '@/styles/Admin.module.css'
 
 const { Header, Sider, Content } = Layout
 
 const LayoutAdmin = memo(({ content }: { content: React.ReactElement }) => {
   console.log(typeof content)
-  const items: MenuProps['items'] = [
-    HomeOutlined,
-    LaptopOutlined,
-    NotificationOutlined,
-  ].map((icon, index) => {
-    const key = String(index + 1)
+  const menuItem = [
+    { label: 'Chi nhánh', icon: HomeOutlined },
+    { label: 'Kinh doanh', icon: HomeOutlined },
+    {
+      label: 'Nhân viên',
+      icon: HomeOutlined,
+      children: ['Nhân viên', 'Yêu cầu'],
+    },
+    { label: 'Tài khoản', icon: HomeOutlined },
+    { label: 'Sự kiện', icon: HomeOutlined },
+    { label: 'Hàng hóa', icon: HomeOutlined },
+    { label: 'Kho', icon: HomeOutlined },
+    {
+      label: 'Đơn hàng',
+      icon: HomeOutlined,
+      children: ['Cửa hàng', 'Trực tuyến'],
+    },
+  ]
 
+  const items: MenuProps['items'] = menuItem.map((item, index) => {
     return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
+      key: index,
+      icon: React.createElement(item.icon),
+      label: item.label,
       onClick: () => {
-        console.log(key)
+        console.log(index)
       },
 
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1
+      children: item.children?.map((child, childIndex) => {
         return {
-          key: subKey,
-          label: `option${subKey}`,
+          key: index + '' + childIndex,
+          label: child,
+          onClick: () => {
+            console.log(index + '' + childIndex)
+          },
         }
       }),
-      style: { color: 'white' },
     }
   })
+
   return (
     <Layout>
-      <Sider className='!bg-green h-screen'>
+      <Sider className={styles.adminSider}>
+        <div className='my-8 flex-1 justify-end'>
+          <h1 className='text-center text-white font-bold	text-3xl italic font-sans'>
+            PTH Fashion
+          </h1>
+        </div>
         <Menu
-          className={styles.sider}
+          className={styles.adminMenu}
           mode='inline'
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={['0']}
           items={items}
         />
       </Sider>
