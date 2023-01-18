@@ -3,6 +3,14 @@ import type { MenuProps } from 'antd'
 import { HomeOutlined, LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
+import BranchIcon from '@/constants/asset/svg/branchIcon'
+import StaffIcon from '@/constants/asset/svg/staffIcon'
+import StatisticIcon from '@/constants/asset/svg/statisticIcon'
+import AccountIcon from '@/constants/asset/svg/accountIcon'
+import EventIcon from '@/constants/asset/svg/eventIcon'
+import GoodsIcon from '@/constants/asset/svg/goodsIcon'
+import WarehouseIcon from '@/constants/asset/svg/warehouseIcon'
+import OrderIcon from '@/constants/asset/svg/orderIcon'
 
 const { Header, Sider, Content } = Layout
 
@@ -16,28 +24,79 @@ const LayoutAdmin = ({
   const [title, setTitle] = useState('')
 
   const menuItem = [
-    { label: 'Chi nhánh', icon: HomeOutlined },
-    { label: 'Kinh doanh', icon: HomeOutlined },
+    {
+      label: 'Chi nhánh',
+      icon: BranchIcon,
+      props: {
+        size: selected == 0 ? 22 : 18,
+        height: 22,
+        stroke: selected == 0 ? '#fff' : '#bbb',
+      },
+    },
+    {
+      label: 'Kinh doanh',
+      icon: StatisticIcon,
+      props: {
+        size: selected == 1 ? 22 : 18,
+        stroke: selected == 1 ? '#fff' : '#bbb',
+      },
+    },
     {
       label: 'Nhân viên',
-      icon: HomeOutlined,
+      icon: StaffIcon,
       children: ['Nhân viên', 'Yêu cầu'],
+      props: {
+        size: selected == 20 || selected == 21 ? 22 : 18,
+        stroke: selected == 20 || selected == 21 ? '#fff' : '#bbb',
+      },
     },
-    { label: 'Tài khoản', icon: HomeOutlined },
-    { label: 'Sự kiện', icon: HomeOutlined },
-    { label: 'Hàng hóa', icon: HomeOutlined },
-    { label: 'Kho', icon: HomeOutlined },
+    {
+      label: 'Tài khoản',
+      icon: AccountIcon,
+      props: {
+        size: selected == 3 ? 22 : 18,
+        stroke: selected == 3 ? '#fff' : '#bbb',
+      },
+    },
+    {
+      label: 'Sự kiện',
+      icon: EventIcon,
+      props: {
+        size: selected == 4 ? 22 : 18,
+        stroke: selected == 4 ? '#fff' : '#bbb',
+      },
+    },
+    {
+      label: 'Hàng hóa',
+      icon: GoodsIcon,
+      props: {
+        size: selected == 5 ? 22 : 18,
+        stroke: selected == 5 ? '#fff' : '#bbb',
+      },
+    },
+    {
+      label: 'Kho',
+      icon: WarehouseIcon,
+      props: {
+        size: selected == 6 ? 22 : 18,
+        stroke: selected == 6 ? '#fff' : '#bbb',
+      },
+    },
     {
       label: 'Đơn hàng',
-      icon: HomeOutlined,
+      icon: OrderIcon,
       children: ['Cửa hàng', 'Trực tuyến'],
+      props: {
+        size: selected == 70 || selected == 71 ? 22 : 18,
+        stroke: selected == 70 || selected == 71 ? '#fff' : '#bbb',
+      },
     },
   ]
 
   const siderItems: MenuProps['items'] = menuItem.map((item, index) => {
     return {
       key: index,
-      icon: React.createElement(item.icon),
+      icon: React.createElement(item.icon, item.props),
       label: item.label,
       onClick: () => {
         console.log(index)
