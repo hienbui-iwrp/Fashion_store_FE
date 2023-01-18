@@ -8,7 +8,7 @@
   --foreground-rgb: 0, 0, 0;
   --admin-primary-color: #14794f;
   --admin-seconday-color: #00d272;
-  --grey-white-color: #bbb;
+  --gray-white-color: #bbb;
   --admin-bg-color: #f0fdf4;
 }
 
@@ -25,7 +25,7 @@ a {
 
 .ant-menu-item,
 .ant-menu-submenu {
-  color: var(--grey-white-color) !important;
+  color: var(--gray-white-color) !important;
   font-size: 13px !important;
   min-height: 46px;
   font-weight: 500 !important;
@@ -82,7 +82,7 @@ a {
   border-radius: 0;
   font-weight: 400 !important;
   background-image: none !important;
-  color: var(--grey-white-color) !important;
+  color: var(--gray-white-color) !important;
 }
 
 .ant-menu-submenu-selected .ant-menu-item-selected {
@@ -95,7 +95,7 @@ a {
 }
 
 .ant-menu-submenu i {
-  color: var(--grey-white-color) !important;
+  color: var(--gray-white-color) !important;
 }
 .ant-menu-submenu-selected i {
   color: white !important;

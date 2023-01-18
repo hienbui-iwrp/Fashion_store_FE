@@ -3,14 +3,17 @@ import type { MenuProps } from 'antd'
 import { HomeOutlined, LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
-import BranchIcon from '@/constants/asset/svg/branchIcon'
-import StaffIcon from '@/constants/asset/svg/staffIcon'
-import StatisticIcon from '@/constants/asset/svg/statisticIcon'
-import AccountIcon from '@/constants/asset/svg/accountIcon'
-import EventIcon from '@/constants/asset/svg/eventIcon'
-import GoodsIcon from '@/constants/asset/svg/goodsIcon'
-import WarehouseIcon from '@/constants/asset/svg/warehouseIcon'
-import OrderIcon from '@/constants/asset/svg/orderIcon'
+import { Colors } from '@/constants/colors'
+import {
+  AccountIcon,
+  BranchIcon,
+  EventIcon,
+  GoodsIcon,
+  OrderIcon,
+  StaffIcon,
+  StatisticIcon,
+  WarehouseIcon,
+} from '@/constants/asset/svg'
 
 const { Header, Sider, Content } = Layout
 
@@ -30,7 +33,7 @@ const LayoutAdmin = ({
       props: {
         size: selected == 0 ? 22 : 18,
         height: 22,
-        stroke: selected == 0 ? '#fff' : '#bbb',
+        stroke: selected == 0 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -38,7 +41,7 @@ const LayoutAdmin = ({
       icon: StatisticIcon,
       props: {
         size: selected == 1 ? 22 : 18,
-        stroke: selected == 1 ? '#fff' : '#bbb',
+        stroke: selected == 1 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -47,7 +50,7 @@ const LayoutAdmin = ({
       children: ['Nhân viên', 'Yêu cầu'],
       props: {
         size: selected == 20 || selected == 21 ? 22 : 18,
-        stroke: selected == 20 || selected == 21 ? '#fff' : '#bbb',
+        stroke: selected == 20 || selected == 21 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -55,7 +58,7 @@ const LayoutAdmin = ({
       icon: AccountIcon,
       props: {
         size: selected == 3 ? 22 : 18,
-        stroke: selected == 3 ? '#fff' : '#bbb',
+        stroke: selected == 3 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -63,7 +66,7 @@ const LayoutAdmin = ({
       icon: EventIcon,
       props: {
         size: selected == 4 ? 22 : 18,
-        stroke: selected == 4 ? '#fff' : '#bbb',
+        stroke: selected == 4 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -71,7 +74,7 @@ const LayoutAdmin = ({
       icon: GoodsIcon,
       props: {
         size: selected == 5 ? 22 : 18,
-        stroke: selected == 5 ? '#fff' : '#bbb',
+        stroke: selected == 5 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -79,7 +82,7 @@ const LayoutAdmin = ({
       icon: WarehouseIcon,
       props: {
         size: selected == 6 ? 22 : 18,
-        stroke: selected == 6 ? '#fff' : '#bbb',
+        stroke: selected == 6 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -88,7 +91,7 @@ const LayoutAdmin = ({
       children: ['Cửa hàng', 'Trực tuyến'],
       props: {
         size: selected == 70 || selected == 71 ? 22 : 18,
-        stroke: selected == 70 || selected == 71 ? '#fff' : '#bbb',
+        stroke: selected == 70 || selected == 71 ? Colors.white : Colors.gray,
       },
     },
   ]
@@ -147,7 +150,7 @@ const LayoutAdmin = ({
         >
           <Button
             className='border-0 flex items-center	'
-            style={{ color: '#14794f' }}
+            style={{ color: Colors.adminGreen900 }}
             icon={<LogoutOutlined />}
             size={'small'}
           >
