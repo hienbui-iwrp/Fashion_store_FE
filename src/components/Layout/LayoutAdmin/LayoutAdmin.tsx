@@ -195,17 +195,19 @@ const LayoutAdmin = ({
   return (
     <Layout>
       <Sider className={styles.adminSider}>
-        <div className='my-8 flex-1 justify-end'>
-          <h1 className='text-center text-white font-bold	text-3xl italic font-sans'>
-            PTH Fashion
-          </h1>
+        <div className={styles.adminContainer}>
+          <div className='my-8 flex-1 justify-end'>
+            <h1 className='text-center text-white font-bold	text-3xl italic font-sans'>
+              PTH Fashion
+            </h1>
+          </div>
+          <Menu
+            className={styles.adminMenu}
+            mode='inline'
+            defaultSelectedKeys={[selected.toString()]}
+            items={siderItems}
+          />
         </div>
-        <Menu
-          className={styles.adminMenu}
-          mode='inline'
-          defaultSelectedKeys={[selected.toString()]}
-          items={siderItems}
-        />
       </Sider>
       <Layout>
         <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12'>
