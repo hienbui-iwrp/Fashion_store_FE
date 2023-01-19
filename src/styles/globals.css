@@ -106,6 +106,13 @@ a {
   width: 0;
 }
 
+.ant-table-body::-webkit-scrollbar {
+  display: none;
+}
+.ant-table-thead .ant-table-cell {
+  background-color: white !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

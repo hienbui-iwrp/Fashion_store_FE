@@ -3,7 +3,6 @@ import * as React from 'react'
 import { memo } from 'react'
 
 const SvgComponent = (props: SvgIcon) => {
-  console.log(props)
   return (
     <svg
       width={props.size ?? 23}
