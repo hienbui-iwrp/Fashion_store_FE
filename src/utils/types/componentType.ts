@@ -6,8 +6,10 @@ export interface ButtonProps {
   onclick?: () => void
 }
 
-export interface TableProps {
-  name?: string
-  label: string[]
-  data: string[][]
+export interface TableListProps<T> {
+  data: T[]
+  title: string
+  columns: any
+  editModal?: ReactNode
+  selectUrl?: string
 }
