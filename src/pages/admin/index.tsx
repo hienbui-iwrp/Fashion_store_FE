@@ -5,6 +5,7 @@ import AddButton from '@/components/Button/AddButton'
 import TableList from '@/components/Table/table'
 import { ColumnsType } from 'antd/es/table'
 import { Colors } from '@/constants'
+import axios from 'axios'
 
 interface DataType {
   id: string
@@ -13,57 +14,39 @@ interface DataType {
 }
 
 const BranchManagement = memo(() => {
-  const [data, setData] = useState<DataType[]>([
-    {
-      id: '1',
-      name: 'Chi nhánh 1',
-      address: `New York No. Lake Park`,
-    },
-    {
-      id: '2',
-      name: 'Chi nhánh 2',
-      address: ` Lake Park`,
-    },
-    {
-      id: '3',
-      name: 'Chi nhánh 3',
-      address: ` Lake Park`,
-    },
-    {
-      id: '4',
-      name: 'Chi nhánh 4',
-      address: `New York No. Lake Park`,
-    },
-    {
-      id: '5',
-      name: 'Chi nhánh 5',
-      address: `New York No. Lake Park`,
-    },
-    {
-      id: '6',
-      name: 'Chi nhánh 6',
-      address: `New York No. Lake Park`,
-    },
-  ])
+  const [data, setData] = useState<DataType[]>([])
+
   const columns: ColumnsType<DataType> = []
-  for (const key in data[0]) {
-    columns.push({
-      title: key,
-      dataIndex: key,
-      sorter: (a: DataType, b: DataType) => (a[key] > b[key] ? 1 : -1),
-      ellipsis: true,
-      render(text: string, record: DataType, index: number) {
-        return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
+  if (data[0])
+    for (const key in data[0]) {
+      columns.push({
+        title: key,
+        dataIndex: key,
+        sorter: (a: DataType, b: DataType) => (a[key] > b[key] ? 1 : -1),
+        ellipsis: true,
+        render(text: string, record: DataType, index: number) {
+          return {
+            props: {
+              style: {
+                background: index % 2 ? Colors.white : Colors.adminBackground,
+              },
             },
-          },
-          children: <div>{text}</div>,
-        }
-      },
+            children: <div>{text}</div>,
+          }
+        },
+      })
+    }
+
+  const getData = async () => {
+    await axios.get(`http://localhost:3000/api/branchData`).then((res) => {
+      console.log(res)
+      setData(res.data)
     })
   }
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   const content = (
     <div>
