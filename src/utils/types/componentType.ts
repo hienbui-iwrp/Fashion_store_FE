@@ -1,9 +1,10 @@
 import { ReactNode } from 'react'
 
 export interface ButtonProps {
-  label: string
+  label?: string
   iconInput?: ReactNode
-  onclick?: () => void
+  onClick?: (e?: any) => void
+  borderRadius?: number
 }
 
 export interface TableListProps<T> {

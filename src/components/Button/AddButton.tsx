@@ -13,9 +13,11 @@ export default function AddButton(props: ButtonProps) {
         color: Colors.white,
         border: 0,
         fontWeight: 'bold',
-        borderRadius: 20,
-        paddingLeft: 24,
-        paddingRight: 24,
+        borderRadius: props.borderRadius ?? 20,
+        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
       icon={props?.iconInput}
       size='middle'
@@ -25,9 +27,9 @@ export default function AddButton(props: ButtonProps) {
       onMouseLeave={() => {
         setIsHover(false)
       }}
-      onClick={props?.onclick}
+      onClick={props?.onClick}
     >
-      {props.label}
+      {props.label ?? ''}
     </Button>
   )
 }
