@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Table } from 'antd'
 import type { TableProps } from 'antd/es/table'
-import { Colors } from '@/constants'
+import { BASE_URL, Colors } from '@/constants'
 import { TableListProps } from '@/utils/types/componentType'
+import { useRouter } from 'next/router'
 
 const TableList = function <T extends object>(props: TableListProps<T>) {
+  const router = useRouter()
+
   const tableProps: TableProps<T> = {
     bordered: false,
     loading: false,
@@ -37,7 +40,9 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         dataSource={props.data ?? []}
         onRow={(record, index) => {
           return {
-            onClick: (event) => {},
+            onClick: (event) => {
+              router.push(props.selectUrl ?? BASE_URL)
+            },
           }
         }}
       />
