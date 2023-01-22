@@ -7,7 +7,8 @@ import { ColumnsType } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
-import styles from '@/styles/Admin.module.css'
+import { Button } from 'antd'
+import { useRouter } from 'next/router'
 
 interface DataType {
   id: string
@@ -15,8 +16,10 @@ interface DataType {
   address: string
 }
 
-const BranchManagement = memo(() => {
+const BranchDetail = memo(() => {
   const [data, setData] = useState<DataType[]>([])
+  const router = useRouter()
+  console.log(router.query)
 
   const columns: ColumnsType<DataType> = []
   if (data[0]) {
@@ -69,7 +72,6 @@ const BranchManagement = memo(() => {
 
   const getData = async () => {
     await axios.get(`http://localhost:3000/api/branchData`).then((res) => {
-      console.log(res)
       setData(res.data)
     })
   }
@@ -79,7 +81,7 @@ const BranchManagement = memo(() => {
   }, [])
 
   const content = (
-    <div className={styles.adminContentContainer}>
+    <div>
       <AddButton label='Thêm mới' />
       <TableList<DataType>
         data={data}
@@ -93,6 +95,6 @@ const BranchManagement = memo(() => {
   return <LayoutAdmin content={content} selected={0} />
 })
 
-BranchManagement.displayName = 'Branch Management'
+BranchDetail.displayName = 'Branch Detail'
 
-export default BranchManagement
+export default BranchDetail
