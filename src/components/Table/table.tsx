@@ -28,6 +28,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
   return (
     <div
       style={{
+        marginTop: 20,
         paddingLeft: 30,
         paddingRight: 30,
         backgroundColor: Colors.white,
