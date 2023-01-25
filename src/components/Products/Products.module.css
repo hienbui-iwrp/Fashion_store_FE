@@ -1,0 +1,10 @@
+.productsSortPrice {
+  display:flex;
+  flex-direction: column;
+}
+
+.productsSortPrice label {
+  margin-inline-start: 0px !important;
+  width: fit-content;
+}
+
