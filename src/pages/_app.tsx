@@ -26,4 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </ConfigProvider>
     )
   }
+  return (
+    <Component {...pageProps} />
+  )
 }
