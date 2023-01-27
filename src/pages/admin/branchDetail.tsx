@@ -8,6 +8,7 @@ import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Row, Image, List, Space } from 'antd'
 import { useRouter } from 'next/router'
+import { LineChart } from '@/components/LineChart'
 
 const BranchDetail = () => {
   const [loading, setLoading] = useState(false)
@@ -34,7 +35,7 @@ const BranchDetail = () => {
   const content = (
     <>
       <Card
-        className='max-w-screen-lg'
+        className='max-w-full-lg'
         title={'Chi nhánh 1'.toUpperCase()}
         bordered={false}
         loading={loading}
@@ -53,8 +54,6 @@ const BranchDetail = () => {
           <Col xs={24} sm={12}>
             <List
               size={30}
-              // header={<div>Header</div>}
-              // footer={<div>Footer</div>}
               bordered={false}
               dataSource={data}
               renderItem={(item) => {
@@ -79,6 +78,9 @@ const BranchDetail = () => {
             </Row>
           </Col>
         </Row>
+      </Card>
+      <Card className='!max-w-full-lg'>
+        <LineChart />
       </Card>
     </>
   )

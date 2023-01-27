@@ -1,4 +1,4 @@
-import { Layout, Menu, Image, Button, Dropdown } from 'antd'
+import { Layout, Menu, Image, Button, Dropdown, Space } from 'antd'
 import type { MenuProps } from 'antd'
 import { LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
@@ -223,7 +223,11 @@ const LayoutAdmin = ({
           </Dropdown>
         </Header>
         <Content className='bg-emerald-50	!min-h-screen'>
-          <div className={styles.adminContentContainer}> {content}</div>
+          <div className={styles.adminContentContainer}>
+            <Space direction='vertical' size={20}>
+              {content}
+            </Space>
+          </div>
         </Content>
       </Layout>
     </Layout>
