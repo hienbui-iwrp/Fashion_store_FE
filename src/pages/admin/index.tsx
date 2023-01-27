@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { memo } from 'react'
 import LayoutAdmin from '@/components/Layout/LayoutAdmin/LayoutAdmin'
 import AddButton from '@/components/Button/AddButton'
-import TableList from '@/components/Table/table'
 import { ColumnsType } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
+import { TableList } from '@/components/TableList'
+import { Space } from 'antd'
 
 interface DataType {
   id: string
@@ -15,8 +15,9 @@ interface DataType {
   address: string
 }
 
-const BranchManagement = memo(() => {
+const BranchManagement = () => {
   const [data, setData] = useState<DataType[]>([])
+  const [loading, setLoading] = useState(true)
 
   const columns: ColumnsType<DataType> = []
   if (data[0]) {
@@ -69,29 +70,30 @@ const BranchManagement = memo(() => {
 
   const getData = async () => {
     await axios.get(`http://localhost:3000/api/branchData`).then((res) => {
-      console.log(res)
       setData(res.data)
     })
   }
 
   useEffect(() => {
     getData()
+    setLoading(false)
   }, [])
 
   const content = (
-    <div className={styles.adminContentContainer}>
+    <Space direction='vertical' size={20}>
       <AddButton label='Thêm mới' />
       <TableList<DataType>
         data={data}
         title='Danh sách chi nhánh'
         columns={columns}
-        selectUrl={BASE_URL}
+        selectUrl={BASE_URL + 'admin/branchDetail'}
+        loading={loading}
       />
-    </div>
+    </Space>
   )
 
   return <LayoutAdmin content={content} selected={0} />
-})
+}
 
 BranchManagement.displayName = 'Branch Management'
 
