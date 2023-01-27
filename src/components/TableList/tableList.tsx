@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Table } from 'antd'
 import type { TableProps } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
@@ -10,7 +10,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
 
   const tableProps: TableProps<T> = {
     bordered: false,
-    loading: false,
+    loading: props?.loading,
     size: 'small',
     expandable: undefined,
     title: () => (
@@ -20,7 +20,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     ),
     footer: undefined,
     showHeader: true,
-    scroll: { x: '60vw', y: '50vh' },
+    scroll: { x: props?.scroll?.x ?? '60vw', y: props?.scroll?.y ?? '60vh' },
     tableLayout: 'auto',
     pagination: { position: ['bottomRight'], pageSize: 25 },
   }
@@ -28,7 +28,6 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
   return (
     <div
       style={{
-        marginTop: 20,
         paddingLeft: 30,
         paddingRight: 30,
         backgroundColor: Colors.white,

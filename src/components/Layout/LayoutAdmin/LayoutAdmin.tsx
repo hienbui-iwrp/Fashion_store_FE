@@ -1,6 +1,6 @@
 import { Layout, Menu, Image, Button, Dropdown } from 'antd'
 import type { MenuProps } from 'antd'
-import { HomeOutlined, LogoutOutlined } from '@ant-design/icons'
+import { LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
 import { Colors } from '@/constants/colors'
@@ -195,7 +195,7 @@ const LayoutAdmin = ({
   return (
     <Layout>
       <Sider className={styles.adminSider}>
-        <div className={styles.adminContainer}>
+        <div className={styles.adminContainer + ' z-20'}>
           <div className='my-8 flex-1 justify-end'>
             <h1 className='text-center text-white font-bold	text-3xl italic font-sans'>
               PTH Fashion
@@ -209,8 +209,8 @@ const LayoutAdmin = ({
           />
         </div>
       </Sider>
-      <Layout>
-        <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12'>
+      <Layout className='relative !w-full'>
+        <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12 !sticky top-0 z-10'>
           <span className='text-black font-bold	text-xl leading-none	'>
             {title}
           </span>
@@ -222,7 +222,9 @@ const LayoutAdmin = ({
             />
           </Dropdown>
         </Header>
-        <Content className='bg-emerald-50	'>{content}</Content>
+        <Content className='bg-emerald-50	!min-h-screen'>
+          <div className={styles.adminContentContainer}> {content}</div>
+        </Content>
       </Layout>
     </Layout>
   )
