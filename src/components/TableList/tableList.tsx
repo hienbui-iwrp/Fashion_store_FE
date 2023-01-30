@@ -38,10 +38,10 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         {...tableProps}
         columns={props.columns}
         dataSource={props.data ?? []}
-        onRow={(record, index) => {
+        onRow={(record: any, index) => {
           return {
             onClick: (event) => {
-              router.push(props.selectUrl ?? BASE_URL)
+              router.push(props.selectUrl + `?id=${record.id}` ?? BASE_URL)
             },
           }
         }}

@@ -6,8 +6,8 @@
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
   --foreground-rgb: 0, 0, 0;
-  --admin-primary-color: #14794f;
-  --admin-seconday-color: #00d272;
+  --admin-green900: #14794f;
+  --admin-green500: #00d272;
   --gray-white-color: #bbb;
   --admin-bg-color: #f0fdf4;
 }
@@ -48,7 +48,7 @@ a {
   font-weight: 700 !important;
   background-image: linear-gradient(
     to right,
-    var(--admin-seconday-color),
+    var(--admin-green500),
     rgba(0, 210, 114, 0.7),
     rgba(0, 210, 114, 0.2),
     rgba(229, 106, 6, 0)
@@ -109,8 +109,25 @@ a {
 .ant-table-body::-webkit-scrollbar {
   display: none;
 }
+
 .ant-table-thead .ant-table-cell {
   background-color: white !important;
+}
+
+.ant-picker-time-panel-column::-webkit-scrollbar {
+  display: none;
+}
+
+.ant-picker-dropdown .ant-btn {
+  background-color: var(--admin-green900);
+}
+
+.ant-picker-dropdown .ant-btn:hover {
+  background-color: var(--admin-green500);
+}
+
+.ant-picker-dropdown .ant-picker-now-btn:hover {
+  color: var(--admin-green500);
 }
 
 @tailwind base;

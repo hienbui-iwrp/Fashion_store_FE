@@ -9,12 +9,12 @@
   overflow-y: scroll;
   position: fixed;
   width: 20%;
-  background-color: var(--admin-primary-color) !important;
+  background-color: var(--admin-green900) !important;
   height: 100vh;
 }
 
 .adminMenu {
-  background-color: var(--admin-primary-color);
+  background-color: var(--admin-green900);
 }
 
 .adminContainer::-webkit-scrollbar {

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
-  { ssr: false }
+  { ssr: false, loading: () => 'Loading...' }
 )
 
 const LineChart = () => {
