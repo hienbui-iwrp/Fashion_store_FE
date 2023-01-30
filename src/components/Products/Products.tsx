@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import { Typography, Select, Col, Row, Radio, Space, Checkbox, Divider } from 'antd'
+import { Typography, Select, Col, Row, Radio, Space, Checkbox, Card, List } from 'antd'
 import type { RadioChangeEvent } from 'antd';
 import type { SelectProps } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
+import CardProductClient from '../Card/CardProductClient';
 import styles from './Products.module.css'
 
 const { Title, Text } = Typography
@@ -17,9 +18,134 @@ const CheckboxGroup = Checkbox.Group;
 const plainOptions = ['0 - 500.000đ', '500.000 - 1.000.000 đ', '1.000.000 - 3.000.000 đ', '3.000.000 - 5.000.000 đ', '5.000.000 đ trở lên'];
 const defaultCheckedList = ['0 - 500.000đ', '500.000 - 1.000.000 đ'];
 
+const data = [
+  {
+    title: 'Title 1',
+  },
+  {
+    title: 'Title 2',
+  },
+  {
+    title: 'Title 3',
+  },
+  {
+    title: 'Title 4',
+  },
+  {
+    title: 'Title 5',
+  },
+  {
+    title: 'Title 6',
+  },
+];
+
+const listFeaturedProduct = [
+  {
+    goodsId: '1',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 10
+  },
+  {
+    goodsId: '2',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 0
+  },
+  {
+    goodsId: '3',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 10
+  },
+  {
+    goodsId: '4',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 10
+  },
+  {
+    goodsId: '5',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 10
+  },
+  {
+    goodsId: '6',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 10
+  },
+  {
+    goodsId: '7',
+    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    name: 'Áo khoác mùa đông a',
+    unitPrice: 100000,
+    quantity: 1,
+    size: '36',
+    color: 'yellow',
+    discount: 10
+  },
+]
+
 export default function Products(props: ProductsProps) {
-  const options: SelectProps['options'] = [];
+  const options: SelectProps['options'] = [
+    { value: 'man', label: 'Nam' },
+    { value: 'woman', label: 'Nữ' },
+    { value: 'unisex', label: 'Unisex' },
+    { value: 'jacket', label: 'Áo khoác' },
+    { value: 'sweater', label: 'Áo len' },
+    { value: 'T-shirt', label: 'Áo thun' },
+    { value: 'Trousers', label: 'Quần tây' },
+    { value: 'kaki', label: 'Quần kaki' },
+    { value: 'short', label: 'Quần sọt' },
+    { value: 'sport Shoes', label: 'Giày thể thao' },
+    { value: 'western shoes', label: 'Giày tây' },
+    { value: 'sandal', label: 'Dép' },
+    { value: 'ring', label: 'Nhẫn' },
+    { value: 'hat', label: 'Nón' },
+    { value: 'bag', label: 'Túi/balo' },
+    { value: '31', label: '31' },
+    { value: '32', label: '32' },
+    { value: '33', label: '33' },
+    { value: '34', label: '34' },
+    { value: '35', label: '35' },
+    { value: '36', label: '36' },
+    { value: '37', label: '37' },
+    { value: '38', label: '38' },
+    { value: '39', label: '39' },
+    { value: '40', label: '40' },
+    { value: '41', label: '41' },
+    { value: '42', label: '42' },
+    { value: '43', label: '43' },
+    { value: '44', label: '44' },
+  ];
   const [value, setValue] = useState(1);
+  const [listValueFilter, setListValueFilter] = useState(['man'])
   const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(defaultCheckedList);
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
@@ -35,19 +161,26 @@ export default function Products(props: ProductsProps) {
     setValue(e.target.value);
   };
 
+  const handleSelectFilter = (value: string) => {
+    if(!listValueFilter.includes(value)){
+      setListValueFilter([...listValueFilter, value]);
+    }
+    
+  }
+
+  const handleDeselect = (value: string) => {
+    setListValueFilter(listValueFilter.filter((item) => {
+      return item !== value;
+    }))
+  }
+
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
   };
+
   const handleListChange = (value: string[]) => {
     console.log(`selected ${value}`);
   };
-
-  for (let i = 10; i < 36; i++) {
-    options.push({
-      label: i.toString(36) + i,
-      value: i.toString(36) + i,
-    });
-  }
 
   return (
     <div className='products-content px-4 md:px-8'>
@@ -65,13 +198,14 @@ export default function Products(props: ProductsProps) {
             placeholder={<Text strong>Giới tính</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
+            onSelect={handleSelectFilter}
             options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
+              { value: 'man', label: 'Nam' },
+              { value: 'woman', label: 'Nữ' },
+              { value: 'unisex', label: 'Unisex' },
             ]}
           />
-          <Select
+          {/* <Select
             placeholder={<Text strong>Kiểu dáng</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
@@ -80,45 +214,63 @@ export default function Products(props: ProductsProps) {
               { value: 'lucy', label: 'Lucy' },
               { value: 'Yiminghe', label: 'yiminghe' },
             ]}
-          />
+          /> */}
           <Select
             placeholder={<Text strong>Áo quần</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
+            onSelect={handleSelectFilter}
             options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
+              { value: 'jacket', label: 'Áo khoác' },
+              { value: 'sweater', label: 'Áo len' },
+              { value: 'T-shirt', label: 'Áo thun' },
+              { value: 'Trousers', label: 'Quần tây' },
+              { value: 'kaki', label: 'Quần kaki' },
+              { value: 'short', label: 'Quần sọt' },
             ]}
           />
           <Select
             placeholder={<Text strong>Giày dép</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
+            onSelect={handleSelectFilter}
             options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
+              { value: 'sport Shoes', label: 'Giày thể thao' },
+              { value: 'western shoes', label: 'Giày tây' },
+              { value: 'sandal', label: 'Dép' },
             ]}
           />
           <Select
             placeholder={<Text strong>Phụ kiện</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
+            onSelect={handleSelectFilter}
             options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
+              { value: 'ring', label: 'Nhẫn' },
+              { value: 'hat', label: 'Nón' },
+              { value: 'bag', label: 'Túi/balo' },
             ]}
           />
           <Select
             placeholder={<Text strong>Size</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
+            onSelect={handleSelectFilter}
             options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
+              { value: '31', label: '31' },
+              { value: '32', label: '32' },
+              { value: '33', label: '33' },
+              { value: '34', label: '34' },
+              { value: '35', label: '35' },
+              { value: '36', label: '36' },
+              { value: '37', label: '37' },
+              { value: '38', label: '38' },
+              { value: '39', label: '39' },
+              { value: '40', label: '40' },
+              { value: '41', label: '41' },
+              { value: '42', label: '42' },
+              { value: '43', label: '43' },
+              { value: '44', label: '44' },
             ]}
           />
         </div>
@@ -130,7 +282,10 @@ export default function Products(props: ProductsProps) {
           showSearch={false}
           bordered={false}
           style={{ width: '100%' }}
-          defaultValue={['a10', 'c12']}
+          defaultValue={listValueFilter}
+          value={listValueFilter}
+          onDeselect={handleDeselect}
+          onClear={() => setListValueFilter([])}
           options={options}
           dropdownRender={() => (<></>)}
           dropdownStyle={{ display: 'none' }}
@@ -140,7 +295,7 @@ export default function Products(props: ProductsProps) {
         <Row>
           <Col className='products-sort ' span={5}>
             <div>
-              <Title level={3}>Sắp xếp</Title>
+              <Title level={4}>Sắp xếp</Title>
               <Radio.Group onChange={onChange} value={value}>
                 <Space direction="vertical">
                   <Radio value={1}>Mặc định</Radio>
@@ -152,11 +307,19 @@ export default function Products(props: ProductsProps) {
               </Radio.Group>
             </div>
             <div>
-              <Title level={3}>Giá</Title>
+              <Title level={4}>Giá</Title>
               <CheckboxGroup className={styles.productsSortPrice} options={plainOptions} value={checkedList} onChange={onChangePrice} />
             </div>
           </Col>
-          <Col className='products-list-product' span={19}>list products</Col>
+          <Col className='products-list-product' span={19}>
+            <div className='flex w-full flex-wrap'>
+              {listFeaturedProduct.map((item, index) => {
+                return (
+                  <CardProductClient key={index} {...item} />
+                )
+              })}
+            </div>
+          </Col>
         </Row>
       </div>
     </div>

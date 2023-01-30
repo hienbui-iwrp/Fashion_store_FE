@@ -43,8 +43,20 @@ export default function Register() {
 
         <Form.Item
           className='mb-2'
+          label={<Text strong>Email</Text>}
+          name="email"
+          rules={[
+            {type: 'email', message: 'Định dạng email không đúng.'},
+            { required: true, message: 'Vui lòng nhập email!' }
+        ]}
+        >
+          <Input className='' />
+        </Form.Item>
+
+        <Form.Item
+          className='mb-2'
           label={<Text strong>Tên người dùng</Text>}
-          name="username"
+          name="name"
         >
           <Input className='' />
         </Form.Item>
@@ -52,8 +64,8 @@ export default function Register() {
         <Form.Item
           className='mb-2'
           label={<Text strong>Số điện thoại</Text>}
-          name="username"
-          rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+          name="phoneNumber"
+          rules={[]}
         >
           <Input className='' />
         </Form.Item>
