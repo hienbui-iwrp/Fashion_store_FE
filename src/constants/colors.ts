@@ -5,4 +5,6 @@ export const Colors = {
   adminGreen500: '#00d272',
   adminGreen600: '#00C169',
   gray: '#bbb',
+  adminRed500: '#FF4A4A',
+  adminRed900: '#cc4141',
 }

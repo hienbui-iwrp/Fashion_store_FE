@@ -14,6 +14,7 @@ import {
   StatisticIcon,
   WarehouseIcon,
 } from '@/constants/asset/svg'
+import { useRouter } from 'next/router'
 
 const { Header, Sider, Content } = Layout
 
@@ -25,6 +26,8 @@ const LayoutAdmin = ({
   selected: number
 }) => {
   const [title, setTitle] = useState('')
+
+  const routes = useRouter()
 
   const menuItem = [
     {
@@ -102,7 +105,38 @@ const LayoutAdmin = ({
       icon: React.createElement(item.icon, item.props),
       label: item.label,
       onClick: () => {
-        console.log(index)
+        switch (index) {
+          case 0:
+            routes.push('/admin')
+            break
+          case 1:
+            routes.push('/admin')
+            break
+          case 20:
+            routes.push('/admin')
+            break
+          case 21:
+            routes.push('/admin')
+            break
+          case 3:
+            routes.push('/admin')
+            break
+          case 4:
+            routes.push('/admin')
+            break
+          case 5:
+            routes.push('/admin')
+            break
+          case 6:
+            routes.push('/admin')
+            break
+          case 70:
+            routes.push('/admin')
+            break
+          case 71:
+            routes.push('/admin')
+            break
+        }
       },
 
       children: item.children?.map((child, childIndex) => {
@@ -223,11 +257,7 @@ const LayoutAdmin = ({
           </Dropdown>
         </Header>
         <Content className='bg-emerald-50	!min-h-screen'>
-          <div className={styles.adminContentContainer}>
-            <Space direction='vertical' size={20}>
-              {content}
-            </Space>
-          </div>
+          <div className={styles.adminContentContainer}>{content}</div>
         </Content>
       </Layout>
     </Layout>

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import LayoutAdmin from '@/components/Layout/LayoutAdmin/LayoutAdmin'
-import AddButton from '@/components/Button/AddButton'
 import { ColumnsType } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { TableList } from '@/components/TableList'
 import { Space } from 'antd'
+import { AddButton, LayoutAdmin, TableList } from '@/components'
+import { ModalAddBranch } from '@/utils'
 
 interface DataType {
   id: string
@@ -18,6 +17,7 @@ interface DataType {
 const BranchManagement = () => {
   const [data, setData] = useState<DataType[]>([])
   const [loading, setLoading] = useState(true)
+  const [modalAddBranch, setModalAddBranch] = useState(false)
 
   const columns: ColumnsType<DataType> = []
   if (data[0]) {
@@ -59,7 +59,7 @@ const BranchManagement = () => {
               borderRadius={5}
               onClick={(e) => {
                 e.stopPropagation()
-                console.log('edit')
+                setModalAddBranch(true)
               }}
             />
           ),
@@ -69,7 +69,7 @@ const BranchManagement = () => {
   }
 
   const getData = async () => {
-    await axios.get(`http://localhost:3000/api/branchData`).then((res) => {
+    await axios.get(`${BASE_URL}/api/admin/branchData`).then((res) => {
       setData(res.data)
     })
   }
@@ -80,16 +80,22 @@ const BranchManagement = () => {
   }, [])
 
   const content = (
-    <Space direction='vertical' size={20}>
-      <AddButton label='Thêm mới' />
-      <TableList<DataType>
-        data={data}
-        title='Danh sách chi nhánh'
-        columns={columns}
-        selectUrl={BASE_URL + 'admin/branchDetail'}
-        loading={loading}
+    <>
+      <Space direction='vertical' style={{ width: '99%' }} size='large'>
+        <AddButton label='Thêm mới' onClick={() => setModalAddBranch(true)} />
+        <TableList<DataType>
+          data={data}
+          title='Danh sách chi nhánh'
+          columns={columns}
+          selectUrl={BASE_URL + 'admin/branchDetail/'}
+          loading={loading}
+        />
+      </Space>
+      <ModalAddBranch
+        open={modalAddBranch}
+        cancel={() => setModalAddBranch(false)}
       />
-    </Space>
+    </>
   )
 
   return <LayoutAdmin content={content} selected={0} />
