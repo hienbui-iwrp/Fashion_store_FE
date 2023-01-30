@@ -13,4 +13,6 @@ export interface TableListProps<T> {
   columns: any
   editModal?: ReactNode
   selectUrl?: string
+  scroll?: { x?: string; y?: string }
+  loading?: boolean
 }

@@ -1,99 +1,140 @@
 import React, { useEffect, useState } from 'react'
-import { memo } from 'react'
-import LayoutAdmin from '@/components/Layout/LayoutAdmin/LayoutAdmin'
-import AddButton from '@/components/Button/AddButton'
-import TableList from '@/components/Table/table'
-import { ColumnsType } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
-import { EditOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { EditFilled, ExclamationCircleOutlined } from '@ant-design/icons'
+import { Card, Col, Row, Image, List, Space, Modal } from 'antd'
 import { useRouter } from 'next/router'
+import { LineChart } from '@/components/LineChart'
+import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
+import { ModalAddBranch } from '@/utils/modals'
+import { useModalDelete } from '@/hooks'
+import { formatTime } from '@/utils'
 
 interface DataType {
   id: string
   name: string
   address: string
+  manager: string
+  area: number
+  staff: number
+  startTime: Date
+  endTime: Date
+  image?: string
 }
 
-const BranchDetail = memo(() => {
+const BranchDetail = () => {
+  const [loading, setLoading] = useState(false)
   const [data, setData] = useState<DataType[]>([])
-  const router = useRouter()
-  console.log(router.query)
+  const [dataFetch, setDataFetch] = useState<DataType>()
+  const [modalAddBranch, setModalAddBranch] = useState(false)
 
-  const columns: ColumnsType<DataType> = []
-  if (data[0]) {
-    for (const key in data[0]) {
-      columns.push({
-        title:
-          key === 'id'
-            ? 'Mã chi nhánh'
-            : key === 'name'
-            ? 'Tên chi nhánh'
-            : 'Địa chỉ',
-        dataIndex: key,
-        sorter: (a: DataType, b: DataType) => (a[key] > b[key] ? 1 : -1),
-        ellipsis: true,
-        render(text: string, record: DataType, index: number) {
-          return {
-            props: {
-              style: {
-                background: index % 2 ? Colors.white : Colors.adminBackground,
-              },
-            },
-            children: <div>{text}</div>,
-          }
-        },
-      })
-    }
-    columns.push({
-      title: '',
-      render(text: string, record: DataType, index: number) {
-        return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
-          children: (
-            <AddButton
-              iconInput={<EditOutlined />}
-              borderRadius={5}
-              onClick={(e) => {
-                e.stopPropagation()
-                console.log('edit')
-              }}
-            />
-          ),
-        }
-      },
-    })
-  }
+  const router = useRouter()
+  const { id } = router.query
 
   const getData = async () => {
-    await axios.get(`http://localhost:3000/api/branchData`).then((res) => {
-      setData(res.data)
-    })
+    await axios
+      .get(`http://localhost:3000/api/admin/branchDetailData?id=${id}`)
+      .then((res) => {
+        formatData(res.data)
+        setDataFetch(res.data)
+      })
+  }
+  const formatData = (data: any) => {
+    let dataFormat: any[] = []
+    for (const key in data) {
+      if (key == 'image') continue
+      if (key == 'startTime' || key == 'endTime')
+        dataFormat = [...dataFormat, { [key]: new Date(data[key]) }]
+      else dataFormat = [...dataFormat, { [key]: data[key] }]
+    }
+    for (const i in dataFormat) {
+      console.log(typeof new Date())
+    }
+    setData(dataFormat)
   }
 
   useEffect(() => {
     getData()
   }, [])
 
+  const { showModelDelete, contextModalDelete } = useModalDelete({
+    title: 'Xóa chi nhánh',
+    content: 'Bạn có chắc  chắn muốn xóa chi nhánh này?',
+    onOk: () => {
+      console.log('delete branch')
+    },
+  })
+
+  const nameCurrentBranch = () => {
+    data.find
+  }
+
   const content = (
-    <div>
-      <AddButton label='Thêm mới' />
-      <TableList<DataType>
-        data={data}
-        title='Danh sách chi nhánh'
-        columns={columns}
-        selectUrl={BASE_URL}
+    <Space direction='vertical' style={{ width: '99%' }} size='large'>
+      <Card
+        className='max-w-full-lg'
+        title={dataFetch?.name?.toUpperCase() ?? 'Không tên'}
+        bordered={false}
+        loading={loading}
+      >
+        <Row justify='center' align='middle'>
+          {/* xs sm lg xl */}
+          <Col xs={24} sm={12}>
+            <Image
+              preview={true}
+              src={
+                dataFetch?.image ??
+                'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
+              }
+              width={'80%'}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <List
+              bordered={false}
+              dataSource={data ?? []}
+              renderItem={(item) => {
+                const key = Object.keys(item)
+                return (
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} sm={8}>
+                      <b>{key}</b>
+                    </Col>
+                    <Col xs={24} sm={16}>
+                      {item[key] instanceof Date
+                        ? formatTime(item[key])
+                        : item[key]}
+                    </Col>
+                  </Row>
+                )
+              }}
+            />
+            <Row justify='end' align='bottom'>
+              <Space size={20}>
+                <RemoveButton onClick={showModelDelete} />
+                <AddButton
+                  label='Chỉnh sửa'
+                  iconInput={<EditFilled />}
+                  onClick={() => setModalAddBranch(true)}
+                />
+              </Space>
+            </Row>
+          </Col>
+        </Row>
+      </Card>
+      <Card className='!max-w-full-lg'>
+        <LineChart />
+      </Card>
+      <ModalAddBranch
+        open={modalAddBranch}
+        cancel={() => setModalAddBranch(false)}
       />
-    </div>
+      {contextModalDelete}
+    </Space>
   )
 
   return <LayoutAdmin content={content} selected={0} />
-})
+}
 
 BranchDetail.displayName = 'Branch Detail'
 

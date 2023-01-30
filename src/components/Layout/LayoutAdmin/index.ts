@@ -1,1 +1,1 @@
-export * from './LayoutAdmin'
+export { default as LayoutAdmin } from './LayoutAdmin'

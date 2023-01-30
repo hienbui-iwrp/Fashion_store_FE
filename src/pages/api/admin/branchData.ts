@@ -42,5 +42,35 @@ export default function handler(
       name: 'Chi nhánh 6',
       address: `New York No. Lake Park`,
     },
+    {
+      id: '7',
+      name: 'Chi nhánh 1',
+      address: `New York No. Lake Park`,
+    },
+    {
+      id: '8',
+      name: 'Chi nhánh 2',
+      address: ` Lake Park`,
+    },
+    {
+      id: '9',
+      name: 'Chi nhánh 3',
+      address: ` Lake Park`,
+    },
+    {
+      id: '10',
+      name: 'Chi nhánh 4',
+      address: `New York No. Lake Park`,
+    },
+    {
+      id: '11',
+      name: 'Chi nhánh 5',
+      address: `New York No. Lake Park`,
+    },
+    {
+      id: '12',
+      name: 'Chi nhánh 6',
+      address: `New York No. Lake Park`,
+    },
   ])
 }
