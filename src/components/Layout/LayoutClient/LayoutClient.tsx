@@ -197,12 +197,20 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
             />
           </Col>
           <Col span={9} className='flex justify-around items-center'>
-            <ButtonHeader name='Quản lý cửa hàng' />
-            <ButtonHeader name='Giỏ hàng' iconInput={<FontAwesomeIcon icon={faCartShopping} />} />
+            <ButtonHeader name='Quản lý đơn hàng' />
+            <ButtonHeader name='Giỏ hàng'
+              iconInput={<FontAwesomeIcon
+                className='pr-2'
+                icon={faCartShopping}
+              />}
+            />
             <Link href='/login'>
               <ButtonHeader
                 name='Đăng nhập'
-                iconInput={<FontAwesomeIcon icon={faUser} />}
+                iconInput={<FontAwesomeIcon
+                  className='pr-2'
+                  icon={faUser}
+                />}
               />
             </Link>
           </Col>

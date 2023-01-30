@@ -1,15 +1,37 @@
-import React from 'react';
-import { Button, Checkbox, Form, Input, Typography, Empty } from 'antd';
+import React, { useState } from 'react';
+import { Button, Checkbox, Form, Input, Typography, notification } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Toast from '../Toast';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
+export interface ToastProps {
+  title: string;
+  content: string;
+  type: NotificationType;
+}
 
 const { Title, Text } = Typography;
 
 export default function Login() {
+  const [form] = Form.useForm();
   const router = useRouter();
+  
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationWithIcon = (props: ToastProps) => {
+    console.log('checkkkk')
+    api[props.type]({
+      message: props.title,
+      description: props.content,
+    });
+  };
+
   const onFinish = (values: any) => {
     console.log('Success:', values);
+    openNotificationWithIcon({title:'Đăng nhập thành công', content:'', type:'success'})
     router.replace('/');
   };
 
@@ -19,8 +41,10 @@ export default function Login() {
 
   return (
     <div className='flex items-center h-screen w-screen bg-[url("./../../public/bg-login.png")] bg-no-repeat bg-cover'>
+      {contextHolder}
       <Form
         className='bg-gray-300 w-96 m-auto p-5 rounded-3xl'
+        form={form}
         name="basic"
         layout="vertical"
         initialValues={{ remember: true }}
@@ -39,7 +63,8 @@ export default function Login() {
           className='mb-2'
           label={<Text strong>Tên đăng nhập</Text>}
           name="username"
-          rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+          rules={[
+            { required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
         >
           <Input className='' />
         </Form.Item>
@@ -48,7 +73,16 @@ export default function Login() {
           className='mb-2'
           label={<Text strong>Mật khẩu</Text>}
           name="password"
-          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
+            ({}) => ({
+              validator(_, value) {
+                if (!value || value.length > 5) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
+              },
+            }),
+          ]}
         >
           <Input.Password />
         </Form.Item>
