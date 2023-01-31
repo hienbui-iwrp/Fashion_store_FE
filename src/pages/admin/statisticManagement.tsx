@@ -3,7 +3,7 @@ import { BASE_URL } from '@/constants'
 import axios from 'axios'
 import { Card, Space, DatePicker, Row, Col } from 'antd'
 import { LineChart } from '@/components/LineChart'
-import { AddButton, DropdownButton, LayoutAdmin } from '@/components'
+import { AddButton, DropdownButton, FilterTag, LayoutAdmin } from '@/components'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 
@@ -80,8 +80,16 @@ const StatisticManagement = () => {
             <AddButton label='Chọn sản phẩm' />
           </Col>
         </Row>
+        <Space size={20}>
+          <FilterTag
+            label='Nam'
+            onClick={() => {
+              console.log('close')
+            }}
+          />
+        </Space>
 
-        <LineChart data={statisticData} haveRevenue={false} haveProfit={true} />
+        <LineChart data={statisticData} haveProfit showTotal />
       </Card>
       <Card className='!max-w-full-lg'>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -114,7 +122,7 @@ const StatisticManagement = () => {
             <AddButton label='Chọn sản phẩm' />
           </Col>
         </Row>
-        <LineChart data={statisticData} haveRevenue={true} haveProfit={false} />
+        <LineChart data={statisticData} haveRevenue showTotal />
       </Card>
     </Space>
   )

@@ -1,5 +1,3 @@
-import { Dropdown } from 'antd'
-import { LineChart } from '@/components/LineChart'
 import { ReactNode } from 'react'
 
 export interface ButtonProps {
@@ -22,6 +20,7 @@ export interface TableListProps<T> {
 export interface LineChartProps {
   haveRevenue?: boolean
   haveProfit?: boolean
+  showTotal?: boolean
   data?: { profit?: number; revenue?: number; date: Date }[]
 }
 

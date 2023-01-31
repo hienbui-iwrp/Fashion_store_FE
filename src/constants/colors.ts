@@ -4,8 +4,9 @@ export const Colors = {
   black: '#333',
   adminBackground: '#f0fdf4',
   adminGreen900: '#14794f',
-  adminGreen500: '#00d272',
   adminGreen600: '#00C169',
-  adminRed500: '#FF4A4A',
+  adminGreen500: '#00d272',
+  adminGreen300: '#87FB7F',
   adminRed900: '#cc4141',
+  adminRed500: '#FF4A4A',
 }

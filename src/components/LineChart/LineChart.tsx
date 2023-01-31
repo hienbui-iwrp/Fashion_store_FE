@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
 import { LineChartProps } from '@/utils/types/componentType'
 import { Skeleton } from 'antd'
+import { FormatNumber } from '@/utils'
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
   { ssr: false, loading: () => <Skeleton active paragraph={{ rows: 10 }} /> }
@@ -15,9 +16,7 @@ interface DataType {
 }
 
 const LineChart = (props: LineChartProps) => {
-  const [data, setData] = useState<DataType[]>([
-    // { year: '1991', value: 3000000, category: 'a' },
-  ])
+  const [data, setData] = useState<DataType[]>([])
 
   useEffect(() => {
     if (props.data) {
@@ -90,6 +89,26 @@ const LineChart = (props: LineChartProps) => {
     style: { width: '99%' },
   }
 
-  return <Line {...config} />
+  return (
+    <>
+      {props.showTotal && (
+        <h1>
+          <b>
+            {FormatNumber(
+              (props.haveRevenue
+                ? props.data?.reduce((sum, item) => {
+                    return sum + (item.revenue ?? 0)
+                  }, 0)
+                : props.data?.reduce((sum, item) => {
+                    return sum + (item.profit ?? 0)
+                  }, 0)) ?? 0
+            )}{' '}
+            VND
+          </b>
+        </h1>
+      )}
+      <Line {...config} />
+    </>
+  )
 }
 export default LineChart
