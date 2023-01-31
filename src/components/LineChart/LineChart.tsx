@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
 import { LineChartProps } from '@/utils/types/componentType'
+import { Skeleton } from 'antd'
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
-  { ssr: false, loading: () => <h1>Loading...</h1> }
+  { ssr: false, loading: () => <Skeleton active paragraph={{ rows: 10 }} /> }
 )
 
 interface DataType {

@@ -112,12 +112,6 @@ const LayoutAdmin = ({
           case 1:
             routes.push('/admin/statisticManagement')
             break
-          case 20:
-            routes.push('/admin')
-            break
-          case 21:
-            routes.push('/admin')
-            break
           case 3:
             routes.push('/admin')
             break
@@ -130,12 +124,6 @@ const LayoutAdmin = ({
           case 6:
             routes.push('/admin')
             break
-          case 70:
-            routes.push('/admin')
-            break
-          case 71:
-            routes.push('/admin')
-            break
         }
       },
 
@@ -144,7 +132,20 @@ const LayoutAdmin = ({
           key: index + '' + childIndex,
           label: child,
           onClick: () => {
-            console.log(index + '' + childIndex)
+            switch (index + '' + childIndex) {
+              case '20':
+                routes.push('/admin')
+                break
+              case '21':
+                routes.push('/admin')
+                break
+              case '70':
+                routes.push('/admin')
+                break
+              case '71':
+                routes.push('/admin')
+                break
+            }
           },
         }
       }),

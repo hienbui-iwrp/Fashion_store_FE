@@ -30,6 +30,7 @@ export default function RemoveButton(props: ButtonProps) {
         setIsHover(false)
       }}
       onClick={props?.onClick}
+      {...props}
     >
       {props.label ?? 'Xóa'}
     </Button>
