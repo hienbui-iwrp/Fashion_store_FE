@@ -28,7 +28,7 @@ interface StatisticDataType {
   date: Date
 }
 
-const BranchDetail = () => {
+const StatisticManagement = () => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<DataType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
@@ -79,71 +79,18 @@ const BranchDetail = () => {
 
   const content = (
     <Space direction='vertical' style={{ width: '99%' }} size='large'>
-      <Card
-        className='max-w-full-lg'
-        title={dataFetch?.name?.toUpperCase() ?? 'Không tên'}
-        bordered={false}
-        loading={loading}
-      >
-        <Row justify='center' align='middle'>
-          {/* xs sm lg xl */}
-          <Col xs={24} sm={12}>
-            <Image
-              preview={true}
-              src={
-                dataFetch?.image ??
-                'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
-              }
-              width={'80%'}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <List
-              bordered={false}
-              dataSource={data ?? []}
-              renderItem={(item) => {
-                const key = Object.keys(item)
-                return (
-                  <Row style={{ padding: 8 }}>
-                    <Col xs={24} sm={8}>
-                      <b>{key}</b>
-                    </Col>
-                    <Col xs={24} sm={16}>
-                      {item[key] instanceof Date
-                        ? formatTime(item[key])
-                        : item[key]}
-                    </Col>
-                  </Row>
-                )
-              }}
-            />
-            <Row justify='end' align='bottom'>
-              <Space size={20}>
-                <RemoveButton onClick={showModelDelete} />
-                <AddButton
-                  label='Chỉnh sửa'
-                  iconInput={<EditFilled />}
-                  onClick={() => setModalAddBranch(true)}
-                />
-              </Space>
-            </Row>
-          </Col>
-        </Row>
+      <Card className='!max-w-full-lg'>
+        <LineChart data={statisticData} haveRevenue={false} haveProfit={true} />
       </Card>
       <Card className='!max-w-full-lg'>
-        <LineChart data={statisticData} haveRevenue={true} haveProfit={true} />
+        <LineChart data={statisticData} haveRevenue={true} haveProfit={false} />
       </Card>
-      <ModalAddBranch
-        open={modalAddBranch}
-        cancel={() => setModalAddBranch(false)}
-      />
-      {contextModalDelete}
     </Space>
   )
 
-  return <LayoutAdmin content={content} selected={0} />
+  return <LayoutAdmin content={content} selected={1} />
 }
 
-BranchDetail.displayName = 'Branch Detail'
+StatisticManagement.displayName = 'Statistic Management'
 
-export default BranchDetail
+export default StatisticManagement
