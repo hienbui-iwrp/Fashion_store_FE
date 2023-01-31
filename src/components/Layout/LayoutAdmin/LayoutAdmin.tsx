@@ -110,7 +110,7 @@ const LayoutAdmin = ({
             routes.push('/admin')
             break
           case 1:
-            routes.push('/admin')
+            routes.push('/admin/statisticManagement')
             break
           case 20:
             routes.push('/admin')

@@ -51,9 +51,9 @@ const ModalAddBranch = (props: ModalAddBranchProps) => {
             <Space direction='vertical' align='center'>
               <Image
                 preview={true}
-                src={`https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?${
-                  Math.random() * 10000
-                }`}
+                src={
+                  'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
+                }
                 width={'90%'}
               />
               <AddButton

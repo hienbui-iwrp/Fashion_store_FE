@@ -1,3 +1,4 @@
+import { LineChart } from '@/components/LineChart'
 import { ReactNode } from 'react'
 
 export interface ButtonProps {
@@ -15,4 +16,10 @@ export interface TableListProps<T> {
   selectUrl?: string
   scroll?: { x?: string; y?: string }
   loading?: boolean
+}
+
+export interface LineChartProps {
+  haveRevenue?: boolean
+  haveProfit?: boolean
+  data?: { profit?: number; revenue?: number; date: Date }[]
 }
