@@ -93,7 +93,7 @@ const StaffManagement = () => {
           data={data}
           title='Danh sách nhân viên'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/staffManagement/'}
+          selectUrl={BASE_URL + 'admin/staffManagement/staffDetail'}
           loading={loading}
         />
       </Space>

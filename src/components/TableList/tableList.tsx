@@ -13,17 +13,23 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     loading: props?.loading,
     size: 'small',
     expandable: undefined,
-    title: () => (
-      <h1>
-        <b>{props.title}</b>
-      </h1>
-    ),
+    title: () =>
+      props.title && (
+        <h1>
+          <b>{props.title}</b>
+        </h1>
+      ),
     footer: undefined,
     showHeader: true,
     scroll: { x: props?.scroll?.x ?? '60vw', y: props?.scroll?.y ?? '70vh' },
     tableLayout: 'auto',
     pagination: { position: ['bottomRight'], pageSize: 30 },
   }
+
+  const tableColumns = props?.columns.map((item: any) => ({
+    ...item,
+    ellipsis: false,
+  }))
 
   return (
     <div
@@ -41,7 +47,8 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         onRow={(record: any, index) => {
           return {
             onClick: (event) => {
-              router.push(props.selectUrl + `?id=${record.id}` ?? BASE_URL)
+              props.selectUrl &&
+                router.push(props.selectUrl + `?id=${record.id}` ?? BASE_URL)
             },
           }
         }}

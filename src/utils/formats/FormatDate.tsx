@@ -1,3 +1,13 @@
-export default function FormatOutputDate(date: Date): string {
-  return date.getDate() + ' - ' + (date.getMonth() + 1) + ' - ' + date.getFullYear();
+export default function FormatOutputDate(date: any): string {
+  console.log(date)
+  const _date = new Date(date)
+
+  const day = _date.getDate()
+  const month = _date.getMonth() + 1
+
+  let result: string = day < 10 ? '0' + day : day.toString()
+
+  result += '/' + (month < 10 ? '0' + month : month)
+
+  return result + '/' + _date.getFullYear()
 }

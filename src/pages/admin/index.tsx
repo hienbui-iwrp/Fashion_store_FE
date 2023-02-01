@@ -31,7 +31,6 @@ const BranchManagement = () => {
             : 'Địa chỉ',
         dataIndex: key,
         sorter: (a: DataType, b: DataType) => (a[key] > b[key] ? 1 : -1),
-        ellipsis: true,
         render(text: string, record: DataType, index: number) {
           return {
             props: {

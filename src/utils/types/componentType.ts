@@ -14,7 +14,7 @@ export interface ButtonProps extends ComponentProps {
 
 export interface TableListProps<T> extends ComponentProps {
   data: T[]
-  title: string
+  title?: string
   columns: any
   editModal?: ReactNode
   selectUrl?: string
