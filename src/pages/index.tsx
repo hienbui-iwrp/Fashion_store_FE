@@ -14,19 +14,6 @@ const onSearch = (value: string) => console.log(value)
 
 export default function App() {
   return (
-    <>
-      <HomeClient />
-      {/* <Head>
-        <title>PTH Fashion</title>
-        <meta name='description' content='Fashion Store' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <main className={styles.main}>
-        <LayoutClient>
-          <Component {...pageProps} />
-        </LayoutClient>
-      </main> */}
-    </>
+    <HomeClient />
   )
 }

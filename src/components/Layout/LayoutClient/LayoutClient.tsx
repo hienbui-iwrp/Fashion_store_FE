@@ -180,6 +180,7 @@ const onSearch = (value: string) => console.log(value)
 export default function LayoutClient({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [navbar, setNavbar] = useState(false);
+
   return (
     <Layout className='max-w-7xl m-auto p-0 bg-gray-300'>
       <Header className="!bg-white !p-0 !h-full">
@@ -198,12 +199,14 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
           </Col>
           <Col span={9} className='flex justify-around items-center'>
             <ButtonHeader name='Quản lý đơn hàng' />
-            <ButtonHeader name='Giỏ hàng'
-              iconInput={<FontAwesomeIcon
-                className='pr-2'
-                icon={faCartShopping}
-              />}
-            />
+            <Link href='/cart' passHref>
+              <ButtonHeader name='Giỏ hàng'
+                iconInput={<FontAwesomeIcon
+                  className='pr-2'
+                  icon={faCartShopping}
+                />}
+              />
+            </Link>
             <Link href='/login'>
               <ButtonHeader
                 name='Đăng nhập'
@@ -276,9 +279,11 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
               >
                 <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
                   {listItem.map((item, index) => {
+                    console.log(item)
                     return (
-                      <li key={index} className="text-black text-sm">
-                        <Link href={item.link || '/'}>
+                      <li key={index}
+                        className="text-black text-sm hover:cursor-pointer">
+                        <Link href={`/${item.link}` || '/'} >
                           {item.label}
                         </Link>
                       </li>
@@ -317,13 +322,13 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
               <Title className='!text-gray-300' level={4}>Về chúng tôi</Title>
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
-                  <a href="#" className="hover:underline hover:text-gray-300">Trang chủ</a>
+                  <Link href="#" className="hover:underline hover:text-gray-300">Trang chủ</Link>
                 </li>
                 <li className="mb-4">
-                  <a href="#" className="hover:underline hover:text-gray-300">Sản phẩm</a>
+                  <Link href="#" className="hover:underline hover:text-gray-300">Sản phẩm</Link>
                 </li>
                 <li className="mb-4">
-                  <a href="#" className="hover:underline hover:text-gray-300">Hỗ trợ</a>
+                  <Link href="#" className="hover:underline hover:text-gray-300">Hỗ trợ</Link>
                 </li>
               </ul>
             </div>
@@ -333,13 +338,13 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
               <Title className='!text-gray-300' level={4}>Truy cập nhanh</Title>
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
-                  <a href="#" className="hover:underline hover:text-gray-300">Giới thiệu</a>
+                  <Link href="/intro" className="hover:underline hover:text-gray-300">Giới thiệu</Link>
                 </li>
                 <li className="mb-4">
                   <a href="#" className="hover:underline hover:text-gray-300">Hướng dẫn chọn size</a>
                 </li>
                 <li className="mb-4">
-                  <a href="#" className="hover:underline hover:text-gray-300">Quản lý đơn hàng</a>
+                  <Link href="#" className="hover:underline hover:text-gray-300">Quản lý đơn hàng</Link>
                 </li>
               </ul>
             </div>

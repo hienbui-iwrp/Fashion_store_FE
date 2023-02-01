@@ -1,13 +1,16 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, Typography, Empty } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 
 const { Title, Text } = Typography;
 
 export default function ConfirmOtp() {
+  const router = useRouter()
   const onFinish = (values: any) => {
     console.log('Success:', values);
+    router.push('/reset-password/confirm-otp/new-password')
   };
 
   const onFinishFailed = (errorInfo: any) => {
