@@ -1,6 +1,14 @@
-import { Layout, Menu, Image, Button, Dropdown, Space } from 'antd'
+import {
+  Layout,
+  Menu,
+  Image,
+  Button,
+  Dropdown,
+  Spin,
+  ConfigProvider,
+} from 'antd'
 import type { MenuProps } from 'antd'
-import { LogoutOutlined } from '@ant-design/icons'
+import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
 import { Colors } from '@/constants/colors'
@@ -26,6 +34,7 @@ const LayoutAdmin = ({
   selected: number
 }) => {
   const [title, setTitle] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const routes = useRouter()
 
@@ -105,6 +114,15 @@ const LayoutAdmin = ({
       icon: React.createElement(item.icon, item.props),
       label: item.label,
       onClick: () => {
+        if (
+          selected != 20 &&
+          selected != 21 &&
+          selected != 70 &&
+          selected != 71 &&
+          selected != index
+        )
+          setLoading(true)
+
         switch (index) {
           case 0:
             routes.push('/admin')
@@ -132,9 +150,11 @@ const LayoutAdmin = ({
           key: index + '' + childIndex,
           label: child,
           onClick: () => {
+            if (selected.toString() != index + '' + childIndex) setLoading(true)
+
             switch (index + '' + childIndex) {
               case '20':
-                routes.push('/admin')
+                routes.push('/admin/staffManagement')
                 break
               case '21':
                 routes.push('/admin')
@@ -228,40 +248,73 @@ const LayoutAdmin = ({
   }, [selected])
 
   return (
-    <Layout>
-      <Sider className={styles.adminSider}>
-        <div className={styles.adminContainer + ' z-20'}>
-          <div className='my-8 flex-1 justify-end'>
-            <h1 className='text-center text-white font-bold	text-3xl italic font-sans'>
-              PTH Fashion
-            </h1>
-          </div>
-          <Menu
-            className={styles.adminMenu}
-            mode='inline'
-            defaultSelectedKeys={[selected.toString()]}
-            items={siderItems}
-          />
-        </div>
-      </Sider>
-      <Layout className='relative !w-full'>
-        <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12 !sticky top-0 z-10'>
-          <span className='text-black font-bold	text-xl leading-none	'>
-            {title}
-          </span>
-          <Dropdown menu={{ items: avatarItems }} trigger={['click']}>
-            <Button
-              className='bg-emerald-50 border-0'
-              icon={<Image width='30px' src='/Avatar.png' preview={false} />}
-              size={'large'}
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: Colors.adminGreen500,
+          colorPrimaryBg: Colors.adminBackground,
+        },
+      }}
+    >
+      <Layout>
+        <Sider className={styles.adminSider}>
+          <div className={styles.adminContainer + ' z-20'}>
+            <div className='my-8 flex-1 justify-end'>
+              <h1 className='text-center text-white font-bold	text-3xl italic font-sans'>
+                PTH Fashion
+              </h1>
+            </div>
+            <Menu
+              className={styles.adminMenu}
+              mode='inline'
+              defaultSelectedKeys={[selected.toString()]}
+              items={siderItems}
             />
-          </Dropdown>
-        </Header>
-        <Content className='bg-emerald-50	!min-h-screen'>
-          <div className={styles.adminContentContainer}>{content}</div>
-        </Content>
+          </div>
+        </Sider>
+        <Layout className='relative !w-full'>
+          <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12 !sticky top-0 z-10'>
+            <span className='text-black font-bold	text-xl leading-none	'>
+              {title}
+            </span>
+            <Dropdown menu={{ items: avatarItems }} trigger={['click']}>
+              <Button
+                className='bg-emerald-50 border-0'
+                icon={<Image width='30px' src='/Avatar.png' preview={false} />}
+                size={'large'}
+              />
+            </Dropdown>
+          </Header>
+          <Content className='bg-emerald-50	!min-h-screen'>
+            <div className={styles.adminContentContainer}>{content}</div>
+          </Content>
+        </Layout>
+        {loading && (
+          <div
+            style={{
+              background: 'rgba(0, 0, 0, 0.5)',
+              position: 'fixed',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 100,
+            }}
+          >
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{ color: Colors.adminGreen600, fontSize: 50 }}
+                />
+              }
+            />
+          </div>
+        )}
       </Layout>
-    </Layout>
+    </ConfigProvider>
   )
 }
 

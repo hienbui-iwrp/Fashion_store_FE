@@ -1,16 +1,6 @@
-import React, { useState } from 'react'
-import {
-  Col,
-  Modal,
-  Row,
-  Space,
-  Image,
-  Form,
-  Radio,
-  Input,
-  TimePicker,
-} from 'antd'
-import { ModalAddBranchProps } from '../types/modalType'
+import React from 'react'
+import { Col, Modal, Row, Space, Image, Form, Input, TimePicker } from 'antd'
+import { ModalAddEditBranchProps } from '../types/modalType'
 import { AddButton, RemoveButton } from '@/components'
 import {
   CheckOutlined,
@@ -19,10 +9,11 @@ import {
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import styles from '@/styles/Admin.module.css'
 
 dayjs.extend(customParseFormat)
 
-const ModalAddBranch = (props: ModalAddBranchProps) => {
+const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
   const [form] = Form.useForm()
 
   return (
@@ -66,10 +57,16 @@ const ModalAddBranch = (props: ModalAddBranchProps) => {
           <Col xs={24} sm={12}>
             <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
               <Form.Item label='Tên chi nhánh'>
-                <Input placeholder='Nhập tên chi nhánh' />
+                <Input
+                  placeholder='Nhập tên chi nhánh'
+                  className={styles.adminInputShadow}
+                />
               </Form.Item>
               <Form.Item label='Địa chỉ'>
-                <Input placeholder='Nhập địa chỉ' />
+                <Input
+                  placeholder='Nhập địa chỉ'
+                  className={styles.adminInputShadow}
+                />
               </Form.Item>
               <Form.Item label='Giờ hoạt động'>
                 <Space>
@@ -77,11 +74,13 @@ const ModalAddBranch = (props: ModalAddBranchProps) => {
                     defaultValue={dayjs('8:30', 'HH:mm ')}
                     format={'HH:mm'}
                     onOk={(item) => console.log(item.hour(), item.minute())}
+                    className={styles.adminInputShadow}
                   />
                   <TimePicker
                     defaultValue={dayjs('19:30', 'HH:mm ')}
                     format={'HH:mm'}
                     onOk={(item) => console.log(item.hour(), item.minute())}
+                    className={styles.adminInputShadow}
                   />
                 </Space>
               </Form.Item>
@@ -93,4 +92,4 @@ const ModalAddBranch = (props: ModalAddBranchProps) => {
   )
 }
 
-export default ModalAddBranch
+export default ModalAddEditBranch

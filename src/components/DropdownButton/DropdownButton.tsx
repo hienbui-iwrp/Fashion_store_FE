@@ -4,6 +4,7 @@ import { Button, Dropdown } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 import { Colors } from '@/constants'
 import { DropdownButtonProps } from '@/utils/types/componentType'
+import styles from '@/styles/Admin.module.css'
 
 const DropdownButton = (props: DropdownButtonProps) => {
   const [isHover, setIsHover] = useState(false)
@@ -18,15 +19,13 @@ const DropdownButton = (props: DropdownButtonProps) => {
     })
 
   return (
-    <Dropdown menu={{ items: items ?? [] }} placement='bottomLeft'>
+    <Dropdown menu={{ items: items ?? [] }} placement='bottomLeft' {...props}>
       <Button
+        className={styles.adminInputShadow}
         style={{
           display: 'flex',
           alignItems: 'center',
           color: isHover ? Colors.adminGreen500 : Colors.black,
-          border: 0,
-          boxShadow: '1px 4px 6px 1px #ccc',
-          borderRadius: 12,
         }}
         onMouseEnter={() => {
           setIsHover(true)

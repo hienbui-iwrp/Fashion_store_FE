@@ -9,4 +9,5 @@ export const Colors = {
   adminGreen300: '#87FB7F',
   adminRed900: '#cc4141',
   adminRed500: '#FF4A4A',
+  shadow: '#ccc',
 }

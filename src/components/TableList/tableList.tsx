@@ -20,9 +20,9 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     ),
     footer: undefined,
     showHeader: true,
-    scroll: { x: props?.scroll?.x ?? '60vw', y: props?.scroll?.y ?? '60vh' },
+    scroll: { x: props?.scroll?.x ?? '60vw', y: props?.scroll?.y ?? '70vh' },
     tableLayout: 'auto',
-    pagination: { position: ['bottomRight'], pageSize: 25 },
+    pagination: { position: ['bottomRight'], pageSize: 30 },
   }
 
   return (
@@ -33,9 +33,9 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         backgroundColor: Colors.white,
         borderRadius: 12,
       }}
+      {...props}
     >
       <Table
-        {...tableProps}
         columns={props.columns}
         dataSource={props.data ?? []}
         onRow={(record: any, index) => {
@@ -45,6 +45,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
             },
           }
         }}
+        {...tableProps}
       />
     </div>
   )

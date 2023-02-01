@@ -5,7 +5,7 @@ export interface ModalSampleProps {
   callback?: (item: any) => void
 }
 
-export interface ModalAddBranchProps extends ModalSampleProps {
+export interface ModalAddEditBranchProps extends ModalSampleProps {
   extraData?: {
     name?: string
     address?: string

@@ -6,6 +6,7 @@ import { LineChart } from '@/components/LineChart'
 import { AddButton, DropdownButton, FilterTag, LayoutAdmin } from '@/components'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import styles from '@/styles/Admin.module.css'
 
 dayjs.extend(customParseFormat)
 
@@ -52,17 +53,18 @@ const StatisticManagement = () => {
       <Card className='!max-w-full-lg'>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Col xs={24} lg={24} xl={10} className='my-2'>
-            <Space direction='horizontal' size={10}>
+            <Space direction='horizontal' size={25}>
               <DropdownButton label={'Chi nhánh'} items={items} />
               <DropdownButton label={'Giới tính'} items={items} />
               <DropdownButton label={'Loại'} items={items} />
             </Space>
           </Col>
           <Col xs={24} lg={16} xl={8} className='my-2'>
-            <Space direction='horizontal' size={10}>
+            <Space direction='horizontal' size={25}>
               <DatePicker
                 placeholder='Start Date'
                 format={'DD/MM/YYYY'}
+                className={styles.adminInputShadow}
                 onChange={(date, dateString) => {
                   console.log(dateString)
                 }}
@@ -70,6 +72,7 @@ const StatisticManagement = () => {
               <DatePicker
                 placeholder='End Date'
                 format={'DD/MM/YYYY'}
+                className={styles.adminInputShadow}
                 onChange={(date, dateString) => {
                   console.log(dateString)
                 }}
@@ -80,9 +83,15 @@ const StatisticManagement = () => {
             <AddButton label='Chọn sản phẩm' />
           </Col>
         </Row>
-        <Space size={20}>
+        <Space size={4}>
           <FilterTag
             label='Nam'
+            onClick={() => {
+              console.log('close')
+            }}
+          />
+          <FilterTag
+            label='Áo khoác'
             onClick={() => {
               console.log('close')
             }}
@@ -94,17 +103,18 @@ const StatisticManagement = () => {
       <Card className='!max-w-full-lg'>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Col xs={24} lg={24} xl={10} className='my-2'>
-            <Space direction='horizontal' size={10}>
+            <Space direction='horizontal' size={25}>
               <DropdownButton label={'Chi nhánh'} items={items} />
               <DropdownButton label={'Giới tính'} items={items} />
               <DropdownButton label={'Loại'} items={items} />
             </Space>
           </Col>
           <Col xs={24} lg={16} xl={8} className='my-2'>
-            <Space direction='horizontal' size={10}>
+            <Space direction='horizontal' size={25}>
               <DatePicker
                 placeholder='Start Date'
                 format={'DD/MM/YYYY'}
+                className={styles.adminInputShadow}
                 onChange={(date, dateString) => {
                   console.log(dateString)
                 }}
@@ -112,6 +122,7 @@ const StatisticManagement = () => {
               <DatePicker
                 placeholder='End Date'
                 format={'DD/MM/YYYY'}
+                className={styles.adminInputShadow}
                 onChange={(date, dateString) => {
                   console.log(dateString)
                 }}

@@ -6,18 +6,19 @@ import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { ModalAddEditBranch } from '@/utils'
+import { ModalAddEditStaff } from '@/utils'
 
 interface DataType {
   id: string
   name: string
-  address: string
+  role: string
+  workingLocation: string
 }
 
-const BranchManagement = () => {
+const StaffManagement = () => {
   const [data, setData] = useState<DataType[]>([])
   const [loading, setLoading] = useState(true)
-  const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
+  const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
 
   const columns: ColumnsType<DataType> = []
   if (data[0]) {
@@ -27,8 +28,10 @@ const BranchManagement = () => {
           key === 'id'
             ? 'Mã chi nhánh'
             : key === 'name'
-            ? 'Tên chi nhánh'
-            : 'Địa chỉ',
+            ? 'Tên'
+            : key === 'role'
+            ? 'Vị trí'
+            : 'Nơi làm việc',
         dataIndex: key,
         sorter: (a: DataType, b: DataType) => (a[key] > b[key] ? 1 : -1),
         ellipsis: true,
@@ -59,7 +62,7 @@ const BranchManagement = () => {
               borderRadius={5}
               onClick={(e) => {
                 e.stopPropagation()
-                setModalAddEditBranch(true)
+                setModalAddEditStaff(true)
               }}
             />
           ),
@@ -69,7 +72,7 @@ const BranchManagement = () => {
   }
 
   const getData = async () => {
-    await axios.get(`${BASE_URL}/api/admin/branchData`).then((res) => {
+    await axios.get(`${BASE_URL}/api/admin/staffManagement`).then((res) => {
       setData(res.data)
     })
   }
@@ -84,26 +87,26 @@ const BranchManagement = () => {
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <AddButton
           label='Thêm mới'
-          onClick={() => setModalAddEditBranch(true)}
+          onClick={() => setModalAddEditStaff(true)}
         />
         <TableList<DataType>
           data={data}
-          title='Danh sách chi nhánh'
+          title='Danh sách nhân viên'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/branchDetail/'}
+          selectUrl={BASE_URL + 'admin/staffManagement/'}
           loading={loading}
         />
       </Space>
-      <ModalAddEditBranch
-        open={modalAddEditBranch}
-        cancel={() => setModalAddEditBranch(false)}
+      <ModalAddEditStaff
+        open={modalAddEditStaff}
+        cancel={() => setModalAddEditStaff(false)}
       />
     </>
   )
 
-  return <LayoutAdmin content={content} selected={0} />
+  return <LayoutAdmin content={content} selected={20} />
 }
 
-BranchManagement.displayName = 'Branch Management'
+StaffManagement.displayName = 'Staff Management'
 
-export default BranchManagement
+export default StaffManagement

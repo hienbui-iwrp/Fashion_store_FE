@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL } from '@/constants'
 import axios from 'axios'
-import { EditFilled, ExclamationCircleOutlined } from '@ant-design/icons'
+import { EditFilled } from '@ant-design/icons'
 import { Card, Col, Row, Image, List, Space, Modal } from 'antd'
 import { useRouter } from 'next/router'
 import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
-import { ModalAddBranch } from '@/utils/modals'
+import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalDelete } from '@/hooks'
 import { formatTime } from '@/utils'
 
@@ -33,7 +33,7 @@ const BranchDetail = () => {
   const [data, setData] = useState<DataType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
   const [dataFetch, setDataFetch] = useState<DataType>()
-  const [modalAddBranch, setModalAddBranch] = useState(false)
+  const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
 
   const router = useRouter()
   const { id } = router.query
@@ -123,7 +123,7 @@ const BranchDetail = () => {
                 <AddButton
                   label='Chỉnh sửa'
                   iconInput={<EditFilled />}
-                  onClick={() => setModalAddBranch(true)}
+                  onClick={() => setModalAddEditBranch(true)}
                 />
               </Space>
             </Row>
@@ -133,9 +133,9 @@ const BranchDetail = () => {
       <Card className='!max-w-full-lg'>
         <LineChart data={statisticData} haveRevenue={true} haveProfit={true} />
       </Card>
-      <ModalAddBranch
-        open={modalAddBranch}
-        cancel={() => setModalAddBranch(false)}
+      <ModalAddEditBranch
+        open={modalAddEditBranch}
+        cancel={() => setModalAddEditBranch(false)}
       />
       {contextModalDelete}
     </Space>
