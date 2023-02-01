@@ -90,7 +90,7 @@ const LineChart = (props: LineChartProps) => {
   }
 
   return (
-    <>
+    <div {...props}>
       {props.showTotal && (
         <h1>
           <b>
@@ -108,7 +108,7 @@ const LineChart = (props: LineChartProps) => {
         </h1>
       )}
       <Line {...config} />
-    </>
+    </div>
   )
 }
 export default LineChart

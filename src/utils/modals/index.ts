@@ -1,1 +1,2 @@
-export { default as ModalAddBranch } from './ModalAddBranch'
+export { default as ModalAddEditBranch } from './ModalAddEditBranch'
+export { default as ModalAddEditStaff } from './ModalAddEditStaff'
