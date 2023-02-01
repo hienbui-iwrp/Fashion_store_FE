@@ -27,3 +27,10 @@
   margin-left: 3%;
   margin-right: 3%;
 }
+
+.adminInputShadow,
+.adminInputShadow:focus {
+  border: 0;
+  box-shadow: 2px 4px 6px 1px var(--shadow-color);
+  border-radius: 12px;
+}

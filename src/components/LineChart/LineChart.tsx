@@ -1,27 +1,47 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
+import { LineChartProps } from '@/utils/types/componentType'
+import { Skeleton } from 'antd'
+import { FormatNumber } from '@/utils'
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
-  { ssr: false, loading: () => 'Loading...' }
+  { ssr: false, loading: () => <Skeleton active paragraph={{ rows: 10 }} /> }
 )
 
-const LineChart = () => {
-  const [data, setData] = useState([
-    { year: '1991', value: 3000000, category: 'a' },
-    { year: '1992', value: 40000, category: 'b' },
-    { year: '1993', value: 30000.5, category: 'c' },
-    { year: '1994', value: 500000, category: 'a' },
-    { year: '1995', value: 40000.9, category: 'b' },
-    { year: '1996', value: 600000, category: 'c' },
-    { year: '1997', value: 7000000, category: 'c' },
-    { year: '1998', value: 900000, category: 'b' },
-    { year: '1999', value: 130000, category: 'a' },
-  ])
+interface DataType {
+  date: Date
+  value: number
+  category: string
+}
+
+const LineChart = (props: LineChartProps) => {
+  const [data, setData] = useState<DataType[]>([])
+
+  useEffect(() => {
+    if (props.data) {
+      let _data: any[] = []
+      props.data?.forEach((item) => {
+        if (props.haveRevenue) {
+          _data = [
+            ..._data,
+            { date: item.date, value: item.revenue, category: 'revenue' },
+          ]
+        }
+        if (props.haveProfit) {
+          _data = [
+            ..._data,
+            { date: item.date, value: item.profit, category: 'profit' },
+          ]
+        }
+      })
+      setData(_data)
+    }
+  }, [props.data])
 
   const config = {
     data: data,
-    xField: 'year',
+    xField: 'date',
     yField: 'value',
     seriesField: 'category',
     xAxis: {
@@ -31,7 +51,10 @@ const LineChart = () => {
           fill: '#000',
         },
         formatter: (value: any) => {
-          return new Date(value).getFullYear()
+          const date = new Date(value)
+          return (
+            date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
+          )
         },
       },
     },
@@ -50,13 +73,15 @@ const LineChart = () => {
       },
     },
     point: {
-      size: 2,
+      size: 3,
       shape: 'diamond',
     },
     smooth: true,
     loading: false,
     colorField: 'item',
-    color: [Colors.adminGreen500, Colors.adminGreen900, '#4778EC', '#F8827D'],
+    color: props.haveRevenue
+      ? [Colors.adminGreen500, Colors.adminGreen900, '#4778EC', '#F8827D']
+      : [Colors.adminGreen900, Colors.adminGreen500, '#4778EC', '#F8827D'],
     lineStyle: {
       lineWidth: 2,
       strokeOpacity: 0.9,
@@ -64,6 +89,26 @@ const LineChart = () => {
     style: { width: '99%' },
   }
 
-  return <Line {...config} />
+  return (
+    <div {...props}>
+      {props.showTotal && (
+        <h1>
+          <b>
+            {FormatNumber(
+              (props.haveRevenue
+                ? props.data?.reduce((sum, item) => {
+                    return sum + (item.revenue ?? 0)
+                  }, 0)
+                : props.data?.reduce((sum, item) => {
+                    return sum + (item.profit ?? 0)
+                  }, 0)) ?? 0
+            )}{' '}
+            VND
+          </b>
+        </h1>
+      )}
+      <Line {...config} />
+    </div>
+  )
 }
 export default LineChart

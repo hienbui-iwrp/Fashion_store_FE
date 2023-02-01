@@ -28,6 +28,7 @@ export default function AddButton(props: ButtonProps) {
         setIsHover(false)
       }}
       onClick={props?.onClick}
+      {...props}
     >
       {props.label ?? ''}
     </Button>
