@@ -1,0 +1,17 @@
+.productColor label,
+.productSize label {
+  margin-right: 0.5rem;
+  border-radius: 0px !important;
+  width: 4rem;
+}
+
+.productSize label {
+  width: 3rem;
+}
+
+.productColor label span:nth-child(2),
+.productSize label span:nth-child(2) {
+  display: flex;
+  justify-content: center;
+}
+

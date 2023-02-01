@@ -1,13 +1,16 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, Typography, Empty } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 
 const { Title, Text } = Typography;
 
 export default function Register() {
+  const router = useRouter()
   const onFinish = (values: any) => {
     console.log('Success:', values);
+    router.push('/login');
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -46,9 +49,9 @@ export default function Register() {
           label={<Text strong>Email</Text>}
           name="email"
           rules={[
-            {type: 'email', message: 'Định dạng email không đúng.'},
+            { type: 'email', message: 'Định dạng email không đúng.' },
             { required: true, message: 'Vui lòng nhập email!' }
-        ]}
+          ]}
         >
           <Input className='' />
         </Form.Item>
@@ -74,7 +77,16 @@ export default function Register() {
           className='mb-2'
           label={<Text strong>Mật khẩu</Text>}
           name="password"
-          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
+          ({}) => ({
+            validator(_, value) {
+              if (!value || value.length > 5) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
+            },
+          }),
+        ]}
         >
           <Input.Password />
         </Form.Item>
@@ -82,8 +94,20 @@ export default function Register() {
         <Form.Item
           className='mb-4'
           label={<Text strong>Nhập lại mật khẩu</Text>}
-          name="password"
-          rules={[{ required: true, message: 'Vui lòng nhập lại mật khẩu!' }]}
+          name="confirmPassword"
+          dependencies={['password']}
+          hasFeedback
+          rules={[
+            { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Nhập lại mật khẩu không đúng!'));
+              },
+            })
+          ]}
         >
           <Input.Password />
         </Form.Item>

@@ -186,10 +186,10 @@ export default function Products(props: ProductsProps) {
     <div className='products-content px-4 md:px-8'>
       <div className="products-title flex justify-between">
         <Title level={3}>Tất cả sản phẩm</Title>
-        <div>
+        <Space>
           <Text className='bg-lime-200 rounded-lg px-2'>118</Text>
           <Text> sản phẩm</Text>
-        </div>
+        </Space>
       </div>
       <div className='products-filter'>
         <div className='flex gap-2'>
@@ -205,16 +205,6 @@ export default function Products(props: ProductsProps) {
               { value: 'unisex', label: 'Unisex' },
             ]}
           />
-          {/* <Select
-            placeholder={<Text strong>Kiểu dáng</Text>}
-            style={{ width: 120 }}
-            onChange={handleChange}
-            options={[
-              { value: 'jack', label: 'Jack' },
-              { value: 'lucy', label: 'Lucy' },
-              { value: 'Yiminghe', label: 'yiminghe' },
-            ]}
-          /> */}
           <Select
             placeholder={<Text strong>Áo quần</Text>}
             style={{ width: 120 }}
