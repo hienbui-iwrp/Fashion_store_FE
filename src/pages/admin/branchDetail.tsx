@@ -22,6 +22,11 @@ interface DataType {
   image?: string
 }
 
+interface ItemType {
+  name: string
+  content: string
+}
+
 interface StatisticDataType {
   revenue?: number
   profit?: number
@@ -29,10 +34,10 @@ interface StatisticDataType {
 }
 
 const BranchDetail = () => {
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState<DataType[]>([])
+  const [loading, setLoading] = useState(true)
+  const [dataItems, setDataItems] = useState<ItemType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
-  const [dataFetch, setDataFetch] = useState<DataType>()
+  const [data, setData] = useState<DataType>()
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
 
   const router = useRouter()
@@ -42,20 +47,24 @@ const BranchDetail = () => {
     await axios
       .get(`${BASE_URL}/api/admin/branchDetailData?id=${id}`)
       .then((res) => {
-        formatData(res.data)
-        setDataFetch(res.data)
+        const _data = res.data
+        setData(res.data)
+        setDataItems([
+          { name: 'Mã chi nhánh', content: _data.id },
+          { name: 'Địa chỉ', content: _data.address },
+          { name: 'Quản lý', content: _data.manager },
+          { name: 'Diện tích', content: _data.area },
+          { name: 'Nhân viên', content: _data.staff },
+          {
+            name: 'Giờ hoạt động',
+            content:
+              formatTime(new Date(_data.startTime)) +
+              ' - ' +
+              formatTime(new Date(_data.endTime)),
+          },
+        ])
+        setLoading(false)
       })
-  }
-  const formatData = (data: any) => {
-    let dataFormat: any[] = []
-    for (const key in data) {
-      if (key == 'image') continue
-      if (key == 'startTime' || key == 'endTime')
-        dataFormat = [...dataFormat, { [key]: new Date(data[key]) }]
-      else dataFormat = [...dataFormat, { [key]: data[key] }]
-    }
-
-    setData(dataFormat)
   }
 
   const getStatisticData = async () => {
@@ -81,17 +90,16 @@ const BranchDetail = () => {
     <Space direction='vertical' style={{ width: '99%' }} size='large'>
       <Card
         className='max-w-full-lg'
-        title={dataFetch?.name?.toUpperCase() ?? 'Không tên'}
+        title={data?.name?.toUpperCase() ?? 'Không tên'}
         bordered={false}
         loading={loading}
       >
         <Row justify='center' align='middle'>
-          {/* xs sm lg xl */}
           <Col xs={24} sm={12}>
             <Image
               preview={true}
               src={
-                dataFetch?.image ??
+                data?.image ??
                 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
               }
               width={'80%'}
@@ -100,18 +108,15 @@ const BranchDetail = () => {
           <Col xs={24} sm={12}>
             <List
               bordered={false}
-              dataSource={data ?? []}
+              dataSource={dataItems ?? []}
               renderItem={(item) => {
-                const key = Object.keys(item)
                 return (
                   <Row style={{ padding: 8 }}>
-                    <Col xs={24} sm={8}>
-                      <b>{key}</b>
+                    <Col xs={24} lg={8}>
+                      <b>{item.name}</b>
                     </Col>
-                    <Col xs={24} sm={16}>
-                      {item[key] instanceof Date
-                        ? formatTime(item[key])
-                        : item[key]}
+                    <Col xs={24} lg={16}>
+                      {item.content}
                     </Col>
                   </Row>
                 )
