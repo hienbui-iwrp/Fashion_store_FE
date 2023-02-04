@@ -9,7 +9,7 @@ type Data = {
   address: string
   dateOfBirth: Date
   homeTown: string
-  workLocation: string
+  workingLocation: string
   role: string
   salary: number
   startDate: Date
@@ -43,7 +43,7 @@ export default function handler(
         address: 'Đông hòa, Dĩ An, Bình Dương',
         dateOfBirth: new Date('01/01/2001'),
         homeTown: 'Daklak',
-        workLocation: 'Chi nhánh 1',
+        workingLocation: 'Chi nhánh 1',
         role: 'Quản lý',
         salary: 10000000,
         startDate: new Date('01/01/2022'),
@@ -59,7 +59,7 @@ export default function handler(
         address: 'Đông hòa, Dĩ An, Bình Dương',
         dateOfBirth: new Date('01/01/2000'),
         homeTown: 'Daklak',
-        workLocation: 'Chi nhánh 2',
+        workingLocation: 'Chi nhánh 2',
         role: 'Nhân viên',
         salary: 5000000,
         startDate: new Date('01/01/2022'),
@@ -74,7 +74,7 @@ export default function handler(
         address: 'Đông hòa, Dĩ An, Bình Dương',
         dateOfBirth: new Date('01/01/2005'),
         homeTown: 'Daklak',
-        workLocation: 'Chi nhánh 3',
+        workingLocation: 'Chi nhánh 3',
         role: 'Nhân viên',
         salary: 7000000,
         startDate: new Date('01/01/2022'),
@@ -89,7 +89,7 @@ export default function handler(
         address: 'Đại học Bách Khoa, Đông hòa, DĨ an, Bình Dương',
         dateOfBirth: new Date('12/12/2012'),
         homeTown: 'Daklak',
-        workLocation: 'Chi nhánh 1',
+        workingLocation: 'Chi nhánh 1',
         role: 'Nhân viên',
         salary: 8000000,
         startDate: new Date('01/12/2022'),

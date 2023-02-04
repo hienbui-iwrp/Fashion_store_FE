@@ -15,9 +15,13 @@ import {
 } from 'antd'
 import { useRouter } from 'next/router'
 import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
-import { ModalAddEditStaff } from '@/utils/modals'
-import { useModalDelete } from '@/hooks'
-import { formatDate, FormatNumber, formatTime } from '@/utils'
+import { useModalConfirm } from '@/hooks'
+import {
+  formatDate,
+  FormatNumber,
+  formatTime,
+  ModalAddEditStaff,
+} from '@/utils'
 import { ColumnsType } from 'antd/es/table'
 import styles from '@/styles/Admin.module.css'
 import dayjs from 'dayjs'
@@ -33,7 +37,7 @@ interface DataType {
   address: string
   dateOfBirth: Date
   homeTown: string
-  workLocation: string
+  workingLocation: string
   role: string
   salary: number
   startDate: Date
@@ -57,14 +61,14 @@ const StaffDetail = () => {
   const [dataItems1, setDataItems1] = useState<ItemType[]>([])
   const [dataItems2, setDataItems2] = useState<ItemType[]>([])
   const [attendanceData, setAttendanceData] = useState<AttendanceDataType[]>([])
-  const [data, setData] = useState<DataType>()
+  const [data, setData] = useState<DataType>({})
   const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
 
   const router = useRouter()
   const { id } = router.query
 
   const columns: ColumnsType<AttendanceDataType> = []
-  if (attendanceData[0]) {
+  if (attendanceData && attendanceData[0]) {
     for (const key in attendanceData[0]) {
       columns.push({
         title:
@@ -116,7 +120,7 @@ const StaffDetail = () => {
           { name: 'Quê quán', content: _data.homeTown },
         ])
         setDataItems2([
-          { name: 'Nơi làm việc', content: _data.workLocation },
+          { name: 'Nơi làm việc', content: _data.workingLocation },
           { name: 'Vị trí', content: _data.role },
           { name: 'Lương', content: FormatNumber(_data.salary) + ' VND' },
           {
@@ -145,9 +149,9 @@ const StaffDetail = () => {
     getAttendacceData()
   }, [])
 
-  const { showModelDelete, contextModalDelete } = useModalDelete({
-    title: 'Xóa chi nhánh',
-    content: 'Bạn có chắc  chắn muốn xóa chi nhánh này?',
+  const { showModelConfirm, contextModalComfirm } = useModalConfirm({
+    title: 'Xóa nhân viên',
+    content: 'Bạn có chắc  chắn muốn xóa nhân viên này?',
     onOk: () => {
       console.log('delete Staff')
     },
@@ -199,20 +203,22 @@ const StaffDetail = () => {
               dataSource={dataItems2 ?? []}
               renderItem={(item) => {
                 return (
-                  <Row style={{ padding: 8 }}>
-                    <Col xs={24} lg={8}>
-                      <b>{item.name}</b>
-                    </Col>
-                    <Col xs={24} lg={16}>
-                      {item.content}
-                    </Col>
-                  </Row>
+                  item && (
+                    <Row style={{ padding: 8 }}>
+                      <Col xs={24} lg={8}>
+                        <b>{item.name}</b>
+                      </Col>
+                      <Col xs={24} lg={16}>
+                        {item.content}
+                      </Col>
+                    </Row>
+                  )
                 )
               }}
             />
             <Row justify='end' align='bottom'>
               <Space size={20}>
-                <RemoveButton onClick={showModelDelete} />
+                <RemoveButton onClick={showModelConfirm} />
                 <AddButton
                   label='Chỉnh sửa'
                   iconInput={<EditFilled />}
@@ -239,7 +245,7 @@ const StaffDetail = () => {
             picker='month'
             placeholder='Month'
             format={'MM/YYYY'}
-            defaultValue={dayjs('01/2022', 'MM/YYYY')}
+            // defaultValue={dayjs('01/2022', 'MM/YYYY')}
             className={styles.adminInputShadow}
             onChange={(date, dateString) => {
               console.log(dateString)
@@ -247,16 +253,19 @@ const StaffDetail = () => {
           />
         </div>
         <TableList<AttendanceDataType>
-          data={attendanceData}
+          data={attendanceData ?? []}
           columns={columns}
           loading={loading}
         />
       </Card>
-      <ModalAddEditStaff
-        open={modalAddEditStaff}
-        cancel={() => setModalAddEditStaff(false)}
-      />
-      {contextModalDelete}
+      {modalAddEditStaff && (
+        <ModalAddEditStaff
+          open={modalAddEditStaff}
+          cancel={() => setModalAddEditStaff(false)}
+          extraData={data}
+        />
+      )}
+      {contextModalComfirm}
     </Space>
   )
 

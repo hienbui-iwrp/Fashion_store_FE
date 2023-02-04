@@ -1,5 +1,4 @@
 export default function FormatOutputDate(date: any): string {
-  console.log(date)
   const _date = new Date(date)
 
   const day = _date.getDate()

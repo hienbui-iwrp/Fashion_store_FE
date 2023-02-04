@@ -19,6 +19,7 @@ const StaffManagement = () => {
   const [data, setData] = useState<DataType[]>([])
   const [loading, setLoading] = useState(true)
   const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
+  const [currentData, setCurrentData] = useState<DataType>()
 
   const columns: ColumnsType<DataType> = []
   if (data[0]) {
@@ -62,6 +63,7 @@ const StaffManagement = () => {
               borderRadius={5}
               onClick={(e) => {
                 e.stopPropagation()
+                setCurrentData(record)
                 setModalAddEditStaff(true)
               }}
             />
@@ -97,10 +99,13 @@ const StaffManagement = () => {
           loading={loading}
         />
       </Space>
-      <ModalAddEditStaff
-        open={modalAddEditStaff}
-        cancel={() => setModalAddEditStaff(false)}
-      />
+      {modalAddEditStaff && (
+        <ModalAddEditStaff
+          open={modalAddEditStaff}
+          cancel={() => setModalAddEditStaff(false)}
+          extraData={currentData}
+        />
+      )}
     </>
   )
 

@@ -157,7 +157,7 @@ const LayoutAdmin = ({
                 routes.push('/admin/staffManagement')
                 break
               case '21':
-                routes.push('/admin')
+                routes.push('/admin/staffManagement/request')
                 break
               case '70':
                 routes.push('/admin')

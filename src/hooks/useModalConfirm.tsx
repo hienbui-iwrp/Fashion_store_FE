@@ -2,13 +2,13 @@ import React from 'react'
 import { Modal } from 'antd'
 import { Colors } from '@/constants'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
-import { useModalDeleteProps } from '@/utils/types/hookType'
+import { useModalComfirmProps } from '@/utils/types/hookType'
 
-const useModalDelete = (props: useModalDeleteProps) => {
-  const [modalDelete, contextModalDelete] = Modal.useModal()
+const useModalConfirm = (props: useModalComfirmProps) => {
+  const [modalComfirm, contextModalComfirm] = Modal.useModal()
 
-  const showModelDelete = () => {
-    modalDelete.confirm({
+  const showModelConfirm = () => {
+    modalComfirm.confirm({
       title: props.title ?? 'Xác nhận xóa',
       content: props.content ?? 'Bạn có chắc muốn xóa',
       okText: 'Xác nhận',
@@ -27,7 +27,7 @@ const useModalDelete = (props: useModalDeleteProps) => {
     })
   }
 
-  return { showModelDelete, contextModalDelete }
+  return { showModelConfirm, contextModalComfirm }
 }
 
-export default useModalDelete
+export default useModalConfirm

@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 export interface ComponentProps {
   styles?: object
   className?: string
+  callBack?: (item: any) => void
 }
 
 export interface ButtonProps extends ComponentProps {
@@ -20,6 +21,9 @@ export interface TableListProps<T> extends ComponentProps {
   selectUrl?: string
   scroll?: { x?: string; y?: string }
   loading?: boolean
+  pageSize?: number
+  ellipsis?: boolean
+  onSelectRow?: () => void
 }
 
 export interface LineChartProps extends ComponentProps {
