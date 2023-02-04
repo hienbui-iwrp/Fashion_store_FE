@@ -18,6 +18,7 @@ const BranchManagement = () => {
   const [data, setData] = useState<DataType[]>([])
   const [loading, setLoading] = useState(true)
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
+  const [currentData, setCurrentData] = useState<DataType>()
 
   const columns: ColumnsType<DataType> = []
   if (data[0]) {
@@ -57,6 +58,7 @@ const BranchManagement = () => {
               iconInput={<EditOutlined />}
               borderRadius={5}
               onClick={(e) => {
+                setCurrentData(record)
                 e.stopPropagation()
                 setModalAddEditBranch(true)
               }}
@@ -93,10 +95,13 @@ const BranchManagement = () => {
           loading={loading}
         />
       </Space>
-      <ModalAddEditBranch
-        open={modalAddEditBranch}
-        cancel={() => setModalAddEditBranch(false)}
-      />
+      {modalAddEditBranch && (
+        <ModalAddEditBranch
+          open={modalAddEditBranch}
+          cancel={() => setModalAddEditBranch(false)}
+          extraData={currentData}
+        />
+      )}
     </>
   )
 

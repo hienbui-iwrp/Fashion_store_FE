@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Modal, Row, Space, Image, Form, Input, TimePicker } from 'antd'
 import { ModalAddEditBranchProps } from '../types/modalType'
 import { AddButton, RemoveButton } from '@/components'
@@ -7,9 +7,10 @@ import {
   CloseOutlined,
   FileImageOutlined,
 } from '@ant-design/icons'
+import styles from '@/styles/Admin.module.css'
+import { formatTime } from '..'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import styles from '@/styles/Admin.module.css'
 
 dayjs.extend(customParseFormat)
 
@@ -43,6 +44,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
               <Image
                 preview={true}
                 src={
+                  props.extraData?.image ??
                   'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
                 }
                 width={'90%'}
@@ -60,24 +62,32 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                 <Input
                   placeholder='Nhập tên chi nhánh'
                   className={styles.adminInputShadow}
+                  defaultValue={props.extraData?.name}
                 />
               </Form.Item>
               <Form.Item label='Địa chỉ'>
                 <Input
                   placeholder='Nhập địa chỉ'
                   className={styles.adminInputShadow}
+                  defaultValue={props.extraData?.address}
                 />
               </Form.Item>
               <Form.Item label='Giờ hoạt động'>
                 <Space>
                   <TimePicker
-                    defaultValue={dayjs('8:30', 'HH:mm ')}
+                    defaultValue={
+                      props.extraData?.startTime &&
+                      dayjs(formatTime(props.extraData?.startTime), 'HH:mm ')
+                    }
                     format={'HH:mm'}
                     onOk={(item) => console.log(item.hour(), item.minute())}
                     className={styles.adminInputShadow}
                   />
                   <TimePicker
-                    defaultValue={dayjs('19:30', 'HH:mm ')}
+                    defaultValue={
+                      props.extraData?.endTime &&
+                      dayjs(formatTime(props.extraData?.endTime), 'HH:mm ')
+                    }
                     format={'HH:mm'}
                     onOk={(item) => console.log(item.hour(), item.minute())}
                     className={styles.adminInputShadow}
