@@ -125,13 +125,13 @@ const LayoutAdmin = ({
 
         switch (index) {
           case 0:
-            routes.push('/admin')
+            routes.push('/admin/branch')
             break
           case 1:
-            routes.push('/admin/statisticManagement')
+            routes.push('/admin/statistic')
             break
           case 3:
-            routes.push('/admin')
+            routes.push('/admin/account')
             break
           case 4:
             routes.push('/admin')
@@ -154,10 +154,10 @@ const LayoutAdmin = ({
 
             switch (index + '' + childIndex) {
               case '20':
-                routes.push('/admin/staffManagement')
+                routes.push('/admin/staff')
                 break
               case '21':
-                routes.push('/admin/staffManagement/request')
+                routes.push('/admin/staff/request')
                 break
               case '70':
                 routes.push('/admin')

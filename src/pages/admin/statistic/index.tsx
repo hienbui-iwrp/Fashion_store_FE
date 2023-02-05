@@ -28,7 +28,7 @@ interface StatisticDataType {
   date: Date
 }
 
-const StatisticManagement = () => {
+const Statistic = () => {
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
 
   const getStatisticData = async () => {
@@ -141,6 +141,6 @@ const StatisticManagement = () => {
   return <LayoutAdmin content={content} selected={1} />
 }
 
-StatisticManagement.displayName = 'Statistic Management'
+Statistic.displayName = 'Statistic Management'
 
-export default StatisticManagement
+export default Statistic
