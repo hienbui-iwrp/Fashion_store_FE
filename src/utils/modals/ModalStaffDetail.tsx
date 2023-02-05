@@ -30,7 +30,6 @@ interface ItemType {
 }
 
 const ModalStaffDetail = (props: ModalStaffDetailProps) => {
-  const [loading, setLoading] = useState(true)
   const [dataItems1, setDataItems1] = useState<ItemType[]>([])
   const [dataItems2, setDataItems2] = useState<ItemType[]>([])
 
@@ -63,7 +62,6 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
         content: props?.extraData?.account ?? '',
       },
     ])
-    setLoading(false)
   }
 
   useEffect(() => {
@@ -87,6 +85,7 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
                 <List
                   bordered={false}
                   dataSource={dataItems1 ?? []}
+                  key={'list1'}
                   renderItem={(item) => {
                     return (
                       item.content && (
@@ -118,6 +117,7 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
             <List
               bordered={false}
               dataSource={dataItems2 ?? []}
+              key={'list2'}
               renderItem={(item) => {
                 return (
                   <Row style={{ padding: 8 }}>

@@ -37,3 +37,8 @@ export interface DropdownButtonProps extends ComponentProps {
   label?: string
   items?: { content?: string; onClick?: () => void }[]
 }
+
+export interface InputSearchProps extends ComponentProps {
+  onEnter?: () => void
+  width?: string | number
+}

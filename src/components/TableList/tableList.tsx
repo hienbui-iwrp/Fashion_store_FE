@@ -42,7 +42,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
       {...props}
     >
       <Table
-        columns={props.columns}
+        columns={tableColumns}
         dataSource={props.data ?? []}
         onRow={(record: any, index) => {
           return {

@@ -7,6 +7,7 @@ import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import { ModalAddEditStaff } from '@/utils'
+import { InputSearch } from '@/components'
 
 interface DataType {
   id: string
@@ -87,10 +88,13 @@ const StaffManagement = () => {
   const content = (
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
-        <AddButton
-          label='Thêm mới'
-          onClick={() => setModalAddEditStaff(true)}
-        />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <AddButton
+            label='Thêm mới'
+            onClick={() => setModalAddEditStaff(true)}
+          />
+          <InputSearch />
+        </div>
         <TableList<DataType>
           data={data}
           title='Danh sách nhân viên'
