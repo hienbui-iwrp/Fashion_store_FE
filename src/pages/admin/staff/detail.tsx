@@ -56,7 +56,7 @@ interface AttendanceDataType {
   total: number
 }
 
-const StaffDetail = () => {
+const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [dataItems1, setDataItems1] = useState<ItemType[]>([])
   const [dataItems2, setDataItems2] = useState<ItemType[]>([])
@@ -272,6 +272,6 @@ const StaffDetail = () => {
   return <LayoutAdmin content={content} selected={20} />
 }
 
-StaffDetail.displayName = 'Staff Detail'
+Detail.displayName = 'Staff Detail'
 
-export default StaffDetail
+export default Detail

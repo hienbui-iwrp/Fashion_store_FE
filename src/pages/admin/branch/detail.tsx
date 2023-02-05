@@ -33,7 +33,7 @@ interface StatisticDataType {
   date: Date
 }
 
-const BranchDetail = () => {
+const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [dataItems, setDataItems] = useState<ItemType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
@@ -152,6 +152,6 @@ const BranchDetail = () => {
   return <LayoutAdmin content={content} selected={0} />
 }
 
-BranchDetail.displayName = 'Branch Detail'
+Detail.displayName = 'Branch Detail'
 
-export default BranchDetail
+export default Detail

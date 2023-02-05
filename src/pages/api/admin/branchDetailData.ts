@@ -21,7 +21,6 @@ export default function handler(
     query: { id },
     method,
   } = req
-  console.log(req)
 
   const startTime = new Date()
   startTime.setHours(8)
