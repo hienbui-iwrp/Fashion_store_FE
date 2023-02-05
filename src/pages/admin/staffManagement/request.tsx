@@ -125,6 +125,7 @@ const Request = () => {
 
     columns.push({
       title: '',
+      dataIndex: 'option',
       render(text: string, record: DataType, index: number) {
         return {
           props: {
@@ -179,7 +180,7 @@ const Request = () => {
     })
     columns.push({
       title: 'Tên nhân viên',
-      dataIndex: 'name',
+      dataIndex: 'name1',
       sorter: (a: DataType, b: DataType) =>
         a.staff.name > b.staff.name ? 1 : -1,
       render(text: string, record: DataType, index: number) {
@@ -213,7 +214,7 @@ const Request = () => {
 
     columns.push({
       title: 'Vị trí',
-      dataIndex: 'role',
+      dataIndex: 'role1',
       sorter: (a: DataType, b: DataType) =>
         a.staff.role > b.staff.role ? 1 : -1,
       render(text: string, record: DataType, index: number) {
@@ -230,6 +231,7 @@ const Request = () => {
 
     columns.push({
       title: '',
+      dataIndex: 'option1',
       render(text: string, record: DataType, index: number) {
         return {
           props: {
@@ -284,6 +286,7 @@ const Request = () => {
           title='Yêu cầu thêm'
           columns={getDataAdd().columns}
           loading={loading}
+          ellipsis={true}
           callBack={(i: DataType) => {
             setCurrentStaffData(
               data.find((item: DataType) => item.id == i.id)?.staff
@@ -295,12 +298,16 @@ const Request = () => {
           data={getDataRemove().data}
           title='Yêu cầu xóa'
           columns={getDataRemove().columns}
+          callBack={(i: DataType) => {
+            setCurrentStaffData(
+              data.find((item: DataType) => item.id == i.id)?.staff
+            )
+          }}
           onSelectRow={() => setModalStaffDetail(true)}
           loading={loading}
           ellipsis={true}
         />
       </Space>
-
       <ModalStaffDetail
         extraData={currentStaffData}
         open={modalStaffDetail}
