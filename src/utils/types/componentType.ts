@@ -16,6 +16,7 @@ export interface ButtonProps extends ComponentProps {
 export interface TableListProps<T> extends ComponentProps {
   data: T[]
   title?: string
+  header?: ReactNode
   columns: any
   editModal?: ReactNode
   selectUrl?: string
@@ -23,6 +24,7 @@ export interface TableListProps<T> extends ComponentProps {
   loading?: boolean
   pageSize?: number
   ellipsis?: boolean
+  pagination?: string
   onSelectRow?: () => void
 }
 

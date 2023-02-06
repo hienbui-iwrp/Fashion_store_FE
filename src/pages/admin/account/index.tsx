@@ -4,9 +4,9 @@ import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { Space } from 'antd'
+import { Card, Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { ModalAddEditStaff } from '@/utils'
+import { formatDate, ModalAddEditStaff } from '@/utils'
 import { InputSearch } from '@/components'
 
 interface DataType {
@@ -95,7 +95,7 @@ const Account = () => {
               background: index % 2 ? Colors.white : Colors.adminBackground,
             },
           },
-          children: <div>{text}</div>,
+          children: <div>{formatDate(text)}</div>,
         }
       },
     })
@@ -125,7 +125,7 @@ const Account = () => {
               background: index % 2 ? Colors.white : Colors.adminBackground,
             },
           },
-          children: <div>{text}</div>,
+          children: <div>{formatDate(text)}</div>,
         }
       },
     })
