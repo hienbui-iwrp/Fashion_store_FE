@@ -23,12 +23,15 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     showHeader: true,
     scroll: { x: props?.scroll?.x ?? '60vw', y: props?.scroll?.y ?? '70vh' },
     tableLayout: 'auto',
-    pagination: { position: ['bottomRight'], pageSize: props.pageSize ?? 30 },
+    pagination: {
+      position: [props.pagination ?? 'bottomRight'],
+      pageSize: props.pageSize ?? 30,
+    },
   }
 
-  const tableColumns = props?.columns.map((item: any) => ({
+  const tableColumns = props?.columns?.map((item: any) => ({
     ...item,
-    ellipsis: props.ellipsis ?? false,
+    ellipsis: props.ellipsis ?? true,
   }))
 
   return (
@@ -38,9 +41,11 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         paddingRight: 30,
         backgroundColor: Colors.white,
         borderRadius: 12,
+        paddingTop: props.header ? 15 : 0,
       }}
       {...props}
     >
+      <div style={{ marginBottom: 10 }}>{props.header}</div>
       <Table
         columns={tableColumns}
         dataSource={props.data ?? []}

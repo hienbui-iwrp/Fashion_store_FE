@@ -25,9 +25,19 @@ import {
 import { ColumnsType } from 'antd/es/table'
 import styles from '@/styles/Admin.module.css'
 import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import localeData from 'dayjs/plugin/localeData'
+import weekday from 'dayjs/plugin/weekday'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+import weekYear from 'dayjs/plugin/weekYear'
 
 dayjs.extend(customParseFormat)
+dayjs.extend(advancedFormat)
+dayjs.extend(weekday)
+dayjs.extend(localeData)
+dayjs.extend(weekOfYear)
+dayjs.extend(weekYear)
 
 interface DataType {
   id: string
@@ -229,35 +239,28 @@ const Detail = () => {
           </Col>
         </Row>
       </Card>
-      <Card>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: 10,
-            fontSize: 15,
-          }}
-        >
-          <b>Điểm danh</b>
-          <span>Số ngày làm 7</span>
-          <span>Số ngày nghỉ 0</span>
-          <DatePicker
-            picker='month'
-            placeholder='Month'
-            format={'MM/YYYY'}
-            // defaultValue={dayjs('01/2022', 'MM/YYYY')}
-            className={styles.adminInputShadow}
-            onChange={(date, dateString) => {
-              console.log(dateString)
-            }}
-          />
-        </div>
-        <TableList<AttendanceDataType>
-          data={attendanceData ?? []}
-          columns={columns}
-          loading={loading}
-        />
-      </Card>
+      <TableList<AttendanceDataType>
+        data={attendanceData ?? []}
+        columns={columns}
+        loading={loading}
+        header={
+          <div className='flex justify-between text-base	'>
+            <b>Điểm danh</b>
+            <span>Số ngày làm 7</span>
+            <span>Số ngày nghỉ 0</span>
+            <DatePicker
+              picker='month'
+              placeholder='Month'
+              format={'MM/YYYY'}
+              defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
+              className={styles.adminInputShadow}
+              onChange={(date, dateString) => {
+                console.log(dateString)
+              }}
+            />
+          </div>
+        }
+      />
       {modalAddEditStaff && (
         <ModalAddEditStaff
           open={modalAddEditStaff}

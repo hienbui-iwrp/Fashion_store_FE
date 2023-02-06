@@ -48,3 +48,14 @@ export interface ModalStaffDetailProps extends ModalSampleProps {
     account?: string
   }
 }
+
+export interface ModalOrderDetailProps extends ModalSampleProps {
+  extraData?: {
+    id: string
+    status: string
+    total: number
+    createdDate: Date
+    goods: { id: string; name: string; price: number; quantity: number }[]
+    tax: number
+  }
+}
