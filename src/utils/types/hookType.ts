@@ -1,4 +1,4 @@
-export interface useModalDeleteProps {
+export interface useModalComfirmProps {
   title?: string
   content?: string
   onOk?: () => void

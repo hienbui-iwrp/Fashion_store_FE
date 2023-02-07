@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
-import { useModalDelete } from '@/hooks'
+import { useModalConfirm } from '@/hooks'
 import { formatTime } from '@/utils'
 
 interface DataType {
@@ -33,7 +33,7 @@ interface StatisticDataType {
   date: Date
 }
 
-const BranchDetail = () => {
+const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [dataItems, setDataItems] = useState<ItemType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
@@ -78,7 +78,7 @@ const BranchDetail = () => {
     getStatisticData()
   }, [])
 
-  const { showModelDelete, contextModalDelete } = useModalDelete({
+  const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa chi nhánh',
     content: 'Bạn có chắc  chắn muốn xóa chi nhánh này?',
     onOk: () => {
@@ -124,7 +124,7 @@ const BranchDetail = () => {
             />
             <Row justify='end' align='bottom'>
               <Space size={20}>
-                <RemoveButton onClick={showModelDelete} />
+                <RemoveButton onClick={showModelConfirm} />
                 <AddButton
                   label='Chỉnh sửa'
                   iconInput={<EditFilled />}
@@ -138,17 +138,20 @@ const BranchDetail = () => {
       <Card className='!max-w-full-lg'>
         <LineChart data={statisticData} haveRevenue={true} haveProfit={true} />
       </Card>
-      <ModalAddEditBranch
-        open={modalAddEditBranch}
-        cancel={() => setModalAddEditBranch(false)}
-      />
-      {contextModalDelete}
+      {modalAddEditBranch && (
+        <ModalAddEditBranch
+          open={modalAddEditBranch}
+          cancel={() => setModalAddEditBranch(false)}
+          extraData={data}
+        />
+      )}
+      {contextModalComfirm}
     </Space>
   )
 
   return <LayoutAdmin content={content} selected={0} />
 }
 
-BranchDetail.displayName = 'Branch Detail'
+Detail.displayName = 'Branch Detail'
 
-export default BranchDetail
+export default Detail
