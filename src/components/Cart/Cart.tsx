@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import {
-  Space,
-  Typography,
-  Image,
-  Row,
-  Col,
-  Divider,
-  Radio,
-  InputNumber,
-} from 'antd'
-import { Checkbox } from 'antd'
-import ButtonClientPrimary from '../Button/ButtonClientPrimary'
-import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import React, { useState, useEffect } from 'react';
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
+import { Space, Typography, Image, Row, Col, Divider, Radio, InputNumber } from 'antd';
+import { Checkbox } from 'antd';
+import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import styles from './Cart.module.css'
 
 const { Title, Text } = Typography
 
 const onChange = (e: CheckboxChangeEvent) => {
-  console.log(`checked = ${e.target.checked}`)
+  console.log(`checked = ${e.target.checked}`);
+};
+export interface CartProps {
 }
 
-export interface CartProps {}
+export interface CartProps { }
 
 export interface CartItemProps {
   goodsId: string
@@ -58,12 +52,16 @@ const listCartItem: CartItemProps[] = [
 ]
 
 export default function Cart(props: CartProps) {
+  const router = useRouter();
   const [quantity, setQuantity] = useState<number>(1)
   const maxQuantity: number = 1000
   const onChangeQuantity = (index: number, value: number) => {
     if (value > 0 && value < maxQuantity) {
       setQuantity(value)
     }
+  };
+  const handleToPayment = () => {
+    router.push('/payment');
   }
 
   useEffect(() => {
@@ -107,20 +105,14 @@ export default function Cart(props: CartProps) {
                     </Row>
                     <div className='mt-0'>
                       <Space>
-                        <Text className='text-[#A9A9A9] flex w-28'>
-                          Màu sắc:
-                        </Text>
-                        <Text className='bg-[#D9D9D9] flex justify-center w-16'>
-                          {item.color}
-                        </Text>
+                        <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
+                        <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{item.color}</Text>
                       </Space>
                     </div>
                     <div className='mt-2'>
                       <Space>
                         <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                        <Text className='bg-[#D9D9D9] flex justify-center w-16'>
-                          {item.size}
-                        </Text>
+                        <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{item.size}</Text>
                       </Space>
                     </div>
                     <div className='flex justify-between items-center mt-10'>
@@ -199,7 +191,7 @@ export default function Cart(props: CartProps) {
         </Text>
       </div>
       <div className='px-4 pt-2 flex justify-end'>
-        <ButtonClientPrimary name='Thanh toán' />
+        <ButtonClientPrimary name='Thanh toán' onClick={handleToPayment} />
       </div>
     </div>
   )

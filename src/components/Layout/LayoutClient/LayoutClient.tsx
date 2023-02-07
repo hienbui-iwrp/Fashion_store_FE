@@ -182,7 +182,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
   const [navbar, setNavbar] = useState(false);
 
   return (
-    <Layout className='max-w-7xl m-auto p-0 bg-gray-300'>
+    <Layout className='client max-w-7xl m-auto p-0 bg-gray-300'>
       <Header className="!bg-white !p-0 !h-full">
         <Row className='flex'>
           <Col span={15} className="flex items-center ">
@@ -198,7 +198,9 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
             />
           </Col>
           <Col span={9} className='flex justify-around items-center'>
-            <ButtonHeader name='Quản lý đơn hàng' />
+            <Link href='/manage-orders' passHref>
+              <ButtonHeader name='Quản lý đơn hàng' />
+            </Link>
             <Link href='/cart' passHref>
               <ButtonHeader name='Giỏ hàng'
                 iconInput={<FontAwesomeIcon
@@ -322,13 +324,13 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
               <Title className='!text-gray-300' level={4}>Về chúng tôi</Title>
               <ul className="text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
-                  <Link href="#" className="hover:underline hover:text-gray-300">Trang chủ</Link>
+                  <Link href="/" className="hover:underline hover:text-gray-300">Trang chủ</Link>
                 </li>
                 <li className="mb-4">
-                  <Link href="#" className="hover:underline hover:text-gray-300">Sản phẩm</Link>
+                  <Link href="/products" className="hover:underline hover:text-gray-300">Sản phẩm</Link>
                 </li>
                 <li className="mb-4">
-                  <Link href="#" className="hover:underline hover:text-gray-300">Hỗ trợ</Link>
+                  <Link href="/support" className="hover:underline hover:text-gray-300">Hỗ trợ</Link>
                 </li>
               </ul>
             </div>
@@ -344,7 +346,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
                   <a href="#" className="hover:underline hover:text-gray-300">Hướng dẫn chọn size</a>
                 </li>
                 <li className="mb-4">
-                  <Link href="#" className="hover:underline hover:text-gray-300">Quản lý đơn hàng</Link>
+                  <Link href="/manage-orders" className="hover:underline hover:text-gray-300">Quản lý đơn hàng</Link>
                 </li>
               </ul>
             </div>

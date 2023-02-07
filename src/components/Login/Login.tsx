@@ -32,7 +32,12 @@ export default function Login() {
   const onFinish = (values: any) => {
     console.log('Success:', values);
     openNotificationWithIcon({title:'Đăng nhập thành công', content:'', type:'success'})
-    router.replace('/');
+    if (values.username === 'admin' && values.password === 'admin1'){
+      router.replace('/admin');
+    }
+    else{
+      router.replace('/');
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {

@@ -26,7 +26,6 @@ const productDetailProps : ProductDetailProps = {
 
 export default function ProductDetailPage(props: ProductDetailProps) {
   const router = useRouter();
-  console.log('check', router.query)
   return (
     <ProductDetail {...productDetailProps} />
   );
