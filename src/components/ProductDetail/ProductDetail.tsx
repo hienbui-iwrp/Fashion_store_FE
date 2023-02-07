@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { PlusOutlined, SearchOutlined, PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Col, Row, Image, Typography, Space, Button, InputNumber, Tabs } from 'antd'
 import type { RadioChangeEvent } from 'antd';
 import type { TabsProps } from 'antd';
@@ -15,8 +15,8 @@ export interface ProductDetailProps {
   unitPrice: number;
   image: string;
   quantity: number;
-  size: string;
-  color: string;
+  size?: string;
+  color?: string;
   discount: number;
 }
 

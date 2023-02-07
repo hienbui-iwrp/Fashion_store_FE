@@ -1,0 +1,8 @@
+.customerOrders {
+  width: 700px;
+  margin: auto;
+}
+
+.customerOrders div div:nth-child(1) {
+  margin-bottom: 0px;
+}

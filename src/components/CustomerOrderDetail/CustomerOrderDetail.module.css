@@ -1,0 +1,6 @@
+.tablePrice thead{
+  display: none;
+}
+.tablePrice tbody td{
+  padding: 4px 4px !important;
+}
