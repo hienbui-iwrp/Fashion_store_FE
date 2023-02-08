@@ -131,16 +131,16 @@ const Goods = () => {
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card>
           <Row className={styles.adminRow}>
-            <b className='mr-6'>Mã sản phẩm</b>
+            <b className='mr-10'>Mã sản phẩm</b>
             {data?.id}
           </Row>
           <Row>
-            <Col span={15}>
+            <Col xs={24} sm={15}>
               <Row className={styles.adminRow}>
-                <Col span={6}>
+                <Col xs={10} sm={6}>
                   <b>Tên sản phẩm</b>
                 </Col>
-                <Col span={18}>
+                <Col xs={14} sm={18}>
                   {data?.name && (
                     <Input
                       defaultValue={data.name}
@@ -150,13 +150,13 @@ const Goods = () => {
                 </Col>
               </Row>
             </Col>
-            <Col span={2}></Col>
-            <Col span={7}>
+            <Col xs={24} sm={1} lg={2}></Col>
+            <Col xs={24} sm={8} lg={7}>
               <Row className={styles.adminRow}>
-                <Col span={8}>
+                <Col xs={10} sm={8}>
                   <b>Giới tính</b>
                 </Col>
-                <Col span={16}>
+                <Col xs={14} sm={16}>
                   <DropdownButton
                     label={data?.gender}
                     items={[{ content: 'a' }, { content: 'b' }]}
@@ -166,12 +166,12 @@ const Goods = () => {
             </Col>
           </Row>
           <Row>
-            <Col span={7}>
+            <Col xs={24} sm={7} lg={7}>
               <Row className={styles.adminRow}>
-                <Col span={13}>
+                <Col xs={10} sm={13}>
                   <b>Đơn giá</b>
                 </Col>
-                <Col span={11}>
+                <Col xs={14} sm={11}>
                   {data?.price && (
                     <InputNumber
                       defaultValue={data.price}
@@ -181,13 +181,13 @@ const Goods = () => {
                 </Col>
               </Row>
             </Col>
-            <Col span={2}></Col>
-            <Col span={6}>
+            <Col sm={1} lg={2}></Col>
+            <Col xs={24} sm={7} lg={6}>
               <Row className={styles.adminRow}>
-                <Col span={12}>
+                <Col xs={10} sm={12}>
                   <b>Giá nhập</b>
                 </Col>
-                <Col span={12}>
+                <Col xs={14} sm={12}>
                   {data?.cost && (
                     <InputNumber
                       defaultValue={data?.cost}
@@ -197,13 +197,13 @@ const Goods = () => {
                 </Col>
               </Row>
             </Col>
-            <Col span={2}></Col>
-            <Col span={7}>
+            <Col sm={1} lg={2}></Col>
+            <Col xs={24} sm={8} lg={7}>
               <Row className={styles.adminRow}>
-                <Col span={8}>
+                <Col xs={10} sm={8}>
                   <b>Lọai</b>
                 </Col>
-                <Col span={16}>
+                <Col xs={14} sm={16}>
                   <DropdownButton
                     label={data?.type}
                     items={[{ content: 'a' }, { content: 'b' }]}
@@ -213,12 +213,12 @@ const Goods = () => {
             </Col>
           </Row>
           <Row>
-            <Col span={15}>
+            <Col xs={24} sm={15}>
               <Row className={styles.adminRow}>
-                <Col span={6}>
+                <Col xs={10} sm={6}>
                   <b>Nhà cung cấp</b>
                 </Col>
-                <Col span={18}>
+                <Col xs={14} sm={18}>
                   {data?.supplier && (
                     <Input
                       defaultValue={data.supplier}
@@ -228,13 +228,13 @@ const Goods = () => {
                 </Col>
               </Row>
             </Col>
-            <Col span={2}></Col>
-            <Col span={7}>
+            <Col xs={24} sm={1} lg={2}></Col>
+            <Col xs={24} sm={8} lg={7}>
               <Row className={styles.adminRow}>
-                <Col span={8}>
+                <Col xs={10} sm={8}>
                   <b>Lứa tuổi</b>
                 </Col>
-                <Col span={16}>
+                <Col xs={14} sm={16}>
                   <DropdownButton
                     label={data?.age}
                     items={[{ content: 'a' }, { content: 'b' }]}
