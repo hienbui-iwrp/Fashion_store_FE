@@ -307,12 +307,10 @@ const Account = () => {
             label='Hủy'
             iconInput={<CloseOutlined />}
             borderRadius={10}
-            large
           />
           <AddButton
             label='Lưu'
             iconInput={<CheckOutlined />}
-            large
             borderRadius={10}
           />
         </Space>
@@ -324,13 +322,15 @@ const Account = () => {
         loading={loading}
         ellipsis={true}
       />
-      <ModalAllGoods
-        open={modalAllGoods}
-        cancel={() => setModalAllGoods(false)}
-        extraData={data?.goods.map((item) => {
-          return { id: item.id, color: item.color, size: item.size }
-        })}
-      />
+      {modalAllGoods && (
+        <ModalAllGoods
+          open={modalAllGoods}
+          cancel={() => setModalAllGoods(false)}
+          extraData={data?.goods.map((item) => {
+            return { id: item.id, color: item.color, size: item.size }
+          })}
+        />
+      )}
     </>
   )
 

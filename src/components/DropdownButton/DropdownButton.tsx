@@ -25,6 +25,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
         style={{
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
           color: isHover ? Colors.adminGreen500 : Colors.black,
         }}
         onMouseEnter={() => {

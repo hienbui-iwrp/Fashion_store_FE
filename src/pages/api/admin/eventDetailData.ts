@@ -31,7 +31,6 @@ export default function handler(
   const {
     query: { id },
   } = req
-  console.log(req.query)
 
   switch (id) {
     case 'e1':

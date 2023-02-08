@@ -170,9 +170,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       setRowSelected(_rowSelected)
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
-      setRowSelected(
-        data?.map((item: any) => item.id + item.size + item.color) ?? []
-      )
+      if (selected)
+        setRowSelected(
+          data?.map((item: any) => item.id + item.size + item.color) ?? []
+        )
+      else setRowSelected([])
     },
     selectedRowKeys: rowSelected,
   }

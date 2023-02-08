@@ -13,6 +13,7 @@ type Data = {
   color: string
   size: string
   image: string[]
+  quantity?: number
 }
 
 export default function handler(
@@ -34,6 +35,7 @@ export default function handler(
       age: 'Người lớn',
       color: 'Đen',
       size: 'S',
+      quantity: 10,
     },
     {
       id: 'g1',
@@ -49,6 +51,7 @@ export default function handler(
       age: 'Người lớn',
       color: 'Đen',
       size: 'L',
+      quantity: 15,
     },
     {
       id: 'g1',
@@ -64,6 +67,7 @@ export default function handler(
       age: 'Người lớn',
       color: 'Đen',
       size: 'M',
+      quantity: 10,
     },
     {
       id: 'g1',
@@ -79,6 +83,7 @@ export default function handler(
       age: 'Người lớn',
       color: 'Đen',
       size: 'XL',
+      quantity: 30,
     },
     {
       id: 'g2',
@@ -95,6 +100,7 @@ export default function handler(
       age: 'Người lớn',
       color: 'Đen',
       size: 'S',
+      quantity: 10,
     },
     {
       id: 'g2',
@@ -111,6 +117,7 @@ export default function handler(
       age: 'Người lớn',
       color: 'Đen',
       size: 'M',
+      quantity: 20,
     },
   ])
 }
