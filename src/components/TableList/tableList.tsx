@@ -24,9 +24,10 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     },
     rowSelection: props?.rowSelection,
     rowKey: props.rowKey
-      ? (record: any) =>
-          props.rowKey.reduce((total, item) => total + record[item], '')
-      : (record: any) => record.toString(),
+      ? (record: any) => (
+          props?.rowKey?.reduce((total, item) => total + record[item]), ''
+        )
+      : (record: any, index: number) => record.id + index,
   }
 
   const tableColumns = props?.columns?.map((item: any) => ({
@@ -43,7 +44,6 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         borderRadius: 12,
         paddingTop: props.header ? 15 : 0,
       }}
-      // {...props}
     >
       <div style={{ marginBottom: 10 }}>{props.header}</div>
       <Table
