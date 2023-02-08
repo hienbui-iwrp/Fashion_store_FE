@@ -10,13 +10,14 @@ export default function InputSearch(props: InputSearchProps) {
   return (
     <Input
       style={{
-        width: props.width ?? 200,
+        width: props.width ?? 220,
+        height: 34,
         color: Colors.adminGreen900,
         borderRadius: 16,
         paddingLeft: 10,
         backgroundColor: Colors.white,
       }}
-      placeholder='input search text'
+      placeholder={props.placeholder ?? 'Tìm kiếm theo mã, tên'}
       onPressEnter={props?.onEnter}
       allowClear
       bordered={false}
