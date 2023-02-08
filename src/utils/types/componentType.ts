@@ -11,6 +11,7 @@ export interface ButtonProps extends ComponentProps {
   iconInput?: ReactNode
   onClick?: (e?: any) => void
   borderRadius?: number
+  large?: boolean
 }
 
 export interface TableListProps<T> extends ComponentProps {
@@ -24,8 +25,10 @@ export interface TableListProps<T> extends ComponentProps {
   loading?: boolean
   pageSize?: number
   ellipsis?: boolean
-  pagination?: string
+  pagination?: boolean
   onSelectRow?: () => void
+  rowSelection?: object
+  rowKey?: string[]
 }
 
 export interface LineChartProps extends ComponentProps {

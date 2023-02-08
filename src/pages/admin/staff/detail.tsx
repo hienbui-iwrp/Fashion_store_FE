@@ -100,11 +100,6 @@ const Detail = () => {
               ? text
               : formatTime(text)
           return {
-            props: {
-              style: {
-                background: index % 2 ? Colors.white : Colors.adminBackground,
-              },
-            },
             children: <div>{textShow}</div>,
           }
         },
@@ -244,21 +239,29 @@ const Detail = () => {
         columns={columns}
         loading={loading}
         header={
-          <div className='flex justify-between text-base	'>
-            <b>Điểm danh</b>
-            <span>Số ngày làm 7</span>
-            <span>Số ngày nghỉ 0</span>
-            <DatePicker
-              picker='month'
-              placeholder='Month'
-              format={'MM/YYYY'}
-              defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
-              className={styles.adminInputShadow}
-              onChange={(date, dateString) => {
-                console.log(dateString)
-              }}
-            />
-          </div>
+          <Row>
+            <Col xs={24} lg={6} className='mt-1'>
+              <b>Điểm danh</b>
+            </Col>
+            <Col xs={12} lg={7} className='mt-1'>
+              <span>Số ngày làm 7</span>
+            </Col>
+            <Col xs={12} lg={7} className='mt-1'>
+              <span>Số ngày nghỉ 0</span>
+            </Col>
+            <Col xs={8} lg={4} className='mt-2'>
+              <DatePicker
+                picker='month'
+                placeholder='Month'
+                format={'MM/YYYY'}
+                defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
+                className={styles.adminInputShadow}
+                onChange={(date, dateString) => {
+                  console.log(dateString)
+                }}
+              />
+            </Col>
+          </Row>
         }
       />
       {modalAddEditStaff && (

@@ -13,20 +13,20 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     loading: props?.loading ?? false,
     size: 'small',
     expandable: undefined,
-    title: () =>
-      props.title && (
-        <h1>
-          <b>{props.title}</b>
-        </h1>
-      ),
+    title: () => props.title && <b style={{ fontSize: 17 }}>{props.title}</b>,
     footer: undefined,
     showHeader: true,
-    scroll: { x: props?.scroll?.x ?? '60vw', y: props?.scroll?.y ?? '70vh' },
+    scroll: { x: props?.scroll?.x ?? '20vw', y: props?.scroll?.y ?? '70vh' },
     tableLayout: 'auto',
     pagination: {
-      position: [props.pagination ?? 'bottomRight'],
+      position: props.pagination ?? true ? ['bottomRight'] : [],
       pageSize: props.pageSize ?? 30,
     },
+    rowSelection: props?.rowSelection,
+    rowKey: props.rowKey
+      ? (record: any) =>
+          props.rowKey.reduce((total, item) => total + record[item], '')
+      : (record: any) => record.toString(),
   }
 
   const tableColumns = props?.columns?.map((item: any) => ({
@@ -43,10 +43,13 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         borderRadius: 12,
         paddingTop: props.header ? 15 : 0,
       }}
-      {...props}
+      // {...props}
     >
       <div style={{ marginBottom: 10 }}>{props.header}</div>
       <Table
+        rowClassName={(record, index) =>
+          index % 2 === 1 ? 'table-row-light' : 'table-row-green'
+        }
         columns={tableColumns}
         dataSource={props.data ?? []}
         onRow={(record: any, index) => {
@@ -59,6 +62,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
             },
           }
         }}
+        style={{ width: '99%' }}
         {...tableProps}
       />
     </div>

@@ -82,6 +82,7 @@ export default function Cart(props: CartProps) {
               >
                 <div className='flex'>
                   <Image
+                    alt='img'
                     width={140}
                     height={160}
                     preview={false}

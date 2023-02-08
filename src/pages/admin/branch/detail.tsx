@@ -97,6 +97,7 @@ const Detail = () => {
         <Row justify='center' align='middle'>
           <Col xs={24} sm={12}>
             <Image
+              alt='img'
               preview={true}
               src={
                 data?.image ??

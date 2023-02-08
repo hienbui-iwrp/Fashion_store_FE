@@ -39,11 +39,6 @@ const Staff = () => {
         ellipsis: true,
         render(text: string, record: DataType, index: number) {
           return {
-            props: {
-              style: {
-                background: index % 2 ? Colors.white : Colors.adminBackground,
-              },
-            },
             children: <div>{text}</div>,
           }
         },
@@ -53,11 +48,6 @@ const Staff = () => {
       title: '',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: (
             <AddButton
               iconInput={<EditOutlined />}
@@ -92,6 +82,7 @@ const Staff = () => {
           <AddButton
             label='Thêm mới'
             onClick={() => setModalAddEditStaff(true)}
+            large
           />
           <InputSearch />
         </div>

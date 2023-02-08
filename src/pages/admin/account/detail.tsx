@@ -96,28 +96,21 @@ const Detail = () => {
       dataIndex: 'id',
       render(text: string, record: OrderData, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: OrderData, b: OrderData) => (a.id > b.id ? 1 : -1),
     })
     columns.push({
       title: 'Ngày tạo',
       dataIndex: 'createdDate',
       render(text: string, record: OrderData, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{formatDate(text)}</div>,
         }
       },
+      sorter: (a: OrderData, b: OrderData) =>
+        a.createdDate > b.createdDate ? 1 : -1,
     })
     columns.push({
       title: 'Trạng thái',
@@ -133,20 +126,17 @@ const Detail = () => {
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: OrderData, b: OrderData) => (a.status > b.status ? 1 : -1),
     })
     columns.push({
       title: 'Tổng giá trị đơn',
       dataIndex: 'total',
       render(text: string, record: OrderData, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{FormatNumber(text)}</div>,
         }
       },
+      sorter: (a: OrderData, b: OrderData) => (a.total > b.total ? 1 : -1),
     })
   }
 
@@ -210,19 +200,23 @@ const Detail = () => {
               setCurrentData(item)
             }}
             header={
-              <div className='flex justify-between	'>
-                <b>Đơn hàng</b>
-                <DatePicker
-                  picker='month'
-                  placeholder='Month'
-                  format={'MM/YYYY'}
-                  defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
-                  className={styles.adminInputShadow}
-                  onChange={(date, dateString) => {
-                    console.log(dateString)
-                  }}
-                />
-              </div>
+              <Row className='flex justify-between	'>
+                <Col>
+                  <b>Đơn hàng</b>
+                </Col>
+                <Col>
+                  <DatePicker
+                    picker='month'
+                    placeholder='Month'
+                    format={'MM/YYYY'}
+                    defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
+                    className={styles.adminInputShadow}
+                    onChange={(date, dateString) => {
+                      console.log(dateString)
+                    }}
+                  />
+                </Col>
+              </Row>
             }
           />
         </Col>

@@ -34,11 +34,6 @@ const Branch = () => {
         sorter: (a: any, b: any) => (a[key] > b[key] ? 1 : -1),
         render(text: string, record: DataType, index: number) {
           return {
-            props: {
-              style: {
-                background: index % 2 ? Colors.white : Colors.adminBackground,
-              },
-            },
             children: <div>{text}</div>,
           }
         },
@@ -48,11 +43,6 @@ const Branch = () => {
       title: '',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: (
             <AddButton
               iconInput={<EditOutlined />}
@@ -82,10 +72,11 @@ const Branch = () => {
 
   const content = (
     <>
-      <Space direction='vertical' style={{ width: '99%' }} size='large'>
+      <Space direction='vertical' style={{ width: '99%' }} size='small'>
         <AddButton
           label='Thêm mới'
           onClick={() => setModalAddEditBranch(true)}
+          large
         />
         <TableList<DataType>
           data={data}
