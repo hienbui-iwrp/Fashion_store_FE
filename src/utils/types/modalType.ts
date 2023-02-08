@@ -59,3 +59,19 @@ export interface ModalOrderDetailProps extends ModalSampleProps {
     tax: number
   }
 }
+
+export interface ModalAllGoodsProps extends ModalSampleProps {
+  extraData?: {
+    id: string
+    name?: string
+    cost?: number
+    price?: number
+    supplier?: string
+    gender?: string
+    type?: string
+    age?: string
+    color: string
+    size: string
+    image?: string[]
+  }[]
+}

@@ -52,15 +52,15 @@ const Statistic = () => {
     <Space direction='vertical' style={{ width: '99%' }} size='large'>
       <Card className='!max-w-full-lg'>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Col xs={24} lg={24} xl={10} className='my-2'>
-            <Space direction='horizontal' size={25}>
+          <Col xs={24} sm={24} lg={10} className='my-2'>
+            <Space direction='horizontal' size={15}>
               <DropdownButton label={'Chi nhánh'} items={items} />
               <DropdownButton label={'Giới tính'} items={items} />
               <DropdownButton label={'Loại'} items={items} />
             </Space>
           </Col>
-          <Col xs={24} lg={16} xl={8} className='my-2'>
-            <Space direction='horizontal' size={25}>
+          <Col xs={24} sm={16} lg={8} className='my-2'>
+            <Space direction='horizontal' size={15}>
               <DatePicker
                 placeholder='Start Date'
                 format={'DD/MM/YYYY'}
@@ -79,7 +79,7 @@ const Statistic = () => {
               />
             </Space>
           </Col>
-          <Col xs={24} lg={8} xl={4} className='my-2'>
+          <Col xs={24} sm={8} lg={4} className='my-2'>
             <AddButton label='Chọn sản phẩm' />
           </Col>
         </Row>

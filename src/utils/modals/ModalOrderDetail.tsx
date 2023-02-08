@@ -26,11 +26,6 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
       dataIndex: '',
       render(text: string, record: Goods, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{index}</div>,
         }
       },
@@ -40,11 +35,6 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
       dataIndex: 'createdDate',
       render(text: string, record: Goods, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.name}</div>,
         }
       },
@@ -69,11 +59,6 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
       dataIndex: 'quantity',
       render(text: string, record: any, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{FormatNumber(text)}</div>,
         }
       },
@@ -83,11 +68,6 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
       dataIndex: '',
       render(text: string, record: any, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{FormatNumber(record.quantity * record.price)}</div>,
         }
       },
@@ -179,7 +159,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
               </Col>
               <Col span={12}>
                 {FormatNumber(
-                  props.extraData?.total ?? 0 + (props.extraData?.tax ?? 0)
+                  (props.extraData?.total ?? 0) + (props.extraData?.tax ?? 0)
                 )}
               </Col>
             </Row>

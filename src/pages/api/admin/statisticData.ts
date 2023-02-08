@@ -15,7 +15,6 @@ export default function handler(
     query: { id },
     method,
   } = req
-  console.log(req)
 
   res.status(200).json([
     { revenue: 100000, profit: 50000, date: new Date('2021-10-01') },

@@ -30,14 +30,11 @@ const Account = () => {
       dataIndex: 'id',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) =>
+        a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1,
     })
 
     columns.push({
@@ -45,14 +42,11 @@ const Account = () => {
       dataIndex: 'account',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) =>
+        a.account.toLowerCase() > b.account.toLowerCase() ? 1 : -1,
     })
 
     columns.push({
@@ -60,14 +54,11 @@ const Account = () => {
       dataIndex: 'name',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) =>
+        a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1,
     })
 
     columns.push({
@@ -75,14 +66,10 @@ const Account = () => {
       dataIndex: 'phone',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) => (a.phone > b.phone ? 1 : -1),
     })
 
     columns.push({
@@ -90,14 +77,11 @@ const Account = () => {
       dataIndex: 'dateOfBirth',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{formatDate(text)}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) =>
+        a.dateOfBirth > b.dateOfBirth ? 1 : -1,
     })
 
     columns.push({
@@ -105,14 +89,11 @@ const Account = () => {
       dataIndex: 'address',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{text}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) =>
+        a.address.toLowerCase() > b.address.toLowerCase() ? 1 : -1,
     })
 
     columns.push({
@@ -120,14 +101,11 @@ const Account = () => {
       dataIndex: 'createdDate',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{formatDate(text)}</div>,
         }
       },
+      sorter: (a: DataType, b: DataType) =>
+        a.createdDate > b.createdDate ? 1 : -1,
     })
   }
 

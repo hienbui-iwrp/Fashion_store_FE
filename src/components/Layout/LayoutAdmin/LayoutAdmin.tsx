@@ -134,13 +134,13 @@ const LayoutAdmin = ({
             routes.push('/admin/account')
             break
           case 4:
-            routes.push('/admin')
+            routes.push('/admin/event')
             break
           case 5:
-            routes.push('/admin')
+            routes.push('/admin/goods')
             break
           case 6:
-            routes.push('/admin')
+            routes.push('/admin/warehouse')
             break
         }
       },
@@ -160,10 +160,10 @@ const LayoutAdmin = ({
                 routes.push('/admin/staff/request')
                 break
               case '70':
-                routes.push('/admin')
+                routes.push('/admin/order')
                 break
               case '71':
-                routes.push('/admin')
+                routes.push('/admin/order/online')
                 break
             }
           },
@@ -280,7 +280,14 @@ const LayoutAdmin = ({
             <Dropdown menu={{ items: avatarItems }} trigger={['click']}>
               <Button
                 className='bg-emerald-50 border-0'
-                icon={<Image width='30px' src='/Avatar.png' preview={false} />}
+                icon={
+                  <Image
+                    alt='img'
+                    width='30px'
+                    src='/Avatar.png'
+                    preview={false}
+                  />
+                }
                 size={'large'}
               />
             </Dropdown>

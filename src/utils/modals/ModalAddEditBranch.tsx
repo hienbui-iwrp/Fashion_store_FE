@@ -42,6 +42,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
           <Col xs={24} sm={12}>
             <Space direction='vertical' align='center'>
               <Image
+                alt='img'
                 preview={true}
                 src={
                   props.extraData?.image ??

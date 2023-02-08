@@ -27,8 +27,6 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data[]>
 ) {
-  console.log(req)
-
   const startTime = new Date()
   startTime.setHours(8)
   startTime.setMinutes(0)

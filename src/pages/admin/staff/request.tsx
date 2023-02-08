@@ -65,11 +65,6 @@ const Request = () => {
         a.staff.name > b.staff.name ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.name}</div>,
         }
       },
@@ -81,11 +76,6 @@ const Request = () => {
         a.staff.workLocation > b.staff.workLocation ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.workLocation}</div>,
         }
       },
@@ -97,11 +87,6 @@ const Request = () => {
         a.staff.role > b.staff.role ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.role}</div>,
         }
       },
@@ -113,11 +98,6 @@ const Request = () => {
         a.staff.salary > b.staff.salary ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{FormatNumber(record.staff.salary)}</div>,
         }
       },
@@ -128,11 +108,6 @@ const Request = () => {
       dataIndex: 'option',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: (
             <Space>
               <RemoveButton
@@ -169,11 +144,6 @@ const Request = () => {
         (a.staff.id ?? 0) > (b.staff.id ?? 0) ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.id}</div>,
         }
       },
@@ -185,11 +155,6 @@ const Request = () => {
         a.staff.name > b.staff.name ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.name}</div>,
         }
       },
@@ -202,11 +167,6 @@ const Request = () => {
         a.staff.workLocation > b.staff.workLocation ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.workLocation}</div>,
         }
       },
@@ -219,11 +179,6 @@ const Request = () => {
         a.staff.role > b.staff.role ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: <div>{record.staff.role}</div>,
         }
       },
@@ -234,11 +189,6 @@ const Request = () => {
       dataIndex: 'option1',
       render(text: string, record: DataType, index: number) {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-            },
-          },
           children: (
             <Space>
               <RemoveButton

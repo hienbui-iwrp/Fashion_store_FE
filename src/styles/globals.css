@@ -10,7 +10,7 @@
   --admin-green500: #00d272;
   --gray-white-color: #bbb;
   --admin-bg-color: #f0fdf4;
-  --shadow-color: #ccc;
+  --shadow-color: #ddd;
 }
 
 * {
@@ -155,6 +155,20 @@ a {
 
 .payment button {
   background-color: #6a983c;
+}
+.table-row-light {
+  background-color: white;
+}
+.table-row-green {
+  background-color: var(--admin-bg-color);
+}
+
+.ant-table-row-selected td {
+  background: inherit !important;
+}
+
+tr:hover td {
+  background: none !important;
 }
 
 @tailwind base;
