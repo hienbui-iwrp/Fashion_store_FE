@@ -40,6 +40,9 @@ type DataType = {
 
 const ModalAllGoods = (props: ModalAllGoodsProps) => {
   const [data, setData] = useState<DataType[]>()
+  const [rowSelected, setRowSelected] = useState<string[]>(
+    props?.extraData?.map((item: any) => item.id + item.size + item.color) ?? []
+  )
 
   const getAllGoods = async () => {
     await axios
@@ -154,22 +157,24 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   }
 
   const rowSelection: TableRowSelection<DataType> = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
-    },
+    onChange: (selectedRowKeys, selectedRows) => {},
     onSelect: (record, selected, selectedRows) => {
-      console.log('select:', record)
+      let _rowSelected = rowSelected
+      if (selected) {
+        _rowSelected = [..._rowSelected, record.id + record.size + record.color]
+      } else {
+        _rowSelected = rowSelected.filter((item: any) => {
+          return record.id + record.size + record.color != item
+        })
+      }
+      setRowSelected(_rowSelected)
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log('select all:', selected, selectedRows, changeRows)
+      setRowSelected(
+        data?.map((item: any) => item.id + item.size + item.color) ?? []
+      )
     },
-    selectedRowKeys:
-      props?.extraData?.map((item: any) => item.id + item.size + item.color) ??
-      [],
+    selectedRowKeys: rowSelected,
   }
 
   return (

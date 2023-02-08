@@ -125,7 +125,6 @@ const Account = () => {
         }
       },
       sorter: (a: Goods, b: Goods) => (a.size > b.size ? 1 : -1),
-      filtered: 'a',
     })
 
     columns.push({
