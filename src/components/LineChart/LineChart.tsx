@@ -4,6 +4,7 @@ import { Colors } from '@/constants'
 import { LineChartProps } from '@/utils/types/componentType'
 import { Skeleton } from 'antd'
 import { FormatNumber } from '@/utils'
+
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
   { ssr: false, loading: () => <Skeleton active paragraph={{ rows: 10 }} /> }
@@ -22,13 +23,13 @@ const LineChart = (props: LineChartProps) => {
     if (props.data) {
       let _data: any[] = []
       props.data?.forEach((item) => {
-        if (props.haveRevenue) {
+        if (props.revenue) {
           _data = [
             ..._data,
             { date: item.date, value: item.revenue, category: 'revenue' },
           ]
         }
-        if (props.haveProfit) {
+        if (props.profit) {
           _data = [
             ..._data,
             { date: item.date, value: item.profit, category: 'profit' },
@@ -79,7 +80,7 @@ const LineChart = (props: LineChartProps) => {
     smooth: true,
     loading: false,
     colorField: 'item',
-    color: props.haveRevenue
+    color: props.revenue
       ? [Colors.adminGreen500, Colors.adminGreen900, '#4778EC', '#F8827D']
       : [Colors.adminGreen900, Colors.adminGreen500, '#4778EC', '#F8827D'],
     lineStyle: {
@@ -95,7 +96,7 @@ const LineChart = (props: LineChartProps) => {
         <h1>
           <b>
             {FormatNumber(
-              (props.haveRevenue
+              (props.revenue
                 ? props.data?.reduce((sum, item) => {
                     return sum + (item.revenue ?? 0)
                   }, 0)

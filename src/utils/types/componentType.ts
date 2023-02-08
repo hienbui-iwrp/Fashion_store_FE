@@ -32,8 +32,8 @@ export interface TableListProps<T> extends ComponentProps {
 }
 
 export interface LineChartProps extends ComponentProps {
-  haveRevenue?: boolean
-  haveProfit?: boolean
+  revenue?: boolean
+  profit?: boolean
   showTotal?: boolean
   data?: { profit?: number; revenue?: number; date: Date }[]
 }
