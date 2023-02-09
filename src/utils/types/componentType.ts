@@ -4,6 +4,7 @@ export interface ComponentProps {
   styles?: object
   className?: string
   callBack?: (item: any) => void
+  disabled?: boolean
 }
 
 export interface ButtonProps extends ComponentProps {

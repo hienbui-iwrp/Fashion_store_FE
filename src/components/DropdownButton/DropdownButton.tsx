@@ -19,32 +19,38 @@ const DropdownButton = (props: DropdownButtonProps) => {
     })
 
   return (
-    <Dropdown menu={{ items: items ?? [] }} placement='bottomLeft' {...props}>
-      <Button
+    <span>
+      <Dropdown
+        menu={{ items: items ?? [] }}
+        placement='bottomLeft'
         className={styles.adminInputShadow}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          color: isHover ? Colors.adminGreen500 : Colors.black,
-        }}
-        onMouseEnter={() => {
-          setIsHover(true)
-        }}
-        onMouseLeave={() => {
-          setIsHover(false)
-        }}
+        {...props}
       >
-        {props?.label}
-        <CaretDownOutlined
+        <Button
           style={{
-            color: isHover ? Colors.adminGreen500 : Colors.adminGreen900,
-            marginLeft: 10,
-            marginRight: -5,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            color: isHover ? Colors.adminGreen500 : Colors.black,
           }}
-        />
-      </Button>
-    </Dropdown>
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+        >
+          {props?.label}
+          <CaretDownOutlined
+            style={{
+              color: isHover ? Colors.adminGreen500 : Colors.adminGreen900,
+              marginLeft: 10,
+              marginRight: -5,
+            }}
+          />
+        </Button>
+      </Dropdown>
+    </span>
   )
 }
 
