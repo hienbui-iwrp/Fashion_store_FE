@@ -80,7 +80,7 @@ const Branch = () => {
   }
 
   const getData = async () => {
-    await axios.get(`${BRANCH_SERVICE_URL}`).then((res) => {
+    await axios.get(`${BRANCH_SERVICE_URL}/`).then((res) => {
       // BranchCode string
       // BranchName string
       // BranchProvince string
@@ -129,7 +129,7 @@ const Branch = () => {
           large
         />
         <TableList<DataType>
-          data={data}
+          data={data ?? []}
           title='Danh sách chi nhánh'
           columns={columns}
           selectUrl={BASE_URL + 'admin/branch/detail/'}

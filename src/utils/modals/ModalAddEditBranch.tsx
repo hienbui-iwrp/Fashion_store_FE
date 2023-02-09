@@ -11,6 +11,8 @@ import styles from '@/styles/Admin.module.css'
 import { formatTime } from '..'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import axios from 'axios'
+import { BRANCH_SERVICE_URL } from '@/constants'
 
 dayjs.extend(customParseFormat)
 
@@ -34,7 +36,20 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
               onClick={props.cancel}
             />
             ,
-            <AddButton key='add' label='Lưu' iconInput={<CheckOutlined />} />
+            <AddButton
+              key='add'
+              label='Lưu'
+              iconInput={<CheckOutlined />}
+              onClick={async () => {
+                const a = await axios.post(BRANCH_SERVICE_URL + '/', {
+                  Name: 'Branch 2',
+                  Address: 'TP.hcm',
+                  Open: '2023-01-01T07:00:00',
+                  Close: '2006-01-02T15:04:05Z07:00',
+                })
+                console.log(a)
+              }}
+            />
           </Space>,
         ]}
       >
@@ -77,8 +92,8 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                 <Space>
                   <TimePicker
                     defaultValue={
-                      props.extraData?.startTime &&
-                      dayjs(formatTime(props.extraData?.startTime), 'HH:mm ')
+                      props.extraData?.openTime &&
+                      dayjs(formatTime(props.extraData?.openTime), 'HH:mm ')
                     }
                     format={'HH:mm'}
                     onOk={(item) => console.log(item.hour(), item.minute())}
@@ -86,8 +101,8 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   />
                   <TimePicker
                     defaultValue={
-                      props.extraData?.endTime &&
-                      dayjs(formatTime(props.extraData?.endTime), 'HH:mm ')
+                      props.extraData?.closeTime &&
+                      dayjs(formatTime(props.extraData?.closeTime), 'HH:mm ')
                     }
                     format={'HH:mm'}
                     onOk={(item) => console.log(item.hour(), item.minute())}

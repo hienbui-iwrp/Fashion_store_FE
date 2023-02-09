@@ -9,8 +9,8 @@ export interface ModalAddEditBranchProps extends ModalSampleProps {
   extraData?: {
     name?: string
     address?: string
-    startTime?: Date
-    endTime?: Date
+    openTime?: Date
+    closeTime?: Date
     image?: string
   }
 }

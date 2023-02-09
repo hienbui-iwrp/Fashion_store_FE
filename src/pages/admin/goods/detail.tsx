@@ -37,7 +37,7 @@ type DataWarehouse = {
   quantity: number
 }
 
-const Goods = () => {
+const Detail = () => {
   const [data, setData] = useState<DataType>()
   const [classifyData, setClassifyData] = useState<DataType>()
   const [loading, setLoading] = useState(true)
@@ -304,7 +304,6 @@ const Goods = () => {
                 <TableList<DataWarehouse>
                   data={item.containedAt}
                   columns={columns}
-                  selectUrl={BASE_URL + 'admin/goods/detail'}
                   pagination={false}
                   loading={loading}
                   header={
@@ -324,7 +323,14 @@ const Goods = () => {
                           items={[{ content: 'S' }]}
                         />
                       </Space>
-                      <AddButton label='Thêm vào kho mới' />
+                      <AddButton
+                        label='Thêm vào kho mới'
+                        onClick={() => {
+                          routes.push(
+                            `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
+                          )
+                        }}
+                      />
                     </div>
                   }
                 />
@@ -338,6 +344,6 @@ const Goods = () => {
   return <LayoutAdmin content={content} selected={5} />
 }
 
-Goods.displayName = 'Goods Management'
+Detail.displayName = 'Goods Detail'
 
-export default Goods
+export default Detail
