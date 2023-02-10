@@ -7,6 +7,7 @@ import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import { ModalAddEditBranch } from '@/utils'
+import { apiBranchService } from '@/utils/axios'
 
 interface DataType {
   id: string
@@ -80,7 +81,7 @@ const Branch = () => {
   }
 
   const getData = async () => {
-    await axios.get(`${BRANCH_SERVICE_URL}/`).then((res) => {
+    await apiBranchService.get('').then((res) => {
       // BranchCode string
       // BranchName string
       // BranchProvince string

@@ -41,12 +41,19 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
               label='Lưu'
               iconInput={<CheckOutlined />}
               onClick={async () => {
-                const a = await axios.post(BRANCH_SERVICE_URL + '/', {
-                  Name: 'Branch 2',
-                  Address: 'TP.hcm',
-                  Open: '2023-01-01T07:00:00',
-                  Close: '2006-01-02T15:04:05Z07:00',
-                })
+                const a = await axios.post(
+                  '/service/branch-service/',
+                  {
+                    Name: 'Branch 2',
+                    Address: 'TP.hcm',
+                  },
+                  {
+                    headers: {
+                      'Content-Type': 'application/json;charset=UTF-8',
+                      'Access-Control-Allow-Origin': 'http://localhost:14000',
+                    },
+                  }
+                )
                 console.log(a)
               }}
             />

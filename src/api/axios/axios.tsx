@@ -1,24 +1,28 @@
+import { HOST_BRANCH_SERVICE } from '@/constants'
 import axios from 'axios'
 
-export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+const apiBranchService = axios.create({
+  baseURL: HOST_BRANCH_SERVICE,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  },
 })
 
-// const jwtKey = localStorage.getItem('jwtKey')
-//   ? String(localStorage.getItem('jwtKey'))
-//   : ' '
+// apiBranchService.defaults.headers.common['Authorization'] = 'Bearer '
 
-api.defaults.headers.common['Authorization'] = 'Bearer '
+// //temporary fix for login error
+// apiBranchService.interceptors.response.use(
+//   (response) => {
+//     return response
+//   },
+//   (error) => {
+//     console.warn('Error status', error.response?.status)
+//     console.log('show notification')
+//     console.log(error.response?.data)
+//     return Promise.reject(error)
+//   }
+// )
 
-//temporary fix for login error
-api.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error) => {
-    console.warn('Error status', error.response?.status)
-    console.log('show notification')
-    console.log(error.response?.data)
-    return Promise.reject(error)
-  }
-)
+export { apiBranchService }
