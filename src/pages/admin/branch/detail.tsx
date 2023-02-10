@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL, BRANCH_SERVICE_URL } from '@/constants'
+import { BASE_URL } from '@/constants'
 import axios from 'axios'
 import { EditFilled } from '@ant-design/icons'
 import { Card, Col, Row, Image, List, Space, Modal } from 'antd'
@@ -9,6 +9,7 @@ import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
 import { formatDate, formatTime } from '@/utils'
+import { apiBranchService } from '@/utils/axios'
 
 type DataType = {
   id: string
@@ -56,7 +57,7 @@ const Detail = () => {
       staff: 0,
     }
 
-    await axios.get(`${BRANCH_SERVICE_URL}/${id}`).then((res) => {
+    await apiBranchService.get(`/${id}`).then((res) => {
       _data = {
         id: res.data.Data.BranchCode,
         name: res.data.Data.BranchName,
@@ -76,7 +77,7 @@ const Detail = () => {
       }
     })
 
-    await axios.get(`${BRANCH_SERVICE_URL}/staff/${id}`).then((res) => {
+    await apiBranchService.get(`/staff/${id}`).then((res) => {
       _data.staff = res.data.Data.length
     })
     setData(_data)
@@ -180,7 +181,7 @@ const Detail = () => {
         </Row>
       </Card>
       <Card className='!max-w-full-lg'>
-        <LineChart data={statisticData} revenue={true} profit={true} />
+        <LineChart data={statisticData} revenue profit={true} />
       </Card>
       {modalAddEditBranch && (
         <ModalAddEditBranch
