@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { Typography, Select, Col, Row, Radio, Space, Checkbox, Card, List } from 'antd'
@@ -6,6 +6,10 @@ import type { RadioChangeEvent } from 'antd';
 import type { SelectProps } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import CardProductClient from '../Card/CardProductClient';
+import { ProductsDataProps, ProductDetailDataProps } from '@/utils';
+import axios from 'axios';
+import { getAllProducts } from '@/api/products';
+import { BASE_URL } from '@/constants'
 import styles from './Products.module.css'
 
 const { Title, Text } = Typography
@@ -18,99 +22,6 @@ const CheckboxGroup = Checkbox.Group;
 const plainOptions = ['0 - 500.000đ', '500.000 - 1.000.000 đ', '1.000.000 - 3.000.000 đ', '3.000.000 - 5.000.000 đ', '5.000.000 đ trở lên'];
 const defaultCheckedList = ['0 - 500.000đ', '500.000 - 1.000.000 đ'];
 
-const data = [
-  {
-    title: 'Title 1',
-  },
-  {
-    title: 'Title 2',
-  },
-  {
-    title: 'Title 3',
-  },
-  {
-    title: 'Title 4',
-  },
-  {
-    title: 'Title 5',
-  },
-  {
-    title: 'Title 6',
-  },
-];
-
-const listFeaturedProduct = [
-  {
-    goodsId: '1',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-  {
-    goodsId: '2',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 0
-  },
-  {
-    goodsId: '3',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-  {
-    goodsId: '4',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-  {
-    goodsId: '5',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-  {
-    goodsId: '6',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-  {
-    goodsId: '7',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác mùa đông a',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-]
 
 export default function Products(props: ProductsProps) {
   const options: SelectProps['options'] = [
@@ -145,6 +56,10 @@ export default function Products(props: ProductsProps) {
     { value: '44', label: '44' },
   ];
   const [value, setValue] = useState(1);
+  const [data, setData] = useState<ProductsDataProps>({
+    totalProducts: 0,
+    listProduct: []
+  });
   const [listValueFilter, setListValueFilter] = useState(['man'])
   const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(defaultCheckedList);
   const [indeterminate, setIndeterminate] = useState(true);
@@ -162,10 +77,10 @@ export default function Products(props: ProductsProps) {
   };
 
   const handleSelectFilter = (value: string) => {
-    if(!listValueFilter.includes(value)){
+    if (!listValueFilter.includes(value)) {
       setListValueFilter([...listValueFilter, value]);
     }
-    
+
   }
 
   const handleDeselect = (value: string) => {
@@ -182,12 +97,31 @@ export default function Products(props: ProductsProps) {
     console.log(`selected ${value}`);
   };
 
+  const fetchData = async () => {
+    getAllProducts()
+      .then((res) => {
+        console.log(res)
+        setData(res?.data)
+      })
+      
+    // await axios
+    //   .get(`${BASE_URL}/api/products`)
+    //   .then((res) => {
+    //     console.log(res)
+    //     setData(res.data)
+    //   })
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
   return (
     <div className='products-content px-4 md:px-8'>
       <div className="products-title flex justify-between">
         <Title level={3}>Tất cả sản phẩm</Title>
         <Space>
-          <Text className='bg-lime-200 rounded-lg px-2'>118</Text>
+          <Text className='bg-lime-200 rounded-lg px-2'>{data.totalProducts}</Text>
           <Text> sản phẩm</Text>
         </Space>
       </div>
@@ -303,7 +237,7 @@ export default function Products(props: ProductsProps) {
           </Col>
           <Col className='products-list-product' span={19}>
             <div className='flex w-full flex-wrap'>
-              {listFeaturedProduct.map((item, index) => {
+              {data.listProduct.map((item, index) => {
                 return (
                   <CardProductClient key={index} {...item} />
                 )

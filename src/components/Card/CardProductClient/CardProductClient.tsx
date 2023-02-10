@@ -5,6 +5,7 @@ import { Button, Card, Typography } from 'antd';
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import { ProductDetailDataProps } from '@/utils';
 
 const { Text } = Typography;
 
@@ -19,7 +20,7 @@ export interface CardProductClientProps {
   discount: number;
 }
 
-export default function CardProductClient(props: CardProductClientProps) {
+export default function CardProductClient(props: ProductDetailDataProps) {
   const link = `/products/${props.goodsId}`;
   const router = useRouter();
   const handleAddToCart = () => {
@@ -31,13 +32,13 @@ export default function CardProductClient(props: CardProductClientProps) {
   return (
     <div className='w-1/4 pl-1 pr-1 pb-4'>
       <Card hoverable onClick={handleClickCard} className='rounded-xl' bodyStyle={{ padding: '12px' }}>
-        <img className='' alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
+        <img className='' alt="example" src={props.images[0]} />
         <Text strong className="text-lg">{props.name}</Text>
         <div className='flex justify-between items-center'>
           {props.discount === 0 ?
             <Text strong className="text-lg">{props.unitPrice} đ</Text> :
             <div className='flex flex-col leading-none'>
-              <Text strong className="text-lg text-red-600 leading-none">{(props.unitPrice * (1 - props.discount / 100)).toFixed(0)} đ</Text>
+              <Text strong className="text-lg text-red-600 leading-none">{props.price} đ</Text>
               <div>
                 <Text strong className="text-xs line-through text-gray-400 pr-1 leading-none">{props.unitPrice} đ</Text>
                 <Text strong className="text-xs leading-none">-{props.discount}%</Text>

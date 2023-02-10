@@ -320,7 +320,6 @@ export default function LayoutClient({
               >
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
                   {listItem.map((item, index) => {
-                    console.log(item)
                     return (
                       <li
                         key={index}
