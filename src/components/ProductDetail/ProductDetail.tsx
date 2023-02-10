@@ -18,6 +18,7 @@ import {
 import type { RadioChangeEvent } from 'antd'
 import type { TabsProps } from 'antd'
 import { Radio } from 'antd'
+import { ProductDetailDataProps } from '@/utils'
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
@@ -36,34 +37,35 @@ export interface ProductDetailProps {
 
 const { Title, Text } = Typography
 
-const listProductImage: string[] = [
-  'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-  'https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp',
-  'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-  'https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp',
-  'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-]
-
-export default function ProductDetail(props: ProductDetailProps) {
-  const [quantity, setQuantity] = React.useState<number>(1)
-  const maxQuantity: number = 1000
-  const [imageShow, setImageShow] = React.useState<string>('')
+export default function ProductDetail(props: ProductDetailDataProps) {
+  const [quantity, setQuantity] = useState<number>(1)
+  const maxQuantity = props.quantity
+  // const [maxQuantity, setMaxQuantity] = useState<number>(props.quantity)
+  const [imageShow, setImageShow] = useState<string>(props.images[0])
+  const [valueSize, setValueSize] = useState(props.size[0])
+  const [valueColor, setValueColor] = useState(props.color[0])
   const items: TabsProps['items'] = [
     {
       key: '1',
       label: <Text>Mô tả</Text>,
-      children: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`,
+      children: `${props.description}`,
     },
   ]
 
-  const onChangeQuantity = (value: number) => {
-    if (value > 0 && value < maxQuantity) {
-      setQuantity(value)
+  const onChangeQuantity = (value: number | null) => {
+    if ((value !== null) && (value > 0 && value < maxQuantity)) {
+      setQuantity(value);
     }
   }
 
   const onChangeColor = (e: RadioChangeEvent) => {
     console.log(`radio checked:${e.target.value}`)
+    setValueColor(e.target.value);
+  }
+
+  const onChangeSize = (e: RadioChangeEvent) => {
+    console.log(`radio checked:${e.target.value}`)
+    setValueSize(e.target.value);
   }
 
   const onChangeTabs = (key: string) => {
@@ -75,8 +77,11 @@ export default function ProductDetail(props: ProductDetailProps) {
   }
 
   useEffect(() => {
-    setImageShow(listProductImage[0])
-  }, [])
+    setImageShow(props.images[0])
+    setValueColor(props.color[0])
+    setValueSize(props.size[0])
+    // setMaxQuantity(props.quantity)
+  }, [props])
 
   return (
     <div className='mb-4 px-8'>
@@ -84,20 +89,18 @@ export default function ProductDetail(props: ProductDetailProps) {
         <Col span={9}>
           <div className='flex justify-center'>
             <Image
-              alt='img'
               width={350}
               height={400}
               className='py-2'
               src={imageShow}
-              alt=''
+              alt={props.name}
             />
           </div>
 
           <div className='flex justify-center mt-2'>
-            {listProductImage.map((item, index) => {
+            {props.images.map((item, index) => {
               return (
                 <Image
-                  alt='img'
                   key={index}
                   className='px-2'
                   preview={false}
@@ -105,7 +108,7 @@ export default function ProductDetail(props: ProductDetailProps) {
                   height={60}
                   onClick={() => handleChangeImage(item)}
                   src={item}
-                  alt=''
+                  alt={props.name}
                 />
               )
             })}
@@ -123,13 +126,19 @@ export default function ProductDetail(props: ProductDetailProps) {
             </Space>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Loại:</Text>
-              <Text strong>áo khoác</Text>
+              <Text strong>{props.type}</Text>
             </Space>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Tình trạng:</Text>
-              <Text strong className='text-[#6A983C]'>
-                Còn hàng
-              </Text>
+              {
+                props.quantity === 0 ?
+                  <Text strong className='text-red-6'>
+                    Hết hàng
+                  </Text> :
+                  <Text strong className='text-[#6A983C]'>
+                    Còn hàng
+                  </Text>
+              }
             </Space>
           </div>
           <div className='mt-8'>
@@ -138,13 +147,16 @@ export default function ProductDetail(props: ProductDetailProps) {
               <Radio.Group
                 buttonStyle='solid'
                 onChange={onChangeColor}
-                defaultValue='a'
+                value={valueColor}
                 className={styles.productColor}
               >
-                <Radio.Button value='a'>Trắng</Radio.Button>
-                <Radio.Button value='b'>Xanh</Radio.Button>
-                <Radio.Button value='c'>Đỏ</Radio.Button>
-                <Radio.Button value='d'>Vàng</Radio.Button>
+                {
+                  props.color.map((item, index) => {
+                    return (
+                      <Radio.Button key={index} value={item}>{item}</Radio.Button>
+                    )
+                  })
+                }
               </Radio.Group>
             </Space>
           </div>
@@ -153,14 +165,15 @@ export default function ProductDetail(props: ProductDetailProps) {
               <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
               <Radio.Group
                 buttonStyle='solid'
-                onChange={onChangeColor}
-                defaultValue='a'
+                onChange={onChangeSize}
+                value={valueSize}
                 className={styles.productSize}
               >
-                <Radio.Button value='d'>S</Radio.Button>
-                <Radio.Button value='a'>M</Radio.Button>
-                <Radio.Button value='b'>L</Radio.Button>
-                <Radio.Button value='c'>XL</Radio.Button>
+                {props.size.map((item, index) => {
+                  return (
+                    <Radio.Button key={index} value={item}>{item}</Radio.Button>
+                  )
+                })}
               </Radio.Group>
             </Space>
           </div>

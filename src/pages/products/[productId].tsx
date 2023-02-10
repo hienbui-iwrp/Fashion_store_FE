@@ -1,6 +1,10 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProductDetail from '@/components/ProductDetail'
+import { ProductDetailDataProps } from '@/utils'
+import axios from 'axios'
+import { getProductDetail } from '@/api/products';
+import { BASE_URL } from '@/constants'
 
 export interface ProductDetailProps {
   goodsId: string;
@@ -13,20 +17,43 @@ export interface ProductDetailProps {
   discount: number;
 }
 
-const productDetailProps : ProductDetailProps = {
-  goodsId: '1',
-  image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-  name: 'Áo khoác mùa đông a',
-  unitPrice: 100000,
-  quantity: 1,
-  size: '36',
-  color: 'yellow',
-  discount: 10
-}
-
-export default function ProductDetailPage(props: ProductDetailProps) {
+export default function ProductDetailPage(props: ProductDetailDataProps) {
   const router = useRouter();
+  console.log(router.asPath.split('/').at(-1));
+  const [data, setData] = useState<ProductDetailDataProps>({
+    goodsId: '',
+    images: [''],
+    name: '',
+    unitPrice: 0,
+    price: 0,
+    quantity: 0,
+    size: [],
+    color: [],
+    type: '',
+    discount: 0,
+    gender: '',
+    age: '',
+    description: '',
+  })
+
+  const fetchData = async () => {
+    getProductDetail('1')
+      .then((res) => {
+        console.log('fetch check', res)
+        setData(res?.data);
+      })
+
+    // await axios
+    //   .get(`${BASE_URL}/api/product/detail`)
+    //   .then((res) => {
+    //     console.log(res)
+    //     setData(res.data);
+    //   })
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
   return (
-    <ProductDetail {...productDetailProps} />
+    <ProductDetail {...data} />
   );
 }
