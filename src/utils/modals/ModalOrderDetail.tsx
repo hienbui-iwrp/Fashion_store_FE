@@ -128,7 +128,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
               </Col>
             </Row>
           }
-          pagination={'none'}
+          pagination={false}
         />
         <Divider
           style={{
