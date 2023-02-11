@@ -3,7 +3,7 @@ import { ColumnsType } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import styles from '@/styles/Admin.module.css'
-import { Card, Space } from 'antd'
+import { Card, DatePicker, Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import { formatDate, FormatNumber, ModalAddEditStaff } from '@/utils'
 import { InputSearch } from '@/components'
@@ -101,8 +101,8 @@ const Online = () => {
           }}
         >
           <Space size='large' style={{ marginBottom: 10 }}>
-            <DatePicker />
-            <DatePicker />
+            <DatePicker style={{ borderRadius: 12 }} />
+            <DatePicker style={{ borderRadius: 12 }} />
           </Space>
           <InputSearch />
         </div>
