@@ -81,7 +81,10 @@ const Staff = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <AddButton
             label='Thêm mới'
-            onClick={() => setModalAddEditStaff(true)}
+            onClick={() => {
+              setCurrentData(undefined)
+              setModalAddEditStaff(true)
+            }}
             large
           />
           <InputSearch />

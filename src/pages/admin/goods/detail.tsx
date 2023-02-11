@@ -130,10 +130,12 @@ const Detail = () => {
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card>
-          <Row className={styles.adminRow}>
-            <b className='mr-10'>Mã sản phẩm</b>
-            {data?.id}
-          </Row>
+          {id && (
+            <Row className={styles.adminRow}>
+              <b className='mr-10'>Mã sản phẩm</b>
+              {data?.id}
+            </Row>
+          )}
           <Row>
             <Col xs={24} sm={15}>
               <Row className={styles.adminRow}>
@@ -147,6 +149,7 @@ const Detail = () => {
                       className={styles.adminInputShadow}
                     />
                   )}
+                  {!id && <Input className={styles.adminInputShadow} />}
                 </Col>
               </Row>
             </Col>
@@ -158,7 +161,7 @@ const Detail = () => {
                 </Col>
                 <Col xs={14} sm={16}>
                   <DropdownButton
-                    label={data?.gender}
+                    label={data?.gender ?? 'Giới tính'}
                     items={[{ content: 'a' }, { content: 'b' }]}
                   />
                 </Col>
@@ -178,6 +181,7 @@ const Detail = () => {
                       className={styles.adminInputShadow}
                     />
                   )}
+                  {!id && <InputNumber className={styles.adminInputShadow} />}
                 </Col>
               </Row>
             </Col>
@@ -194,6 +198,7 @@ const Detail = () => {
                       className={styles.adminInputShadow}
                     />
                   )}
+                  {!id && <InputNumber className={styles.adminInputShadow} />}
                 </Col>
               </Row>
             </Col>
@@ -201,11 +206,11 @@ const Detail = () => {
             <Col xs={24} sm={8} lg={7}>
               <Row className={styles.adminRow}>
                 <Col xs={10} sm={8}>
-                  <b>Lọai</b>
+                  <b>Loại</b>
                 </Col>
                 <Col xs={14} sm={16}>
                   <DropdownButton
-                    label={data?.type}
+                    label={data?.type ?? 'Loại'}
                     items={[{ content: 'a' }, { content: 'b' }]}
                   />
                 </Col>
@@ -225,6 +230,7 @@ const Detail = () => {
                       className={styles.adminInputShadow}
                     />
                   )}
+                  {!id && <Input className={styles.adminInputShadow} />}
                 </Col>
               </Row>
             </Col>
@@ -236,7 +242,7 @@ const Detail = () => {
                 </Col>
                 <Col xs={14} sm={16}>
                   <DropdownButton
-                    label={data?.age}
+                    label={data?.age ?? 'Lứa tuổi'}
                     items={[{ content: 'a' }, { content: 'b' }]}
                   />
                 </Col>

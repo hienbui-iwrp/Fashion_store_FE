@@ -8,7 +8,10 @@ export interface ModalSampleProps {
 export interface ModalAddEditBranchProps extends ModalSampleProps {
   extraData?: {
     name?: string
-    address?: string
+    street?: string
+    ward?: string
+    district?: string
+    province?: string
     openTime?: Date
     closeTime?: Date
     image?: string
@@ -21,7 +24,10 @@ export interface ModalAddEditStaffProps extends ModalSampleProps {
     name?: string
     citizenId?: string
     phone?: string
-    address?: string
+    street?: string
+    ward?: string
+    district?: string
+    province?: string
     dateOfBirth?: Date
     homeTown?: string
     workingLocation?: string
@@ -39,6 +45,10 @@ export interface ModalStaffDetailProps extends ModalSampleProps {
     citizenId?: string
     phone?: string
     address?: string
+    street?: string
+    ward?: string
+    district?: string
+    province?: string
     dateOfBirth?: Date
     homeTown?: string
     workLocation?: string
@@ -74,4 +84,20 @@ export interface ModalAllGoodsProps extends ModalSampleProps {
     size: string
     image?: string[]
   }[]
+}
+
+export interface ModalAddEditWarehouseProps extends ModalSampleProps {
+  extraData?: {
+    id?: string
+    name?: string
+    street?: string
+    ward?: string
+    district?: string
+    province?: string
+    capacity?: string
+    empty?: string
+    manager?: string
+    staff?: number
+    createdDate?: Date
+  }
 }

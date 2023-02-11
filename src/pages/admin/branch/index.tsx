@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, BRANCH_SERVICE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { ModalAddEditBranch } from '@/utils'
+import { formatAddress, ModalAddEditBranch } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
 
 interface DataType {
   id: string
   name: string
-  address: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
   createdAt: Date
   manager: string
   openTime: Date
@@ -51,11 +54,12 @@ const Branch = () => {
 
     columns.push({
       title: 'Địa chỉ',
-      dataIndex: 'address',
-      sorter: (a: DataType, b: DataType) => (a.address > b.address ? 1 : -1),
+      dataIndex: '',
+      sorter: (a: DataType, b: DataType) =>
+        formatAddress(a) > formatAddress(b) ? 1 : -1,
       render(text: string, record: DataType, index: number) {
         return {
-          children: <div>{text}</div>,
+          children: <div>{formatAddress(record)}</div>,
         }
       },
     })
@@ -92,6 +96,7 @@ const Branch = () => {
       // Manager string
       // OpenTime time.Time
       // CloseTime time.Time
+      // console.log(res.data.Data)
       setData(formatData(res.data.Data))
     })
   }
@@ -101,14 +106,10 @@ const Branch = () => {
       return {
         id: item.BranchCode,
         name: item.BranchName,
-        address:
-          item.BranchStreet +
-          ', ' +
-          item.BranchWard +
-          ', ' +
-          item.BranchDistrict +
-          ', ' +
-          item.BranchProvince,
+        street: item.BranchStreet,
+        ward: item.BranchWard,
+        district: item.BranchDistrict,
+        province: item.BranchProvince,
         createdAt: new Date(item.CreatedAt),
         openTime: new Date(item.OpenTime),
         closeTime: new Date(item.CloseTime),
@@ -126,7 +127,10 @@ const Branch = () => {
       <Space direction='vertical' style={{ width: '99%' }} size='small'>
         <AddButton
           label='Thêm mới'
-          onClick={() => setModalAddEditBranch(true)}
+          onClick={() => {
+            setCurrentData(undefined)
+            setModalAddEditBranch(true)
+          }}
           large
         />
         <TableList<DataType>

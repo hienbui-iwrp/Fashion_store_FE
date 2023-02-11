@@ -77,7 +77,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
   return (
     <>
       <Modal
-        title=''
+        title='Chi tiết đơn hàng'
         centered
         open={props.open}
         onCancel={props.cancel}
