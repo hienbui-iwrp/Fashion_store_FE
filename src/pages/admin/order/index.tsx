@@ -101,8 +101,8 @@ const Order = () => {
           }}
         >
           <Space size='large' style={{ marginBottom: 10 }}>
-            <DatePicker />
-            <DatePicker />
+            <DatePicker style={{ borderRadius: 12 }} />
+            <DatePicker style={{ borderRadius: 12 }} />
           </Space>
           <InputSearch />
         </div>
