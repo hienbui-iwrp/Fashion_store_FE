@@ -35,6 +35,7 @@ const Account = () => {
       },
       sorter: (a: DataType, b: DataType) =>
         a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1,
+      fixed: 'left',
     })
 
     columns.push({
@@ -47,6 +48,7 @@ const Account = () => {
       },
       sorter: (a: DataType, b: DataType) =>
         a.account.toLowerCase() > b.account.toLowerCase() ? 1 : -1,
+      fixed: 'left',
     })
 
     columns.push({
@@ -133,6 +135,7 @@ const Account = () => {
           selectUrl={BASE_URL + 'admin/account/detail'}
           loading={loading}
           ellipsis={true}
+          scroll={{ x: '75vw' }}
         />
       </Space>
     </>

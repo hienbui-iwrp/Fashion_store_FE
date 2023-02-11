@@ -163,12 +163,17 @@ a {
   background-color: var(--admin-bg-color);
 }
 
-.ant-table-row-selected td {
+.ant-table-row-selected td,
+.ant-table-cell-fix-left {
   background: inherit !important;
 }
 
 tr:hover td {
   background: none !important;
+}
+
+.ant-form-item-label {
+  font-weight: 500 !important;
 }
 
 @tailwind base;

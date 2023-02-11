@@ -19,6 +19,7 @@ import {
   Space,
   TimePicker,
   Image,
+  Form,
 } from 'antd'
 import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
 import { formatDate, formatTime, ModalAllGoods } from '@/utils'
@@ -70,6 +71,7 @@ const Account = () => {
 
   const router = useRouter()
   const { id } = router.query
+
   const columns: ColumnsType<Goods> = []
   if (data) {
     columns.push({
@@ -191,6 +193,7 @@ const Account = () => {
                     defaultValue={data.name}
                   />
                 )}
+                {!id && <Input className={styles.adminInputShadow} />}
               </Col>
             </Row>
             <Row className={styles.adminRow}>
@@ -204,6 +207,7 @@ const Account = () => {
                     defaultValue={data.discount}
                   />
                 )}
+                {!id && <InputNumber className={styles.adminInputShadow} />}
               </Col>
             </Row>
             <Row className={styles.adminRow}>
@@ -223,7 +227,10 @@ const Account = () => {
                         data?.image ??
                         'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
                     }}
-                    style={{ maxWidth: 130, boxShadow: '1px 1px 2px 1px #ccc' }}
+                    style={{
+                      maxWidth: 130,
+                      boxShadow: '1px 1px 2px 1px #ccc',
+                    }}
                   />
                   <AddButton
                     iconInput={<FileImageOutlined />}
@@ -250,6 +257,13 @@ const Account = () => {
                       )}
                     />
                   )}
+                  {!id && (
+                    <DatePicker
+                      className={styles.adminInputShadow}
+                      format={'DD/MM/YYYY'}
+                    />
+                  )}
+
                   {data && (
                     <DatePicker
                       className={styles.adminInputShadow}
@@ -258,6 +272,12 @@ const Account = () => {
                         formatDate(data?.endTime),
                         'DD/MM/YYYY'
                       )}
+                    />
+                  )}
+                  {!id && (
+                    <DatePicker
+                      className={styles.adminInputShadow}
+                      format={'DD/MM/YYYY'}
                     />
                   )}
                 </Space>
@@ -276,11 +296,23 @@ const Account = () => {
                       defaultValue={dayjs(formatTime(data?.startTime), 'HH:mm')}
                     />
                   )}
+                  {!id && (
+                    <TimePicker
+                      className={styles.adminInputShadow}
+                      format={'HH:mm'}
+                    />
+                  )}
                   {data && (
                     <TimePicker
                       className={styles.adminInputShadow}
                       format={'HH:mm'}
                       defaultValue={dayjs(formatTime(data?.endTime), 'HH:mm')}
+                    />
+                  )}
+                  {!id && (
+                    <TimePicker
+                      className={styles.adminInputShadow}
+                      format={'HH:mm'}
                     />
                   )}
                 </Space>

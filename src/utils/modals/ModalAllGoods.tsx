@@ -182,7 +182,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   return (
     <>
       <Modal
-        title=''
+        title='Tất cả sản phẩm'
         centered
         open={props.open}
         onCancel={props.cancel}

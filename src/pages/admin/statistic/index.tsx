@@ -98,7 +98,7 @@ const Statistic = () => {
           />
         </Space>
 
-        <LineChart data={statisticData} haveProfit showTotal />
+        <LineChart data={statisticData} profit showTotal />
       </Card>
       <Card className='!max-w-full-lg'>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -133,7 +133,7 @@ const Statistic = () => {
             <AddButton label='Chọn sản phẩm' />
           </Col>
         </Row>
-        <LineChart data={statisticData} haveRevenue showTotal />
+        <LineChart data={statisticData} revenue showTotal />
       </Card>
     </Space>
   )

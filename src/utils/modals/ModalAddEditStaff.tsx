@@ -36,7 +36,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   return (
     <>
       <Modal
-        title=''
+        title={props.extraData ? 'Chỉnh sửa nhân viên' : 'Thêm nhân viên mới'}
         centered
         open={props.open}
         onCancel={props.cancel}
@@ -49,21 +49,51 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
               iconInput={<CloseOutlined />}
               onClick={props.cancel}
             />
-            <AddButton key='add' label='Lưu' iconInput={<CheckOutlined />} />
+            <AddButton
+              key='add'
+              label='Lưu'
+              iconInput={<CheckOutlined />}
+              onClick={async () => {
+                try {
+                  const values = await form.validateFields()
+                  console.log('Success:', values)
+                } catch (errorInfo) {
+                  console.log('Failed:', errorInfo)
+                }
+              }}
+            />
           </Space>,
         ]}
       >
-        <Row>
-          <Col xs={24} sm={12} style={{ paddingLeft: 5, paddingRight: 15 }}>
-            <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
-              <Form.Item label='Họ tên'>
+        <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
+          <Row>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Họ tên'
+                name='name'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <Input
                   placeholder='Nhập tên họ tên'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.name ?? ''}
                 />
               </Form.Item>
-              <Form.Item label='Ngày sinh' valuePropName='date'>
+              <Form.Item
+                label='Ngày sinh'
+                name='dateOfBirth'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <DatePicker
                   className={styles.adminInputShadow}
                   style={{ width: '100%' }}
@@ -77,53 +107,98 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   format={'DD/MM/YYYY'}
                 />
               </Form.Item>
-              <Form.Item label='Quê quán'>
+              <Form.Item
+                label='Quê quán'
+                name='hometown'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <Input
                   placeholder='Nhập tên quê quán'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.homeTown ?? ''}
                 />
               </Form.Item>
-              <Form.Item label='Căn cước'>
+              <Form.Item
+                label='Căn cước'
+                name='citizeId'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <Input
                   placeholder='Nhập tên căn cước'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.citizenId ?? ''}
                 />
               </Form.Item>
-              <Form.Item label='Điện thoại'>
+            </Col>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Điện thoại'
+                name='phone'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <Input
                   placeholder='Nhập tên điện thoại'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.phone ?? ''}
                 />
               </Form.Item>
-            </Form>
-          </Col>
-          <Col xs={24} sm={12} style={{ paddingLeft: 15, paddingRight: 5 }}>
-            <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
-              <Form.Item label='Địa chỉ'>
-                <Input
-                  placeholder='Nhập tên địa chỉ'
-                  className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.address ?? ''}
-                />
-              </Form.Item>
-              <Form.Item label='Nơi làm việc'>
+              <Form.Item
+                label='Nơi làm việc'
+                name='workingLocation'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <Input
                   placeholder='Nhập tên nơi làm việc'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.workingLocation ?? ''}
                 />
               </Form.Item>
-              <Form.Item label='Vị trí'>
+              <Form.Item
+                label='Vị trí'
+                name='role'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <Input
                   placeholder='Nhập tên vị trí'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.role ?? ''}
                 />
               </Form.Item>
-              <Form.Item label='Lương'>
+              <Form.Item
+                label='Lương'
+                name='salary'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
                 <InputNumber
                   placeholder='Nhập lương'
                   className={styles.adminInputShadow}
@@ -131,9 +206,86 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   defaultValue={props?.extraData?.salary ?? ''}
                 />
               </Form.Item>
-            </Form>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+          <b>Địa chỉ</b>
+          <Row>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Đường'
+                name='street'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder='Nhập tên đường'
+                  className={styles.adminInputShadow}
+                  defaultValue={props.extraData?.street}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Xã, phường'
+                name='ward'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder='Nhập xã, phường'
+                  className={styles.adminInputShadow}
+                  defaultValue={props.extraData?.ward}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Huyện, thành phố'
+                name='district'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder='Nhập huyện, thành phố'
+                  className={styles.adminInputShadow}
+                  defaultValue={props.extraData?.district}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Tỉnh, thành phố'
+                name='province'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder='Nhập tỉnh, thành phố'
+                  className={styles.adminInputShadow}
+                  defaultValue={props.extraData?.province}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Modal>
     </>
   )

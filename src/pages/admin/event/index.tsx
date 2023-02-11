@@ -7,6 +7,7 @@ import { Card, Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import { formatDate, formatTime } from '@/utils'
 import { InputSearch } from '@/components'
+import { useRouter } from 'next/router'
 
 interface DataType {
   id: string
@@ -16,9 +17,11 @@ interface DataType {
   discount: number
 }
 
-const Account = () => {
+const Event = () => {
   const [data, setData] = useState<DataType[]>([])
   const [loading, setLoading] = useState(true)
+
+  const router = useRouter()
 
   const columns: ColumnsType<DataType> = []
   if (data) {
@@ -93,7 +96,13 @@ const Account = () => {
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div className='flex justify-between'>
-          <AddButton label='Thêm mới' onClick={() => {}} large />
+          <AddButton
+            label='Thêm mới'
+            onClick={() => {
+              router.push(BASE_URL + 'event/detail')
+            }}
+            large
+          />
           <InputSearch />
         </div>
         <TableList<DataType>
@@ -111,6 +120,6 @@ const Account = () => {
   return <LayoutAdmin content={content} selected={4} />
 }
 
-Account.displayName = 'Account Management'
+Event.displayName = 'Event Management'
 
-export default Account
+export default Event

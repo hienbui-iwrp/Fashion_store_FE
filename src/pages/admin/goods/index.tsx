@@ -35,6 +35,8 @@ const Goods = () => {
   const [data, setData] = useState<DateItem[]>([])
   const [loading, setLoading] = useState(true)
 
+  const router = useRouter()
+
   const columns: ColumnsType<DateItem> = []
   if (data[0]) {
     columns.push({
@@ -117,7 +119,13 @@ const Goods = () => {
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <AddButton label='Thêm mới' onClick={() => {}} large />
+          <AddButton
+            label='Thêm mới'
+            onClick={() => {
+              router.push(BASE_URL + 'goods/detail')
+            }}
+            large
+          />
           <InputSearch />
         </div>
         <TableList<DateItem>

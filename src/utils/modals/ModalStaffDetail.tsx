@@ -14,7 +14,11 @@ interface DataType {
   name: string
   citizenId: string
   phone: string
-  address: string
+  address?: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
   dateOfBirth: Date
   homeTown: string
   workLocation: string
@@ -71,7 +75,7 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
   return (
     <>
       <Modal
-        title=''
+        title='Thông tin chi tiết'
         centered
         open={props.open}
         onCancel={props.cancel}

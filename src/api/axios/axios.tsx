@@ -13,16 +13,16 @@ const apiBranchService = axios.create({
 // apiBranchService.defaults.headers.common['Authorization'] = 'Bearer '
 
 // //temporary fix for login error
-// apiBranchService.interceptors.response.use(
-//   (response) => {
-//     return response
-//   },
-//   (error) => {
-//     console.warn('Error status', error.response?.status)
-//     console.log('show notification')
-//     console.log(error.response?.data)
-//     return Promise.reject(error)
-//   }
-// )
+apiBranchService.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    console.warn('Error status', error.response?.status)
+    console.log('show notification')
+    console.log(error.response?.data)
+    return Promise.reject(error)
+  }
+)
 
 export { apiBranchService }

@@ -8,13 +8,16 @@ import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
-import { formatDate, formatTime } from '@/utils'
+import { formatAddress, formatDate, formatTime } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
 
 type DataType = {
   id: string
   name: string
-  address: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
   createdAt: Date
   manager: string
   openTime: Date
@@ -48,7 +51,6 @@ const Detail = () => {
     let _data: DataType = {
       id: '',
       name: '',
-      address: '',
       createdAt: new Date(),
       manager: '',
       openTime: new Date(),
@@ -58,17 +60,14 @@ const Detail = () => {
     }
 
     await apiBranchService.get(`/${id}`).then((res) => {
+      console.log(res.data.Data)
       _data = {
         id: res.data.Data.BranchCode,
         name: res.data.Data.BranchName,
-        address:
-          res.data.Data.BranchStreet +
-          ', ' +
-          res.data.Data.BranchWard +
-          ', ' +
-          res.data.Data.BranchDistrict +
-          ', ' +
-          res.data.Data.BranchProvince,
+        street: res.data.Data.BranchStreet,
+        ward: res.data.Data.BranchWard,
+        district: res.data.Data.BranchDistrict,
+        province: res.data.Data.BranchProvince,
         createdAt: new Date(res.data.Data.CreatedAt),
         openTime: new Date(res.data.Data.OpenTime),
         closeTime: new Date(res.data.Data.CloseTime),
@@ -101,7 +100,7 @@ const Detail = () => {
     if (data) {
       setDataItems([
         { name: 'Mã chi nhánh', content: data.id },
-        { name: 'Địa chỉ', content: data.address },
+        { name: 'Địa chỉ', content: formatAddress(data) },
         { name: 'Quản lý', content: data.manager },
         {
           name: 'Nhân viên',
