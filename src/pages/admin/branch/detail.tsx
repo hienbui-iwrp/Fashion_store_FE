@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BASE_URL } from '@/constants'
 import axios from 'axios'
 import { EditFilled } from '@ant-design/icons'
-import { Card, Col, Row, Image, List, Space, Modal } from 'antd'
+import { Card, Col, Row, Image, List, Space } from 'antd'
 import { useRouter } from 'next/router'
 import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
@@ -10,6 +10,7 @@ import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
 import { formatAddress, formatDate, formatTime, timeToDate } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
+import { useMessage } from '@/hooks'
 
 type DataType = {
   id: string
