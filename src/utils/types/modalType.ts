@@ -3,10 +3,13 @@ export interface ModalSampleProps {
   cancel: () => void
   extraData?: object
   callback?: (item: any) => void
+  render?: boolean
+  setRender?: (item: boolean) => void
 }
 
 export interface ModalAddEditBranchProps extends ModalSampleProps {
   extraData?: {
+    id?: string
     name?: string
     street?: string
     ward?: string
