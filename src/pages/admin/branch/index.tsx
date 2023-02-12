@@ -6,7 +6,7 @@ import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatAddress, ModalAddEditBranch } from '@/utils'
+import { formatAddress, ModalAddEditBranch, timeToDate } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
 
 interface DataType {
@@ -96,7 +96,7 @@ const Branch = () => {
       // Manager string
       // OpenTime time.Time
       // CloseTime time.Time
-      // console.log(res.data.Data)
+      console.log('data: ', res.data.Data)
       setData(formatData(res.data.Data))
     })
   }
@@ -111,8 +111,8 @@ const Branch = () => {
         district: item.BranchDistrict,
         province: item.BranchProvince,
         createdAt: new Date(item.CreatedAt),
-        openTime: new Date(item.OpenTime),
-        closeTime: new Date(item.CloseTime),
+        openTime: timeToDate(item.OpenTime),
+        closeTime: timeToDate(item.CloseTime),
       }
     })
   }
@@ -137,7 +137,7 @@ const Branch = () => {
           data={data ?? []}
           title='Danh sách chi nhánh'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/branch/detail/'}
+          selectUrl={`${BASE_URL}/admin/branch/detail/`}
           loading={loading}
         />
       </Space>
@@ -146,6 +146,13 @@ const Branch = () => {
           open={modalAddEditBranch}
           cancel={() => setModalAddEditBranch(false)}
           extraData={currentData}
+          callback={() => {
+            setLoading(true)
+            setTimeout(() => {
+              getData()
+              setLoading(false)
+            }, 1000)
+          }}
         />
       )}
     </>

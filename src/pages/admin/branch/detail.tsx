@@ -8,7 +8,7 @@ import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
-import { formatAddress, formatDate, formatTime } from '@/utils'
+import { formatAddress, formatDate, formatTime, timeToDate } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
 
 type DataType = {
@@ -44,8 +44,8 @@ const Detail = () => {
   const [data, setData] = useState<DataType>()
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
 
-  const router = useRouter()
-  const { id } = router.query
+  const routes = useRouter()
+  const { id } = routes.query
 
   const getData = async () => {
     let _data: DataType = {
@@ -60,7 +60,6 @@ const Detail = () => {
     }
 
     await apiBranchService.get(`/${id}`).then((res) => {
-      console.log(res.data.Data)
       _data = {
         id: res.data.Data.BranchCode,
         name: res.data.Data.BranchName,
@@ -69,8 +68,8 @@ const Detail = () => {
         district: res.data.Data.BranchDistrict,
         province: res.data.Data.BranchProvince,
         createdAt: new Date(res.data.Data.CreatedAt),
-        openTime: new Date(res.data.Data.OpenTime),
-        closeTime: new Date(res.data.Data.CloseTime),
+        openTime: timeToDate(res.data.Data.OpenTime),
+        closeTime: timeToDate(res.data.Data.CloseTime),
         manager: res.data.Data.Manager,
         image: res.data.Data?.Image,
       }
@@ -124,8 +123,9 @@ const Detail = () => {
   const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa chi nhánh',
     content: 'Bạn có chắc  chắn muốn xóa chi nhánh này?',
-    onOk: () => {
-      console.log('delete branch')
+    onOk: async () => {
+      await apiBranchService.delete(`/${id}`)
+      routes.push(BASE_URL + '/admin/branch')
     },
   })
 
