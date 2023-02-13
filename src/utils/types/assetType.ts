@@ -7,14 +7,24 @@ export interface AccountProps {
   UserId: string
 }
 
-export interface UserProps {
-  ID?: string
+export interface CustomerInfoProps {
+  customerId: string
+  name?: string
+  phoneNumber?: string
+  username: string
+  email: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
+}
+
+export interface CustomerAddProps {
   name?: string
   phoneNumber?: string
   username: string
   password: string
   email: string
-  address?: string
   role: string
 }
 
@@ -44,4 +54,16 @@ export interface ProductDetailDataProps {
   gender: string
   age: string
   description: string
+}
+
+export interface ProductInCartProps {
+  goodsId: string
+  name: string
+  unitPrice: number
+  price: number
+  image: string
+  quantity: number
+  size: string
+  color: string
+  discount: number
 }
