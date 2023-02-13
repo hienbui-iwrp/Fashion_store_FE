@@ -2,7 +2,7 @@ import { HOST_BRANCH_SERVICE } from '@/constants'
 import axios from 'axios'
 
 const apiBranchService = axios.create({
-  baseURL: HOST_BRANCH_SERVICE,
+  baseURL: process.env.BRANCH_SERVICE_URL ?? HOST_BRANCH_SERVICE,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

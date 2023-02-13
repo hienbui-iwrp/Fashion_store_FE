@@ -138,8 +138,9 @@ const Warehouse = () => {
     setLoading(false)
   }, [])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={6}>
+      {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div className='flex justify-between'>
           <AddButton
@@ -170,10 +171,8 @@ const Warehouse = () => {
           extraData={currentData}
         />
       )}
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={6} />
 }
 
 Warehouse.displayName = 'Warehouse Management'

@@ -75,8 +75,8 @@ const Staff = () => {
     setLoading(false)
   }, [])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={20}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <AddButton
@@ -104,10 +104,8 @@ const Staff = () => {
           extraData={currentData}
         />
       )}
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={20} />
 }
 
 Staff.displayName = 'Staff Management'

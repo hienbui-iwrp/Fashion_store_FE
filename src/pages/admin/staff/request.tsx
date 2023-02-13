@@ -228,8 +228,10 @@ const Request = () => {
     setLoading(false)
   }, [])
 
-  const content = (
-    <>
+  const content = <></>
+
+  return (
+    <LayoutAdmin selected={21}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <TableList<DataType>
           data={getDataAdd().data}
@@ -263,15 +265,9 @@ const Request = () => {
         open={modalStaffDetail}
         cancel={() => setModalStaffDetail(false)}
       />
-    </>
-  )
-
-  return (
-    <>
-      <LayoutAdmin content={content} selected={21} />
       {removeModal.contextModalComfirm}
       {acceptModal.contextModalComfirm}
-    </>
+    </LayoutAdmin>
   )
 }
 

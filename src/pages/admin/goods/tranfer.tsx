@@ -70,8 +70,8 @@ const Tranfer = () => {
     setLoading(false)
   }, [id])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={5}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card>
           <Row className={styles.adminRow}>
@@ -255,10 +255,8 @@ const Tranfer = () => {
           </div>
         </Card>
       </Space>
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={5} />
 }
 
 Tranfer.displayName = 'Goods Tranfer'

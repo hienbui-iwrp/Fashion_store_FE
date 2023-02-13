@@ -90,8 +90,8 @@ const Order = () => {
     setLoading(false)
   }, [])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={70}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div
           style={{
@@ -115,10 +115,8 @@ const Order = () => {
           ellipsis={true}
         />
       </Space>
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={70} />
 }
 
 Order.displayName = 'Order Management'

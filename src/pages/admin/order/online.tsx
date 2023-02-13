@@ -90,8 +90,9 @@ const Online = () => {
     setLoading(false)
   }, [])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={71}>
+      {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div
           style={{
@@ -115,10 +116,8 @@ const Online = () => {
           ellipsis={true}
         />
       </Space>
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={71} />
 }
 
 Online.displayName = 'Order Online Management'
