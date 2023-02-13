@@ -5,9 +5,9 @@ const useNotification = (props: useNotificationProps) => {
   const [api, contextNotification] = notification.useNotification()
 
   const openNotification = () => {
-    api['success']({
-      message: props.title,
-      description: props.content,
+    api[props.type ?? 'success']({
+      message: props.title ?? 'Thành công',
+      description: props.content ?? 'Cập nhật thành công',
     })
   }
 

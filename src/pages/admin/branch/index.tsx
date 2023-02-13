@@ -84,40 +84,26 @@ const Branch = () => {
 
   const getData = async () => {
     await apiBranchService.get('').then((res) => {
-      // BranchCode string
-      // BranchName string
-      // BranchProvince string
-      // BranchDistrict string
-      // BranchWard string
-      // BranchStreet string
-      // CreatedAt time.Time
-      // Manager string
-      // OpenTime time.Time
-      // CloseTime time.Time
-      console.log('data: ', res.data.Data)
-      setData(formatData(res.data.Data))
-    })
-  }
-
-  const formatData = (data: any) => {
-    return data.map((item: any) => {
-      return {
-        id: item.BranchCode,
-        name: item.BranchName,
-        street: item.BranchStreet,
-        ward: item.BranchWard,
-        district: item.BranchDistrict,
-        province: item.BranchProvince,
-        createdAt: new Date(item.CreatedAt),
-        openTime: timeToDate(item.OpenTime),
-        closeTime: timeToDate(item.CloseTime),
-      }
+      const _data = res.data.Data.map((item: any) => {
+        return {
+          id: item.BranchCode,
+          name: item.BranchName,
+          street: item.BranchStreet,
+          ward: item.BranchWard,
+          district: item.BranchDistrict,
+          province: item.BranchProvince,
+          createdAt: new Date(item.CreatedAt),
+          openTime: timeToDate(item.OpenTime),
+          closeTime: timeToDate(item.CloseTime),
+        }
+      })
+      setData(_data)
     })
   }
 
   useEffect(() => {
-    getData()
     setLoading(false)
+    getData()
   }, [])
 
   const content = (

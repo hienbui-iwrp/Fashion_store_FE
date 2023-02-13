@@ -5,7 +5,6 @@ import { ButtonProps } from '@/utils/types/componentType'
 
 export default function AddButton(props: ButtonProps) {
   const [isHover, setIsHover] = useState(false)
-
   return (
     <Button
       style={{
