@@ -5,6 +5,8 @@ import { Space, Typography, Image, Row, Col, Divider, Radio, InputNumber } from 
 import { Checkbox } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { ProductInCartProps } from '@/utils'
+import { getCart } from '@/api/cart/cart';
 import styles from './Cart.module.css'
 
 const { Title, Text } = Typography
@@ -55,6 +57,7 @@ export default function Cart(props: CartProps) {
   const router = useRouter();
   const [quantity, setQuantity] = useState<number>(1)
   const maxQuantity: number = 1000
+  const [data, setData] = useState<ProductInCartProps[]>([])
   const onChangeQuantity = (index: number, value: number) => {
     if (value > 0 && value < maxQuantity) {
       setQuantity(value)
@@ -64,8 +67,15 @@ export default function Cart(props: CartProps) {
     router.push('/payment');
   }
 
+  const fetchData = async () => {
+    await getCart('1')
+      .then((res) => {
+        setData(res?.data)
+      })
+  }
+
   useEffect(() => {
-    // setQuantity()
+    fetchData()
   }, [])
 
   return (
@@ -82,13 +92,12 @@ export default function Cart(props: CartProps) {
               >
                 <div className='flex'>
                   <Image
-                    alt='img'
                     width={140}
                     height={160}
                     preview={false}
                     className=''
                     src={item.image}
-                    alt=''
+                    alt={item.name}
                   />
                   <div className='flex-1 pl-4'>
                     <Row className='flex-1'>
