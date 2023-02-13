@@ -335,7 +335,7 @@ export default function LayoutClient({
           </div>
         </nav>
       </Header>
-      <Content className='bg-white'>{children}</Content>
+      <Content className='bg-white pb-4'>{children}</Content>
       <Footer className='!bg-black !text-white'>
         <Row gutter={16}>
           <Col className='gutter-row' span={12}>

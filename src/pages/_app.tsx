@@ -16,11 +16,18 @@ export default function App({ Component, pageProps }: AppProps) {
   if (
     router.pathname.startsWith('/login') ||
     router.pathname.startsWith('/register') ||
-    router.pathname.startsWith('/reset-password')
+    router.pathname.startsWith('/reset-password') ||
+    router.pathname.startsWith('/404')
   ) {
     return <Component {...pageProps} />
   }
-  if (!router.pathname.startsWith('/admin')) {
+  if (
+    router.pathname === '/' ||
+    router.pathname.startsWith('/products/') ||
+    router.pathname === '/products' ||
+    router.pathname === '/intro' ||
+    router.pathname === '/support'
+  ) {
     return (
       <ConfigProvider
         theme={{
