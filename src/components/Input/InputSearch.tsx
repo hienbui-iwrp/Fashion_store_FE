@@ -5,8 +5,6 @@ import { InputSearchProps } from '@/utils/types/componentType'
 import { SearchOutlined } from '@ant-design/icons'
 
 export default function InputSearch(props: InputSearchProps) {
-  const [isHover, setIsHover] = useState(false)
-
   return (
     <Input
       style={{
@@ -16,6 +14,7 @@ export default function InputSearch(props: InputSearchProps) {
         borderRadius: 16,
         paddingLeft: 10,
         backgroundColor: Colors.white,
+        ...props.style,
       }}
       placeholder={props.placeholder ?? 'Tìm kiếm theo mã, tên'}
       onPressEnter={props?.onEnter}

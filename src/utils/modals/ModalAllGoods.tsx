@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Space, Image } from 'antd'
 import { ModalAllGoodsProps } from '../types/modalType'
-import { AddButton, RemoveButton, TableList } from '@/components'
+import { AddButton, InputSearch, RemoveButton, TableList } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { formatDate } from '..'
@@ -43,6 +43,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   const [rowSelected, setRowSelected] = useState<string[]>(
     props?.extraData?.map((item: any) => item.id + item.size + item.color) ?? []
   )
+  console.log(props.single)
 
   const getAllGoods = async () => {
     await axios
@@ -80,8 +81,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
                 src: record?.image ? record?.image[0] : '',
               }}
               style={{
-                maxWidth: 40,
-                maxHeight: 40,
+                maxWidth: 32,
+                maxHeight: 32,
               }}
             />
           ),
@@ -109,6 +110,13 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         }
       },
       sorter: (a: DataType, b: DataType) => (a.gender > b.gender ? 1 : -1),
+      filters: [
+        { text: 'Nam', value: 'Nam' },
+        { text: 'Nữ', value: 'Nữ' },
+        { text: 'Unisex', value: 'Unisex' },
+      ],
+      onFilter: (value: string, record: DataType) =>
+        record.gender.includes(value),
     })
 
     columns.push({
@@ -120,6 +128,12 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         }
       },
       sorter: (a: DataType, b: DataType) => (a.type > b.type ? 1 : -1),
+      filters: [
+        { text: 'Áo khoác', value: 'Áo khoác' },
+        { text: 'Áo thun', value: 'Áo thun' },
+      ],
+      onFilter: (value: string, record: DataType) =>
+        record.type.includes(value),
     })
 
     columns.push({
@@ -131,6 +145,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         }
       },
       sorter: (a: DataType, b: DataType) => (a.age > b.age ? 1 : -1),
+      filters: [
+        { text: 'Người lớn', value: 'Người lớn' },
+        { text: 'Trẻ em', value: 'Trẻ em' },
+      ],
+      onFilter: (value: string, record: DataType) => record.age.includes(value),
     })
 
     columns.push({
@@ -142,6 +161,16 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         }
       },
       sorter: (a: DataType, b: DataType) => (a.size > b.size ? 1 : -1),
+      filters: [
+        { text: 'S', value: 'S' },
+        { text: 'M', value: 'M' },
+        { text: 'L', value: 'L' },
+        { text: 'XL', value: 'XL' },
+        { text: 'XXL', value: 'XXL' },
+        { text: 'XXXL', value: 'XXXL' },
+      ],
+      onFilter: (value: string, record: DataType) =>
+        record.size.includes(value),
     })
 
     columns.push({
@@ -182,29 +211,49 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   return (
     <>
       <Modal
-        title='Tất cả sản phẩm'
         centered
         open={props.open}
         onCancel={props.cancel}
         onOk={() => props?.callback}
-        footer={[
-          <Space key='btn'>
-            <RemoveButton
-              label='Hủy'
-              key='cancel'
-              iconInput={<CloseOutlined />}
-              onClick={props.cancel}
-            />
-            <AddButton key='add' label='Lưu' iconInput={<CheckOutlined />} />
-          </Space>,
-        ]}
+        footer={
+          props.single ? (
+            <></>
+          ) : (
+            [
+              <Space key='btn'>
+                <RemoveButton
+                  label='Hủy'
+                  key='cancel'
+                  iconInput={<CloseOutlined />}
+                  onClick={props.cancel}
+                />
+                <AddButton
+                  key='add'
+                  label='Lưu'
+                  iconInput={<CheckOutlined />}
+                />
+              </Space>,
+            ]
+          )
+        }
         width={'90%'}
       >
         <TableList<DataType>
+          header={
+            <div className='flex justify-between'>
+              <b>Tất cả sản phẩm</b>
+              <InputSearch
+                style={{ backgroundColor: Colors.adminBackground }}
+              />
+            </div>
+          }
           data={data ?? []}
           columns={columns}
-          rowSelection={{ ...rowSelection, checkStrictly: true }}
+          rowSelection={
+            props.single ? undefined : { ...rowSelection, checkStrictly: true }
+          }
           rowKey={['id', 'size', 'color']}
+          scroll={{ y: '50vh' }}
         />
       </Modal>
     </>

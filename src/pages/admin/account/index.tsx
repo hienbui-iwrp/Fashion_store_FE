@@ -122,8 +122,8 @@ const Account = () => {
     setLoading(false)
   }, [])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={3}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <InputSearch />
@@ -138,10 +138,8 @@ const Account = () => {
           scroll={{ x: '75vw' }}
         />
       </Space>
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={3} />
 }
 
 Account.displayName = 'Account Management'

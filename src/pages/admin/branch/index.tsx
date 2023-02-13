@@ -106,8 +106,8 @@ const Branch = () => {
     getData()
   }, [])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={0}>
       <Space direction='vertical' style={{ width: '99%' }} size='small'>
         <AddButton
           label='Thêm mới'
@@ -139,10 +139,8 @@ const Branch = () => {
           }}
         />
       )}
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={0} />
 }
 
 Branch.displayName = 'Branch Management'
