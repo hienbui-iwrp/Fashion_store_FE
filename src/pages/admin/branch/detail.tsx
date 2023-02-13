@@ -134,71 +134,71 @@ const Detail = () => {
     },
   })
 
-  const content = (
-    <Space direction='vertical' style={{ width: '99%' }} size='large'>
-      <Card
-        className='max-w-full-lg'
-        title={data?.name?.toUpperCase() ?? 'Không tên'}
-        bordered={false}
-        loading={loading}
-      >
-        <Row justify='center' align='middle'>
-          <Col xs={24} sm={12}>
-            <Image
-              alt='img'
-              preview={true}
-              src={
-                data?.image ??
-                'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
-              }
-              width={'80%'}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <List
-              bordered={false}
-              dataSource={dataItems ?? []}
-              renderItem={(item) => {
-                return (
-                  <Row style={{ padding: 8 }}>
-                    <Col xs={24} lg={8}>
-                      <b>{item.name}</b>
-                    </Col>
-                    <Col xs={24} lg={16}>
-                      {item.content}
-                    </Col>
-                  </Row>
-                )
-              }}
-            />
-            <Row justify='end' align='bottom'>
-              <Space size={20}>
-                <RemoveButton onClick={showModelConfirm} />
-                <AddButton
-                  label='Chỉnh sửa'
-                  iconInput={<EditFilled />}
-                  onClick={() => setModalAddEditBranch(true)}
-                />
-              </Space>
-            </Row>
-          </Col>
-        </Row>
-      </Card>
-      <Card className='!max-w-full-lg'>
-        <LineChart data={statisticData} revenue profit={true} />
-      </Card>
-      {modalAddEditBranch && (
-        <ModalAddEditBranch
-          open={modalAddEditBranch}
-          cancel={() => setModalAddEditBranch(false)}
-          extraData={data}
-        />
-      )}
-      {contextModalComfirm}
-    </Space>
+  return (
+    <LayoutAdmin selected={0}>
+      <Space direction='vertical' style={{ width: '99%' }} size='large'>
+        <Card
+          className='max-w-full-lg'
+          title={data?.name?.toUpperCase() ?? 'Không tên'}
+          bordered={false}
+          loading={loading}
+        >
+          <Row justify='center' align='middle'>
+            <Col xs={24} sm={12}>
+              <Image
+                alt='img'
+                preview={true}
+                src={
+                  data?.image ??
+                  'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
+                }
+                width={'80%'}
+              />
+            </Col>
+            <Col xs={24} sm={12}>
+              <List
+                bordered={false}
+                dataSource={dataItems ?? []}
+                renderItem={(item) => {
+                  return (
+                    <Row style={{ padding: 8 }}>
+                      <Col xs={24} lg={8}>
+                        <b>{item.name}</b>
+                      </Col>
+                      <Col xs={24} lg={16}>
+                        {item.content}
+                      </Col>
+                    </Row>
+                  )
+                }}
+              />
+              <Row justify='end' align='bottom'>
+                <Space size={20}>
+                  <RemoveButton onClick={showModelConfirm} />
+                  <AddButton
+                    label='Chỉnh sửa'
+                    iconInput={<EditFilled />}
+                    onClick={() => setModalAddEditBranch(true)}
+                  />
+                </Space>
+              </Row>
+            </Col>
+          </Row>
+        </Card>
+        <Card className='!max-w-full-lg'>
+          <LineChart data={statisticData} revenue profit={true} />
+        </Card>
+        {modalAddEditBranch && (
+          <ModalAddEditBranch
+            open={modalAddEditBranch}
+            cancel={() => setModalAddEditBranch(false)}
+            extraData={data}
+          />
+        )}
+        {contextModalComfirm}
+      </Space>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={0} />
 }
 
 Detail.displayName = 'Branch Detail'

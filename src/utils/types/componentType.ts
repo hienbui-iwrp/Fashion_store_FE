@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 export interface ComponentProps {
-  styles?: object
+  style?: object
   className?: string
   callBack?: (item: any) => void
   disabled?: boolean

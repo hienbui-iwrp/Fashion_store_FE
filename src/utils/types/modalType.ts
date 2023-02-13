@@ -87,6 +87,7 @@ export interface ModalAllGoodsProps extends ModalSampleProps {
     size: string
     image?: string[]
   }[]
+  single?: boolean
 }
 
 export interface ModalAddEditWarehouseProps extends ModalSampleProps {

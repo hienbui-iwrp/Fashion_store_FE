@@ -162,23 +162,55 @@ const Detail = () => {
     },
   })
 
-  const content = (
-    <Space direction='vertical' style={{ width: '99%' }} size='large'>
-      <Card
-        className='max-w-full-lg'
-        title={data?.name?.toUpperCase() ?? 'Không tên'}
-        bordered={false}
-        loading={loading}
-      >
-        <Row justify='center' align='middle'>
-          <Col xs={24} sm={11}>
-            <Row>
-              <Col xs={24} sm={23}>
-                <List
-                  bordered={false}
-                  dataSource={dataItems1 ?? []}
-                  renderItem={(item) => {
-                    return (
+  return (
+    <LayoutAdmin selected={20}>
+      {' '}
+      <Space direction='vertical' style={{ width: '99%' }} size='large'>
+        <Card
+          className='max-w-full-lg'
+          title={data?.name?.toUpperCase() ?? 'Không tên'}
+          bordered={false}
+          loading={loading}
+        >
+          <Row justify='center' align='middle'>
+            <Col xs={24} sm={11}>
+              <Row>
+                <Col xs={24} sm={23}>
+                  <List
+                    bordered={false}
+                    dataSource={dataItems1 ?? []}
+                    renderItem={(item) => {
+                      return (
+                        <Row style={{ padding: 8 }}>
+                          <Col xs={24} lg={8}>
+                            <b>{item.name}</b>
+                          </Col>
+                          <Col xs={24} lg={16}>
+                            {item.content}
+                          </Col>
+                        </Row>
+                      )
+                    }}
+                  />
+                </Col>
+                <Col xs={0} sm={1}>
+                  <Divider
+                    type='vertical'
+                    style={{
+                      height: '100%',
+                      backgroundColor: '#aaa',
+                    }}
+                  />
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={24} sm={12}>
+              <List
+                bordered={false}
+                dataSource={dataItems2 ?? []}
+                renderItem={(item) => {
+                  return (
+                    item && (
                       <Row style={{ padding: 8 }}>
                         <Col xs={24} lg={8}>
                           <b>{item.name}</b>
@@ -188,94 +220,63 @@ const Detail = () => {
                         </Col>
                       </Row>
                     )
-                  }}
-                />
-              </Col>
-              <Col xs={0} sm={1}>
-                <Divider
-                  type='vertical'
-                  style={{
-                    height: '100%',
-                    backgroundColor: '#aaa',
-                  }}
-                />
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={24} sm={12}>
-            <List
-              bordered={false}
-              dataSource={dataItems2 ?? []}
-              renderItem={(item) => {
-                return (
-                  item && (
-                    <Row style={{ padding: 8 }}>
-                      <Col xs={24} lg={8}>
-                        <b>{item.name}</b>
-                      </Col>
-                      <Col xs={24} lg={16}>
-                        {item.content}
-                      </Col>
-                    </Row>
                   )
-                )
-              }}
-            />
-            <Row justify='end' align='bottom'>
-              <Space size={20}>
-                <RemoveButton onClick={showModelConfirm} />
-                <AddButton
-                  label='Chỉnh sửa'
-                  iconInput={<EditFilled />}
-                  onClick={() => setModalAddEditStaff(true)}
-                />
-              </Space>
-            </Row>
-          </Col>
-        </Row>
-      </Card>
-      <TableList<AttendanceDataType>
-        data={attendanceData ?? []}
-        columns={columns}
-        loading={loading}
-        header={
-          <Row>
-            <Col xs={24} lg={6} className='mt-1'>
-              <b>Điểm danh</b>
-            </Col>
-            <Col xs={12} lg={7} className='mt-1'>
-              <span>Số ngày làm 7</span>
-            </Col>
-            <Col xs={12} lg={7} className='mt-1'>
-              <span>Số ngày nghỉ 0</span>
-            </Col>
-            <Col xs={8} lg={4} className='mt-2'>
-              <DatePicker
-                picker='month'
-                placeholder='Month'
-                format={'MM/YYYY'}
-                defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
-                className={styles.adminInputShadow}
-                onChange={(date, dateString) => {
-                  console.log(dateString)
                 }}
               />
+              <Row justify='end' align='bottom'>
+                <Space size={20}>
+                  <RemoveButton onClick={showModelConfirm} />
+                  <AddButton
+                    label='Chỉnh sửa'
+                    iconInput={<EditFilled />}
+                    onClick={() => setModalAddEditStaff(true)}
+                  />
+                </Space>
+              </Row>
             </Col>
           </Row>
-        }
-      />
-      {modalAddEditStaff && (
-        <ModalAddEditStaff
-          open={modalAddEditStaff}
-          cancel={() => setModalAddEditStaff(false)}
-          extraData={data}
+        </Card>
+        <TableList<AttendanceDataType>
+          data={attendanceData ?? []}
+          columns={columns}
+          loading={loading}
+          header={
+            <Row>
+              <Col xs={24} lg={6} className='mt-1'>
+                <b>Điểm danh</b>
+              </Col>
+              <Col xs={12} lg={7} className='mt-1'>
+                <span>Số ngày làm 7</span>
+              </Col>
+              <Col xs={12} lg={7} className='mt-1'>
+                <span>Số ngày nghỉ 0</span>
+              </Col>
+              <Col xs={8} lg={4} className='mt-2'>
+                <DatePicker
+                  picker='month'
+                  placeholder='Month'
+                  format={'MM/YYYY'}
+                  defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
+                  className={styles.adminInputShadow}
+                  onChange={(date, dateString) => {
+                    console.log(dateString)
+                  }}
+                />
+              </Col>
+            </Row>
+          }
         />
-      )}
-      {contextModalComfirm}
-    </Space>
+        {modalAddEditStaff && (
+          <ModalAddEditStaff
+            open={modalAddEditStaff}
+            cancel={() => setModalAddEditStaff(false)}
+            extraData={data}
+          />
+        )}
+        {contextModalComfirm}
+      </Space>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={20} />
 }
 
 Detail.displayName = 'Staff Detail'

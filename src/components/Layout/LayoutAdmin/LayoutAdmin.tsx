@@ -27,10 +27,10 @@ import { useRouter } from 'next/router'
 const { Header, Sider, Content } = Layout
 
 const LayoutAdmin = ({
-  content,
+  children,
   selected,
 }: {
-  content: React.ReactNode
+  children: React.ReactNode
   selected: number
 }) => {
   const [title, setTitle] = useState('')
@@ -293,7 +293,7 @@ const LayoutAdmin = ({
             </Dropdown>
           </Header>
           <Content className='bg-emerald-50	!min-h-screen'>
-            <div className={styles.adminContentContainer}>{content}</div>
+            <div className={styles.adminContentContainer}>{children}</div>
           </Content>
         </Layout>
         {loading && (

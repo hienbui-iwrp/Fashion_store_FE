@@ -126,8 +126,8 @@ const Detail = () => {
     setLoading(false)
   }, [id])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={5}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card>
           {id && (
@@ -344,10 +344,8 @@ const Detail = () => {
             )
           })}
       </Space>
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={5} />
 }
 
 Detail.displayName = 'Goods Detail'

@@ -105,124 +105,127 @@ const Detail = () => {
     if (id) getData()
   }, [id])
 
-  const content = (
-    <Card>
-      <TableList<Goods>
-        data={data?.goods ?? []}
-        columns={columns}
-        scroll={{ y: '30vh' }}
-        header={
-          <>
-            <Row>
-              <Col xs={12}>
+  return (
+    data && (
+      <LayoutAdmin selected={data?.staff ? 70 : 71}>
+        {' '}
+        <Card>
+          <TableList<Goods>
+            data={data?.goods ?? []}
+            columns={columns}
+            scroll={{ y: '30vh' }}
+            header={
+              <>
                 <Row>
-                  <Col xs={24} lg={10}>
-                    <b>Mã cửa hàng</b>
+                  <Col xs={12}>
+                    <Row>
+                      <Col xs={24} lg={10}>
+                        <b>Mã cửa hàng</b>
+                      </Col>
+                      <Col xs={24} lg={14}>
+                        {data?.branch}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={24} lg={10}>
+                        <b>Ngày giao dịch</b>
+                      </Col>
+                      <Col xs={24} sm={14}>
+                        {formatDate(data?.createdDate)}
+                      </Col>
+                    </Row>
                   </Col>
-                  <Col xs={24} lg={14}>
-                    {data?.branch}
+                  <Col xs={12}>
+                    <Row>
+                      <Col xs={24} lg={10}>
+                        <b>Mã đơn</b>
+                      </Col>
+                      <Col xs={24} lg={14}>
+                        {data?.id}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={24} lg={10}>
+                        <b>
+                          {data?.staff ? 'Nhân viên giao dịch' : 'Người mua'}
+                        </b>
+                      </Col>
+                      <Col xs={24} lg={14}>
+                        {data?.staff ?? ` ${data?.user} (${data?.nameUser})`}
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
-                <Row>
-                  <Col xs={24} lg={10}>
-                    <b>Ngày giao dịch</b>
-                  </Col>
-                  <Col xs={24} sm={14}>
-                    {formatDate(data?.createdDate)}
-                  </Col>
-                </Row>
-              </Col>
-              <Col xs={12}>
-                <Row>
-                  <Col xs={24} lg={10}>
-                    <b>Mã đơn</b>
-                  </Col>
-                  <Col xs={24} lg={14}>
-                    {data?.id}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={24} lg={10}>
-                    <b>{data?.staff ? 'Nhân viên giao dịch' : 'Người mua'}</b>
-                  </Col>
-                  <Col xs={24} lg={14}>
-                    {data?.staff ?? ` ${data?.user} (${data?.nameUser})`}
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            {data?.street && (
+                {data?.street && (
+                  <Row>
+                    <Col xs={24} lg={5}>
+                      <b>Địa chỉ</b>
+                    </Col>
+                    <Col xs={24} lg={18}>
+                      {formatAddress(data)}
+                    </Col>
+                  </Row>
+                )}
+              </>
+            }
+            pagination={false}
+          />
+          <Divider
+            style={{
+              height: 2,
+              backgroundColor: '#333',
+            }}
+          />
+          <div className='flex justify-end'>
+            <Col xs={18} sm={12} lg={8}>
               <Row>
-                <Col xs={24} lg={5}>
-                  <b>Địa chỉ</b>
+                <Col span={12}>
+                  <b>Tổng tiền</b>
                 </Col>
-                <Col xs={24} lg={18}>
-                  {formatAddress(data)}
+                <Col span={12}>
+                  {FormatNumber(
+                    data?.goods?.reduce(
+                      (acc: number, cur: any) => acc + cur.price * cur.quantity,
+                      0
+                    ) ?? 0
+                  )}
                 </Col>
               </Row>
-            )}
-          </>
-        }
-        pagination={false}
-      />
-      <Divider
-        style={{
-          height: 2,
-          backgroundColor: '#333',
-        }}
-      />
-      <div className='flex justify-end'>
-        <Col xs={18} sm={12} lg={8}>
-          <Row>
-            <Col span={12}>
-              <b>Tổng tiền</b>
-            </Col>
-            <Col span={12}>
-              {FormatNumber(
-                data?.goods?.reduce(
-                  (acc: number, cur: any) => acc + cur.price * cur.quantity,
-                  0
-                ) ?? 0
+              <Row>
+                <Col span={12}>Thuế</Col>
+                <Col span={12}>{FormatNumber(data?.tax ?? 0)}</Col>
+              </Row>
+              <Row>
+                <Col span={12}>Khuyến mãi</Col>
+                <Col span={12}>{FormatNumber(data?.discount ?? 0)}</Col>
+              </Row>
+              {data?.ship && (
+                <Row>
+                  <Col span={12}>Phí ship</Col>
+                  <Col span={12}>{FormatNumber(data?.ship ?? 0)}</Col>
+                </Row>
               )}
+              <Divider />
+              <Row>
+                <Col span={12}>
+                  <b>Tổng cộng</b>
+                </Col>
+                <Col span={12}>
+                  {FormatNumber(
+                    (data?.goods?.reduce(
+                      (acc: number, cur: any) => acc + cur.price * cur.quantity,
+                      0
+                    ) ?? 0) +
+                      (data?.tax ?? 0) +
+                      (data?.ship ?? 0)
+                  )}
+                </Col>
+              </Row>
             </Col>
-          </Row>
-          <Row>
-            <Col span={12}>Thuế</Col>
-            <Col span={12}>{FormatNumber(data?.tax ?? 0)}</Col>
-          </Row>
-          <Row>
-            <Col span={12}>Khuyến mãi</Col>
-            <Col span={12}>{FormatNumber(data?.discount ?? 0)}</Col>
-          </Row>
-          {data?.ship && (
-            <Row>
-              <Col span={12}>Phí ship</Col>
-              <Col span={12}>{FormatNumber(data?.ship ?? 0)}</Col>
-            </Row>
-          )}
-          <Divider />
-          <Row>
-            <Col span={12}>
-              <b>Tổng cộng</b>
-            </Col>
-            <Col span={12}>
-              {FormatNumber(
-                (data?.goods?.reduce(
-                  (acc: number, cur: any) => acc + cur.price * cur.quantity,
-                  0
-                ) ?? 0) +
-                  (data?.tax ?? 0) +
-                  (data?.ship ?? 0)
-              )}
-            </Col>
-          </Row>
-        </Col>
-      </div>
-    </Card>
-  )
-
-  return (
-    data && <LayoutAdmin content={content} selected={data?.staff ? 70 : 71} />
+          </div>
+        </Card>
+      </LayoutAdmin>
+    )
   )
 }
 

@@ -141,8 +141,10 @@ a {
   background-color: white !important;
 }
 
-.ant-picker-dropdown .ant-btn {
+.ant-picker-dropdown .ant-btn,
+.ant-table-filter-dropdown-btns .ant-btn {
   background-color: var(--admin-green900);
+  color: white;
 }
 
 .ant-picker-dropdown .ant-btn:hover {
@@ -164,7 +166,8 @@ a {
 }
 
 .ant-table-row-selected td,
-.ant-table-cell-fix-left {
+.ant-table-cell-fix-left,
+.ant-table-column-sort {
   background: inherit !important;
 }
 

@@ -177,8 +177,8 @@ const Account = () => {
     setLoading(false)
   }, [id])
 
-  const content = (
-    <>
+  return (
+    <LayoutAdmin selected={4}>
       <Card>
         <Row className='justify-between'>
           <Col xs={24} sm={20} lg={10}>
@@ -363,10 +363,8 @@ const Account = () => {
           })}
         />
       )}
-    </>
+    </LayoutAdmin>
   )
-
-  return <LayoutAdmin content={content} selected={4} />
 }
 
 Account.displayName = 'Account Management'
