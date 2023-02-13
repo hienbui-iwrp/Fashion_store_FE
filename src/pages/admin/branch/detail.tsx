@@ -10,7 +10,8 @@ import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
 import { formatAddress, formatDate, formatTime, timeToDate } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
-import { useMessage } from '@/hooks'
+import { useDispatch } from 'react-redux'
+import { setNotificationValue } from '@/redux/slices/notificationSlice'
 
 type DataType = {
   id: string
@@ -44,6 +45,8 @@ const Detail = () => {
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
   const [data, setData] = useState<DataType>()
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
+
+  const dispatch = useDispatch()
 
   const routes = useRouter()
   const { id } = routes.query
@@ -127,6 +130,7 @@ const Detail = () => {
     onOk: async () => {
       await apiBranchService.delete(`/${id}`)
       routes.push(BASE_URL + '/admin/branch')
+      dispatch(setNotificationValue('Xóa chi nhánh thành công'))
     },
   })
 

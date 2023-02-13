@@ -20,6 +20,8 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import { useRouter } from 'next/router'
 import { BASE_URL } from '@/constants'
+import { useDispatch } from 'react-redux'
+import { setNotificationValue } from '@/redux/slices/notificationSlice'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -31,6 +33,7 @@ dayjs.extend(weekYear)
 const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
   const [form] = Form.useForm()
   const routes = useRouter()
+  const dispatch = useDispatch()
 
   const onSave = async () => {
     try {
@@ -50,8 +53,10 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
 
       if (!props.extraData) {
         await apiBranchService.post('/', record)
+        dispatch(setNotificationValue('Đã thêm chi nhánh mới'))
       } else {
         await apiBranchService.put(`/${props?.extraData?.id}`, record)
+        dispatch(setNotificationValue('Đã cập nhật thông tin chi nhánh'))
       }
 
       props.callback && props.callback({})

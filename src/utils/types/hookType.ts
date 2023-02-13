@@ -8,6 +8,7 @@ export interface useModalComfirmProps {
 export interface useNotificationProps {
   title?: string
   content?: string
+  type?: 'success' | 'info' | 'warning' | 'error'
 }
 
 export interface useMessageProps {
