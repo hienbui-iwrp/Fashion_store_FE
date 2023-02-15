@@ -14,13 +14,14 @@ import {
 } from 'antd'
 import type { RadioChangeEvent } from 'antd'
 import type { SelectProps } from 'antd'
-import { FilterOutlined } from '@ant-design/icons'
+import { CaretDownOutlined, FilterOutlined } from '@ant-design/icons'
 import CardProductClient from '../Card/CardProductClient'
 import { ProductsDataProps, ProductDetailDataProps } from '@/utils'
 import axios from 'axios'
 import { getAllProducts } from '@/api/products'
-import { BASE_URL } from '@/constants'
+import { BASE_URL, Colors } from '@/constants'
 import styles from './Products.module.css'
+import { FilterTag } from '../FilterTag'
 
 const { Title, Text } = Typography
 
@@ -131,19 +132,22 @@ export default function Products(props: ProductsProps) {
   }, [])
 
   return (
-    <div className='products-content px-4 md:px-8'>
+    <div className='products-content '>
       <div className='products-title flex justify-between'>
         <Title level={3}>Tất cả sản phẩm</Title>
-        <Space>
-          <Text className='bg-lime-200 rounded-lg px-2'>
+        {/* <Space>
+          <Text
+            className='rounded-lg px-2'
+            style={{ backgroundColor: Colors.adminGreen500 }}
+          >
             {data.totalProducts}
           </Text>
           <Text> sản phẩm</Text>
-        </Space>
+        </Space> */}
       </div>
       <div className='products-filter'>
         <div className='flex gap-2'>
-          <FilterOutlined className='flex items-center text-3xl' />
+          {/* <FilterOutlined className='flex items-center text-3xl' /> */}
           <Select
             placeholder={<Text strong>Giới tính</Text>}
             style={{ width: 120 }}
@@ -154,6 +158,15 @@ export default function Products(props: ProductsProps) {
               { value: 'woman', label: 'Nữ' },
               { value: 'unisex', label: 'Unisex' },
             ]}
+            suffixIcon={
+              <CaretDownOutlined
+                style={{
+                  color: Colors.adminGreen700,
+                  marginLeft: 10,
+                  marginRight: -5,
+                }}
+              />
+            }
           />
           <Select
             placeholder={<Text strong>Áo quần</Text>}
@@ -168,6 +181,15 @@ export default function Products(props: ProductsProps) {
               { value: 'kaki', label: 'Quần kaki' },
               { value: 'short', label: 'Quần sọt' },
             ]}
+            suffixIcon={
+              <CaretDownOutlined
+                style={{
+                  color: Colors.adminGreen700,
+                  marginLeft: 10,
+                  marginRight: -5,
+                }}
+              />
+            }
           />
           <Select
             placeholder={<Text strong>Giày dép</Text>}
@@ -179,6 +201,15 @@ export default function Products(props: ProductsProps) {
               { value: 'western shoes', label: 'Giày tây' },
               { value: 'sandal', label: 'Dép' },
             ]}
+            suffixIcon={
+              <CaretDownOutlined
+                style={{
+                  color: Colors.adminGreen700,
+                  marginLeft: 10,
+                  marginRight: -5,
+                }}
+              />
+            }
           />
           <Select
             placeholder={<Text strong>Phụ kiện</Text>}
@@ -190,6 +221,15 @@ export default function Products(props: ProductsProps) {
               { value: 'hat', label: 'Nón' },
               { value: 'bag', label: 'Túi/balo' },
             ]}
+            suffixIcon={
+              <CaretDownOutlined
+                style={{
+                  color: Colors.adminGreen700,
+                  marginLeft: 10,
+                  marginRight: -5,
+                }}
+              />
+            }
           />
           <Select
             placeholder={<Text strong>Size</Text>}
@@ -212,10 +252,29 @@ export default function Products(props: ProductsProps) {
               { value: '43', label: '43' },
               { value: '44', label: '44' },
             ]}
+            suffixIcon={
+              <CaretDownOutlined
+                style={{
+                  color: Colors.adminGreen700,
+                  marginLeft: 10,
+                  marginRight: -5,
+                }}
+              />
+            }
           />
         </div>
 
-        <Select
+        <Space className='!my-2'>
+          <FilterTag
+            label='Nam'
+            // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
+          />
+          <FilterTag
+            label='Nữ'
+            // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
+          />
+        </Space>
+        {/* <Select
           mode='multiple'
           allowClear
           defaultActiveFirstOption={false}
@@ -229,7 +288,7 @@ export default function Products(props: ProductsProps) {
           options={options}
           dropdownRender={() => <></>}
           dropdownStyle={{ display: 'none' }}
-        />
+        /> */}
       </div>
       <div className='products-list'>
         <Row>
