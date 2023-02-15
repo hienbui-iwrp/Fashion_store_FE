@@ -24,11 +24,12 @@ export default function App({ Component, pageProps }: AppProps) {
   if (
     router.pathname === '/' ||
     router.pathname.startsWith('/products/') ||
+    router.pathname.startsWith('/manage-orders/') ||
     router.pathname === '/products' ||
     router.pathname === '/intro' ||
     router.pathname === '/cart' ||
     router.pathname === '/payment' ||
-    router.pathname === '/manage-order' ||
+    router.pathname === '/manage-orders' ||
     router.pathname === '/user-info' ||
     router.pathname === '/support'
   ) {

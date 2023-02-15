@@ -67,3 +67,46 @@ export interface ProductInCartProps {
   color: string
   discount: number
 }
+
+export interface OrderProps {
+  orderId: string
+  isCompleted: boolean
+  paymentMethod: string //
+  listGoods: ProductInCartProps[]
+  totalGoods: number
+  totalPrice: number
+  totalDiscount: number
+  shipFee: number
+  statusShips: StatusShip[]
+  transactionDate: string
+}
+
+export interface OrderDetailProps {
+  orderId: string
+  isCompleted: boolean
+  paymentMethod: string //
+  status: string
+  listGoods: ProductInCartProps[]
+  totalGoods: number
+  totalPrice: number
+  totalOrder: number
+  totalDiscount: number
+  shipFee: number
+  statusShips: StatusShip[]
+  transactionDate: string
+  nameReceiver: string
+  phoneReceiver: string
+  address: AddressProps
+}
+
+export interface AddressProps {
+  province: string
+  district: string
+  ward: string
+  street: string
+}
+
+export interface StatusShip {
+  status: string
+  time: string
+}

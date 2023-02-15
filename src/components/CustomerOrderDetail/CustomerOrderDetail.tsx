@@ -86,7 +86,7 @@ const OrderDetail: OrderProps = {
 interface Item {
   key: string;
   name: string;
-  content: number;
+  content: number | string;
 }
 const dataSource = [
   {
@@ -139,7 +139,7 @@ const columns = [
           {record.content === 3 && 'Ví điện tử VNpay'}
         </div> :
         <div className='flex justify-end'>
-          {FormatMoney(record.content)}
+          {typeof record.content === 'number' && FormatMoney(record.content)}
         </div>
     )
   }

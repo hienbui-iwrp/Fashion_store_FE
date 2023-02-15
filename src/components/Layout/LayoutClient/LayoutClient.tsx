@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Layout, Col, Row, Image, Input, Menu, Typography } from 'antd'
@@ -213,6 +213,22 @@ export default function LayoutClient({
 }) {
   const router = useRouter()
   const [navbar, setNavbar] = useState(false)
+  useEffect(() => {
+    if(!localStorage.getItem('jwt')){
+      localStorage.setItem('jwt', '')
+    }
+    // console.log(localStorage.getItem('abc'));
+    // if (null) {
+    //   console.log(true)
+    // } else {
+    //   console.log(false);
+    // }
+    // localStorage.setItem('check', '')
+    // console.log('ok');
+    // const check = localStorage.getItem('check')
+    // console.log('check', check);
+    // console.log(check);
+  }, [])
 
   return (
     <Layout className='max-w-7xl m-auto p-0 bg-gray-300'>
@@ -235,7 +251,7 @@ export default function LayoutClient({
               className='pl-10 w-2/5 md:w-3/5'
               placeholder='Tìm kiếm...'
               onSearch={onSearch}
-              // style={{ width: 200 }}
+            // style={{ width: 200 }}
             />
           </Col>
           <Col span={9} className='flex justify-around items-center'>
@@ -314,9 +330,8 @@ export default function LayoutClient({
             </div>
             <div>
               <div
-                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
-                  navbar ? 'block' : 'hidden'
-                }`}
+                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'
+                  }`}
               >
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
                   {listItem.map((item, index) => {

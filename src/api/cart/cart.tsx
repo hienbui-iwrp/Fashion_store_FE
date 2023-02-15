@@ -20,7 +20,7 @@ export const getCart = async (customerId: string) => {
 export const addToCart = async (product: ProductInCartProps) => {
   return await api
     // .get(product + `/${productId}`, {})
-    .post(product + `/detail`, {})
+    .post(cart + `/detail`, {...product})
     .then((response) => {
       return response;
     })

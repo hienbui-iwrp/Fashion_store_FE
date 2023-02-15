@@ -132,7 +132,7 @@ function OrderItem(props: OrderProps) {
         </div>
         {props.listGoods.map((item, index) => {
           return (
-            <>
+            <div key={index}>
               <hr className='my-1 font-bold' />
               <div className="flex">
                 <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image} alt='' />
@@ -178,7 +178,7 @@ function OrderItem(props: OrderProps) {
                   </Row>
                 </div>
               </div>
-            </>
+            </div>
           )
         })}
       </Link>
