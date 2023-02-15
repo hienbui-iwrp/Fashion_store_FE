@@ -9,6 +9,7 @@ import { selectNotification } from '@/redux/selectors'
 import { useNotification } from '@/hooks'
 import { useEffect } from 'react'
 import { setNotificationValue } from '@/redux/slices/notificationSlice'
+import { Colors } from '@/constants'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -31,13 +32,14 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname === '/payment' ||
     router.pathname === '/manage-orders' ||
     router.pathname === '/user-info' ||
+    router.pathname === '/manage-orders' ||
     router.pathname === '/support'
   ) {
     return (
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#6a983c',
+            colorPrimary: Colors.adminGreen700,
           },
         }}
       >

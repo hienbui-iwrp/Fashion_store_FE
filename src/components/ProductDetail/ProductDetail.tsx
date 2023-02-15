@@ -23,6 +23,7 @@ import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import styles from './ProductDetail.module.css'
+import { Colors } from '@/constants'
 
 export interface ProductDetailProps {
   goodsId: string
@@ -53,19 +54,19 @@ export default function ProductDetail(props: ProductDetailDataProps) {
   ]
 
   const onChangeQuantity = (value: number | null) => {
-    if ((value !== null) && (value > 0 && value < maxQuantity)) {
-      setQuantity(value);
+    if (value !== null && value > 0 && value < maxQuantity) {
+      setQuantity(value)
     }
   }
 
   const onChangeColor = (e: RadioChangeEvent) => {
     console.log(`radio checked:${e.target.value}`)
-    setValueColor(e.target.value);
+    setValueColor(e.target.value)
   }
 
   const onChangeSize = (e: RadioChangeEvent) => {
     console.log(`radio checked:${e.target.value}`)
-    setValueSize(e.target.value);
+    setValueSize(e.target.value)
   }
 
   const onChangeTabs = (key: string) => {
@@ -130,15 +131,15 @@ export default function ProductDetail(props: ProductDetailDataProps) {
             </Space>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Tình trạng:</Text>
-              {
-                props.quantity === 0 ?
-                  <Text strong className='text-red-6'>
-                    Hết hàng
-                  </Text> :
-                  <Text strong className='text-[#6A983C]'>
-                    Còn hàng
-                  </Text>
-              }
+              {props.quantity === 0 ? (
+                <Text strong style={{ color: Colors.adminRed500 }}>
+                  Hết hàng
+                </Text>
+              ) : (
+                <Text strong style={{ color: Colors.adminGreen700 }}>
+                  Còn hàng
+                </Text>
+              )}
             </Space>
           </div>
           <div className='mt-8'>
@@ -150,13 +151,13 @@ export default function ProductDetail(props: ProductDetailDataProps) {
                 value={valueColor}
                 className={styles.productColor}
               >
-                {
-                  props.color.map((item, index) => {
-                    return (
-                      <Radio.Button key={index} value={item}>{item}</Radio.Button>
-                    )
-                  })
-                }
+                {props.color.map((item, index) => {
+                  return (
+                    <Radio.Button key={index} value={item}>
+                      {item}
+                    </Radio.Button>
+                  )
+                })}
               </Radio.Group>
             </Space>
           </div>
@@ -171,7 +172,9 @@ export default function ProductDetail(props: ProductDetailDataProps) {
               >
                 {props.size.map((item, index) => {
                   return (
-                    <Radio.Button key={index} value={item}>{item}</Radio.Button>
+                    <Radio.Button key={index} value={item}>
+                      {item}
+                    </Radio.Button>
                   )
                 })}
               </Radio.Group>

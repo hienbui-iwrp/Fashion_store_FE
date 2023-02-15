@@ -231,7 +231,10 @@ export default function LayoutClient({
   }, [])
 
   return (
-    <Layout className='max-w-7xl m-auto p-0 bg-gray-300'>
+    <Layout
+      className='max-w-7xl m-auto p-0 bg-gray-300'
+      style={{ minHeight: '100vh' }}
+    >
       <Header className='!bg-white !p-0 !h-full'>
         <Row className='flex'>
           <Col span={15} className='flex items-center '>
@@ -286,7 +289,10 @@ export default function LayoutClient({
             };
           })}
         /> */}
-        <nav className='w-full bg-[#F9F9F9] shadow'>
+        <nav
+          className='w-full bg-[#F9F9F9] shadow'
+          style={{ backgroundColor: '#ddd' }}
+        >
           <div className='px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
             <div>
               <div className='flex items-center justify-end py-3 md:py-5 md:block'>
@@ -333,12 +339,13 @@ export default function LayoutClient({
                 className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'
                   }`}
               >
-                <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
+                <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 '>
                   {listItem.map((item, index) => {
                     return (
                       <li
                         key={index}
                         className='text-black text-sm hover:cursor-pointer'
+                        style={{ fontWeight: '600' }}
                       >
                         <Link href={`/${item.link}` || '/'}>{item.label}</Link>
                       </li>
@@ -350,7 +357,9 @@ export default function LayoutClient({
           </div>
         </nav>
       </Header>
-      <Content className='bg-white pb-4'>{children}</Content>
+      <Content className='bg-white pt-6 pb-24 px-3 sm:px-6 md:px-14'>
+        {children}
+      </Content>
       <Footer className='!bg-black !text-white'>
         <Row gutter={16}>
           <Col className='gutter-row' span={12}>

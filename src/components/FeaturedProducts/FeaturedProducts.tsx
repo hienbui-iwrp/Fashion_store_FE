@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from 'react'
 import { Typography } from 'antd'
-import CardProductClient from '../Card/CardProductClient';
-import { ProductDetailDataProps } from '@/utils';
+import CardProductClient from '../Card/CardProductClient'
+import { ProductDetailDataProps } from '@/utils'
 
 const { Title } = Typography
 
@@ -29,7 +29,7 @@ const listFeaturedProduct = [
     discount: 10,
     gender: 'nữ',
     age: 'adult',
-    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
+    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`,
   },
   {
     goodsId: '2',
@@ -50,7 +50,7 @@ const listFeaturedProduct = [
     discount: 10,
     gender: 'nữ',
     age: 'adult',
-    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
+    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`,
   },
   {
     goodsId: '3',
@@ -71,7 +71,7 @@ const listFeaturedProduct = [
     discount: 10,
     gender: 'nữ',
     age: 'adult',
-    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
+    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`,
   },
   {
     goodsId: '4',
@@ -92,21 +92,21 @@ const listFeaturedProduct = [
     discount: 10,
     gender: 'nữ',
     age: 'adult',
-    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
+    description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`,
   },
 ]
 
 export default function FeaturedProducts(props: FeaturedProductsProps) {
   return (
     <div className='pt-3'>
-      <Title level={3} className="!font-bold !mb-2">{props.name}</Title>
-      <div className='flex w-full'>
+      <Title level={3} className='!font-bold !mb-4 text-center'>
+        {props.name}
+      </Title>
+      <div className='flex w-full flex-wrap	justify-center'>
         {listFeaturedProduct.map((item, index) => {
-          return (
-            <CardProductClient key={index} {...item} />
-          )
+          return <CardProductClient key={index} {...item} />
         })}
       </div>
     </div>
-  );
+  )
 }

@@ -14,6 +14,8 @@ export default function FilterTag(props: ButtonProps) {
         borderRadius: 12,
         display: 'flex',
         alignItems: 'center',
+        width: 'fit-content',
+        ...props.style,
       }}
     >
       {props?.label}
