@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import styles from '@/styles/Admin.module.css'
 import { useRouter } from 'next/router'
-import { formatDate, FormatNumber } from '../formats'
+import { formatAddress, formatDate, formatNumber } from '../formats'
 
 dayjs.extend(customParseFormat)
 
@@ -43,19 +43,19 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
       { name: 'Tên nhân viên', content: props?.extraData?.name ?? '' },
       { name: 'Căn cước', content: props?.extraData?.citizenId ?? '' },
       { name: 'Số điện thoại', content: props?.extraData?.phone ?? '' },
-      { name: 'Địa chỉ', content: props?.extraData?.address ?? '' },
+      { name: 'Địa chỉ', content: formatAddress(props?.extraData) ?? '' },
       {
         name: 'Ngày sinh',
-        content: formatDate(props?.extraData?.dateOfBirth) ?? '',
+        content: formatDate(props?.extraData?.birthdate) ?? '',
       },
     ])
     setDataItems2([
-      { name: 'Quê quán', content: props?.extraData?.homeTown ?? '' },
-      { name: 'Nơi làm việc', content: props?.extraData?.workLocation ?? '' },
+      { name: 'Quê quán', content: props?.extraData?.hometown ?? '' },
+      { name: 'Nơi làm việc', content: props?.extraData?.branchId ?? '' },
       { name: 'Vị trí', content: props?.extraData?.role ?? '' },
       {
         name: 'Lương',
-        content: FormatNumber(props?.extraData?.salary ?? 0) + ' VND',
+        content: formatNumber(props?.extraData?.salary ?? 0) + ' VND',
       },
       {
         name: 'Ngày bắt đầu',
@@ -63,7 +63,7 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
       },
       {
         name: 'Tài khoản',
-        content: props?.extraData?.account ?? '',
+        content: props?.extraData?.account ?? 'Không có',
       },
     ])
   }

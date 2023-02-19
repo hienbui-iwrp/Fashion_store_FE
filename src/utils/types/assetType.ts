@@ -35,7 +35,6 @@ export interface SvgIcon {
   strokeWidth?: number
 }
 
-
 export interface ProductsDataProps {
   totalProducts: number
   listProduct: ProductDetailDataProps[]
@@ -109,4 +108,54 @@ export interface AddressProps {
 export interface StatusShip {
   status: string
   time: string
+}
+
+export type BranchProps = {
+  id?: string
+  name?: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
+  createdAt?: Date
+  manager?: string
+  openTime?: Date
+  closeTime?: Date
+  image?: string
+  staff?: number
+}
+
+export type StaffProps = {
+  id?: string
+  name?: string
+  citizenId?: string
+  phone?: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
+  birthdate?: Date
+  hometown?: string
+  branchId?: string
+  role?: string
+  salary?: number
+  startDate?: Date
+  account?: string
+  status?: string
+  email?: string
+  gender?: string
+}
+
+export type AttendanceProps = {
+  date?: Date
+  checkIn?: Date
+  checkOut?: Date
+}
+
+export type RequestProps = {
+  id: string
+  staffId: string
+  status: string
+  type: string
+  date: Date
 }

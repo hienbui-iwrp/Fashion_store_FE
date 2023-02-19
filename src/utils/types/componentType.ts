@@ -41,11 +41,12 @@ export interface LineChartProps extends ComponentProps {
 
 export interface DropdownButtonProps extends ComponentProps {
   label?: string
-  items?: { content?: string; onClick?: () => void }[]
+  items?: string[]
 }
 
 export interface InputSearchProps extends ComponentProps {
-  onEnter?: () => void
+  onEnter?: (item?: any) => void
   width?: string | number
   placeholder?: string
+  onClear?: () => void
 }

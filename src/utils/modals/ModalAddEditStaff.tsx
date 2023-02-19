@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Col,
   Modal,
@@ -6,12 +6,11 @@ import {
   Space,
   Form,
   Input,
-  TimePicker,
   DatePicker,
   InputNumber,
 } from 'antd'
 import { ModalAddEditStaffProps } from '../types/modalType'
-import { AddButton, RemoveButton } from '@/components'
+import { AddButton, DropdownButton, RemoveButton } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { formatDate } from '..'
@@ -22,6 +21,11 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
+import { Gender, Routes } from '@/constants'
+import { useRouter } from 'next/router'
+import { addStaff, updateStaff } from '@/api'
+import { useDispatch } from 'react-redux'
+import { setNotificationType, setNotificationValue } from '@/redux'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -31,7 +35,48 @@ dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
 const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
+  const routes = useRouter()
   const [form] = Form.useForm()
+  const dispatch = useDispatch()
+
+  const onSave = async () => {
+    try {
+      const values = await form.validateFields()
+
+      if (!props.extraData) {
+        addStaff(values)
+          .then((res: any) => {
+            if (res.data.StatusCode != 200) throw new Error('FAIL')
+
+            dispatch(setNotificationValue('Đã thêm nhân viên mới'))
+            routes.push(Routes.admin.staff)
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+      } else {
+        updateStaff(props.extraData.id, values)
+          .then((res: any) => {
+            if (res.data.StatusCode != 200) throw new Error('FAIL')
+            dispatch(setNotificationValue('Đã cập nhật thông tin'))
+            routes.push(Routes.admin.staff)
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+      }
+
+      props.callback && props.callback({})
+      props.cancel && props.cancel()
+      routes.push(Routes.admin.staff)
+
+      console.log('Success', values)
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo)
+    }
+  }
 
   return (
     <>
@@ -53,14 +98,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
               key='add'
               label='Lưu'
               iconInput={<CheckOutlined />}
-              onClick={async () => {
-                try {
-                  const values = await form.validateFields()
-                  console.log('Success:', values)
-                } catch (errorInfo) {
-                  console.log('Failed:', errorInfo)
-                }
-              }}
+              onClick={onSave}
             />
           </Space>,
         ]}
@@ -86,7 +124,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
               </Form.Item>
               <Form.Item
                 label='Ngày sinh'
-                name='dateOfBirth'
+                name='birthdate'
                 rules={[
                   {
                     required: props.extraData ? false : true,
@@ -98,13 +136,15 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   className={styles.adminInputShadow}
                   style={{ width: '100%' }}
                   defaultValue={
-                    props.extraData?.dateOfBirth &&
-                    dayjs(
-                      formatDate(props.extraData?.dateOfBirth),
-                      'DD/MM/YYYY'
-                    )
+                    props.extraData?.birthdate &&
+                    dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY')
                   }
                   format={'DD/MM/YYYY'}
+                  onChange={(date) => {
+                    console.log(
+                      date?.year() + '-' + date?.month() + '-' + date?.date()
+                    )
+                  }}
                 />
               </Form.Item>
               <Form.Item
@@ -120,12 +160,12 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên quê quán'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.homeTown ?? ''}
+                  defaultValue={props?.extraData?.hometown ?? ''}
                 />
               </Form.Item>
               <Form.Item
                 label='Căn cước'
-                name='citizeId'
+                name='citizenId'
                 rules={[
                   {
                     required: props.extraData ? false : true,
@@ -139,8 +179,49 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   defaultValue={props?.extraData?.citizenId ?? ''}
                 />
               </Form.Item>
+              <Form.Item
+                label='Giới tính'
+                name='gender'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <DropdownButton
+                  label={
+                    Gender.find(
+                      (item: any) => item.value === props.extraData?.gender
+                    )?.content ?? 'Giới tính'
+                  }
+                  items={Gender.map((item) => item.content)}
+                  callBack={(gender: any) => {
+                    form.setFieldValue(
+                      'gender',
+                      Gender.find((item: any) => item.content === gender)?.value
+                    )
+                  }}
+                />
+              </Form.Item>
             </Col>
             <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Email'
+                name='email'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder='Nhập email'
+                  className={styles.adminInputShadow}
+                  defaultValue={props?.extraData?.email ?? ''}
+                />
+              </Form.Item>
               <Form.Item
                 label='Điện thoại'
                 name='phone'
@@ -159,7 +240,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
               </Form.Item>
               <Form.Item
                 label='Nơi làm việc'
-                name='workingLocation'
+                name='branchId'
                 rules={[
                   {
                     required: props.extraData ? false : true,
@@ -170,7 +251,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên nơi làm việc'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.workingLocation ?? ''}
+                  defaultValue={props?.extraData?.branchId ?? ''}
                 />
               </Form.Item>
               <Form.Item
