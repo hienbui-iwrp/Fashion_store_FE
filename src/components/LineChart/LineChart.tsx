@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
 import { LineChartProps } from '@/utils/types/componentType'
 import { Skeleton } from 'antd'
-import { FormatNumber } from '@/utils'
+import { formatNumber } from '@/utils'
 
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
@@ -95,7 +95,7 @@ const LineChart = (props: LineChartProps) => {
       {props.showTotal && (
         <h1>
           <b>
-            {FormatNumber(
+            {formatNumber(
               (props.revenue
                 ? props.data?.reduce((sum, item) => {
                     return sum + (item.revenue ?? 0)

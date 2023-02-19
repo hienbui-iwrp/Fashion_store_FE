@@ -5,7 +5,7 @@ import axios from 'axios'
 import styles from '@/styles/Admin.module.css'
 import { Card, DatePicker, Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatDate, FormatNumber, ModalAddEditStaff } from '@/utils'
+import { formatDate, formatNumber, ModalAddEditStaff } from '@/utils'
 import { InputSearch } from '@/components'
 
 interface DataType {
@@ -72,7 +72,7 @@ const Order = () => {
       dataIndex: 'total',
       render(text: string, record: DataType, index: number) {
         return {
-          children: <div>{FormatNumber(text)}</div>,
+          children: <div>{formatNumber(text)}</div>,
         }
       },
       sorter: (a: DataType, b: DataType) => (a.total > b.total ? 1 : -1),

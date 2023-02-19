@@ -5,23 +5,30 @@ import { CaretDownOutlined } from '@ant-design/icons'
 import { Colors } from '@/constants'
 import { DropdownButtonProps } from '@/utils/types/componentType'
 import styles from '@/styles/Admin.module.css'
+import { MenuInfo } from 'rc-menu/lib/interface'
 
 const DropdownButton = (props: DropdownButtonProps) => {
   const [isHover, setIsHover] = useState(false)
+  const [label, setLabel] = useState(props?.label)
 
   const items: MenuProps['items'] =
     props?.items &&
     props?.items.map((item, index) => {
       return {
-        key: index,
-        label: <span onClick={item.onClick}>{item.content}</span>,
+        key: item,
+        label: <button>{item}</button>,
       }
     })
+
+  const handleMenuClick: MenuProps['onClick'] = (e: MenuInfo) => {
+    props.callBack && props.callBack(e.key)
+    setLabel(e.key)
+  }
 
   return (
     <span>
       <Dropdown
-        menu={{ items: items ?? [] }}
+        menu={{ items: items ?? [], onClick: handleMenuClick }}
         placement='bottomLeft'
         className={styles.adminInputShadow}
         {...props}
@@ -40,7 +47,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
             setIsHover(false)
           }}
         >
-          {props?.label}
+          {label}
           <CaretDownOutlined
             style={{
               color: isHover ? Colors.adminGreen500 : Colors.adminGreen900,

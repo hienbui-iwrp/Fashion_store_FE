@@ -3,12 +3,12 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface NotificationState {
   value: string
-  type: string
+  type: 'success' | 'info' | 'warning' | 'error'
 }
 
 const initialState: NotificationState = {
   value: '',
-  type: '',
+  type: 'success',
 }
 
 export const notificationSlice = createSlice({
@@ -18,7 +18,10 @@ export const notificationSlice = createSlice({
     setNotificationValue: (state, action: PayloadAction<string>) => {
       state.value = action.payload
     },
-    setNotificationType: (state, action: PayloadAction<string>) => {
+    setNotificationType: (
+      state,
+      action: PayloadAction<'success' | 'info' | 'warning' | 'error'>
+    ) => {
       state.type = action.payload
     },
   },

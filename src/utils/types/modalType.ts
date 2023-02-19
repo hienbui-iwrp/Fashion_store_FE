@@ -1,3 +1,4 @@
+import { BranchProps, StaffProps } from './assetType'
 export interface ModalSampleProps {
   open: boolean
   cancel: () => void
@@ -8,58 +9,15 @@ export interface ModalSampleProps {
 }
 
 export interface ModalAddEditBranchProps extends ModalSampleProps {
-  extraData?: {
-    id?: string
-    name?: string
-    street?: string
-    ward?: string
-    district?: string
-    province?: string
-    openTime?: Date
-    closeTime?: Date
-    image?: string
-  }
+  extraData?: BranchProps
 }
 
 export interface ModalAddEditStaffProps extends ModalSampleProps {
-  extraData?: {
-    id?: string
-    name?: string
-    citizenId?: string
-    phone?: string
-    street?: string
-    ward?: string
-    district?: string
-    province?: string
-    dateOfBirth?: Date
-    homeTown?: string
-    workingLocation?: string
-    role?: string
-    salary?: number
-    startDate?: Date
-    account?: string
-  }
+  extraData?: StaffProps
 }
 
 export interface ModalStaffDetailProps extends ModalSampleProps {
-  extraData?: {
-    id?: string
-    name?: string
-    citizenId?: string
-    phone?: string
-    address?: string
-    street?: string
-    ward?: string
-    district?: string
-    province?: string
-    dateOfBirth?: Date
-    homeTown?: string
-    workLocation?: string
-    role?: string
-    salary?: number
-    startDate?: Date
-    account?: string
-  }
+  extraData?: StaffProps
 }
 
 export interface ModalOrderDetailProps extends ModalSampleProps {

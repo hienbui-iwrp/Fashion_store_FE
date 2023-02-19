@@ -1,52 +1,78 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
-import axios from 'axios'
+import { BASE_URL, Colors, Routes, StaffStatus } from '@/constants'
 import { EditOutlined } from '@ant-design/icons'
-import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { ModalAddEditStaff } from '@/utils'
+import {
+  apiStaffService,
+  formatStaffData,
+  ModalAddEditStaff,
+  StaffProps,
+} from '@/utils'
 import { InputSearch } from '@/components'
-
-interface DataType {
-  id: string
-  name: string
-  role: string
-  workingLocation: string
-}
+import { filterStaffById, filterStaffByName, getStaff } from '@/api'
 
 const Staff = () => {
-  const [data, setData] = useState<DataType[]>([])
+  const [data, setData] = useState<StaffProps[]>([])
   const [loading, setLoading] = useState(true)
   const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
-  const [currentData, setCurrentData] = useState<DataType>()
+  const [currentData, setCurrentData] = useState<StaffProps>()
+  const [keyword, setKeyword] = useState<string>()
 
-  const columns: ColumnsType<DataType> = []
+  const columns: ColumnsType<StaffProps> = []
   if (data[0]) {
-    for (const key in data[0]) {
-      columns.push({
-        title:
-          key === 'id'
-            ? 'Mã chi nhánh'
-            : key === 'name'
-            ? 'Tên'
-            : key === 'role'
-            ? 'Vị trí'
-            : 'Nơi làm việc',
-        dataIndex: key,
-        sorter: (a: any, b: any) => (a[key] > b[key] ? 1 : -1),
-        ellipsis: true,
-        render(text: string, record: DataType, index: number) {
-          return {
-            children: <div>{text}</div>,
-          }
-        },
-      })
-    }
+    columns.push({
+      title: 'Mã nhân viên',
+      dataIndex: 'id',
+      sorter: (a: StaffProps, b: StaffProps) =>
+        (a.id ?? 1) > (b.id ?? 1) ? 1 : -1,
+      render(text: string, record: StaffProps, index: number) {
+        return {
+          children: <div>{text}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Tên nhân viên',
+      dataIndex: 'name',
+      sorter: (a: StaffProps, b: StaffProps) =>
+        (a.name ?? 1) > (b.name ?? 1) ? 1 : -1,
+      render(text: string, record: StaffProps, index: number) {
+        return {
+          children: <div>{text}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Vị trí',
+      dataIndex: 'role',
+      sorter: (a: StaffProps, b: StaffProps) =>
+        (a.role ?? 1) > (b.role ?? 1) ? 1 : -1,
+      render(text: string, record: StaffProps, index: number) {
+        return {
+          children: <div>{text}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Mã chi nhánh làm việc',
+      dataIndex: 'branchId',
+      sorter: (a: StaffProps, b: StaffProps) =>
+        (a.branchId ?? 1) > (b.branchId ?? 1) ? 1 : -1,
+      render(text: string, record: StaffProps, index: number) {
+        return {
+          children: <div>{text}</div>,
+        }
+      },
+    })
+
     columns.push({
       title: '',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: StaffProps, index: number) {
         return {
           children: (
             <AddButton
@@ -65,15 +91,48 @@ const Staff = () => {
   }
 
   const getData = async () => {
-    await axios.get(`${BASE_URL}/api/admin/staffManagement`).then((res) => {
-      setData(res.data)
+    await getStaff().then((res: any) => {
+      if (res.data.StatusCode != 200) throw new Error('FAIL')
+      const _data = res.data.Data.filter(
+        (item: any) => item.Status == StaffStatus.approved
+      ).map((item: any) => {
+        return formatStaffData(item)
+      })
+      setData(_data)
     })
+    setLoading(false)
   }
 
   useEffect(() => {
     getData()
-    setLoading(false)
   }, [])
+
+  const filterData = async () => {
+    let dataName: StaffProps[] = []
+    await filterStaffByName(keyword).then((res: any) => {
+      dataName = res.data.Data.filter(
+        (item: any) => item.Status == StaffStatus.approved
+      ).map((item: any) => {
+        return formatStaffData(item)
+      })
+    })
+
+    let dataId: StaffProps[] = []
+    await filterStaffById(keyword).then((res: any) => {
+      dataId = res.data.Data.filter(
+        (item: any) => item.Status == StaffStatus.approved
+      ).map((item: any) => {
+        return formatStaffData(item)
+      })
+    })
+
+    setData([...dataName, ...dataId])
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    if (keyword) filterData()
+  }, [keyword])
 
   return (
     <LayoutAdmin selected={20}>
@@ -87,13 +146,23 @@ const Staff = () => {
             }}
             large
           />
-          <InputSearch />
+          <InputSearch
+            onEnter={(item) => {
+              setLoading(true)
+              setKeyword(item)
+            }}
+            onClear={() => {
+              getData()
+              setLoading(true)
+              setKeyword(undefined)
+            }}
+          />
         </div>
-        <TableList<DataType>
+        <TableList<StaffProps>
           data={data}
           title='Danh sách nhân viên'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/staff/detail'}
+          selectUrl={Routes.admin.staffDetail}
           loading={loading}
         />
       </Space>
@@ -102,6 +171,13 @@ const Staff = () => {
           open={modalAddEditStaff}
           cancel={() => setModalAddEditStaff(false)}
           extraData={currentData}
+          callback={(item) => {
+            setLoading(true)
+            setTimeout(() => {
+              getData()
+              setLoading(false)
+            }, 1000)
+          }}
         />
       )}
     </LayoutAdmin>

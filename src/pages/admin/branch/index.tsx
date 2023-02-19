@@ -1,38 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL } from '@/constants'
+import { Routes } from '@/constants'
 import { EditOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatAddress, ModalAddEditBranch, timeToDate } from '@/utils'
+import { BranchProps, formatAddress, ModalAddEditBranch } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
-
-interface DataType {
-  id: string
-  name: string
-  street?: string
-  ward?: string
-  district?: string
-  province?: string
-  createdAt: Date
-  manager: string
-  openTime: Date
-  closeTime: Date
-}
+import { formatBranchData } from '@/utils/formats/formatData'
+import { getBranch } from '@/api'
 
 const Branch = () => {
-  const [data, setData] = useState<DataType[]>([])
+  const [data, setData] = useState<BranchProps[]>([])
   const [loading, setLoading] = useState(true)
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
-  const [currentData, setCurrentData] = useState<DataType>()
+  const [currentData, setCurrentData] = useState<BranchProps>()
 
-  const columns: ColumnsType<DataType> = []
+  const columns: ColumnsType<BranchProps> = []
   if (data[0]) {
     columns.push({
       title: 'Mã chi nhánh',
       dataIndex: 'id',
-      sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
-      render(text: string, record: DataType, index: number) {
+      sorter: (a: BranchProps, b: BranchProps) =>
+        (a.id ?? 1) > (b.id ?? 1) ? 1 : -1,
+      render(text: string, record: BranchProps, index: number) {
         return {
           children: <div>{text}</div>,
         }
@@ -42,8 +32,9 @@ const Branch = () => {
     columns.push({
       title: 'Tên chi nhánh',
       dataIndex: 'name',
-      sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
-      render(text: string, record: DataType, index: number) {
+      sorter: (a: BranchProps, b: BranchProps) =>
+        (a.name ?? 1) > (b.name ?? 1) ? 1 : -1,
+      render(text: string, record: BranchProps, index: number) {
         return {
           children: <div>{text}</div>,
         }
@@ -53,9 +44,9 @@ const Branch = () => {
     columns.push({
       title: 'Địa chỉ',
       dataIndex: '',
-      sorter: (a: DataType, b: DataType) =>
+      sorter: (a: BranchProps, b: BranchProps) =>
         formatAddress(a) > formatAddress(b) ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: BranchProps, index: number) {
         return {
           children: <div>{formatAddress(record)}</div>,
         }
@@ -64,7 +55,7 @@ const Branch = () => {
 
     columns.push({
       title: '',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: BranchProps, index: number) {
         return {
           children: (
             <AddButton
@@ -82,28 +73,20 @@ const Branch = () => {
     })
   }
 
-  const getData = async () => {
-    await apiBranchService.get('').then((res) => {
+  const getData = () => {
+    getBranch().then((res: any) => {
       const _data = res.data.Data.map((item: any) => {
-        return {
-          id: item.BranchCode,
-          name: item.BranchName,
-          street: item.BranchStreet,
-          ward: item.BranchWard,
-          district: item.BranchDistrict,
-          province: item.BranchProvince,
-          createdAt: new Date(item.CreatedAt),
-          openTime: timeToDate(item.OpenTime),
-          closeTime: timeToDate(item.CloseTime),
-        }
+        if (res.data.StatusCode != 200) throw new Error('FAIL')
+        return formatBranchData(item)
       })
       setData(_data)
     })
   }
 
+  // get data
   useEffect(() => {
-    setLoading(false)
     getData()
+    setLoading(false)
   }, [])
 
   return (
@@ -117,11 +100,11 @@ const Branch = () => {
           }}
           large
         />
-        <TableList<DataType>
+        <TableList<BranchProps>
           data={data ?? []}
           title='Danh sách chi nhánh'
           columns={columns}
-          selectUrl={`${BASE_URL}/admin/branch/detail/`}
+          selectUrl={Routes.admin.branchDetail}
           loading={loading}
         />
       </Space>

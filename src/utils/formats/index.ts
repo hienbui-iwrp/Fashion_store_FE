@@ -1,7 +1,8 @@
-import FormatMoney from './FormatMoney'
-export default FormatMoney
+export { default as FormatMoney } from './FormatMoney'
 export { default as formatDate } from './FormatDate'
+export * from './FormatDate'
 export { default as formatTime } from './FormatTime'
-export { default as FormatNumber } from './FormatNumber'
+export { default as formatNumber } from './formatNumber'
 export { default as formatAddress } from './formatAddress'
 export { default as timeToDate } from './timeToDate'
+export * from './formatData'

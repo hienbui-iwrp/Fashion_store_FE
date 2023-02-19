@@ -1,46 +1,51 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, RequestStatus, RequestType } from '@/constants'
 import axios from 'axios'
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
-import { FormatNumber, ModalStaffDetail } from '@/utils'
+import {
+  formatDate,
+  formatNumber,
+  formatRequestData,
+  formatStaffData,
+  ModalStaffDetail,
+  RequestProps,
+  StaffProps,
+} from '@/utils'
 import { useModalConfirm } from '@/hooks'
-
-type StaffDataType = {
-  id?: string
-  name: string
-  citizenId: string
-  phone: string
-  address: string
-  dateOfBirth: Date
-  homeTown: string
-  workLocation: string
-  role: string
-  salary: number
-  startDate: Date
-  account?: string
-}
-
-type DataType = {
-  id: string
-  staff: StaffDataType
-  status: 'accepted' | 'rejected' | 'waiting'
-  type: 'add' | 'remove'
-}
+import { getListRequest, getStaff, updateRequest } from '@/api'
+import { useDispatch } from 'react-redux'
+import { setNotificationType, setNotificationValue } from '@/redux'
 
 const Request = () => {
-  const [data, setData] = useState<DataType[]>([])
+  const [data, setData] = useState<RequestProps[]>([])
+  const [staffData, setStaffData] = useState<StaffProps[]>([])
   const [loading, setLoading] = useState(true)
   const [modalStaffDetail, setModalStaffDetail] = useState(false)
-  const [currentStaffData, setCurrentStaffData] = useState<StaffDataType>()
+  const [currentStaffData, setCurrentStaffData] = useState<StaffProps>()
+  let requestId = useRef('')
+  const dispatch = useDispatch()
 
   const removeModal = useModalConfirm({
     title: 'Xóa yêu cầu',
     content: 'Bạn chắc chắn muốn xóa yêu cầu này?',
-    onOk: () => {},
+    onOk: async () => {
+      await updateRequest(requestId.current, RequestStatus.unApproved)
+        .then((res: any) => {
+          dispatch(setNotificationValue('Xóa yêu cầu thành công'))
+          setTimeout(() => {
+            getData()
+            setLoading(false)
+          }, 1000)
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
+    },
     onCancel: () => {
       setModalStaffDetail(false)
     },
@@ -49,71 +54,105 @@ const Request = () => {
   const acceptModal = useModalConfirm({
     title: 'Xác nhận yêu cầu',
     content: 'Bạn chắc chắn muốn chấp nhận yêu cầu này?',
-    onOk: () => {},
+    onOk: () => {
+      updateRequest(requestId.current, RequestStatus.approved)
+        .then((res: any) => {
+          dispatch(setNotificationValue('Đã thêm nhân viên mới'))
+          setLoading(true)
+          setTimeout(() => {
+            getData()
+            setLoading(false)
+          }, 1000)
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
+    },
     onCancel: () => {
       setModalStaffDetail(false)
     },
   })
 
+  const findStaff = (request: RequestProps) => {
+    return staffData.find((item: StaffProps) => item.id == request.staffId)
+  }
+
   const getDataAdd = (): any => {
-    const _data = data.filter((item: any) => item.type === 'add')
-    const columns: ColumnsType<DataType> = []
+    const _data = data.filter((item: any) => item.type === RequestType.add)
+    const columns: ColumnsType<RequestProps> = []
     columns.push({
       title: 'Tên nhân viên mới',
-      dataIndex: 'name',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.name > b.staff.name ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) => {
+        return (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1
+      },
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.name}</div>,
+          children: <div>{findStaff(record)?.name}</div>,
         }
       },
     })
     columns.push({
       title: 'Nơi công tác',
-      dataIndex: 'workLocation',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.workLocation > b.staff.workLocation ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.branchId ?? 1) > (findStaff(b)?.branchId ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.workLocation}</div>,
+          children: <div>{findStaff(record)?.branchId}</div>,
         }
       },
     })
     columns.push({
       title: 'Vị trí',
-      dataIndex: 'role',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.role > b.staff.role ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.role}</div>,
+          children: <div>{findStaff(record)?.role}</div>,
         }
       },
     })
     columns.push({
       title: 'Lương yêu cầu',
-      dataIndex: 'salary',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.salary > b.staff.salary ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.salary ?? 1) > (findStaff(b)?.salary ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{FormatNumber(record.staff.salary)}</div>,
+          children: <div>{formatNumber(findStaff(record)?.salary)}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Ngày tạo',
+      dataIndex: 'date',
+      sorter: (a: RequestProps, b: RequestProps) => (a.date > b.date ? 1 : -1),
+      render(text: string, record: RequestProps, index: number) {
+        return {
+          children: <div>{formatDate(text)}</div>,
         }
       },
     })
 
     columns.push({
       title: '',
-      dataIndex: 'option',
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      render(text: string, record: RequestProps, index: number) {
         return {
+          props: {
+            style: { maxWidth: 100 },
+          },
           children: (
-            <Space>
+            <Space key={index + record.id}>
               <RemoveButton
                 iconInput={<CloseOutlined />}
                 label={'Xóa'}
                 onClick={(e) => {
+                  requestId.current = record.id
                   removeModal.showModelConfirm()
                   e.stopPropagation()
                 }}
@@ -122,6 +161,7 @@ const Request = () => {
                 iconInput={<CheckOutlined />}
                 label={'Duyệt'}
                 onClick={(e) => {
+                  requestId.current = record.id
                   acceptModal.showModelConfirm()
                   e.stopPropagation()
                 }}
@@ -135,66 +175,70 @@ const Request = () => {
   }
 
   const getDataRemove = (): any => {
-    const _data = data.filter((item: any) => item.type === 'remove')
-    const columns: ColumnsType<DataType> = []
+    const _data = data.filter((item: any) => item.type === RequestType.delete)
+    const columns: ColumnsType<RequestProps> = []
     columns.push({
       title: 'Mã nhân viên',
-      dataIndex: 'id',
-      sorter: (a: DataType, b: DataType) =>
-        (a.staff.id ?? 0) > (b.staff.id ?? 0) ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.id ?? 1) > (findStaff(b)?.id ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.id}</div>,
+          children: <div>{findStaff(record)?.id}</div>,
         }
       },
     })
     columns.push({
       title: 'Tên nhân viên',
-      dataIndex: 'name1',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.name > b.staff.name ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.name}</div>,
+          children: <div>{findStaff(record)?.name}</div>,
         }
       },
     })
 
     columns.push({
       title: 'Nơi làm việc',
-      dataIndex: 'workLocation',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.workLocation > b.staff.workLocation ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.branchId ?? 1) > (findStaff(b)?.branchId ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.workLocation}</div>,
+          children: <div>{findStaff(record)?.branchId}</div>,
         }
       },
     })
 
     columns.push({
       title: 'Vị trí',
-      dataIndex: 'role1',
-      sorter: (a: DataType, b: DataType) =>
-        a.staff.role > b.staff.role ? 1 : -1,
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      sorter: (a: RequestProps, b: RequestProps) =>
+        (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
+      render(text: string, record: RequestProps, index: number) {
         return {
-          children: <div>{record.staff.role}</div>,
+          children: <div>{findStaff(record)?.role}</div>,
         }
       },
     })
 
     columns.push({
       title: '',
-      dataIndex: 'option1',
-      render(text: string, record: DataType, index: number) {
+      dataIndex: '',
+      render(text: string, record: RequestProps, index: number) {
         return {
+          props: {
+            style: { maxWidth: 70 },
+          },
           children: (
-            <Space>
+            <Space key={index + record.id}>
               <RemoveButton
                 iconInput={<CloseOutlined />}
                 label={'Xóa'}
                 onClick={(e) => {
+                  requestId.current = record.id
                   removeModal.showModelConfirm()
                   e.stopPropagation()
                 }}
@@ -203,6 +247,7 @@ const Request = () => {
                 iconInput={<CheckOutlined />}
                 label={'Duyệt'}
                 onClick={(e) => {
+                  requestId.current = record.id
                   acceptModal.showModelConfirm()
                   e.stopPropagation()
                 }}
@@ -216,48 +261,59 @@ const Request = () => {
   }
 
   const getData = async () => {
-    await axios
-      .get(`${BASE_URL}/api/admin/staffManagement/requestData`)
-      .then((res) => {
-        setData(res.data)
+    await getListRequest().then((res: any) => {
+      if (res.data.StatusCode != 200) throw new Error('FAIL')
+      const _data = res.data.Data.filter(
+        (item: any) => item.Status == RequestStatus.pending
+      ).map((item: any) => {
+        return formatRequestData(item)
       })
+      console.log(_data)
+      setData(_data)
+    })
+
+    await getStaff().then((res: any) => {
+      if (res.data.StatusCode != 200) throw new Error('FAIL')
+      const _data = res.data.Data.map((item: any) => {
+        return formatStaffData(item)
+      })
+      setStaffData(_data)
+    })
+
+    setLoading(false)
   }
 
   useEffect(() => {
     getData()
-    setLoading(false)
   }, [])
-
-  const content = <></>
 
   return (
     <LayoutAdmin selected={21}>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
-        <TableList<DataType>
+        <TableList<RequestProps>
           data={getDataAdd().data}
           title='Yêu cầu thêm'
           columns={getDataAdd().columns}
           loading={loading}
           ellipsis={true}
-          callBack={(i: DataType) => {
-            setCurrentStaffData(
-              data.find((item: DataType) => item.id == i.id)?.staff
-            )
+          callBack={(i: RequestProps) => {
+            setCurrentStaffData(findStaff(i))
           }}
           onSelectRow={() => setModalStaffDetail(true)}
+          rowKey={['id', 'staffId']}
         />
-        <TableList<DataType>
+
+        <TableList<RequestProps>
           data={getDataRemove().data}
           title='Yêu cầu xóa'
           columns={getDataRemove().columns}
-          callBack={(i: DataType) => {
-            setCurrentStaffData(
-              data.find((item: DataType) => item.id == i.id)?.staff
-            )
+          callBack={(i: RequestProps) => {
+            setCurrentStaffData(findStaff(i))
           }}
           onSelectRow={() => setModalStaffDetail(true)}
           loading={loading}
           ellipsis={true}
+          rowKey={['id', 'staffId']}
         />
       </Space>
       <ModalStaffDetail

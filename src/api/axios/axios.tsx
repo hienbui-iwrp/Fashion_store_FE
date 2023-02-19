@@ -4,10 +4,6 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 })
 
-// const jwtKey = localStorage.getItem('jwtKey')
-//   ? String(localStorage.getItem('jwtKey'))
-//   : ' '
-
 api.defaults.headers.common['Authorization'] = 'Bearer '
 
 //temporary fix for login error

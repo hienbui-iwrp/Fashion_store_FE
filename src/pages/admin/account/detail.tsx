@@ -5,7 +5,7 @@ import styles from '@/styles/Admin.module.css'
 import { Card, Col, DatePicker, List, Row, Space } from 'antd'
 import { LayoutAdmin, TableList } from '@/components'
 import { useRouter } from 'next/router'
-import { formatDate, FormatNumber, ModalOrderDetail } from '@/utils'
+import { formatDate, formatNumber, ModalOrderDetail } from '@/utils'
 import { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
@@ -133,7 +133,7 @@ const Detail = () => {
       dataIndex: 'total',
       render(text: string, record: OrderData, index: number) {
         return {
-          children: <div>{FormatNumber(text)}</div>,
+          children: <div>{formatNumber(text)}</div>,
         }
       },
       sorter: (a: OrderData, b: OrderData) => (a.total > b.total ? 1 : -1),

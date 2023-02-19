@@ -1,3 +1,5 @@
+export * from './notificationSlice'
+
 import { navbarSlice } from './navbarSlice'
 import { notificationSlice } from './notificationSlice'
 import { userSlice } from './user'
