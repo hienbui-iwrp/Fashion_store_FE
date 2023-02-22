@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL } from '@/constants'
+import { BASE_URL, Routes } from '@/constants'
 import axios from 'axios'
 import { EditFilled } from '@ant-design/icons'
 import { Card, Col, Row, Image, List, Space } from 'antd'
@@ -8,25 +8,21 @@ import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
-import { formatAddress, formatDate, formatTime, timeToDate } from '@/utils'
+import {
+  BranchProps,
+  formatAddress,
+  formatDate,
+  formatTime,
+  timeToDate,
+} from '@/utils'
 import { apiBranchService } from '@/utils/axios'
 import { useDispatch } from 'react-redux'
-import { setNotificationValue } from '@/redux/slices/notificationSlice'
-
-type DataType = {
-  id: string
-  name: string
-  street?: string
-  ward?: string
-  district?: string
-  province?: string
-  createdAt: Date
-  manager: string
-  openTime: Date
-  closeTime: Date
-  image?: string
-  staff?: number
-}
+import {
+  setNotificationType,
+  setNotificationValue,
+} from '@/redux/slices/notificationSlice'
+import { formatBranchData } from '@/utils/formats/formatData'
+import { deleteBranch, getBranchDetail } from '@/api'
 
 interface ItemType {
   name: string
@@ -43,7 +39,7 @@ const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [dataItems, setDataItems] = useState<ItemType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
-  const [data, setData] = useState<DataType>()
+  const [data, setData] = useState<BranchProps>()
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
 
   const dispatch = useDispatch()
@@ -52,31 +48,11 @@ const Detail = () => {
   const { id } = routes.query
 
   const getData = async () => {
-    let _data: DataType = {
-      id: '',
-      name: '',
-      createdAt: new Date(),
-      manager: '',
-      openTime: new Date(),
-      closeTime: new Date(),
-      image: '',
-      staff: 0,
-    }
+    let _data: BranchProps = {}
 
-    await apiBranchService.get(`/${id}`).then((res) => {
-      _data = {
-        id: res.data.Data.BranchCode,
-        name: res.data.Data.BranchName,
-        street: res.data.Data.BranchStreet,
-        ward: res.data.Data.BranchWard,
-        district: res.data.Data.BranchDistrict,
-        province: res.data.Data.BranchProvince,
-        createdAt: new Date(res.data.Data.CreatedAt),
-        openTime: timeToDate(res.data.Data.OpenTime),
-        closeTime: timeToDate(res.data.Data.CloseTime),
-        manager: res.data.Data.Manager,
-        image: res.data.Data?.Image,
-      }
+    getBranchDetail(id).then((res: any) => {
+      if (res.data.Data.BranchCode == 0) routes.push(Routes.error)
+      _data = formatBranchData(res.data.Data)
     })
 
     await apiBranchService.get(`/staff/${id}`).then((res) => {
@@ -102,9 +78,9 @@ const Detail = () => {
   useEffect(() => {
     if (data) {
       setDataItems([
-        { name: 'Mã chi nhánh', content: data.id },
+        { name: 'Mã chi nhánh', content: data.id ?? '' },
         { name: 'Địa chỉ', content: formatAddress(data) },
-        { name: 'Quản lý', content: data.manager },
+        { name: 'Quản lý', content: data.manager ?? 'Chưa có' },
         {
           name: 'Nhân viên',
           content: data?.staff?.toString() ?? '0',
@@ -112,13 +88,13 @@ const Detail = () => {
         {
           name: 'Giờ hoạt động',
           content:
-            formatTime(new Date(data.openTime)) +
+            formatTime(new Date(data.openTime ?? '')) +
             ' - ' +
-            formatTime(new Date(data.closeTime)),
+            formatTime(new Date(data.closeTime ?? '')),
         },
         {
           name: 'Ngày thành lập',
-          content: formatDate(new Date(data.createdAt)),
+          content: formatDate(new Date(data.createdAt ?? '')),
         },
       ])
     }
@@ -128,9 +104,17 @@ const Detail = () => {
     title: 'Xóa chi nhánh',
     content: 'Bạn có chắc  chắn muốn xóa chi nhánh này?',
     onOk: async () => {
-      await apiBranchService.delete(`/${id}`)
-      routes.push(BASE_URL + '/admin/branch')
-      dispatch(setNotificationValue('Xóa chi nhánh thành công'))
+      deleteBranch(id)
+        .then((res: any) => {
+          if (res.data.StatusCode != 200) throw new Error('FAIL')
+
+          routes.push(Routes.admin.branch)
+          dispatch(setNotificationValue('Xóa chi nhánh thành công'))
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
     },
   })
 

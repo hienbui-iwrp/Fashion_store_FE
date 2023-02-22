@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Gender, Routes } from '@/constants'
 import axios from 'axios'
 import { EditFilled } from '@ant-design/icons'
-import {
-  Card,
-  Col,
-  Row,
-  Image,
-  List,
-  Space,
-  Modal,
-  Divider,
-  DatePicker,
-} from 'antd'
+import { Card, Col, Row, List, Space, Divider, DatePicker } from 'antd'
 import { useRouter } from 'next/router'
 import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
 import { useModalConfirm } from '@/hooks'
 import {
+  apiStaffService,
+  AttendanceProps,
+  formatAddress,
   formatDate,
-  FormatNumber,
+  formatNumber,
+  formatStaffData,
   formatTime,
   ModalAddEditStaff,
+  StaffProps,
 } from '@/utils'
 import { ColumnsType } from 'antd/es/table'
+import { deleteStaff, getAttendace, getStaffDetail } from '@/api'
 import styles from '@/styles/Admin.module.css'
 import dayjs from 'dayjs'
+
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
+import { useDispatch } from 'react-redux'
+import { setNotificationType, setNotificationValue } from '@/redux'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -39,128 +38,171 @@ dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
-interface DataType {
-  id: string
-  name: string
-  citizenId: string
-  phone: string
-  address: string
-  dateOfBirth: Date
-  homeTown: string
-  workingLocation: string
-  role: string
-  salary: number
-  startDate: Date
-  account?: string
-}
-
 interface ItemType {
   name: string
   content: string | number
-}
-
-interface AttendanceDataType {
-  date: Date
-  startTime: Date
-  endTime: Date
-  total: number
 }
 
 const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [dataItems1, setDataItems1] = useState<ItemType[]>([])
   const [dataItems2, setDataItems2] = useState<ItemType[]>([])
-  const [attendanceData, setAttendanceData] = useState<AttendanceDataType[]>([])
-  const [data, setData] = useState<DataType>({})
+  const [attendanceData, setAttendanceData] = useState<AttendanceProps[]>([])
+  const [attendanceShowData, setAttendanceShowData] = useState<
+    AttendanceProps[]
+  >([])
+  const [data, setData] = useState<StaffProps>({})
   const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
+  const dispatch = useDispatch()
 
   const router = useRouter()
   const { id } = router.query
 
-  const columns: ColumnsType<AttendanceDataType> = []
-  if (attendanceData && attendanceData[0]) {
-    for (const key in attendanceData[0]) {
-      columns.push({
-        title:
-          key === 'date'
-            ? 'Ngày'
-            : key === 'startTime'
-            ? 'Thời điểm vào'
-            : key === 'endTime'
-            ? 'Thời điểm ra'
-            : 'Thời gian làm',
-        dataIndex: key,
-        sorter: (a: AttendanceDataType, b: AttendanceDataType) =>
-          a[key] > b[key] ? 1 : -1,
-        render(text: any, record: AttendanceDataType, index: number) {
-          const textShow =
-            key === 'date'
-              ? formatDate(text)
-              : key === 'total'
-              ? text
-              : formatTime(text)
-          return {
-            children: <div>{textShow}</div>,
-          }
-        },
-      })
-    }
+  const columns: ColumnsType<AttendanceProps> = []
+  if (attendanceShowData && attendanceShowData[0]) {
+    columns.push({
+      title: 'Ngày',
+      dataIndex: 'date',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        (a.date ?? 1) > (b.date ?? 1) ? 1 : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return {
+          children: <div>{formatDate(text)}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Thời điểm vào',
+      dataIndex: 'checkIn',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        (a.checkIn ?? 1) > (b.checkIn ?? 1) ? 1 : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return {
+          children: <div>{formatTime(text)}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Thời điểm ra',
+      dataIndex: 'checkOut',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return {
+          children: <div>{formatTime(text)}</div>,
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Thời gian làm',
+      dataIndex: '',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        getWorkingTime(a.checkIn, a.checkOut) >
+        getWorkingTime(b.checkIn, b.checkOut)
+          ? 1
+          : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return {
+          children: (
+            <div>{getWorkingTime(record.checkIn, record.checkOut)}</div>
+          ),
+        }
+      },
+    })
+  }
+
+  const setListData = (data: StaffProps) => {
+    setDataItems1([
+      { name: 'Mã nhân viên', content: data.id ?? '' },
+      { name: 'Địa chỉ', content: formatAddress(data) },
+      {
+        name: 'Giới tính',
+        content:
+          Gender.find((item: any) => item.value === data.gender)?.content ??
+          'Chưa xác định',
+      },
+      { name: 'Số điện thoại', content: data.phone ?? '' },
+      { name: 'Căn cước', content: data.citizenId ?? '' },
+      {
+        name: 'Ngày sinh',
+        content: formatDate(data.birthdate),
+      },
+      { name: 'Email', content: data.email ?? '' },
+    ])
+    setDataItems2([
+      { name: 'Quê quán', content: data.hometown ?? '' },
+      { name: 'Nơi làm việc', content: data.branchId ?? '' },
+      { name: 'Vị trí', content: data.role ?? '' },
+      { name: 'Lương', content: formatNumber(data.salary) + ' VND' },
+      {
+        name: 'Ngày bắt đầu',
+        content: formatDate(data.startDate),
+      },
+      {
+        name: 'Tài khoản',
+        content: data.account ?? 'Không có',
+      },
+    ])
   }
 
   const getData = async () => {
-    await axios
-      .get(`${BASE_URL}/api/admin/staffManagement/staffDetailData?id=${id}`)
-      .then((res) => {
-        const _data: DataType = res.data
-        setData(res.data)
-        setDataItems1([
-          { name: 'Mã nhân viên', content: _data.id },
-          { name: 'Căn cước', content: _data.citizenId },
-          { name: 'Số điện thoại', content: _data.phone },
-          { name: 'Địa chỉ', content: _data.address },
-          {
-            name: 'Ngày sinh',
-            content: formatDate(_data.dateOfBirth),
-          },
-          { name: 'Quê quán', content: _data.homeTown },
-        ])
-        setDataItems2([
-          { name: 'Nơi làm việc', content: _data.workingLocation },
-          { name: 'Vị trí', content: _data.role },
-          { name: 'Lương', content: FormatNumber(_data.salary) + ' VND' },
-          {
-            name: 'Ngày bắt đầu',
-            content: formatDate(_data.startDate),
-          },
-          {
-            name: 'Tài khoản',
-            content: _data.account ?? '',
-          },
-        ])
-        setLoading(false)
-      })
+    await getStaffDetail(id).then((res: any) => {
+      if (res.data.Data.Status == 'res.data.Data') router.push(Routes.error)
+      const _data = formatStaffData(res.data.Data)
+      setData(_data)
+      setListData(_data)
+      setLoading(false)
+    })
   }
 
-  const getAttendacceData = async () => {
-    await axios
-      .get(`${BASE_URL}/api/admin/staffManagement/staffAttendanceData`)
-      .then((res) => {
-        setAttendanceData(res.data)
-      })
-  }
+  const getAttendacceData = () => {
+    getAttendace(id).then((res: any) => {
+      const _attendacceData: AttendanceProps[] = res.data.Data.map(
+        (item: any) => {
+          return {
+            date: new Date(item.AttendanceDate),
+            checkIn: new Date(item.CheckinTime),
+            checkOut: new Date(item.CheckoutTime),
+          }
+        }
+      )
 
-  useEffect(() => {
-    getData()
-    getAttendacceData()
-  }, [])
+      setAttendanceShowData(
+        _attendacceData.filter((item: AttendanceProps) => {
+          return item.date?.getMonth() == new Date().getMonth()
+        })
+      )
+
+      setAttendanceData(_attendacceData)
+    })
+  }
 
   const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa nhân viên',
     content: 'Bạn có chắc  chắn muốn xóa nhân viên này?',
     onOk: () => {
-      console.log('delete Staff')
+      deleteStaff(id)
+        .then((res: any) => {
+          if (res.data.StatusCode != 200) throw new Error('FAIL')
+          router.push(Routes.admin.staff)
+          dispatch(setNotificationValue('Xóa nhân viên thành công'))
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
     },
   })
+
+  useEffect(() => {
+    if (id) {
+      getData()
+      getAttendacceData()
+    }
+  }, [id])
 
   return (
     <LayoutAdmin selected={20}>
@@ -173,7 +215,7 @@ const Detail = () => {
           loading={loading}
         >
           <Row justify='center' align='middle'>
-            <Col xs={24} sm={11}>
+            <Col xs={24} sm={13}>
               <Row>
                 <Col xs={24} sm={23}>
                   <List
@@ -204,7 +246,7 @@ const Detail = () => {
                 </Col>
               </Row>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24} sm={10}>
               <List
                 bordered={false}
                 dataSource={dataItems2 ?? []}
@@ -223,43 +265,44 @@ const Detail = () => {
                   )
                 }}
               />
-              <Row justify='end' align='bottom'>
-                <Space size={20}>
-                  <RemoveButton onClick={showModelConfirm} />
-                  <AddButton
-                    label='Chỉnh sửa'
-                    iconInput={<EditFilled />}
-                    onClick={() => setModalAddEditStaff(true)}
-                  />
-                </Space>
-              </Row>
             </Col>
           </Row>
+          <Row justify='end' align='bottom'>
+            <Space size={20}>
+              <RemoveButton onClick={showModelConfirm} />
+              <AddButton
+                label='Chỉnh sửa'
+                iconInput={<EditFilled />}
+                onClick={() => setModalAddEditStaff(true)}
+              />
+            </Space>
+          </Row>
         </Card>
-        <TableList<AttendanceDataType>
-          data={attendanceData ?? []}
+        <TableList<AttendanceProps>
+          data={attendanceShowData ?? []}
           columns={columns}
           loading={loading}
           header={
             <Row>
-              <Col xs={24} lg={6} className='mt-1'>
+              <Col xs={12} lg={6} className='mt-2'>
                 <b>Điểm danh</b>
               </Col>
-              <Col xs={12} lg={7} className='mt-1'>
-                <span>Số ngày làm 7</span>
+              <Col xs={12} lg={14} className='mt-2'>
+                <span>Số ngày làm {countWorkingDate(attendanceShowData)}</span>
               </Col>
-              <Col xs={12} lg={7} className='mt-1'>
-                <span>Số ngày nghỉ 0</span>
-              </Col>
-              <Col xs={8} lg={4} className='mt-2'>
+              <Col xs={12} sm={8} lg={4} className='mt-2'>
                 <DatePicker
                   picker='month'
                   placeholder='Month'
                   format={'MM/YYYY'}
-                  defaultValue={dayjs(formatDate(new Date()), 'MM/YYYY')}
+                  defaultValue={dayjs(formatDate(new Date()), 'DD/MM/YYYY')}
                   className={styles.adminInputShadow}
                   onChange={(date, dateString) => {
-                    console.log(dateString)
+                    setAttendanceShowData(
+                      attendanceData.filter((item: AttendanceProps) => {
+                        return item.date?.getMonth() == date?.month()
+                      })
+                    )
                   }}
                 />
               </Col>
@@ -282,3 +325,15 @@ const Detail = () => {
 Detail.displayName = 'Staff Detail'
 
 export default Detail
+
+const getWorkingTime = (start: any, end: any) => {
+  const a = new Date(start).valueOf()
+  const b = new Date(end).valueOf()
+  return (Math.abs(b - a) / 3600000.0 - 1).toFixed(1)
+}
+
+const countWorkingDate = (data: AttendanceProps[]) => {
+  return data.filter((item: AttendanceProps) => {
+    return item.date
+  }).length
+}

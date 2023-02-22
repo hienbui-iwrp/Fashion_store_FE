@@ -1,5 +1,6 @@
-export default function formatTime(time: any): string {
+export default function formatTime(time?: any): string {
   const _time = new Date(time)
+  if (!time || isNaN(_time.getTime())) return 'NaN'
   const hour = _time.getHours()
   const minute = _time.getMinutes()
   let result = ''

@@ -8,20 +8,24 @@ import { store } from '@/redux/store'
 import { selectNotification } from '@/redux/selectors'
 import { useNotification } from '@/hooks'
 import { useEffect } from 'react'
-import { setNotificationValue } from '@/redux/slices/notificationSlice'
-import { Colors } from '@/constants'
+import {
+  setNotificationType,
+  setNotificationValue,
+} from '@/redux/slices/notificationSlice'
+import { Colors, Routes } from '@/constants'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
 
   if (
-    router.pathname.startsWith('/login') ||
-    router.pathname.startsWith('/register') ||
-    router.pathname.startsWith('/reset-password') ||
-    router.pathname.startsWith('/404')
+    router.pathname.startsWith(Routes.login) ||
+    router.pathname.startsWith(Routes.register) ||
+    router.pathname.startsWith(Routes.resetPassword) ||
+    router.pathname.startsWith(Routes.error)
   ) {
     return <Component {...pageProps} />
   }
+
   if (
     router.pathname === '/' ||
     router.pathname.startsWith('/products/') ||
@@ -37,7 +41,18 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname === '/woman' ||
     router.pathname === '/baby' ||
     router.pathname === '/accessory' ||
-    router.pathname === '/support'
+    router.pathname === '/support' ||
+    router.pathname === Routes.homepage ||
+    router.pathname.startsWith(Routes.productsDetail) ||
+    router.pathname.startsWith(Routes.manageOrdersDetail) ||
+    router.pathname === Routes.products ||
+    router.pathname === Routes.intro ||
+    router.pathname === Routes.cart ||
+    router.pathname === Routes.payment ||
+    router.pathname === Routes.manageOrders ||
+    router.pathname === Routes.userInfo ||
+    router.pathname === Routes.manageOrders ||
+    router.pathname === Routes.support
   ) {
     return (
       <Provider store={store}>
@@ -67,12 +82,14 @@ const Notify = () => {
   const notification = useSelector(selectNotification)
   const { openNotification, contextNotification } = useNotification({
     content: notification.value,
+    type: notification.type,
   })
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (notification.value != '') {
       dispatch(setNotificationValue(''))
+      dispatch(setNotificationType('success'))
       openNotification()
     }
   }, [notification])

@@ -4,7 +4,7 @@ import { ModalOrderDetailProps } from '../types/modalType'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import styles from '@/styles/Admin.module.css'
-import { formatDate, FormatNumber } from '../formats'
+import { formatDate, formatNumber } from '../formats'
 import { TableList } from '@/components'
 import { ColumnsType } from 'antd/es/table'
 import { Colors } from '@/constants'
@@ -50,7 +50,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
               color: text == 'Đang giao' ? Colors.adminRed500 : Colors.black,
             },
           },
-          children: <div>{FormatNumber(text)}</div>,
+          children: <div>{formatNumber(text)}</div>,
         }
       },
     })
@@ -59,7 +59,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
       dataIndex: 'quantity',
       render(text: string, record: any, index: number) {
         return {
-          children: <div>{FormatNumber(text)}</div>,
+          children: <div>{formatNumber(text)}</div>,
         }
       },
     })
@@ -68,7 +68,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
       dataIndex: '',
       render(text: string, record: any, index: number) {
         return {
-          children: <div>{FormatNumber(record.quantity * record.price)}</div>,
+          children: <div>{formatNumber(record.quantity * record.price)}</div>,
         }
       },
     })
@@ -142,15 +142,15 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
               <Col span={12}>
                 <b>Tổng tiền</b>
               </Col>
-              <Col span={12}>{FormatNumber(props.extraData?.total ?? 0)}</Col>
+              <Col span={12}>{formatNumber(props.extraData?.total ?? 0)}</Col>
             </Row>
             <Row>
               <Col span={12}>Thuế</Col>
-              <Col span={12}>{FormatNumber(props.extraData?.tax ?? 0)}</Col>
+              <Col span={12}>{formatNumber(props.extraData?.tax ?? 0)}</Col>
             </Row>
             <Row>
               <Col span={12}>Khuyến mãi</Col>
-              <Col span={12}>{FormatNumber(0)}</Col>
+              <Col span={12}>{formatNumber(0)}</Col>
             </Row>
             <Divider />
             <Row>
@@ -158,7 +158,7 @@ const ModalOrderDetail = (props: ModalOrderDetailProps) => {
                 <b>Tổng cộng</b>
               </Col>
               <Col span={12}>
-                {FormatNumber(
+                {formatNumber(
                   (props.extraData?.total ?? 0) + (props.extraData?.tax ?? 0)
                 )}
               </Col>

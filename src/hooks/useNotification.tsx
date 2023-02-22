@@ -6,7 +6,7 @@ const useNotification = (props: useNotificationProps) => {
 
   const openNotification = () => {
     api[props.type ?? 'success']({
-      message: props.title ?? 'Thành công',
+      message: props.type == 'error' ? 'Thất bại' : 'Thành công',
       description: props.content ?? 'Cập nhật thành công',
     })
   }

@@ -1,6 +1,6 @@
 import { LayoutAdmin, TableList } from '@/components'
 import { BASE_URL } from '@/constants'
-import { formatAddress, formatDate, FormatNumber } from '@/utils'
+import { formatAddress, formatDate, formatNumber } from '@/utils'
 import { Card, Col, Divider, Row } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import axios from 'axios'
@@ -64,7 +64,7 @@ const Detail = () => {
       dataIndex: 'price',
       render(text: string, record: Goods, index: number) {
         return {
-          children: <div>{FormatNumber(text)}</div>,
+          children: <div>{formatNumber(text)}</div>,
         }
       },
       sorter: (a: Goods, b: Goods) => (a.price > b.price ? 1 : -1),
@@ -85,7 +85,7 @@ const Detail = () => {
       dataIndex: '',
       render(text: string, record: Goods, index: number) {
         return {
-          children: <div>{FormatNumber(record.quantity * record.price)}</div>,
+          children: <div>{formatNumber(record.quantity * record.price)}</div>,
         }
       },
       sorter: (a: Goods, b: Goods) =>
@@ -183,7 +183,7 @@ const Detail = () => {
                   <b>Tổng tiền</b>
                 </Col>
                 <Col span={12}>
-                  {FormatNumber(
+                  {formatNumber(
                     data?.goods?.reduce(
                       (acc: number, cur: any) => acc + cur.price * cur.quantity,
                       0
@@ -193,16 +193,16 @@ const Detail = () => {
               </Row>
               <Row>
                 <Col span={12}>Thuế</Col>
-                <Col span={12}>{FormatNumber(data?.tax ?? 0)}</Col>
+                <Col span={12}>{formatNumber(data?.tax ?? 0)}</Col>
               </Row>
               <Row>
                 <Col span={12}>Khuyến mãi</Col>
-                <Col span={12}>{FormatNumber(data?.discount ?? 0)}</Col>
+                <Col span={12}>{formatNumber(data?.discount ?? 0)}</Col>
               </Row>
               {data?.ship && (
                 <Row>
                   <Col span={12}>Phí ship</Col>
-                  <Col span={12}>{FormatNumber(data?.ship ?? 0)}</Col>
+                  <Col span={12}>{formatNumber(data?.ship ?? 0)}</Col>
                 </Row>
               )}
               <Divider />
@@ -211,7 +211,7 @@ const Detail = () => {
                   <b>Tổng cộng</b>
                 </Col>
                 <Col span={12}>
-                  {FormatNumber(
+                  {formatNumber(
                     (data?.goods?.reduce(
                       (acc: number, cur: any) => acc + cur.price * cur.quantity,
                       0

@@ -9,7 +9,6 @@ import {
 } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { formatTime } from '..'
-import { apiBranchService } from '../axios'
 
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
@@ -19,9 +18,13 @@ import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import { useRouter } from 'next/router'
-import { BASE_URL } from '@/constants'
+import { Routes } from '@/constants'
 import { useDispatch } from 'react-redux'
-import { setNotificationValue } from '@/redux/slices/notificationSlice'
+import {
+  setNotificationType,
+  setNotificationValue,
+} from '@/redux/slices/notificationSlice'
+import { addBranch, updateBranch } from '@/api'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -38,30 +41,32 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
   const onSave = async () => {
     try {
       const values = await form.validateFields()
-
-      const openTime = new Date(values?.openTime)
-      const closeTime = new Date(values?.closeTime)
-      const record = {
-        Name: values?.name,
-        Street: values?.street,
-        Ward: values?.ward,
-        District: values?.district,
-        Province: values?.province,
-        Open: values?.openTime && formatTime(openTime) + ':00',
-        Close: values?.closeTime && formatTime(closeTime) + ':00',
-      }
-
       if (!props.extraData) {
-        await apiBranchService.post('/', record)
-        dispatch(setNotificationValue('Đã thêm chi nhánh mới'))
+        addBranch(values)
+          .then((res: any) => {
+            if (res.data.StatusCode != 200) throw new Error('FAIL')
+
+            dispatch(setNotificationValue('Đã thêm chi nhánh mới'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
       } else {
-        await apiBranchService.put(`/${props?.extraData?.id}`, record)
-        dispatch(setNotificationValue('Đã cập nhật thông tin chi nhánh'))
+        updateBranch(props.extraData.id, values)
+          .then((res: any) => {
+            if (res.data.StatusCode != 200) throw new Error('FAIL')
+            dispatch(setNotificationValue('Đã cập nhật thông tin chi nhánh'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
       }
 
       props.callback && props.callback({})
       props.cancel && props.cancel()
-      routes.push(BASE_URL + '/admin/branch')
+      routes.push(Routes.admin.branch)
 
       console.log('Success', values)
     } catch (errorInfo) {

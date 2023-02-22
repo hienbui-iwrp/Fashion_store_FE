@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import type { TableProps } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, Routes } from '@/constants'
 import { TableListProps } from '@/utils/types/componentType'
 import { useRouter } from 'next/router'
 
@@ -24,13 +24,14 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     },
     rowSelection: props?.rowSelection,
     rowKey: props.rowKey
-      ? (record: any) => {
-          return props?.rowKey?.reduce(
+      ? (record: any, index: number) => {
+          const key = props?.rowKey?.reduce(
             (total, item) => total + record[item],
             ''
           )
+          return key
         }
-      : (record: any, index: number) => record.id + index,
+      : (record: any, index: number) => index,
   }
 
   const tableColumns = props?.columns?.map((item: any) => ({
@@ -61,7 +62,9 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
             onClick: (event) => {
               props.callBack && props.callBack(record)
               props.selectUrl &&
-                router.push(props.selectUrl + `?id=${record.id}` ?? BASE_URL)
+                router.push(
+                  props.selectUrl + `?id=${record.id}` ?? Routes.admin.homepage
+                )
               props.onSelectRow && props.onSelectRow()
             },
           }

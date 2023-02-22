@@ -16,19 +16,19 @@ export default function handler(
     {
       date: new Date('01/01/2022'),
       startTime: new Date('01/01/2022 08:00'),
-      endTime: new Date('01/01/2022 18:00'),
+      endTime: new Date('01/01/2022 18:20'),
       total: 8,
     },
     {
       date: new Date('02/01/2022'),
       startTime: new Date('01/01/2022 09:00'),
-      endTime: new Date('01/01/2022 19:00'),
+      endTime: new Date('01/01/2022 19:10'),
       total: 8,
     },
     {
       date: new Date('03/01/2022'),
       startTime: new Date('01/01/2022 09:00'),
-      endTime: new Date('01/01/2022 18:00'),
+      endTime: new Date('01/01/2022 18:30'),
       total: 7,
     },
     {

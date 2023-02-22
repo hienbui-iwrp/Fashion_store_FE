@@ -5,7 +5,7 @@ import { Button, Card, Typography, Image } from 'antd'
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
-import { FormatNumber, ProductDetailDataProps } from '@/utils'
+import { formatNumber, ProductDetailDataProps } from '@/utils'
 
 const { Text } = Typography
 
@@ -48,22 +48,22 @@ export default function CardProductClient(props: ProductDetailDataProps) {
         <div className='flex justify-between items-center pt-2'>
           {props.discount === 0 ? (
             <Text strong className='text-lg'>
-              {FormatNumber(props.unitPrice)} đ
+              {formatNumber(props.unitPrice)} đ
             </Text>
           ) : (
             <div className='flex flex-col leading-none'>
               <Text strong className='text-lg text-red-600 leading-none'>
-                {FormatNumber(props.price)} đ
+                {formatNumber(props.price)} đ
               </Text>
               <div className='mt-1'>
                 <Text
                   strong
                   className='text-xs line-through text-gray-400 pr-1 leading-none'
                 >
-                  {FormatNumber(props.unitPrice)} đ
+                  {formatNumber(props.unitPrice)} đ
                 </Text>
                 <Text strong className='text-xs leading-none'>
-                  -{FormatNumber(props.discount)}%
+                  -{formatNumber(props.discount)}%
                 </Text>
               </div>
             </div>

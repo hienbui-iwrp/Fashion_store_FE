@@ -17,8 +17,14 @@ export default function InputSearch(props: InputSearchProps) {
         ...props.style,
       }}
       placeholder={props.placeholder ?? 'Tìm kiếm theo mã, tên'}
-      onPressEnter={props?.onEnter}
+      onPressEnter={(item: any) => {
+        if (item.target.value != '')
+          props?.onEnter && props?.onEnter(item.target.value)
+      }}
       allowClear
+      onChange={(item) => {
+        if (item.target.value == '') props.onClear && props.onClear()
+      }}
       bordered={false}
       suffix={
         <SearchOutlined color={Colors.adminGreen900} style={{ fontSize: 16 }} />
