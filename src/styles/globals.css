@@ -8,6 +8,7 @@
   --foreground-rgb: 0, 0, 0;
   --admin-green900: #14794f;
   --admin-green500: #00d272;
+  --admin-green300: #87FB7F;
   --gray-white-color: #bbb;
   --admin-bg-color: #f0fdf4;
   --shadow-color: #ddd;
@@ -177,6 +178,21 @@ tr:hover td {
 
 .ant-form-item-label {
   font-weight: 500 !important;
+}
+
+/* client page */
+/* .ant-popover-arrow {
+  display: none;
+}
+
+.ant-popover-inner {
+  padding: 0;
+} */
+
+/* products page */
+.products-filter .ant-select-selection-overflow-item .ant-select-selection-item {
+  border: none;
+  background-color: var(--admin-green300)
 }
 
 @tailwind base;

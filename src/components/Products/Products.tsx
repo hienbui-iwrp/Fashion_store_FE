@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/redux/store'
+import { selectProducts, selectProductsByCategory } from '@/redux/selectors'
+import { productsActions } from '@/redux/slices'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import type { CheckboxValueType } from 'antd/es/checkbox/Group'
 import {
@@ -25,19 +29,25 @@ import { FilterTag } from '../FilterTag'
 
 const { Title, Text } = Typography
 
-export interface ProductsProps {}
+export interface ProductsProps {
+  filter: string[]
+}
+
 const CheckboxGroup = Checkbox.Group
 
 const plainOptions = [
-  '0 - 500.000đ',
-  '500.000 - 1.000.000 đ',
-  '1.000.000 - 3.000.000 đ',
-  '3.000.000 - 5.000.000 đ',
-  '5.000.000 đ trở lên',
+  { label: '0 - 500.000đ', value: 'lt5h' },
+  { label: '500.000 - 1.000.000 đ', value: '5hTo1m' },
+  { label: '1.000.000 - 3.000.000 đ', value: '1mTo3m' },
+  { label: '3.000.000 - 5.000.000 đ', value: '3mTo5m' },
+  { label: '5.000.000 đ trở lên', value: 'gt5m' },
 ]
-const defaultCheckedList = ['0 - 500.000đ', '500.000 - 1.000.000 đ']
+const defaultCheckedList: string[] = []
 
 export default function Products(props: ProductsProps) {
+  const dispatch = useAppDispatch()
+  const { setListProduct } = productsActions;
+  const dataProducts: ProductsDataProps = useSelector(selectProducts);
   const options: SelectProps['options'] = [
     { value: 'man', label: 'Nam' },
     { value: 'woman', label: 'Nữ' },
@@ -69,40 +79,99 @@ export default function Products(props: ProductsProps) {
     { value: '43', label: '43' },
     { value: '44', label: '44' },
   ]
-  const [value, setValue] = useState(1)
+  const [value, setValue] = useState('default')
   const [data, setData] = useState<ProductsDataProps>({
-    totalProducts: 0,
-    listProduct: [],
+    ...dataProducts
   })
-  const [listValueFilter, setListValueFilter] = useState(['man'])
+  const [listValueFilter, setListValueFilter] = useState<string[]>(props.filter)
   const [checkedList, setCheckedList] =
     useState<CheckboxValueType[]>(defaultCheckedList)
-  const [indeterminate, setIndeterminate] = useState(true)
-  const [checkAll, setCheckAll] = useState(false)
+
+  const filterProducts = (checklist: CheckboxValueType[], listValueFilter: string[]) => {
+    let listProduct: ProductDetailDataProps[] = [...dataProducts.listProduct]
+    if (listValueFilter.length !== 0) {
+      listProduct = listProduct.filter((item) => {
+        return listValueFilter.includes(item.type) || listValueFilter.includes(item.gender) || listValueFilter.includes(item.age)
+      })
+    }
+    if (checklist.length > 0 && checklist.length < 5) {
+      listProduct = listProduct.filter(item => {
+        if (item.price <= 500000 && checklist.includes('lt5h'))
+          return true;
+        if (item.price > 500000 && item.price <= 1000000 && checklist.includes('5hTo1m'))
+          return true;
+        if (item.price > 1000000 && item.price <= 3000000 && checklist.includes('1mTo3m'))
+          return true;
+        if (item.price > 3000000 && item.price <= 5000000 && checklist.includes('3mTo5m'))
+          return true;
+        if (item.price > 5000000 && checklist.includes('gt5m'))
+          return true;
+        return false
+      })
+    }
+    setData({
+      totalProducts: listProduct.length,
+      listProduct: [...listProduct]
+    })
+  }
 
   const onChangePrice = (list: CheckboxValueType[]) => {
-    setCheckedList(list)
-    setIndeterminate(!!list.length && list.length < plainOptions.length)
-    setCheckAll(list.length === plainOptions.length)
+    setCheckedList(list);
+    filterProducts(list, listValueFilter)
   }
 
-  const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value)
+  const onChangeSort = (e: RadioChangeEvent) => {
     setValue(e.target.value)
-  }
-
-  const handleSelectFilter = (value: string) => {
-    if (!listValueFilter.includes(value)) {
-      setListValueFilter([...listValueFilter, value])
+    // const dataShow = listValueFilter.length === 0 ? [...dataProducts.listProduct ] : [...data.listProduct ]
+    const dataShow = [...data.listProduct]
+    switch (e.target.value) {
+      case 'a-z':
+        const dataSortAlphaBetIncrease = dataShow.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return a.name.localeCompare(b.name) })
+        setData({
+          totalProducts: dataSortAlphaBetIncrease.length,
+          listProduct: dataSortAlphaBetIncrease
+        })
+        break
+      case 'z-a':
+        let dataSortAlphaBetDecrease = dataShow.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return b.name.localeCompare(a.name) })
+        setData({
+          totalProducts: dataSortAlphaBetDecrease.length,
+          listProduct: dataSortAlphaBetDecrease
+        })
+        break
+      case 'increase':
+        let dataSortIncrease = dataShow.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return a.price - b.price })
+        setData({
+          totalProducts: dataSortIncrease.length,
+          listProduct: dataSortIncrease
+        })
+        break
+      case 'decrease':
+        let dataSortDecrease = dataShow.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return b.price - a.price })
+        setData({
+          totalProducts: dataSortDecrease.length,
+          listProduct: dataSortDecrease
+        })
+        break
+      default:
+        setData(dataProducts)
     }
   }
 
+  const handleSelectFilter = (value: string) => {
+    const newListValueFilter = [...listValueFilter, value]
+    if (!listValueFilter.includes(value)) {
+      setListValueFilter(newListValueFilter)
+    }
+    filterProducts(checkedList, newListValueFilter)
+  }
+
   const handleDeselect = (value: string) => {
-    setListValueFilter(
-      listValueFilter.filter((item) => {
-        return item !== value
-      })
-    )
+    const newListValueFilter = listValueFilter.filter((item) => {
+      return item !== value
+    })
+    setListValueFilter(newListValueFilter)
+    filterProducts(checkedList, newListValueFilter)
   }
 
   const handleChange = (value: string) => {
@@ -117,14 +186,10 @@ export default function Products(props: ProductsProps) {
     getAllProducts().then((res) => {
       console.log(res)
       setData(res?.data)
+      filterProducts(checkedList, listValueFilter)
+      dispatch(setListProduct(res?.data))
+      // setData({...dataProducts})
     })
-
-    // await axios
-    //   .get(`${BASE_URL}/api/products`)
-    //   .then((res) => {
-    //     console.log(res)
-    //     setData(res.data)
-    //   })
   }
 
   useEffect(() => {
@@ -231,7 +296,7 @@ export default function Products(props: ProductsProps) {
               />
             }
           />
-          <Select
+          {/* <Select
             placeholder={<Text strong>Size</Text>}
             style={{ width: 120 }}
             onChange={handleChange}
@@ -261,20 +326,20 @@ export default function Products(props: ProductsProps) {
                 }}
               />
             }
-          />
+          /> */}
         </div>
 
-        <Space className='!my-2'>
+        {/* <Space className='!my-2'>
           <FilterTag
             label='Nam'
-            // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
+          // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
           />
           <FilterTag
             label='Nữ'
-            // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
+          // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
           />
-        </Space>
-        {/* <Select
+        </Space> */}
+        <Select
           mode='multiple'
           allowClear
           defaultActiveFirstOption={false}
@@ -288,20 +353,20 @@ export default function Products(props: ProductsProps) {
           options={options}
           dropdownRender={() => <></>}
           dropdownStyle={{ display: 'none' }}
-        /> */}
+        />
       </div>
       <div className='products-list'>
         <Row>
           <Col className='products-sort ' span={5}>
             <div>
               <Title level={4}>Sắp xếp</Title>
-              <Radio.Group onChange={onChange} value={value}>
+              <Radio.Group onChange={onChangeSort} value={value}>
                 <Space direction='vertical'>
-                  <Radio value={1}>Mặc định</Radio>
-                  <Radio value={2}>từ A - Z</Radio>
-                  <Radio value={3}>từ Z - A</Radio>
-                  <Radio value={4}>Giá thấp đến cao</Radio>
-                  <Radio value={5}>Giá cao đến thấp</Radio>
+                  <Radio value={'default'}>Mặc định</Radio>
+                  <Radio value={'a-z'}>từ A - Z</Radio>
+                  <Radio value={'z-a'}>từ Z - A</Radio>
+                  <Radio value={'increase'}>Giá thấp đến cao</Radio>
+                  <Radio value={'decrease'}>Giá cao đến thấp</Radio>
                 </Space>
               </Radio.Group>
             </div>

@@ -49,7 +49,7 @@ export default function Payment(props: PaymentProps) {
   const [methodOnline, setMethodOnline] = React.useState('Momo');
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    router.push('/login');
+    router.push('/manage-orders');
   };
 
   const onFinishFailed = (errorInfo: any) => {

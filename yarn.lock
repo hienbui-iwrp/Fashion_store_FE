@@ -4366,6 +4366,13 @@ react-resize-detector@^7.0.0:
   dependencies:
     lodash "^4.17.21"
 
+react-to-print@^2.14.12:
+  version "2.14.12"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.12.tgz#e3ecddca2a03eddef1773ffb7c1a63c140f44036"
+  integrity sha512-qFJAwvDFd95Z+FWNqitt+HaB1/z+Zdd0MMrNOPUSus3fG32vqv512yB+HXhQ94J3HKoyqaIg44v0Zfc6xUBqlg==
+  dependencies:
+    prop-types "^15.8.1"
+
 react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"

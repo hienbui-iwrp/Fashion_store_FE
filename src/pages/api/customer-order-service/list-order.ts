@@ -25,7 +25,7 @@ export default function handler(
       totalPrice: 500000,
       totalGoods: 3,
       totalDiscount: 100000,
-      isCompleted: true,
+      isCompleted: false,
       shipFee: 30000,
       statusShips: [
         {
