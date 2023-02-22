@@ -84,7 +84,7 @@ export interface OrderDetailProps {
   orderId: string
   isCompleted: boolean
   paymentMethod: string //
-  status: string
+  status: number
   listGoods: ProductInCartProps[]
   totalGoods: number
   totalPrice: number

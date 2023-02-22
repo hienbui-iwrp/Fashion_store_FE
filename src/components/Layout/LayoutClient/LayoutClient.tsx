@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Layout, Col, Row, Image, Input, Menu, Typography } from 'antd'
+import type { MenuProps } from 'antd';
+import { Layout, Col, Row, Image, Input, Menu, Typography, Popover, Button, Dropdown } from 'antd'
 import ButtonHeader from './../../Button/ButtonHeader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
@@ -122,7 +123,7 @@ const listItem: ItemNavProps[] = [
   },
   {
     label: 'Phụ kiện',
-    link: 'baby',
+    link: 'accessory',
     hasSubItem: true,
     listSubItem: [
       {
@@ -144,18 +145,18 @@ const listItem: ItemNavProps[] = [
     ],
     key: 'phụ kiện',
   },
-  {
-    label: 'Mới về',
-    link: 'new',
-    hasSubItem: false,
-    key: 'Mới về',
-  },
-  {
-    label: 'Flash sale',
-    link: 'sales',
-    hasSubItem: false,
-    key: 'Flash sale',
-  },
+  // {
+  //   label: 'Mới về',
+  //   link: 'new',
+  //   hasSubItem: false,
+  //   key: 'Mới về',
+  // },
+  // {
+  //   label: 'Flash sale',
+  //   link: 'sales',
+  //   hasSubItem: false,
+  //   key: 'Flash sale',
+  // },
   {
     label: 'Hỗ trợ',
     link: 'support',
@@ -163,6 +164,17 @@ const listItem: ItemNavProps[] = [
     key: 'Hỗ trợ',
   },
 ]
+
+const items: MenuProps['items'] = [
+  {
+    key: '1',
+    label: (
+      <a href="">
+        Đăng xuất
+      </a>
+    ),
+  },
+];
 
 const iconFb: React.ReactNode = (
   <svg
@@ -214,7 +226,7 @@ export default function LayoutClient({
   const router = useRouter()
   const [navbar, setNavbar] = useState(false)
   useEffect(() => {
-    if(!localStorage.getItem('jwt')){
+    if (!localStorage.getItem('jwt')) {
       localStorage.setItem('jwt', '')
     }
     // console.log(localStorage.getItem('abc'));
@@ -232,10 +244,10 @@ export default function LayoutClient({
 
   return (
     <Layout
-      className='max-w-7xl m-auto p-0 bg-gray-300'
+      className='m-auto bg-gray-300'
       style={{ minHeight: '100vh' }}
     >
-      <Header className='!bg-white !p-0 !h-full'>
+      <Header className='header-client !bg-neutral-50 !p-0 !h-full'>
         <Row className='flex'>
           <Col span={15} className='flex items-center '>
             <a href='#' className='flex'>
@@ -269,12 +281,22 @@ export default function LayoutClient({
                 }
               />
             </Link>
-            <Link href='/login'>
-              <ButtonHeader
-                name='Đăng nhập'
-                iconInput={<FontAwesomeIcon className='pr-2' icon={faUser} />}
-              />
-            </Link>
+            {true ?
+              <Link href='/login'>
+                <ButtonHeader
+                  name='Đăng nhập'
+                  iconInput={<FontAwesomeIcon className='pr-2' icon={faUser} />}
+                />
+              </Link> :
+              <Dropdown menu={{ items }} placement="bottom">
+                <Link href='/user-info'>
+                  <ButtonHeader
+                    name='tên đăng nhập'
+                    iconInput={<FontAwesomeIcon className='pr-2' icon={faUser} />}
+                  />
+                </Link>
+              </Dropdown>
+            }
           </Col>
         </Row>
         {/* <Menu
@@ -290,10 +312,11 @@ export default function LayoutClient({
           })}
         /> */}
         <nav
-          className='w-full bg-[#F9F9F9] shadow'
+          className='w-full !bg-red-100 shadow'
+          // className='w-full bg-[#F9F9F9] shadow'
           style={{ backgroundColor: '#ddd' }}
         >
-          <div className='px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
+          <div className='mx-auto md:items-center md:flex md:px-8 lg:px-16 '>
             <div>
               <div className='flex items-center justify-end py-3 md:py-5 md:block'>
                 <div className='md:hidden'>
@@ -357,7 +380,7 @@ export default function LayoutClient({
           </div>
         </nav>
       </Header>
-      <Content className='bg-white pt-6 pb-24 px-3 sm:px-6 md:px-14'>
+      <Content className='bg-stone-50 pt-6 pb-24 px-3 sm:px-6 md:px-8 lg:px-16 '>
         {children}
       </Content>
       <Footer className='!bg-black !text-white'>

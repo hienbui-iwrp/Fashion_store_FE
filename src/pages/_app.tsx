@@ -27,6 +27,21 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   if (
+    router.pathname === '/' ||
+    router.pathname.startsWith('/products/') ||
+    router.pathname.startsWith('/manage-orders/') ||
+    router.pathname === '/products' ||
+    router.pathname === '/intro' ||
+    router.pathname === '/cart' ||
+    router.pathname === '/payment' ||
+    router.pathname === '/manage-orders' ||
+    router.pathname === '/user-info' ||
+    router.pathname === '/manage-orders' ||
+    router.pathname === '/man' ||
+    router.pathname === '/woman' ||
+    router.pathname === '/baby' ||
+    router.pathname === '/accessory' ||
+    router.pathname === '/support' ||
     router.pathname === Routes.homepage ||
     router.pathname.startsWith(Routes.productsDetail) ||
     router.pathname.startsWith(Routes.manageOrdersDetail) ||
@@ -40,17 +55,19 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname === Routes.support
   ) {
     return (
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: Colors.adminGreen700,
-          },
-        }}
-      >
-        <LayoutClient>
-          <Component {...pageProps} />
-        </LayoutClient>
-      </ConfigProvider>
+      <Provider store={store}>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: Colors.adminGreen700,
+            },
+          }}
+        >
+          <LayoutClient>
+            <Component {...pageProps} />
+          </LayoutClient>
+        </ConfigProvider>
+      </Provider>
     )
   }
   return (
