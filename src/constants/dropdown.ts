@@ -10,6 +10,15 @@ export const StaffStatus = {
   deleted: 'DELETED',
 }
 
+export const StaffRole = {
+  normal: 'Nhân viên',
+  branch: 'Quản lý chi nhánh',
+  warehouse: 'Quản lý kho',
+  staff: 'Quản lý nhân viên',
+  branchLead: 'Trưởng chi nhánh',
+  goods: 'Quản lý hàng hóa',
+}
+
 export const RequestStatus = {
   pending: 'PENDING',
   approved: 'APPROVED',
