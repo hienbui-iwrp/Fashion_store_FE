@@ -5,7 +5,14 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import styles from '@/styles/Admin.module.css'
 import { useRouter } from 'next/router'
-import { formatAddress, formatDate, formatNumber } from '../formats'
+import {
+  formatAddress,
+  formatBranchData,
+  formatDate,
+  formatNumber,
+} from '../formats'
+import { getBranchDetail } from '@/api'
+import { BranchProps } from '../types'
 
 dayjs.extend(customParseFormat)
 
@@ -37,7 +44,7 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
   const [dataItems1, setDataItems1] = useState<ItemType[]>([])
   const [dataItems2, setDataItems2] = useState<ItemType[]>([])
 
-  const updateData = async () => {
+  const updateData = (branch: BranchProps) => {
     setDataItems1([
       { name: 'Mã nhân viên', content: props?.extraData?.id ?? '' },
       { name: 'Tên nhân viên', content: props?.extraData?.name ?? '' },
@@ -51,7 +58,7 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
     ])
     setDataItems2([
       { name: 'Quê quán', content: props?.extraData?.hometown ?? '' },
-      { name: 'Nơi làm việc', content: props?.extraData?.branchId ?? '' },
+      { name: 'Nơi làm việc', content: branch.name ?? '' },
       { name: 'Vị trí', content: props?.extraData?.role ?? '' },
       {
         name: 'Lương',
@@ -69,7 +76,12 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
   }
 
   useEffect(() => {
-    updateData()
+    if (props.extraData) {
+      getBranchDetail(props.extraData.branchId).then((res: any) => {
+        const _data = formatBranchData(res.data.Data)
+        updateData(_data)
+      })
+    }
   }, [props.open])
 
   return (

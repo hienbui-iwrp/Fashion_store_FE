@@ -9,7 +9,9 @@ import { useModalConfirm } from '@/hooks'
 import {
   apiStaffService,
   AttendanceProps,
+  BranchProps,
   formatAddress,
+  formatBranchData,
   formatDate,
   formatNumber,
   formatStaffData,
@@ -18,7 +20,12 @@ import {
   StaffProps,
 } from '@/utils'
 import { ColumnsType } from 'antd/es/table'
-import { deleteStaff, getAttendace, getStaffDetail } from '@/api'
+import {
+  deleteStaff,
+  getAttendace,
+  getBranchDetail,
+  getStaffDetail,
+} from '@/api'
 import styles from '@/styles/Admin.module.css'
 import dayjs from 'dayjs'
 
@@ -114,7 +121,7 @@ const Detail = () => {
     })
   }
 
-  const setListData = (data: StaffProps) => {
+  const setListData = (data: StaffProps, branch: BranchProps) => {
     setDataItems1([
       { name: 'Mã nhân viên', content: data.id ?? '' },
       { name: 'Địa chỉ', content: formatAddress(data) },
@@ -134,7 +141,7 @@ const Detail = () => {
     ])
     setDataItems2([
       { name: 'Quê quán', content: data.hometown ?? '' },
-      { name: 'Nơi làm việc', content: data.branchId ?? '' },
+      { name: 'Nơi làm việc', content: branch.name ?? '' },
       { name: 'Vị trí', content: data.role ?? '' },
       { name: 'Lương', content: formatNumber(data.salary) + ' VND' },
       {
@@ -149,13 +156,13 @@ const Detail = () => {
   }
 
   const getData = async () => {
+    // let staffData: StaffProps = {}
     await getStaffDetail(id).then((res: any) => {
       if (res.data.Data.Status == 'res.data.Data') router.push(Routes.error)
       const _data = formatStaffData(res.data.Data)
       setData(_data)
-      setListData(_data)
-      setLoading(false)
     })
+    setLoading(false)
   }
 
   const getAttendacceData = () => {
@@ -203,6 +210,15 @@ const Detail = () => {
       getAttendacceData()
     }
   }, [id])
+
+  useEffect(() => {
+    if (data) {
+      getBranchDetail(data.branchId).then((res: any) => {
+        const _data = formatBranchData(res.data.Data)
+        setListData(data, _data)
+      })
+    }
+  }, [data])
 
   return (
     <LayoutAdmin selected={20}>

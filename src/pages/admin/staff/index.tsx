@@ -6,12 +6,14 @@ import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import {
   apiStaffService,
+  BranchProps,
+  formatBranchData,
   formatStaffData,
   ModalAddEditStaff,
   StaffProps,
 } from '@/utils'
 import { InputSearch } from '@/components'
-import { filterStaffById, filterStaffByName, getStaff } from '@/api'
+import { filterStaffById, filterStaffByName, getBranch, getStaff } from '@/api'
 
 const Staff = () => {
   const [data, setData] = useState<StaffProps[]>([])
@@ -19,6 +21,7 @@ const Staff = () => {
   const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
   const [currentData, setCurrentData] = useState<StaffProps>()
   const [keyword, setKeyword] = useState<string>()
+  const [branchData, setBranchData] = useState<BranchProps[]>()
 
   const columns: ColumnsType<StaffProps> = []
   if (data[0]) {
@@ -59,13 +62,16 @@ const Staff = () => {
     })
 
     columns.push({
-      title: 'Mã chi nhánh làm việc',
+      title: 'Nơi làm việc',
       dataIndex: 'branchId',
       sorter: (a: StaffProps, b: StaffProps) =>
         (a.branchId ?? 1) > (b.branchId ?? 1) ? 1 : -1,
       render(text: string, record: StaffProps, index: number) {
+        const name = branchData?.find((item: any) => {
+          return item.id.toString() == text
+        })?.name
         return {
-          children: <div>{text}</div>,
+          children: <div>{name}</div>,
         }
       },
     })
@@ -99,6 +105,14 @@ const Staff = () => {
         return formatStaffData(item)
       })
       setData(_data)
+    })
+
+    getBranch().then((res: any) => {
+      const _data = res.data.Data.map((item: any) => {
+        if (res.data.StatusCode != 200) throw new Error('FAIL')
+        return formatBranchData(item)
+      })
+      setBranchData(_data)
     })
     setLoading(false)
   }

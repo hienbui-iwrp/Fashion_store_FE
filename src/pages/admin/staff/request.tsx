@@ -7,6 +7,8 @@ import styles from '@/styles/Admin.module.css'
 import { Space } from 'antd'
 import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
 import {
+  BranchProps,
+  formatBranchData,
   formatDate,
   formatNumber,
   formatRequestData,
@@ -16,7 +18,7 @@ import {
   StaffProps,
 } from '@/utils'
 import { useModalConfirm } from '@/hooks'
-import { getListRequest, getStaff, updateRequest } from '@/api'
+import { getBranch, getListRequest, getStaff, updateRequest } from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
@@ -26,6 +28,8 @@ const Request = () => {
   const [loading, setLoading] = useState(true)
   const [modalStaffDetail, setModalStaffDetail] = useState(false)
   const [currentStaffData, setCurrentStaffData] = useState<StaffProps>()
+  const [branchData, setBranchData] = useState<BranchProps[]>()
+
   let requestId = useRef('')
   const dispatch = useDispatch()
 
@@ -99,8 +103,14 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.branchId ?? 1) > (findStaff(b)?.branchId ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
+        const name = branchData?.find((item: any) => {
+          return (
+            item.id.toString() ==
+            staffData.find((s: StaffProps) => s.id == record.staffId)?.branchId
+          )
+        })?.name
         return {
-          children: <div>{findStaff(record)?.branchId}</div>,
+          children: <div>{name}</div>,
         }
       },
     })
@@ -115,17 +125,17 @@ const Request = () => {
         }
       },
     })
-    columns.push({
-      title: 'Lương yêu cầu',
-      dataIndex: '',
-      sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.salary ?? 1) > (findStaff(b)?.salary ?? 1) ? 1 : -1,
-      render(text: string, record: RequestProps, index: number) {
-        return {
-          children: <div>{formatNumber(findStaff(record)?.salary)}</div>,
-        }
-      },
-    })
+    // columns.push({
+    //   title: 'Lương yêu cầu',
+    //   dataIndex: '',
+    //   sorter: (a: RequestProps, b: RequestProps) =>
+    //     (findStaff(a)?.salary ?? 1) > (findStaff(b)?.salary ?? 1) ? 1 : -1,
+    //   render(text: string, record: RequestProps, index: number) {
+    //     return {
+    //       children: <div>{formatNumber(findStaff(record)?.salary)}</div>,
+    //     }
+    //   },
+    // })
 
     columns.push({
       title: 'Ngày tạo',
@@ -206,8 +216,14 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.branchId ?? 1) > (findStaff(b)?.branchId ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
+        const name = branchData?.find((item: any) => {
+          return (
+            item.id.toString() ==
+            staffData.find((s: StaffProps) => s.id == record.staffId)?.branchId
+          )
+        })?.name
         return {
-          children: <div>{findStaff(record)?.branchId}</div>,
+          children: <div>{name}</div>,
         }
       },
     })
@@ -280,8 +296,20 @@ const Request = () => {
       setStaffData(_data)
     })
 
+    await getBranch().then((res: any) => {
+      const _data = res.data.Data.map((item: any) => {
+        if (res.data.StatusCode != 200) throw new Error('FAIL')
+        return formatBranchData(item)
+      })
+      setBranchData(_data)
+    })
+
     setLoading(false)
   }
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   useEffect(() => {
     getData()
