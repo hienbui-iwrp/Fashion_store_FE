@@ -13,6 +13,7 @@ import {
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
 import { Colors, Routes } from '@/constants'
+import { LayoutAdmin } from '@/components'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -70,6 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Provider>
     )
   }
+
   return (
     <Provider store={store}>
       <Component {...pageProps} />

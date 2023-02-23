@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Col,
   Modal,
@@ -13,7 +13,7 @@ import { ModalAddEditStaffProps } from '../types/modalType'
 import { AddButton, DropdownButton, RemoveButton } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { formatDate } from '..'
+import { BranchProps, formatBranchData, formatDate } from '..'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -21,9 +21,9 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
-import { Gender, Routes } from '@/constants'
+import { Gender, Routes, StaffRole } from '@/constants'
 import { useRouter } from 'next/router'
-import { addStaff, updateStaff } from '@/api'
+import { addStaff, getBranch, updateStaff } from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
@@ -37,11 +37,34 @@ dayjs.extend(weekYear)
 const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   const routes = useRouter()
   const [form] = Form.useForm()
+  const [branchData, setBranchData] = useState<BranchProps[]>()
+  const [curBranch, setCurBranch] = useState<BranchProps>()
   const dispatch = useDispatch()
+
+  const getData = () => {
+    getBranch().then((res: any) => {
+      const _data = res.data.Data.map((item: any) => {
+        if (res.data.StatusCode != 200) throw new Error('FAIL')
+        return formatBranchData(item)
+      })
+      setBranchData(_data)
+      setCurBranch(
+        _data?.find((item: any) => {
+          return item.id.toString() == props.extraData?.branchId
+        })
+      )
+    })
+  }
+
+  // get data
+  useEffect(() => {
+    getData()
+  }, [])
 
   const onSave = async () => {
     try {
       const values = await form.validateFields()
+      console.log(values)
 
       if (!props.extraData) {
         addStaff(values)
@@ -248,11 +271,41 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   },
                 ]}
               >
-                <Input
-                  placeholder='Nhập tên nơi làm việc'
-                  className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.branchId ?? ''}
-                />
+                {props.extraData ? (
+                  curBranch && (
+                    <DropdownButton
+                      label={curBranch.name}
+                      items={branchData?.map((item: BranchProps) => {
+                        return `${item.name} (${item.id})`
+                      })}
+                      callBack={(branch: string) => {
+                        form.setFieldValue(
+                          'branchId',
+                          branchData?.find(
+                            (item: any) =>
+                              item.id == branch.split(')')[0].split('(')[1]
+                          )?.id
+                        )
+                      }}
+                    />
+                  )
+                ) : (
+                  <DropdownButton
+                    label={'Nơi làm việc'}
+                    items={branchData?.map((item: BranchProps) => {
+                      return `${item.name} (${item.id})`
+                    })}
+                    callBack={(branch: string) => {
+                      form.setFieldValue(
+                        'branchId',
+                        branchData?.find(
+                          (item: any) =>
+                            item.id == branch.split(')')[0].split('(')[1]
+                        )?.id
+                      )
+                    }}
+                  />
+                )}
               </Form.Item>
               <Form.Item
                 label='Vị trí'
@@ -264,11 +317,20 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   },
                 ]}
               >
-                <Input
+                <DropdownButton
+                  label={form.getFieldValue('role') ?? 'Vị trí'}
+                  items={Object.keys(StaffRole).map(
+                    (item: string) => StaffRole[item]
+                  )}
+                  callBack={(item: any) => {
+                    form.setFieldValue('role', item)
+                  }}
+                />
+                {/* <Input
                   placeholder='Nhập tên vị trí'
                   className={styles.adminInputShadow}
                   defaultValue={props?.extraData?.role ?? ''}
-                />
+                /> */}
               </Form.Item>
               <Form.Item
                 label='Lương'
