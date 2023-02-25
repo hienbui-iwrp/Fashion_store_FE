@@ -165,17 +165,6 @@ const listItem: ItemNavProps[] = [
   },
 ]
 
-const items: MenuProps['items'] = [
-  {
-    key: '1',
-    label: (
-      <a href="">
-        Đăng xuất
-      </a>
-    ),
-  },
-];
-
 const iconFb: React.ReactNode = (
   <svg
     className='w-5 h-5'
@@ -183,8 +172,7 @@ const iconFb: React.ReactNode = (
     viewBox='0 0 24 24'
     aria-hidden='true'
   >
-    <path
-      fillRule='evenodd'
+    <path      fillRule='evenodd'
       d='M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z'
       clipRule='evenodd'
     />
@@ -225,26 +213,32 @@ export default function LayoutClient({
 }) {
   const router = useRouter()
   const [navbar, setNavbar] = useState(false)
+  const [logged, setLogged] = useState(false)
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <button
+          onClick={() => {
+            localStorage.setItem('logged', '')
+            router.push('/login')
+          }}
+        >
+          Đăng xuất
+        </button>
+      ),
+    },
+  ];
+
   useEffect(() => {
-    if (!localStorage.getItem('jwt')) {
-      localStorage.setItem('jwt', '')
+    if (localStorage.getItem('logged') !== '') {
+      setLogged(true)
     }
-    // console.log(localStorage.getItem('abc'));
-    // if (null) {
-    //   console.log(true)
-    // } else {
-    //   console.log(false);
-    // }
-    // localStorage.setItem('check', '')
-    // console.log('ok');
-    // const check = localStorage.getItem('check')
-    // console.log('check', check);
-    // console.log(check);
   }, [])
 
   return (
     <Layout
-      className='m-auto bg-gray-300'
+      className='m-auto bg-gray-200'
       style={{ minHeight: '100vh' }}
     >
       <Header className='header-client !bg-neutral-50 !p-0 !h-full'>
@@ -270,10 +264,10 @@ export default function LayoutClient({
             />
           </Col>
           <Col span={9} className='flex justify-around items-center'>
-            <Link href='/manage-orders' passHref>
+            <Link href='/manage-orders' prefetch={false} passHref>
               <ButtonHeader name='Quản lý đơn hàng' />
             </Link>
-            <Link href='/cart' passHref>
+            <Link href='/cart' prefetch={false} passHref>
               <ButtonHeader
                 name='Giỏ hàng'
                 iconInput={
@@ -281,7 +275,7 @@ export default function LayoutClient({
                 }
               />
             </Link>
-            {true ?
+            {!logged ?
               <Link href='/login'>
                 <ButtonHeader
                   name='Đăng nhập'
@@ -312,7 +306,7 @@ export default function LayoutClient({
           })}
         /> */}
         <nav
-          className='w-full !bg-red-100 shadow'
+          className='w-full !bg-green-100 shadow'
           // className='w-full bg-[#F9F9F9] shadow'
           style={{ backgroundColor: '#ddd' }}
         >

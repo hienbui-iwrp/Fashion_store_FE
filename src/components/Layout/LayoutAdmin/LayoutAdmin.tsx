@@ -33,10 +33,18 @@ const LayoutAdmin = ({
   children: React.ReactNode
   selected: number
 }) => {
+  const routes = useRouter()
+
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem('logged') === '') {
+      routes.replace('/login')
+    }
+  }
+
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(false)
+  const [logged, setLogged] = useState(false)
 
-  const routes = useRouter()
 
   const menuItem = [
     {
@@ -196,22 +204,18 @@ const LayoutAdmin = ({
     },
     {
       label: (
-        <a
-          href='#'
-          onClick={(e) => {
-            e.preventDefault()
-            console.log('Đăng xuất')
+        <Button
+          onClick={() => {
+            localStorage.setItem('logged', '')
+            routes.push('/login')
           }}
+          className='border-0 flex items-center	'
+          style={{ color: Colors.adminGreen900 }}
+          icon={<LogoutOutlined />}
+          size={'small'}
         >
-          <Button
-            className='border-0 flex items-center	'
-            style={{ color: Colors.adminGreen900 }}
-            icon={<LogoutOutlined />}
-            size={'small'}
-          >
-            Đăng xuất
-          </Button>
-        </a>
+          Đăng xuất
+        </Button>
       ),
       key: '1',
     },

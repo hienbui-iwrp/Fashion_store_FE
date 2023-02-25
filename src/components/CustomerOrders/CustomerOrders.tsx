@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Typography, Image, Row, Col, Space } from 'antd';
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import type { TabsProps } from 'antd';
-import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary';
 import styles from './CustomerOrders.module.css'
 import { getListOrder } from '@/api/customer-order';
 import { OrderProps } from '@/utils';
+import Loading from '@/components/Loading';
+import { checkLogin } from '@/utils/check';
 
 export interface CustomerOrdersProps {
 }
@@ -86,7 +89,8 @@ function OrderItem(props: OrderProps) {
 
 export default function CustomerOrders(props: CustomerOrdersProps) {
   const [data, setData] = useState<OrderProps[]>([])
-
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   const onChangeTabs = (key: string) => {
     console.log(key);
@@ -144,16 +148,19 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
             })}
           </div>
         )
+        setLoading(false)
       })
   }
 
   useEffect(() => {
+    checkLogin(router)
     fetchData();
   }, [])
 
   return (
-    <div className={styles.customerOrders}>
-      <Tabs defaultActiveKey="1" items={tabItems} onChange={onChangeTabs} />
-    </div>
+    loading ? <Loading /> :
+      <div className={styles.customerOrders}>
+        <Tabs defaultActiveKey="1" items={tabItems} onChange={onChangeTabs} />
+      </div>
   );
 }

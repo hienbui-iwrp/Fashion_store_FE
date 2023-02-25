@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Typography, Button, Steps, Timeline, Row, Col, Image, Space, Table } from 'antd';
-import FormatMoney from '@/utils/formats';
+import { FormatMoney } from '@/utils/formats';
 import { OrderDetailProps } from '@/utils';
 import { useReactToPrint } from 'react-to-print';
 import ReactToPrint from "react-to-print";
@@ -166,9 +166,9 @@ const Invoice = React.forwardRef((props: OrderDetailProps, ref: any) => {
         <div>
           <Title level={5}>Địa chỉ nhận hàng</Title>
           <div className='flex flex-col'>
-          <Text>{props.nameReceiver}</Text>
-          <Text>{props.phoneReceiver}</Text>
-          <Text>{`${props.address?.street}, ${props.address?.ward} , ${props.address?.district}, ${props.address?.province}`}</Text>
+            <Text>{props.nameReceiver}</Text>
+            <Text>{props.phoneReceiver}</Text>
+            <Text>{`${props.address?.street}, ${props.address?.ward} , ${props.address?.district}, ${props.address?.province}`}</Text>
           </div>
         </div>
         <Table
