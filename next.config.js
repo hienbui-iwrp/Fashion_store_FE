@@ -11,6 +11,10 @@ const nextConfig = {
         source: '/staff-service/:path*',
         destination: 'http://localhost:14082/api/staff-service/:path*', // Proxy to Backend
       },
+      {
+        source: '/account-service/:path*',
+        destination: 'http://localhost:14083/api/account-service/:path*', // Proxy to Backend
+      },
     ]
   },
 }

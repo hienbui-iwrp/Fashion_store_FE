@@ -16,6 +16,10 @@ export const Routes = {
   cart: '/cart',
   payment: '/payment',
   userInfo: '/user-info',
+  man: '/man',
+  woman: '/woman',
+  baby: '/baby',
+  accessory: '/accessory',
   support: '/support',
   admin: {
     homepage: '/admin/',

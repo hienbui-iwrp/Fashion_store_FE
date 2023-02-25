@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { signIn } from '@/api/account';
 import { Button, Checkbox, Form, Input, Typography, notification } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,28 +17,40 @@ export interface ToastProps {
 const { Title, Text } = Typography;
 
 export default function Login() {
-  const [form] = Form.useForm();
   const router = useRouter();
-  
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem('logged') !== '') {
+      router.back();
+    }
+  }
+  const [form] = Form.useForm();
+
   const [api, contextHolder] = notification.useNotification();
 
   const openNotificationWithIcon = (props: ToastProps) => {
-    console.log('checkkkk')
     api[props.type]({
       message: props.title,
       description: props.content,
     });
   };
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-    openNotificationWithIcon({title:'Đăng nhập thành công', content:'', type:'success'})
-    if (values.username === 'admin' && values.password === 'admin1'){
-      router.replace('/admin');
-    }
-    else{
-      router.replace('/');
-    }
+  const onFinish = async (values: any) => {
+    // openNotificationWithIcon({title:'Đăng nhập thành công', content:'', type:'success'})
+    await signIn({ ...values })
+      .then((res) => {
+        // console.log(res);
+        if (res?.StatusCode === 200) {
+          openNotificationWithIcon({ title: 'Đăng nhập thành công', content: '', type: 'success' })
+          localStorage.setItem('logged', 'true')
+          if (res?.Data === 1) {
+            router.push('/');
+          } else {
+            router.push('/admin');
+          }
+        } else {
+          openNotificationWithIcon({ title: 'Đăng nhập thất bại', content: '', type: 'error' })
+        }
+      })
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -67,7 +80,7 @@ export default function Login() {
         <Form.Item
           className='mb-2'
           label={<Text strong>Tên đăng nhập</Text>}
-          name="username"
+          name="Username"
           rules={[
             { required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
         >
@@ -77,16 +90,16 @@ export default function Login() {
         <Form.Item
           className='mb-2'
           label={<Text strong>Mật khẩu</Text>}
-          name="password"
+          name="Password"
           rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
-            ({}) => ({
-              validator(_, value) {
-                if (!value || value.length > 5) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
-              },
-            }),
+          ({ }) => ({
+            validator(_, value) {
+              if (!value || value.length > 5) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
+            },
+          }),
           ]}
         >
           <Input.Password />

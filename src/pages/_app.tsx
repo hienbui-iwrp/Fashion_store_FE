@@ -16,7 +16,20 @@ import { Colors, Routes } from '@/constants'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
-
+  if (typeof window !== "undefined") {
+    if (!localStorage.getItem('logged')) {
+      localStorage.setItem('logged', '')
+    }
+    if (router.pathname === Routes.cart ||
+      router.pathname === Routes.payment ||
+      router.pathname === Routes.manageOrders ||
+      router.pathname === Routes.userInfo
+    ) {
+      if (localStorage.getItem('logged') === '') {
+        router.replace('/login')
+      }
+    }
+  }
   if (
     router.pathname.startsWith(Routes.login) ||
     router.pathname.startsWith(Routes.register) ||
@@ -27,21 +40,6 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   if (
-    router.pathname === '/' ||
-    router.pathname.startsWith('/products/') ||
-    router.pathname.startsWith('/manage-orders/') ||
-    router.pathname === '/products' ||
-    router.pathname === '/intro' ||
-    router.pathname === '/cart' ||
-    router.pathname === '/payment' ||
-    router.pathname === '/manage-orders' ||
-    router.pathname === '/user-info' ||
-    router.pathname === '/manage-orders' ||
-    router.pathname === '/man' ||
-    router.pathname === '/woman' ||
-    router.pathname === '/baby' ||
-    router.pathname === '/accessory' ||
-    router.pathname === '/support' ||
     router.pathname === Routes.homepage ||
     router.pathname.startsWith(Routes.productsDetail) ||
     router.pathname.startsWith(Routes.manageOrdersDetail) ||
@@ -51,7 +49,10 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname === Routes.payment ||
     router.pathname === Routes.manageOrders ||
     router.pathname === Routes.userInfo ||
-    router.pathname === Routes.manageOrders ||
+    router.pathname === Routes.man ||
+    router.pathname === Routes.woman ||
+    router.pathname === Routes.baby ||
+    router.pathname === Routes.accessory ||
     router.pathname === Routes.support
   ) {
     return (

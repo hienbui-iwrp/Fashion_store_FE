@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Input, Form, Space, Row, Col, Avatar, Button, Modal } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
@@ -6,6 +6,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import Loading from '@/components/Loading'
 
 const { Title, Text } = Typography
 export interface UserInfoProps {
@@ -29,6 +30,7 @@ const beforeUpload = (file: RcFile) => {
 };
 
 export default function UserInfo(props: UserInfoProps) {
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter();
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -97,114 +99,119 @@ export default function UserInfo(props: UserInfoProps) {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [])
+
   return (
-    <div className="px-8 mb-4">
-      <Title level={4}>
-        Thông tin của bạn
-      </Title>
-      <Form
-        name="basic"
-        layout="vertical"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Row>
-          <Col span={15}>
-            <Form.Item
-              className='mb-1'
-              label={<Text strong>Tên</Text>}
-              name="name"
-              rules={[]}
-            >
-              <Input className='' placeholder='Tên người nhận' />
-            </Form.Item>
-            <Form.Item
-              className='mb-1'
-              label={<Text strong>Số điện thoại</Text>}
-              name="phone"
-              rules={[]}
-            >
-              <Input className='' placeholder='Số điện thoại' />
-            </Form.Item>
-            <Form.Item
-              className='mb-1'
-              label={<Text strong>Email</Text>}
-              name="email"
-              rules={[
-                { required: true, message: 'Vui lòng nhập email!' },
-                {
-                  type: 'email',
-                  message: 'Email không đúng định dạng!',
-                },
-              ]}
-            >
-              <Input className='' placeholder='Email' />
-            </Form.Item>
-            <Button type='text' onClick={showModal}>
-              <Text strong>Đổi mật khẩu</Text>
-            </Button>
-            <div className='mt-2'>
-              <Title level={4}>Địa chỉ </Title>
-              <Row gutter={8}>
-                <Col span={8}>
-                  <Form.Item
-                    className='mb-1'
-                    label={<Text strong>Tỉnh / Thành phố</Text>}
-                    name="province"
-                    rules={[]}
-                  >
-                    <Input className='' placeholder='Tỉnh thành' />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item
-                    className='mb-1'
-                    label={<Text strong>Quận / huyện</Text>}
-                    name="district"
-                    rules={[]}
-                  >
-                    <Input className='' placeholder='Quận huyện' />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item
-                    className='mb-1'
-                    label={<Text strong>Phường / xã</Text>}
-                    name="ward"
-                    rules={[]}
-                  >
-                    <Input className='' placeholder='Phường xã' />
-                  </Form.Item>
-                </Col>
-              </Row>
+    isLoading ? <Loading /> :
+      <div className="px-8 mb-4">
+        <Title level={4}>
+          Thông tin của bạn
+        </Title>
+        <Form
+          name="basic"
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Row>
+            <Col span={15}>
               <Form.Item
                 className='mb-1'
-                label={<Text strong>Số nhà, đường</Text>}
-                name="road"
+                label={<Text strong>Tên</Text>}
+                name="name"
                 rules={[]}
               >
-                <Input className='' placeholder='Số nhà, đường' />
+                <Input className='' placeholder='Tên người nhận' />
               </Form.Item>
-              <div className="mt-2">
-                <ButtonClientPrimary htmlType='submit' name='Cập nhật' />
-              </div>
-            </div>
-          </Col>
-          <Col span={9} className="flex justify-center items-center">
-            <div>
-              <Avatar size={128} src={<img src={'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} alt="avatar" />} />
-              <Upload
-                className="avatar-uploader !flex justify-center mt-2"
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                beforeUpload={beforeUpload}
-                onChange={onChange}
+              <Form.Item
+                className='mb-1'
+                label={<Text strong>Số điện thoại</Text>}
+                name="phone"
+                rules={[]}
               >
-                {fileList.length < 1 && 'Cập nhật mới'}
-              </Upload>
-            </div>
-            {/* <Upload
+                <Input className='' placeholder='Số điện thoại' />
+              </Form.Item>
+              <Form.Item
+                className='mb-1'
+                label={<Text strong>Email</Text>}
+                name="email"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập email!' },
+                  {
+                    type: 'email',
+                    message: 'Email không đúng định dạng!',
+                  },
+                ]}
+              >
+                <Input className='' placeholder='Email' />
+              </Form.Item>
+              <Button type='text' onClick={showModal}>
+                <Text strong>Đổi mật khẩu</Text>
+              </Button>
+              <div className='mt-2'>
+                <Title level={4}>Địa chỉ </Title>
+                <Row gutter={8}>
+                  <Col span={8}>
+                    <Form.Item
+                      className='mb-1'
+                      label={<Text strong>Tỉnh / Thành phố</Text>}
+                      name="province"
+                      rules={[]}
+                    >
+                      <Input className='' placeholder='Tỉnh thành' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      className='mb-1'
+                      label={<Text strong>Quận / huyện</Text>}
+                      name="district"
+                      rules={[]}
+                    >
+                      <Input className='' placeholder='Quận huyện' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      className='mb-1'
+                      label={<Text strong>Phường / xã</Text>}
+                      name="ward"
+                      rules={[]}
+                    >
+                      <Input className='' placeholder='Phường xã' />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item
+                  className='mb-1'
+                  label={<Text strong>Số nhà, đường</Text>}
+                  name="road"
+                  rules={[]}
+                >
+                  <Input className='' placeholder='Số nhà, đường' />
+                </Form.Item>
+                <div className="mt-2">
+                  <ButtonClientPrimary htmlType='submit' name='Cập nhật' />
+                </div>
+              </div>
+            </Col>
+            <Col span={9} className="flex justify-center items-center">
+              <div>
+                <Avatar size={128} src={<img src={'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} alt="avatar" />} />
+                <Upload
+                  className="avatar-uploader !flex justify-center mt-2"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  listType="picture-card"
+                  fileList={fileList}
+                  beforeUpload={beforeUpload}
+                  onChange={onChange}
+                >
+                  {fileList.length < 1 && 'Cập nhật mới'}
+                </Upload>
+              </div>
+              {/* <Upload
               name="avatar"
               listType="picture-card"
               className="avatar-uploader !flex justify-center"
@@ -215,89 +222,89 @@ export default function UserInfo(props: UserInfoProps) {
             >
               {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
             </Upload> */}
-          </Col>
-        </Row>
-      </Form>
-      <Modal title="Đổi mật khẩu"
-        open={isModalOpen}
-        footer={null}
-      >
-        <Form
-          name="basic"
-          layout="vertical"
-          onFinish={onFinishUpdatePassword}
-          onFinishFailed={onFinishFailedUpdatePassword}
+            </Col>
+          </Row>
+        </Form>
+        <Modal title="Đổi mật khẩu"
+          open={isModalOpen}
+          footer={null}
         >
-          <Form.Item
-            className='mb-2'
-            label={<Text strong>Mật khẩu cũ</Text>}
-            name="oldPassword"
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
-            ({ }) => ({
-              validator(_, value) {
-                if (!value || value.length > 5) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
-              },
-            }),
-            ]}
+          <Form
+            name="basic"
+            layout="vertical"
+            onFinish={onFinishUpdatePassword}
+            onFinishFailed={onFinishFailedUpdatePassword}
           >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            className='mb-2'
-            label={<Text strong>Mật khẩu</Text>}
-            name="password"
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
-            ({ }) => ({
-              validator(_, value) {
-                if (!value || value.length > 5) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
-              },
-            }),
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            className='mb-4'
-            label={<Text strong>Nhập lại mật khẩu</Text>}
-            name="confirmPassword"
-            dependencies={['password']}
-            hasFeedback
-            rules={[
-              { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
-              ({ getFieldValue }) => ({
+            <Form.Item
+              className='mb-2'
+              label={<Text strong>Mật khẩu cũ</Text>}
+              name="oldPassword"
+              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
+              ({ }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
+                  if (!value || value.length > 5) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error('Nhập lại mật khẩu không đúng!'));
+                  return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
                 },
-              })
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <div className='flex justify-end gap-2'>
-            <Button type='default'
-              onClick={handleCancel}
+              }),
+              ]}
             >
-              Hủy
-            </Button>
-            <Button type='primary' className='bg-[#6A983C]' htmlType='submit'
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              className='mb-2'
+              label={<Text strong>Mật khẩu</Text>}
+              name="password"
+              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
+              ({ }) => ({
+                validator(_, value) {
+                  if (!value || value.length > 5) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
+                },
+              }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              className='mb-4'
+              label={<Text strong>Nhập lại mật khẩu</Text>}
+              name="confirmPassword"
+              dependencies={['password']}
+              hasFeedback
+              rules={[
+                { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Nhập lại mật khẩu không đúng!'));
+                  },
+                })
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <div className='flex justify-end gap-2'>
+              <Button type='default'
+                onClick={handleCancel}
+              >
+                Hủy
+              </Button>
+              <Button type='primary' className='bg-[#6A983C]' htmlType='submit'
               // onClick={handleOk}
-            >
-              Xác nhận
-            </Button>
-          </div>
-        </Form>
-      </Modal>
-    </div>
+              >
+                Xác nhận
+              </Button>
+            </div>
+          </Form>
+        </Modal>
+      </div>
   );
 }

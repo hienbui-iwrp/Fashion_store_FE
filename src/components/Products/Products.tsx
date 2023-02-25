@@ -46,6 +46,7 @@ const defaultCheckedList: string[] = []
 
 export default function Products(props: ProductsProps) {
   const dispatch = useAppDispatch()
+  const [loaded, setLoaded] = useState(false)
   const { setListProduct } = productsActions;
   const dataProducts: ProductsDataProps = useSelector(selectProducts);
   const options: SelectProps['options'] = [
@@ -89,6 +90,7 @@ export default function Products(props: ProductsProps) {
 
   const filterProducts = (checklist: CheckboxValueType[], listValueFilter: string[]) => {
     let listProduct: ProductDetailDataProps[] = [...dataProducts.listProduct]
+    console.log('check', checklist, listValueFilter);
     if (listValueFilter.length !== 0) {
       listProduct = listProduct.filter((item) => {
         return listValueFilter.includes(item.type) || listValueFilter.includes(item.gender) || listValueFilter.includes(item.age)
@@ -188,13 +190,13 @@ export default function Products(props: ProductsProps) {
       setData(res?.data)
       filterProducts(checkedList, listValueFilter)
       dispatch(setListProduct(res?.data))
-      // setData({...dataProducts})
+      setLoaded(true)
     })
   }
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [loaded])
 
   return (
     <div className='products-content '>
