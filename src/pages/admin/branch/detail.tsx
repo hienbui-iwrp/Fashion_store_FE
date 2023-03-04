@@ -21,8 +21,8 @@ import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import { formatBranchData } from '@/utils/formats/formatData'
-import { deleteBranch, getBranchDetail } from '@/api'
+import { formatBranchData, formatBranchDataXML } from '@/utils/formats/formatData'
+import { deleteBranch, getBranchDetail, getBranchDetailBff } from '@/api'
 
 interface ItemType {
   name: string
@@ -50,9 +50,9 @@ const Detail = () => {
   const getData = async () => {
     let _data: BranchProps = {}
 
-    getBranchDetail(id).then((res: any) => {
-      if (res.data.Data.BranchCode == 0) routes.push(Routes.error)
-      _data = formatBranchData(res.data.Data)
+    await getBranchDetailBff(id).then((data: any) => {
+      if (data.getElementsByTagName('BranchCode')[0].value == 0) routes.push(Routes.error)
+      _data = formatBranchDataXML(data)
     })
 
     await apiBranchService.get(`/staff/${id}`).then((res) => {

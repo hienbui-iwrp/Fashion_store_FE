@@ -24,7 +24,7 @@ import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import { addBranch, updateBranch } from '@/api'
+import { addBranch, addBranchBff, updateBranch } from '@/api'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -42,9 +42,9 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
     try {
       const values = await form.validateFields()
       if (!props.extraData) {
-        addBranch(values)
-          .then((res: any) => {
-            if (res.data.StatusCode != 200) throw new Error('FAIL')
+        addBranchBff(values)
+          .then((data: any) => {
+            if (data.StatusCode != 200) throw new Error('FAIL')
 
             dispatch(setNotificationValue('Đã thêm chi nhánh mới'))
           })
