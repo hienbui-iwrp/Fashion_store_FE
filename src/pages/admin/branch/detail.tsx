@@ -22,7 +22,7 @@ import {
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
 import { formatBranchData, formatBranchDataXML } from '@/utils/formats/formatData'
-import { deleteBranch, getBranchDetail, getBranchDetailBff } from '@/api'
+import { deleteBranch, deleteBranchBff, getBranchDetail, getBranchDetailBff } from '@/api'
 
 interface ItemType {
   name: string
@@ -51,7 +51,7 @@ const Detail = () => {
     let _data: BranchProps = {}
 
     await getBranchDetailBff(id).then((data: any) => {
-      if (data.getElementsByTagName('BranchCode')[0].value == 0) routes.push(Routes.error)
+      if (data.getElementsByTagName('BranchId')[0].value == 0) routes.push(Routes.error)
       _data = formatBranchDataXML(data)
     })
 
@@ -104,9 +104,9 @@ const Detail = () => {
     title: 'Xóa chi nhánh',
     content: 'Bạn có chắc  chắn muốn xóa chi nhánh này?',
     onOk: async () => {
-      deleteBranch(id)
+      deleteBranchBff(id)
         .then((res: any) => {
-          if (res.data.StatusCode != 200) throw new Error('FAIL')
+          if (res.StatusCode != 200) throw new Error('FAIL')
 
           routes.push(Routes.admin.branch)
           dispatch(setNotificationValue('Xóa chi nhánh thành công'))
