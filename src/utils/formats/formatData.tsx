@@ -3,15 +3,15 @@ import timeToDate from './timeToDate'
 
 export const formatBranchDataXML = (data: any): BranchProps => {
   const _data: BranchProps = {
-    id: data.getElementsByTagName('BranchCode')[0].value,
-    name: data.getElementsByTagName('BranchName')[0].value,
-    street: data.getElementsByTagName('BranchStreet')[0].value,
-    ward: data.getElementsByTagName('BranchWard')[0].value,
-    district: data.getElementsByTagName('BranchDistrict')[0].value,
-    province: data.getElementsByTagName('BranchProvince')[0].value,
+    id: data.getElementsByTagName('BranchId')[0].value,
+    name: data.getElementsByTagName('Name')[0].value,
+    street: data.getElementsByTagName('Street')[0].value,
+    ward: data.getElementsByTagName('Ward')[0].value,
+    district: data.getElementsByTagName('District')[0].value,
+    province: data.getElementsByTagName('Province')[0].value,
     createdAt: new Date(data.getElementsByTagName('CreatedAt')[0].value),
-    openTime: timeToDate(data.getElementsByTagName('OpenTime')[0].value),
-    closeTime: timeToDate(data.getElementsByTagName('CloseTime')[0].value),
+    openTime: timeToDate(data.getElementsByTagName('Open')[0].value),
+    closeTime: timeToDate(data.getElementsByTagName('Close')[0].value),
     manager: data.getElementsByTagName('Manager')[0].value,
     image: data.getElementsByTagName('Image')[0]?.value,
   }

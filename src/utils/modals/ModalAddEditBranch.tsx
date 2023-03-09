@@ -24,7 +24,7 @@ import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import { addBranch, addBranchBff, updateBranch } from '@/api'
+import { addBranch, addBranchBff, updateBranch, updateBranchBff } from '@/api'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -53,9 +53,9 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
             dispatch(setNotificationValue('Có lỗi khi thực hiện'))
           })
       } else {
-        updateBranch(props.extraData.id, values)
+        await updateBranchBff(props.extraData.id, values)
           .then((res: any) => {
-            if (res.data.StatusCode != 200) throw new Error('FAIL')
+            if (res.StatusCode != 200) throw new Error('FAIL')
             dispatch(setNotificationValue('Đã cập nhật thông tin chi nhánh'))
           })
           .catch((error) => {
@@ -176,7 +176,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
               </Space>
               <Space size='large'>
                 <Form.Item
-                  label='Huyện, thành phố'
+                  label='Quận, huyện'
                   name='district'
                   rules={[
                     {
@@ -186,7 +186,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   ]}
                 >
                   <Input
-                    placeholder='Nhập huyện, thành phố'
+                    placeholder='Nhập quận, huyện'
                     className={styles.adminInputShadow}
                     defaultValue={props.extraData?.district}
                   />
