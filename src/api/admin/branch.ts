@@ -1,6 +1,8 @@
 import { apiBranchService, BranchProps, formatTime } from '@/utils'
 import axios from 'axios'
 
+const baseUrl = 'http://localhost:3000/'
+const bff = 'bpel-branch-service/';
 
 export const getBranch = async () => {
   return await apiBranchService
@@ -12,6 +14,31 @@ export const getBranch = async () => {
       console.error(error)
     })
 }
+
+export const getBranchBff = async () => {
+  let xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+      <ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callBranchService/getAllBranch"/>
+  </soap:Body>
+</soap:Envelope>`
+  return await
+    axios.post(`${baseUrl}${bff}`,
+      xmls,
+      {
+        headers:
+          { 'Content-Type': 'text/xml' }
+      }).then(res => {
+        console.log(res);
+        const XMLParser = require('react-xml-parser');
+        const xml = new XMLParser().parseFromString(res.data);
+        return {
+            StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+            Message: xml.getElementsByTagName('Message')[0].value,
+            Data: xml.getElementsByTagName('Data'),
+        };
+      }).catch(err => { console.log(err) });
+}
+
 export const getBranchDetailBff = async (id: any) => {
   let xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 <soap:Body>
@@ -21,7 +48,7 @@ export const getBranchDetailBff = async (id: any) => {
 </soap:Body>
 </soap:Envelope>`;
   return await
-    axios.post('http://localhost:3000/bpel',
+    axios.post(`${baseUrl}${bff}`,
       xmls,
       {
         headers:
@@ -30,9 +57,6 @@ export const getBranchDetailBff = async (id: any) => {
         console.log(res);
         const XMLParser = require('react-xml-parser');
         const xml = new XMLParser().parseFromString(res.data);
-        // console.log(xml.getElementsByTagName('StatusCode')[0]);
-        // console.log(xml.getElementsByTagName('Message')[0]);
-        // console.log(xml.getElementsByTagName('Data')[0]);
         return xml.getElementsByTagName('Data')[0];
       }).catch(err => { console.log(err) });
 }
@@ -72,7 +96,7 @@ export const addBranchBff = async (branch: BranchProps) => {
 </soap:Body>
 </soap:Envelope>`
   return await
-    axios.post('http://localhost:3000/bpel',
+    axios.post(`${baseUrl}${bff}`,
       xmls,
       {
         headers:
@@ -81,9 +105,6 @@ export const addBranchBff = async (branch: BranchProps) => {
         console.log(res);
         const XMLParser = require('react-xml-parser');
         const xml = new XMLParser().parseFromString(res.data);
-        // console.log(xml.getElementsByTagName('StatusCode')[0]);
-        // console.log(xml.getElementsByTagName('Message')[0]);
-        // console.log(xml.getElementsByTagName('Data')[0]);
         return {
           StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
           Message: xml.getElementsByTagName('Message')[0].value,
@@ -138,7 +159,7 @@ export const updateBranchBff = async (id: any, branch: any) => {
       </soap:Body>
   </soap:Envelope>`
   return await
-    axios.post('http://localhost:3000/bpel',
+    axios.post(`${baseUrl}${bff}`,
       xmls,
       {
         headers:
@@ -188,7 +209,7 @@ export const deleteBranchBff = async (id: any) => {
   </soap:Body>
 </soap:Envelope>`
   return await
-    axios.post('http://localhost:3000/bpel',
+    axios.post(`${baseUrl}${bff}`,
       xmls,
       {
         headers:

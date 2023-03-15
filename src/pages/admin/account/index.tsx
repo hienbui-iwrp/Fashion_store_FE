@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
+import { getAllAccount } from '@/api/account'
 import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import { Card, Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatDate, ModalAddEditStaff } from '@/utils'
+import { formatDate, ModalAddEditStaff, formatAccountDataXML } from '@/utils'
 import { InputSearch } from '@/components'
 
 interface DataType {
@@ -112,6 +113,15 @@ const Account = () => {
   }
 
   const getData = async () => {
+    await getAllAccount().then((res) => {
+      if(res?.StatusCode == 200) {
+        const _data = res?.Data.map((item: any) => {
+          return formatAccountDataXML(item)
+        })
+        console.log('data',_data);
+      }
+    })
+
     await axios.get(`${BASE_URL}/api/admin/accountData`).then((res) => {
       setData(res.data)
     })
