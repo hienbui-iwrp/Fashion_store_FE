@@ -16,8 +16,12 @@ const nextConfig = {
         destination: 'http://localhost:14083/api/account-service/:path*', // Proxy to Backend
       },
       {
-        source: '/bpel',
+        source: '/bpel-branch-service',
         destination: 'http://PhongTran:7001/soa-infra/services/default/callBranchService/callbranchservice_client_ep?WSDL', // Proxy to Backend
+      },
+      {
+        source: '/bpel-account-service',
+        destination: 'http://PhongTran:7001/soa-infra/services/default/callAccountService/accountservice_client?WSDL', // Proxy to Backend
       },
     ]
   },

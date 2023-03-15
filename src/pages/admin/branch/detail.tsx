@@ -51,7 +51,7 @@ const Detail = () => {
     let _data: BranchProps = {}
 
     await getBranchDetailBff(id).then((data: any) => {
-      if (data.getElementsByTagName('BranchId')[0].value == 0) routes.push(Routes.error)
+      if (data.getElementsByTagName('BranchCode')[0].value == 0) routes.push(Routes.error)
       _data = formatBranchDataXML(data)
     })
 

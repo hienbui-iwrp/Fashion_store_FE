@@ -6,8 +6,8 @@ import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import { BranchProps, formatAddress, ModalAddEditBranch } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
-import { formatBranchData } from '@/utils/formats/formatData'
-import { getBranch } from '@/api'
+import { formatBranchData, formatBranchDataXML } from '@/utils/formats/formatData'
+import { getBranch, getBranchBff } from '@/api'
 
 const Branch = () => {
   const [data, setData] = useState<BranchProps[]>([])
@@ -19,6 +19,7 @@ const Branch = () => {
   if (data[0]) {
     columns.push({
       title: 'Mã chi nhánh',
+      width: '150px',
       dataIndex: 'id',
       sorter: (a: BranchProps, b: BranchProps) =>
         (a.id ?? 1) > (b.id ?? 1) ? 1 : -1,
@@ -73,11 +74,12 @@ const Branch = () => {
     })
   }
 
-  const getData = () => {
-    getBranch().then((res: any) => {
-      const _data = res.data.Data.map((item: any) => {
-        if (res.data.StatusCode != 200) throw new Error('FAIL')
-        return formatBranchData(item)
+  const getData = async () => {
+    await getBranchBff().then((res: any) => {
+      if (res.StatusCode != 200) throw new Error('FAIL')
+      const _data = res.Data.map((item: any) => {
+        return formatBranchDataXML(item)
+        // return formatBranchData(item)
       })
       setData(_data)
     })
