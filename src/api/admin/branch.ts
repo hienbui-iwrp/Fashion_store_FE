@@ -1,87 +1,54 @@
-import { apiBranchService, BranchProps, formatTime } from '@/utils'
-import axios from 'axios'
-
-const baseUrl = 'http://localhost:3000/'
-const bff = 'bpel-branch-service/';
-
-export const getBranch = async () => {
-  return await apiBranchService
-    .get('')
-    .then((res) => {
-      return res
-    })
-    .catch((error) => {
-      console.error(error)
-    })
-}
+import { bpelBranch, BranchProps, formatTime } from '@/utils'
 
 export const getBranchBff = async () => {
-  let xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-      <ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callBranchService/getAllBranch"/>
-  </soap:Body>
-</soap:Envelope>`
-  return await
-    axios.post(`${baseUrl}${bff}`,
-      xmls,
-      {
-        headers:
-          { 'Content-Type': 'text/xml' }
-      }).then(res => {
-        console.log(res);
-        const XMLParser = require('react-xml-parser');
-        const xml = new XMLParser().parseFromString(res.data);
-        return {
-            StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-            Message: xml.getElementsByTagName('Message')[0].value,
-            Data: xml.getElementsByTagName('Data'),
-        };
-      }).catch(err => { console.log(err) });
+  const xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                <soap:Body>
+                    <ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callBranchService/getAllBranch"/>
+                </soap:Body>
+              </soap:Envelope>`
+
+  return await bpelBranch
+    .post('', xmls)
+    .then((res) => {
+      console.log(res)
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+
+      return {
+        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+        Message: xml.getElementsByTagName('Message')[0].value,
+        Data: xml.getElementsByTagName('Data'),
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 export const getBranchDetailBff = async (id: any) => {
-  let xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  const xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 <soap:Body>
     <ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callBranchService/getBranchDetail">
         <ns1:BranchId>${id}</ns1:BranchId>
     </ns1:Body>
 </soap:Body>
-</soap:Envelope>`;
-  return await
-    axios.post(`${baseUrl}${bff}`,
-      xmls,
-      {
-        headers:
-          { 'Content-Type': 'text/xml' }
-      }).then(res => {
-        console.log(res);
-        const XMLParser = require('react-xml-parser');
-        const xml = new XMLParser().parseFromString(res.data);
-        return xml.getElementsByTagName('Data')[0];
-      }).catch(err => { console.log(err) });
-}
-
-export const getBranchDetail = async (id: any) => {
-  return await apiBranchService
-    .get(`/${id}`)
-    .then((res) => {
-      return res
+</soap:Envelope>`
+  return await bpelBranch
+    .post(``, xmls, {
+      headers: { 'Content-Type': 'text/xml' },
     })
-    .catch((error) => {
-      console.error(error)
+    .then((res) => {
+      console.log(res)
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+      return xml.getElementsByTagName('Data')[0]
+    })
+    .catch((err) => {
+      console.log(err)
     })
 }
 
 export const addBranchBff = async (branch: BranchProps) => {
-  const record = {
-    Name: branch?.name,
-    Street: branch?.street,
-    Ward: branch?.ward,
-    District: branch?.district,
-    Province: branch?.province,
-    Open: branch?.openTime && formatTime(branch?.openTime) + ':00',
-    Close: branch?.closeTime && formatTime(branch?.openTime) + ':00',
-  }
   const xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
         <ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callBranchService/addBranch">
@@ -90,60 +57,37 @@ export const addBranchBff = async (branch: BranchProps) => {
               <ns1:District>${branch?.district}</ns1:District>
               <ns1:Ward>${branch?.ward}</ns1:Ward>
               <ns1:Street>${branch?.street}</ns1:Street>
-              <ns1:Open>${branch?.openTime && formatTime(branch?.openTime) + ':00'}</ns1:Open>
-              <ns1:Close>${branch?.closeTime && formatTime(branch?.openTime) + ':00'}</ns1:Close>
+              <ns1:Open>${
+                branch?.openTime && formatTime(branch?.openTime) + ':00'
+              }</ns1:Open>
+              <ns1:Close>${
+                branch?.closeTime && formatTime(branch?.openTime) + ':00'
+              }</ns1:Close>
     </ns1:Body>
 </soap:Body>
 </soap:Envelope>`
-  return await
-    axios.post(`${baseUrl}${bff}`,
-      xmls,
-      {
-        headers:
-          { 'Content-Type': 'text/xml' }
-      }).then(res => {
-        console.log(res);
-        const XMLParser = require('react-xml-parser');
-        const xml = new XMLParser().parseFromString(res.data);
-        return {
-          StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-          Message: xml.getElementsByTagName('Message')[0].value,
-        };
-      }).catch(err => { console.log(err) });
-}
-
-export const addBranch = async (branch: BranchProps) => {
-  const record = {
-    Name: branch?.name,
-    Street: branch?.street,
-    Ward: branch?.ward,
-    District: branch?.district,
-    Province: branch?.province,
-    Open: branch?.openTime && formatTime(branch?.openTime) + ':00',
-    Close: branch?.closeTime && formatTime(branch?.openTime) + ':00',
-  }
-  return await apiBranchService
-    .post(`/`, record)
-    .then((res) => {
-      return res
+  return await bpelBranch
+    .post(``, xmls, {
+      headers: { 'Content-Type': 'text/xml' },
     })
-    .catch((error) => {
-      console.error(error)
+    .then((res) => {
+      console.log(res)
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+      return {
+        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+        Message: xml.getElementsByTagName('Message')[0].value,
+      }
+    })
+    .catch((err) => {
+      console.log(err)
     })
 }
 
 export const updateBranchBff = async (id: any, branch: any) => {
   const openTime = new Date(branch?.openTime ?? '')
   const closeTime = new Date(branch?.closeTime ?? '')
-  const record = {
-    Name: branch?.name,
-    Street: branch?.street,
-    Ward: branch?.ward,
-    District: branch?.district,
-    Province: branch?.province,
-    Open: branch?.openTime && formatTime(openTime) + ':00',
-    Close: branch?.closeTime && formatTime(closeTime) + ':00',
-  }
+
   const xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
       <ns1:Body xmlns:ns1 = "http://xmlns.oracle.com/bpel_process/callBranchService/updateBranch">
@@ -158,45 +102,24 @@ export const updateBranchBff = async (id: any, branch: any) => {
       </ns1:Body>
       </soap:Body>
   </soap:Envelope>`
-  return await
-    axios.post(`${baseUrl}${bff}`,
-      xmls,
-      {
-        headers:
-          { 'Content-Type': 'text/xml' }
-      }).then(res => {
-        console.log(res);
-        const XMLParser = require('react-xml-parser');
-        const xml = new XMLParser().parseFromString(res.data);
-        // console.log(xml.getElementsByTagName('StatusCode')[0]);
-        // console.log(xml.getElementsByTagName('Message')[0]);
-        // console.log(xml.getElementsByTagName('Data')[0]);
-        return {
-          StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-          Message: xml.getElementsByTagName('Message')[0].value,
-        };
-      }).catch(err => { console.log(err) });
-}
-
-export const updateBranch = async (id: any, branch: any) => {
-  const openTime = new Date(branch?.openTime ?? '')
-  const closeTime = new Date(branch?.closeTime ?? '')
-  const record = {
-    Name: branch?.name,
-    Street: branch?.street,
-    Ward: branch?.ward,
-    District: branch?.district,
-    Province: branch?.province,
-    Open: branch?.openTime && formatTime(openTime) + ':00',
-    Close: branch?.closeTime && formatTime(closeTime) + ':00',
-  }
-  return await apiBranchService
-    .put(`/${id}`, record)
-    .then((res) => {
-      return res
+  return await bpelBranch
+    .post(``, xmls, {
+      headers: { 'Content-Type': 'text/xml' },
     })
-    .catch((error) => {
-      console.error(error)
+    .then((res) => {
+      console.log(res)
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+      // console.log(xml.getElementsByTagName('StatusCode')[0]);
+      // console.log(xml.getElementsByTagName('Message')[0]);
+      // console.log(xml.getElementsByTagName('Data')[0]);
+      return {
+        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+        Message: xml.getElementsByTagName('Message')[0].value,
+      }
+    })
+    .catch((err) => {
+      console.log(err)
     })
 }
 
@@ -208,33 +131,23 @@ export const deleteBranchBff = async (id: any) => {
       </ns1:Body>
   </soap:Body>
 </soap:Envelope>`
-  return await
-    axios.post(`${baseUrl}${bff}`,
-      xmls,
-      {
-        headers:
-          { 'Content-Type': 'text/xml' }
-      }).then(res => {
-        console.log(res);
-        const XMLParser = require('react-xml-parser');
-        const xml = new XMLParser().parseFromString(res.data);
-        // console.log(xml.getElementsByTagName('StatusCode')[0]);
-        // console.log(xml.getElementsByTagName('Message')[0]);
-        // console.log(xml.getElementsByTagName('Data')[0]);
-        return {
-          StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-          Message: xml.getElementsByTagName('Message')[0].value,
-        };
-      }).catch(err => { console.log(err) });
-}
-
-export const deleteBranch = async (id: any) => {
-  return await apiBranchService
-    .delete(`/${id}`)
-    .then((res) => {
-      return res
+  return await bpelBranch
+    .post(``, xmls, {
+      headers: { 'Content-Type': 'text/xml' },
     })
-    .catch((error) => {
-      console.error(error)
+    .then((res) => {
+      console.log(res)
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+      // console.log(xml.getElementsByTagName('StatusCode')[0]);
+      // console.log(xml.getElementsByTagName('Message')[0]);
+      // console.log(xml.getElementsByTagName('Data')[0]);
+      return {
+        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+        Message: xml.getElementsByTagName('Message')[0].value,
+      }
+    })
+    .catch((err) => {
+      console.log(err)
     })
 }
