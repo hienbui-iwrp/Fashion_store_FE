@@ -107,8 +107,7 @@ const Detail = () => {
 
   return (
     data && (
-      <LayoutAdmin selected={data?.staff ? 70 : 71}>
-        {' '}
+      <>
         <Card>
           <TableList<Goods>
             data={data?.goods ?? []}
@@ -224,7 +223,7 @@ const Detail = () => {
             </Col>
           </div>
         </Card>
-      </LayoutAdmin>
+      </>
     )
   )
 }

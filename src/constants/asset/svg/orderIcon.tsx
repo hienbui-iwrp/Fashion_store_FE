@@ -22,6 +22,6 @@ const SvgComponent = (props: SvgIcon) => {
   )
 }
 
-const OrderIcon = memo(SvgComponent)
-OrderIcon.displayName = 'Order Icon'
+const OrderIcon = SvgComponent
+// OrderIcon.displayName = 'Order Icon'
 export default OrderIcon

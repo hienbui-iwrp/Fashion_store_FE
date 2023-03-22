@@ -23,6 +23,6 @@ const SvgComponent = (props: SvgIcon) => {
   )
 }
 
-const EventIcon = memo(SvgComponent)
-EventIcon.displayName = 'Event Icon'
+const EventIcon = SvgComponent
+// EventIcon.displayName = 'Event Icon'
 export default EventIcon

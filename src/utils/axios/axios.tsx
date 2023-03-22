@@ -1,8 +1,7 @@
-import { HOST_BRANCH_SERVICE, HOST_STAFF_SERVICE } from '@/constants'
 import axios from 'axios'
 
 export const apiBranchService = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BRANCH_SERVICE_PROXY ?? HOST_BRANCH_SERVICE,
+  baseURL: process.env.NEXT_PUBLIC_BRANCH_SERVICE_PROXY,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -24,7 +23,7 @@ apiBranchService.interceptors.response.use(
 )
 
 export const apiStaffService = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_STAFF_SERVICE_PROXY ?? HOST_STAFF_SERVICE,
+  baseURL: process.env.NEXT_PUBLIC_STAFF_SERVICE_PROXY,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -72,6 +71,46 @@ export const bpelBranch = axios.create({
 })
 
 bpelBranch.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    console.warn('Error status', error.response?.status)
+    console.log('show notification')
+    console.log(error.response?.data)
+    return Promise.reject(error)
+  }
+)
+
+export const bpelAccount = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BPEL_ACCOUNT_PROXY,
+  headers: {
+    'Content-Type': 'text/xml',
+    'Access-Control-Allow-Origin': '*',
+  },
+})
+
+bpelAccount.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    console.warn('Error status', error.response?.status)
+    console.log('show notification')
+    console.log(error.response?.data)
+    return Promise.reject(error)
+  }
+)
+
+export const adminBff = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BPEL_ADMIN_BFF_PROXY,
+  headers: {
+    'Content-Type': 'application/xml',
+    'Access-Control-Allow-Origin': '*',
+  },
+})
+
+adminBff.interceptors.response.use(
   (response) => {
     return response
   },

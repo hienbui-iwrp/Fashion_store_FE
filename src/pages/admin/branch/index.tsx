@@ -6,8 +6,11 @@ import { Space } from 'antd'
 import { AddButton, LayoutAdmin, TableList } from '@/components'
 import { BranchProps, formatAddress, ModalAddEditBranch } from '@/utils'
 import { apiBranchService } from '@/utils/axios'
-import { formatBranchData, formatBranchDataXML } from '@/utils/formats/formatData'
-import { getBranch, getBranchBff } from '@/api'
+import {
+  formatBranchData,
+  formatBranchDataXML,
+} from '@/utils/formats/formatData'
+import { getBranchBff } from '@/api'
 
 const Branch = () => {
   const [data, setData] = useState<BranchProps[]>([])
@@ -76,10 +79,10 @@ const Branch = () => {
 
   const getData = async () => {
     await getBranchBff().then((res: any) => {
+      console.log('data: ', res)
       if (res.StatusCode != 200) throw new Error('FAIL')
       const _data = res.Data.map((item: any) => {
         return formatBranchDataXML(item)
-        // return formatBranchData(item)
       })
       setData(_data)
     })
@@ -92,7 +95,7 @@ const Branch = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={0}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='small'>
         <AddButton
           label='Thêm mới'
@@ -124,7 +127,7 @@ const Branch = () => {
           }}
         />
       )}
-    </LayoutAdmin>
+    </>
   )
 }
 

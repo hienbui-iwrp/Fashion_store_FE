@@ -139,7 +139,7 @@ const Warehouse = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={6}>
+    <>
       {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div className='flex justify-between'>
@@ -171,7 +171,7 @@ const Warehouse = () => {
           extraData={currentData}
         />
       )}
-    </LayoutAdmin>
+    </>
   )
 }
 

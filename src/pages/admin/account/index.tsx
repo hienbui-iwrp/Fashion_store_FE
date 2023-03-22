@@ -114,11 +114,11 @@ const Account = () => {
 
   const getData = async () => {
     await getAllAccount().then((res) => {
-      if(res?.StatusCode == 200) {
+      if (res?.StatusCode == 200) {
         const _data = res?.Data.map((item: any) => {
           return formatAccountDataXML(item)
         })
-        console.log('data',_data);
+        console.log('data', _data)
       }
     })
 
@@ -133,7 +133,7 @@ const Account = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={3}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <InputSearch />
@@ -148,7 +148,7 @@ const Account = () => {
           scroll={{ x: '75vw' }}
         />
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

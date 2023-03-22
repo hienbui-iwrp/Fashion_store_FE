@@ -22,6 +22,6 @@ const SvgComponent = (props: SvgIcon) => {
   )
 }
 
-const WarehouseIcon = memo(SvgComponent)
-WarehouseIcon.displayName = 'Warehouse Icon'
+const WarehouseIcon = SvgComponent
+// WarehouseIcon.displayName = 'Wareh2ouse Icon'
 export default WarehouseIcon

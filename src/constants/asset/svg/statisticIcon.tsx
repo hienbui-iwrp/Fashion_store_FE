@@ -22,6 +22,6 @@ const SvgComponent = (props: SvgIcon) => {
   )
 }
 
-const StatisticIcon = memo(SvgComponent)
-StatisticIcon.displayName = 'Statistic Icon'
+const StatisticIcon = SvgComponent
+// StatisticIcon.displayName = 'Statistic Icon'
 export default StatisticIcon

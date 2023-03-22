@@ -1,14 +1,6 @@
-import {
-  Layout,
-  Menu,
-  Image,
-  Button,
-  Dropdown,
-  Spin,
-  ConfigProvider,
-} from 'antd'
+import { Layout, Menu, Image, Button, Dropdown, ConfigProvider } from 'antd'
 import type { MenuProps } from 'antd'
-import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons'
+import { LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
 import { Colors } from '@/constants/colors'
@@ -23,45 +15,39 @@ import {
   WarehouseIcon,
 } from '@/constants/asset/svg'
 import { useRouter } from 'next/router'
+import { Routes } from '@/constants'
 
 const { Header, Sider, Content } = Layout
 
-const LayoutAdmin = ({
-  children,
-  selected,
-}: {
-  children: React.ReactNode
-  selected: number
-}) => {
-  const routes = useRouter()
+const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter()
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     if (localStorage.getItem('logged') === '') {
-      routes.replace('/login')
+      router.replace('/login')
     }
   }
 
   const [title, setTitle] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [itemSelected, setItemSelected] = useState(0)
   const [logged, setLogged] = useState(false)
-
 
   const menuItem = [
     {
       label: 'Chi nhánh',
       icon: BranchIcon,
       props: {
-        size: selected == 0 ? 22 : 18,
+        size: itemSelected == 0 ? 22 : 18,
         height: 22,
-        stroke: selected == 0 ? Colors.white : Colors.gray,
+        stroke: itemSelected == 0 ? Colors.white : Colors.gray,
       },
     },
     {
       label: 'Kinh doanh',
       icon: StatisticIcon,
       props: {
-        size: selected == 1 ? 22 : 18,
-        stroke: selected == 1 ? Colors.white : Colors.gray,
+        size: itemSelected == 1 ? 22 : 18,
+        stroke: itemSelected == 1 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -69,40 +55,40 @@ const LayoutAdmin = ({
       icon: StaffIcon,
       children: ['Nhân viên', 'Yêu cầu'],
       props: {
-        size: selected == 20 || selected == 21 ? 22 : 18,
-        stroke: selected == 20 || selected == 21 ? Colors.white : Colors.gray,
+        size: itemSelected == 2 ? 22 : 18,
+        stroke: itemSelected == 2 ? Colors.white : Colors.gray,
       },
     },
     {
       label: 'Tài khoản',
       icon: AccountIcon,
       props: {
-        size: selected == 3 ? 22 : 18,
-        stroke: selected == 3 ? Colors.white : Colors.gray,
+        size: itemSelected == 3 ? 22 : 18,
+        stroke: itemSelected == 3 ? Colors.white : Colors.gray,
       },
     },
     {
       label: 'Sự kiện',
       icon: EventIcon,
       props: {
-        size: selected == 4 ? 22 : 18,
-        stroke: selected == 4 ? Colors.white : Colors.gray,
+        size: itemSelected == 4 ? 22 : 18,
+        stroke: itemSelected == 4 ? Colors.white : Colors.gray,
       },
     },
     {
       label: 'Hàng hóa',
       icon: GoodsIcon,
       props: {
-        size: selected == 5 ? 22 : 18,
-        stroke: selected == 5 ? Colors.white : Colors.gray,
+        size: itemSelected == 5 ? 22 : 18,
+        stroke: itemSelected == 5 ? Colors.white : Colors.gray,
       },
     },
     {
       label: 'Kho',
       icon: WarehouseIcon,
       props: {
-        size: selected == 6 ? 22 : 18,
-        stroke: selected == 6 ? Colors.white : Colors.gray,
+        size: itemSelected == 6 ? 22 : 18,
+        stroke: itemSelected == 6 ? Colors.white : Colors.gray,
       },
     },
     {
@@ -110,8 +96,8 @@ const LayoutAdmin = ({
       icon: OrderIcon,
       children: ['Cửa hàng', 'Trực tuyến'],
       props: {
-        size: selected == 70 || selected == 71 ? 22 : 18,
-        stroke: selected == 70 || selected == 71 ? Colors.white : Colors.gray,
+        size: itemSelected == 7 ? 22 : 18,
+        stroke: itemSelected == 7 ? Colors.white : Colors.gray,
       },
     },
   ]
@@ -122,33 +108,25 @@ const LayoutAdmin = ({
       icon: React.createElement(item.icon, item.props),
       label: item.label,
       onClick: () => {
-        if (
-          selected != 20 &&
-          selected != 21 &&
-          selected != 70 &&
-          selected != 71 &&
-          selected != index
-        )
-          setLoading(true)
-
+        setItemSelected(index)
         switch (index) {
           case 0:
-            routes.push('/admin/branch')
+            router.push('/admin/branch')
             break
           case 1:
-            routes.push('/admin/statistic')
+            router.push('/admin/statistic')
             break
           case 3:
-            routes.push('/admin/account')
+            router.push('/admin/account')
             break
           case 4:
-            routes.push('/admin/event')
+            router.push('/admin/event')
             break
           case 5:
-            routes.push('/admin/goods')
+            router.push('/admin/goods')
             break
           case 6:
-            routes.push('/admin/warehouse')
+            router.push('/admin/warehouse')
             break
         }
       },
@@ -158,20 +136,18 @@ const LayoutAdmin = ({
           key: index + '' + childIndex,
           label: child,
           onClick: () => {
-            if (selected.toString() != index + '' + childIndex) setLoading(true)
-
             switch (index + '' + childIndex) {
               case '20':
-                routes.push('/admin/staff')
+                router.push('/admin/staff')
                 break
               case '21':
-                routes.push('/admin/staff/request')
+                router.push('/admin/staff/request')
                 break
               case '70':
-                routes.push('/admin/order')
+                router.push('/admin/order')
                 break
               case '71':
-                routes.push('/admin/order/online')
+                router.push('/admin/order/online')
                 break
             }
           },
@@ -207,7 +183,7 @@ const LayoutAdmin = ({
         <Button
           onClick={() => {
             localStorage.setItem('logged', '')
-            routes.push('/login')
+            router.push('/login')
           }}
           className='border-0 flex items-center	'
           style={{ color: Colors.adminGreen900 }}
@@ -220,8 +196,9 @@ const LayoutAdmin = ({
       key: '1',
     },
   ]
+
   useEffect(() => {
-    switch (selected) {
+    switch (itemSelected) {
       case 0:
         setTitle('Quản lý chi nhánh')
         break
@@ -249,7 +226,16 @@ const LayoutAdmin = ({
         setTitle('Quản lý đơn hàng')
         break
     }
-  }, [selected])
+  }, [itemSelected])
+
+  useEffect(() => {
+    if (
+      !localStorage.getItem('logged') ||
+      localStorage.getItem('userRole') == '1'
+    ) {
+      router.replace(Routes.error)
+    }
+  }, [router.pathname])
 
   return (
     <ConfigProvider
@@ -271,7 +257,7 @@ const LayoutAdmin = ({
             <Menu
               className={styles.adminMenu}
               mode='inline'
-              defaultSelectedKeys={[selected.toString()]}
+              defaultSelectedKeys={[itemSelected.toString()]}
               items={siderItems}
             />
           </div>
@@ -300,30 +286,6 @@ const LayoutAdmin = ({
             <div className={styles.adminContentContainer}>{children}</div>
           </Content>
         </Layout>
-        {loading && (
-          <div
-            style={{
-              background: 'rgba(0, 0, 0, 0.5)',
-              position: 'fixed',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 100,
-            }}
-          >
-            <Spin
-              indicator={
-                <LoadingOutlined
-                  style={{ color: Colors.adminGreen600, fontSize: 50 }}
-                />
-              }
-            />
-          </div>
-        )}
       </Layout>
     </ConfigProvider>
   )

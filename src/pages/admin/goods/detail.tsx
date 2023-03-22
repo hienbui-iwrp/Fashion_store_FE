@@ -127,7 +127,7 @@ const Detail = () => {
   }, [id])
 
   return (
-    <LayoutAdmin selected={5}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card>
           {id && (
@@ -162,7 +162,7 @@ const Detail = () => {
                 <Col xs={14} sm={16}>
                   <DropdownButton
                     label={data?.gender ?? 'Giới tính'}
-                    items={[{ content: 'a' }, { content: 'b' }]}
+                    items={['a', 'b']}
                   />
                 </Col>
               </Row>
@@ -211,7 +211,7 @@ const Detail = () => {
                 <Col xs={14} sm={16}>
                   <DropdownButton
                     label={data?.type ?? 'Loại'}
-                    items={[{ content: 'a' }, { content: 'b' }]}
+                    items={['a', 'b']}
                   />
                 </Col>
               </Row>
@@ -243,7 +243,7 @@ const Detail = () => {
                 <Col xs={14} sm={16}>
                   <DropdownButton
                     label={data?.age ?? 'Lứa tuổi'}
-                    items={[{ content: 'a' }, { content: 'b' }]}
+                    items={['a', 'b']}
                   />
                 </Col>
               </Row>
@@ -324,10 +324,7 @@ const Detail = () => {
 
                       <Space>
                         <b>Màu</b>
-                        <DropdownButton
-                          label={item.size}
-                          items={[{ content: 'S' }]}
-                        />
+                        <DropdownButton label={item.size} items={['S']} />
                       </Space>
                       <AddButton
                         label='Thêm vào kho mới'
@@ -344,7 +341,7 @@ const Detail = () => {
             )
           })}
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

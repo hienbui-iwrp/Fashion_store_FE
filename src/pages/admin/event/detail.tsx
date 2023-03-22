@@ -178,7 +178,7 @@ const Account = () => {
   }, [id])
 
   return (
-    <LayoutAdmin selected={4}>
+    <>
       <Card>
         <Row className='justify-between'>
           <Col xs={24} sm={20} lg={10}>
@@ -363,7 +363,7 @@ const Account = () => {
           })}
         />
       )}
-    </LayoutAdmin>
+    </>
   )
 }
 

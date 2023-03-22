@@ -149,7 +149,7 @@ const Staff = () => {
   }, [keyword])
 
   return (
-    <LayoutAdmin selected={20}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <AddButton
@@ -194,7 +194,7 @@ const Staff = () => {
           }}
         />
       )}
-    </LayoutAdmin>
+    </>
   )
 }
 

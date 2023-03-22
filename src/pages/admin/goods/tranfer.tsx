@@ -71,7 +71,7 @@ const Tranfer = () => {
   }, [id])
 
   return (
-    <LayoutAdmin selected={5}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card>
           <Row className={styles.adminRow}>
@@ -115,11 +115,7 @@ const Tranfer = () => {
                   <b>Kho</b>
                 </Col>
                 <Col xs={14} lg={16}>
-                  <DropdownButton
-                    label={'Kho 1'}
-                    items={[{ content: 'a' }, { content: 'b' }]}
-                    disabled
-                  />
+                  <DropdownButton label={'Kho 1'} items={['a', 'b']} disabled />
                 </Col>
               </Row>
             </Col>
@@ -187,7 +183,7 @@ const Tranfer = () => {
                 <Col xs={14} lg={15}>
                   <DropdownButton
                     label='Kho 1'
-                    items={[{ content: 'a' }, { content: 'a' }]}
+                    items={['a', 'a']}
                     disabled={mode != 2}
                   />
                 </Col>
@@ -243,7 +239,7 @@ const Tranfer = () => {
                 <Col xs={14} lg={15}>
                   <DropdownButton
                     label='GHN'
-                    items={[{ content: 'a' }, { content: 'a' }]}
+                    items={['a', 'a']}
                     disabled={mode != 1 && mode != 2 && mode != 3 && mode != 4}
                   />
                 </Col>
@@ -255,7 +251,7 @@ const Tranfer = () => {
           </div>
         </Card>
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

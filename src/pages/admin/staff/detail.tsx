@@ -221,7 +221,7 @@ const Detail = () => {
   }, [data])
 
   return (
-    <LayoutAdmin selected={20}>
+    <>
       {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card
@@ -334,7 +334,7 @@ const Detail = () => {
         )}
         {contextModalComfirm}
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

@@ -21,8 +21,11 @@ import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import { formatBranchData, formatBranchDataXML } from '@/utils/formats/formatData'
-import { deleteBranch, deleteBranchBff, getBranchDetail, getBranchDetailBff } from '@/api'
+import {
+  formatBranchData,
+  formatBranchDataXML,
+} from '@/utils/formats/formatData'
+import { deleteBranchBff, getBranchDetailBff } from '@/api'
 
 interface ItemType {
   name: string
@@ -51,7 +54,8 @@ const Detail = () => {
     let _data: BranchProps = {}
 
     await getBranchDetailBff(id).then((data: any) => {
-      if (data.getElementsByTagName('BranchCode')[0].value == 0) routes.push(Routes.error)
+      if (data.getElementsByTagName('BranchCode')[0].value == 0)
+        routes.push(Routes.error)
       _data = formatBranchDataXML(data)
     })
 
@@ -119,7 +123,7 @@ const Detail = () => {
   })
 
   return (
-    <LayoutAdmin selected={0}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card
           className='max-w-full-lg'
@@ -181,7 +185,7 @@ const Detail = () => {
         )}
         {contextModalComfirm}
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

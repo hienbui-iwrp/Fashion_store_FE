@@ -143,7 +143,7 @@ const Detail = () => {
   const content = <></>
 
   return (
-    <LayoutAdmin selected={3}>
+    <>
       <Row>
         <Col xs={24} lg={8} style={{ marginRight: 25, marginBottom: 25 }}>
           <Card>
@@ -228,7 +228,7 @@ const Detail = () => {
         cancel={() => setModalOrderDetail(false)}
         extraData={currentData}
       />
-    </LayoutAdmin>
+    </>
   )
 }
 

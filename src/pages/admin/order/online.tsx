@@ -91,7 +91,7 @@ const Online = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={71}>
+    <>
       {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div
@@ -116,7 +116,7 @@ const Online = () => {
           ellipsis={true}
         />
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

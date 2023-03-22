@@ -1,4 +1,4 @@
-import { bpelBranch, BranchProps, formatTime } from '@/utils'
+import { apiBranchService, bpelBranch, BranchProps, formatTime } from '@/utils'
 
 export const getBranchBff = async () => {
   const xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -149,5 +149,27 @@ export const deleteBranchBff = async (id: any) => {
     })
     .catch((err) => {
       console.log(err)
+    })
+}
+
+export const getBranch = async () => {
+  return await apiBranchService
+    .get('')
+    .then((res) => {
+      return res
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+export const getBranchDetail = async (id: any) => {
+  return await apiBranchService
+    .get(`/${id}`)
+    .then((res) => {
+      return res
+    })
+    .catch((error) => {
+      console.error(error)
     })
 }

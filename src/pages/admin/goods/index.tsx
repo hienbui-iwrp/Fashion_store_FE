@@ -116,7 +116,7 @@ const Goods = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={5}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <AddButton
@@ -136,7 +136,7 @@ const Goods = () => {
           loading={loading}
         />
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

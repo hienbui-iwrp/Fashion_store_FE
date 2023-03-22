@@ -43,15 +43,10 @@ const Statistic = () => {
     getStatisticData()
   }, [])
 
-  const items = [
-    { content: 'item 1', onclick: () => {} },
-    { content: 'item 2', onclick: () => {} },
-    { content: 'item 3', onclick: () => {} },
-    { content: 'item 4', onclick: () => {} },
-  ]
+  const items = ['item 1', 'item 2', 'item 3']
 
   return (
-    <LayoutAdmin selected={1}>
+    <>
       {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card className='!max-w-full-lg'>
@@ -151,7 +146,7 @@ const Statistic = () => {
         cancel={() => setModalAllGoods(false)}
         single={true}
       />
-    </LayoutAdmin>
+    </>
   )
 }
 

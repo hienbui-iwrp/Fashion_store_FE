@@ -1,61 +1,94 @@
-import React, { useState } from 'react';
-import { signIn } from '@/api/account';
-import { Button, Checkbox, Form, Input, Typography, notification } from 'antd';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import Toast from '../Toast';
-import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import React, { useState } from 'react'
+import { signIn, signInBff } from '@/api/account'
+import { Button, Checkbox, Form, Input, Typography, notification } from 'antd'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import Toast from '../Toast'
+import ButtonClientPrimary from '../Button/ButtonClientPrimary'
 
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
+type NotificationType = 'success' | 'info' | 'warning' | 'error'
 
 export interface ToastProps {
-  title: string;
-  content: string;
-  type: NotificationType;
+  title: string
+  content: string
+  type: NotificationType
 }
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
 export default function Login() {
-  const router = useRouter();
-  if (typeof window !== "undefined") {
+  const router = useRouter()
+  if (typeof window !== 'undefined') {
     if (localStorage.getItem('logged') !== '') {
-      router.back();
+      router.back()
     }
   }
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
 
-  const [api, contextHolder] = notification.useNotification();
+  const [api, contextHolder] = notification.useNotification()
 
   const openNotificationWithIcon = (props: ToastProps) => {
     api[props.type]({
       message: props.title,
       description: props.content,
-    });
-  };
+    })
+  }
 
   const onFinish = async (values: any) => {
     // openNotificationWithIcon({title:'Đăng nhập thành công', content:'', type:'success'})
-    await signIn({ ...values })
-      .then((res) => {
-        // console.log(res);
-        if (res?.StatusCode === 200) {
-          openNotificationWithIcon({ title: 'Đăng nhập thành công', content: '', type: 'success' })
-          localStorage.setItem('logged', 'true')
-          if (res?.Data === 1) {
-            router.push('/');
-          } else {
-            router.push('/admin');
-          }
+    // await signIn({ ...values }).then((res) => {
+    //   // console.log(res);
+    //   if (res?.StatusCode === 200) {
+    //     openNotificationWithIcon({
+    //       title: 'Đăng nhập thành công',
+    //       content: '',
+    //       type: 'success',
+    //     })
+    //     localStorage.setItem('logged', 'true')
+    //     localStorage.setItem('userRole', res.Data.Role)
+    //     if (res?.Data.Role === 0) {
+    //       router.push('/')
+    //     } else {
+    //       router.push('/admin')
+    //     }
+    //   } else {
+    //     openNotificationWithIcon({
+    //       title: 'Đăng nhập thất bại',
+    //       content: '',
+    //       type: 'error',
+    //     })
+    //   }
+    // })
+    await signInBff({ ...values }).then((res: any) => {
+      if (res?.StatusCode == 200) {
+        openNotificationWithIcon({
+          title: 'Đăng nhập thành công',
+          content: '',
+          type: 'success',
+        })
+        localStorage.setItem('logged', 'true')
+        localStorage.setItem(
+          'userRole',
+          res.Data[0].getElementsByTagName('Role')[0].value
+        )
+        if (res.Data[0].getElementsByTagName('Role')[0].value == 1) {
+          router.push('/')
         } else {
-          openNotificationWithIcon({ title: 'Đăng nhập thất bại', content: '', type: 'error' })
+          router.push('/admin')
         }
-      })
-  };
+      } else {
+        openNotificationWithIcon({
+          title: 'Đăng nhập thất bại',
+          content: '',
+          type: 'error',
+        })
+      }
+    })
+  }
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+    console.log('Failed:', errorInfo)
+  }
 
   return (
     <div className='flex items-center h-screen w-screen bg-[url("./../../public/bg-login.png")] bg-no-repeat bg-cover'>
@@ -63,26 +96,27 @@ export default function Login() {
       <Form
         className='bg-gray-300 w-96 m-auto p-5 rounded-3xl'
         form={form}
-        name="basic"
-        layout="vertical"
+        name='basic'
+        layout='vertical'
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        autoComplete="off"
+        autoComplete='off'
       >
         <div className='flex justify-between'>
           <Title level={2}>Đăng nhập</Title>
           <Link href='/register' className='flex'>
-            <Text className='text-red-600 hover:text-red-400' strong={true}>Đăng ký</Text>
+            <Text className='text-red-600 hover:text-red-400' strong={true}>
+              Đăng ký
+            </Text>
           </Link>
         </div>
 
         <Form.Item
           className='mb-2'
           label={<Text strong>Tên đăng nhập</Text>}
-          name="Username"
-          rules={[
-            { required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+          name='Username'
+          rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
         >
           <Input className='' />
         </Form.Item>
@@ -90,34 +124,39 @@ export default function Login() {
         <Form.Item
           className='mb-2'
           label={<Text strong>Mật khẩu</Text>}
-          name="Password"
-          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' },
-          ({ }) => ({
-            validator(_, value) {
-              if (!value || value.length > 5) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('Mật khẩu dài tối thiểu 6 ký tự'));
-            },
-          }),
+          name='Password'
+          rules={[
+            { required: true, message: 'Vui lòng nhập mật khẩu!' },
+            ({}) => ({
+              validator(_, value) {
+                if (!value || value.length > 5) {
+                  return Promise.resolve()
+                }
+                return Promise.reject(
+                  new Error('Mật khẩu dài tối thiểu 6 ký tự')
+                )
+              },
+            }),
           ]}
         >
           <Input.Password />
         </Form.Item>
 
-        <Form.Item >
+        <Form.Item>
           <div className='flex justify-between'>
             <span></span>
             <Link href='/reset-password' className='flex'>
-              <Text className='text-gray-900' strong>Quên mật khẩu?</Text>
+              <Text className='text-gray-900' strong>
+                Quên mật khẩu?
+              </Text>
             </Link>
           </div>
         </Form.Item>
 
         <Form.Item className='mb-0' wrapperCol={{ offset: 8, span: 16 }}>
-          <ButtonClientPrimary htmlType="submit" name='Đăng nhập' />
+          <ButtonClientPrimary htmlType='submit' name='Đăng nhập' />
         </Form.Item>
       </Form>
     </div>
-  );
-};
+  )
+}

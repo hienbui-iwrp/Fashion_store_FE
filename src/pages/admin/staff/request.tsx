@@ -316,7 +316,7 @@ const Request = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={21}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <TableList<RequestProps>
           data={getDataAdd().data}
@@ -351,7 +351,7 @@ const Request = () => {
       />
       {removeModal.contextModalComfirm}
       {acceptModal.contextModalComfirm}
-    </LayoutAdmin>
+    </>
   )
 }
 

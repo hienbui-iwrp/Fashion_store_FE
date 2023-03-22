@@ -93,7 +93,7 @@ const Event = () => {
   }, [])
 
   return (
-    <LayoutAdmin selected={4}>
+    <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div className='flex justify-between'>
           <AddButton
@@ -114,7 +114,7 @@ const Event = () => {
           ellipsis={true}
         />
       </Space>
-    </LayoutAdmin>
+    </>
   )
 }
 

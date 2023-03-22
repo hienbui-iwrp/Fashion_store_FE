@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import type { MenuProps } from 'antd';
-import { Layout, Col, Row, Image, Input, Menu, Typography, Popover, Button, Dropdown } from 'antd'
+import { Router, useRouter } from 'next/router'
+import type { MenuProps } from 'antd'
+import {
+  Layout,
+  Col,
+  Row,
+  Image,
+  Input,
+  Menu,
+  Typography,
+  Popover,
+  Button,
+  Dropdown,
+} from 'antd'
 import ButtonHeader from './../../Button/ButtonHeader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { Routes } from '@/constants'
 
 const { Header, Footer, Content } = Layout
 const { Search } = Input
@@ -172,7 +184,8 @@ const iconFb: React.ReactNode = (
     viewBox='0 0 24 24'
     aria-hidden='true'
   >
-    <path      fillRule='evenodd'
+    <path
+      fillRule='evenodd'
       d='M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z'
       clipRule='evenodd'
     />
@@ -228,19 +241,20 @@ export default function LayoutClient({
         </button>
       ),
     },
-  ];
+  ]
 
   useEffect(() => {
     if (localStorage.getItem('logged') !== '') {
       setLogged(true)
+      console.log(localStorage.getItem('userRole'))
+      if (localStorage.getItem('userRole') !== '1') {
+        router.replace(Routes.error)
+      }
     }
-  }, [])
+  }, [router.pathname])
 
   return (
-    <Layout
-      className='m-auto bg-gray-200'
-      style={{ minHeight: '100vh' }}
-    >
+    <Layout className='m-auto bg-gray-200' style={{ minHeight: '100vh' }}>
       <Header className='header-client !bg-neutral-50 !p-0 !h-full'>
         <Row className='flex'>
           <Col span={15} className='flex items-center '>
@@ -260,7 +274,7 @@ export default function LayoutClient({
               className='pl-10 w-2/5 md:w-3/5'
               placeholder='Tìm kiếm...'
               onSearch={onSearch}
-            // style={{ width: 200 }}
+              // style={{ width: 200 }}
             />
           </Col>
           <Col span={9} className='flex justify-around items-center'>
@@ -275,22 +289,25 @@ export default function LayoutClient({
                 }
               />
             </Link>
-            {!logged ?
+            {!logged ? (
               <Link href='/login'>
                 <ButtonHeader
                   name='Đăng nhập'
                   iconInput={<FontAwesomeIcon className='pr-2' icon={faUser} />}
                 />
-              </Link> :
-              <Dropdown menu={{ items }} placement="bottom">
+              </Link>
+            ) : (
+              <Dropdown menu={{ items }} placement='bottom'>
                 <Link href='/user-info'>
                   <ButtonHeader
-                    name='tên đăng nhập'
-                    iconInput={<FontAwesomeIcon className='pr-2' icon={faUser} />}
+                    name='Nguyễn Đức A'
+                    iconInput={
+                      <FontAwesomeIcon className='pr-2' icon={faUser} />
+                    }
                   />
                 </Link>
               </Dropdown>
-            }
+            )}
           </Col>
         </Row>
         {/* <Menu
@@ -353,8 +370,9 @@ export default function LayoutClient({
             </div>
             <div>
               <div
-                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'
-                  }`}
+                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
+                  navbar ? 'block' : 'hidden'
+                }`}
               >
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 '>
                   {listItem.map((item, index) => {

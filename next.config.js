@@ -23,6 +23,10 @@ const nextConfig = {
         source: '/bpel-account-service/:path*',
         destination: process.env.NEXT_PUBLIC_BPEL_ACCOUNT_SERVICE + '/:path*', // Proxy to Backend
       },
+      {
+        source: '/admin-bff/:path*',
+        destination: process.env.NEXT_PUBLIC_ADMIN_BFF + '/:path*', // Proxy to Backend
+      },
     ]
   },
 }

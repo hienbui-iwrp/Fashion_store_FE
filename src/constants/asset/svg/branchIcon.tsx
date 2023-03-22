@@ -23,6 +23,6 @@ const SvgComponent = (props: SvgIcon) => {
   )
 }
 
-const BranchIcon = memo(SvgComponent)
-BranchIcon.displayName = 'Branch Icon'
+const BranchIcon = SvgComponent
+// BranchIcon.displayName = 'Branch Icon'
 export default BranchIcon
