@@ -2,6 +2,8 @@ export const BASE_URL = 'http://localhost:3000'
 export const HOST_BRANCH_SERVICE = 'http://localhost:3000/branch-service'
 export const HOST_STAFF_SERVICE = 'http://localhost:3000/staff-service'
 
+export const HOST_BPEL_BRANCH = process.env.BPEL_BRANCH_PROXY
+
 export const Routes = {
   login: '/login',
   register: '/register',
