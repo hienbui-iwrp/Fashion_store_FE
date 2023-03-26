@@ -292,7 +292,7 @@ const Detail = () => {
             </Button>
           </p>
           <p className='flex justify-end'>
-            <AddButton label='Lưu' iconInput={<CheckOutlined />} />
+            <AddButton label='Lưu' icon={<CheckOutlined />} />
           </p>
         </Card>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -300,7 +300,7 @@ const Detail = () => {
             label='Thêm lựa chọn'
             onClick={() => {}}
             large
-            iconInput={<PlusOutlined />}
+            icon={<PlusOutlined />}
           />
         </div>
         {data?.classify &&

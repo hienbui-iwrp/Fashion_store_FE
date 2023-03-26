@@ -24,14 +24,14 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
     },
     rowSelection: props?.rowSelection,
     rowKey: props.rowKey
-      ? (record: any, index: number) => {
+      ? (record: any) => {
           const key = props?.rowKey?.reduce(
             (total, item) => total + record[item],
             ''
           )
           return key
         }
-      : (record: any, index: number) => index,
+      : (record: any) => record?.id ?? '',
   }
 
   const tableColumns = props?.columns?.map((item: any) => ({
@@ -48,6 +48,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         borderRadius: 12,
         paddingTop: props.header ? 15 : 0,
         paddingBottom: props.pagination ?? true ? 0 : 20,
+        maxWidth: '80vw',
       }}
     >
       <div style={{ marginBottom: 10 }}>{props.header}</div>
@@ -60,7 +61,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         onRow={(record: any, index) => {
           return {
             onClick: (event) => {
-              props.callBack && props.callBack(record)
+              props.callback && props.callback(record)
               props.selectUrl &&
                 router.push(
                   props.selectUrl + `?id=${record.id}` ?? Routes.admin.homepage

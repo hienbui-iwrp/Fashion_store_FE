@@ -159,7 +159,7 @@ const Request = () => {
           children: (
             <Space key={index + record.id}>
               <RemoveButton
-                iconInput={<CloseOutlined />}
+                icon={<CloseOutlined />}
                 label={'Xóa'}
                 onClick={(e) => {
                   requestId.current = record.id
@@ -168,7 +168,7 @@ const Request = () => {
                 }}
               />
               <AddButton
-                iconInput={<CheckOutlined />}
+                icon={<CheckOutlined />}
                 label={'Duyệt'}
                 onClick={(e) => {
                   requestId.current = record.id
@@ -251,7 +251,7 @@ const Request = () => {
           children: (
             <Space key={index + record.id}>
               <RemoveButton
-                iconInput={<CloseOutlined />}
+                icon={<CloseOutlined />}
                 label={'Xóa'}
                 onClick={(e) => {
                   requestId.current = record.id
@@ -260,7 +260,7 @@ const Request = () => {
                 }}
               />
               <AddButton
-                iconInput={<CheckOutlined />}
+                icon={<CheckOutlined />}
                 label={'Duyệt'}
                 onClick={(e) => {
                   requestId.current = record.id
@@ -324,7 +324,7 @@ const Request = () => {
           columns={getDataAdd().columns}
           loading={loading}
           ellipsis={true}
-          callBack={(i: RequestProps) => {
+          callback={(i: RequestProps) => {
             setCurrentStaffData(findStaff(i))
           }}
           onSelectRow={() => setModalStaffDetail(true)}
@@ -335,7 +335,7 @@ const Request = () => {
           data={getDataRemove().data}
           title='Yêu cầu xóa'
           columns={getDataRemove().columns}
-          callBack={(i: RequestProps) => {
+          callback={(i: RequestProps) => {
             setCurrentStaffData(findStaff(i))
           }}
           onSelectRow={() => setModalStaffDetail(true)}

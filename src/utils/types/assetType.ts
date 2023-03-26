@@ -1,10 +1,16 @@
 export interface AccountProps {
-  ID: string
-  Username: string
-  Password: string
-  Email: string
-  Role: String
-  UserId: string
+  id: string
+  username: string
+  role: number
+  phoneNumber: string
+  startDate: Date
+  street: string
+  ward: string
+  district: string
+  province: string
+  name: string
+  isActivated: boolean
+  createdAt: Date
 }
 
 export interface CustomerInfoProps {

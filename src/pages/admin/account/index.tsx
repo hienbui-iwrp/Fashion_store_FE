@@ -1,129 +1,145 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
-import axios from 'axios'
-import { getAllAccount } from '@/api/account'
-import { EditOutlined } from '@ant-design/icons'
-import styles from '@/styles/Admin.module.css'
-import { Card, Space } from 'antd'
-import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatDate, ModalAddEditStaff, formatAccountDataXML } from '@/utils'
+import { Routes } from '@/constants'
+import { Space } from 'antd'
+import { TableList } from '@/components'
+import {
+  formatDate,
+  formatAccountDataXML,
+  formatAddress,
+  AccountProps,
+} from '@/utils'
 import { InputSearch } from '@/components'
-
-interface DataType {
-  id: string
-  account: string
-  name: string
-  phone: string
-  dateOfBirth: Date
-  address: string
-  createdDate: Date
-}
+import { getAllAccountBff } from '@/api'
+import { useRouter } from 'next/router'
 
 const Account = () => {
-  const [data, setData] = useState<DataType[]>([])
+  const router = useRouter()
+  const [data, setData] = useState<AccountProps[]>([])
   const [loading, setLoading] = useState(true)
 
-  const columns: ColumnsType<DataType> = []
+  const columns: ColumnsType<AccountProps> = []
   if (data) {
     columns.push({
       title: 'Mã tài khoản',
       dataIndex: 'id',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: AccountProps, index: number) {
+        return text
+      },
+      onCell: (record: AccountProps) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
+      sorter: (a: AccountProps, b: AccountProps) =>
         a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1,
       fixed: 'left',
     })
 
     columns.push({
       title: 'Tên tài khoản',
-      dataIndex: 'account',
-      render(text: string, record: DataType, index: number) {
+      dataIndex: 'username',
+      render(text: string, record: AccountProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
-        a.account.toLowerCase() > b.account.toLowerCase() ? 1 : -1,
+      sorter: (a: AccountProps, b: AccountProps) =>
+        a.username.toLowerCase() > b.username.toLowerCase() ? 1 : -1,
       fixed: 'left',
     })
 
     columns.push({
       title: 'Tên người dùng',
       dataIndex: 'name',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: AccountProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 140 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
+      sorter: (a: AccountProps, b: AccountProps) =>
         a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1,
     })
 
     columns.push({
-      title: 'Điện thoại',
-      dataIndex: 'phone',
-      render(text: string, record: DataType, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+      title: 'Vai trò',
+      dataIndex: '',
+      render(text: string, record: AccountProps, index: number) {
+        return record.role == 1 ? 'Khách hàng' : 'Quản trị viên'
       },
-      sorter: (a: DataType, b: DataType) => (a.phone > b.phone ? 1 : -1),
+      sorter: (a: AccountProps, b: AccountProps) => (a.role > b.role ? 1 : -1),
     })
 
     columns.push({
-      title: 'Ngày sinh',
-      dataIndex: 'dateOfBirth',
-      render(text: string, record: DataType, index: number) {
+      title: 'Điện thoại',
+      dataIndex: 'phoneNumber',
+      render(text: string, record: AccountProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 100 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
-        a.dateOfBirth > b.dateOfBirth ? 1 : -1,
+      sorter: (a: AccountProps, b: AccountProps) =>
+        a.phoneNumber > b.phoneNumber ? 1 : -1,
     })
 
     columns.push({
       title: 'Địa chỉ',
-      dataIndex: 'address',
-      render(text: string, record: DataType, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+      dataIndex: '',
+      render(text: string, record: AccountProps, index: number) {
+        return formatAddress(record)
       },
-      sorter: (a: DataType, b: DataType) =>
-        a.address.toLowerCase() > b.address.toLowerCase() ? 1 : -1,
+      sorter: (a: AccountProps, b: AccountProps) =>
+        formatAddress(a) > formatAddress(b) ? 1 : -1,
     })
 
     columns.push({
       title: 'Ngày tạo',
-      dataIndex: 'createdDate',
-      render(text: string, record: DataType, index: number) {
+      dataIndex: 'createdAt',
+      render(text: string, record: AccountProps, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 100 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
-        a.createdDate > b.createdDate ? 1 : -1,
+      sorter: (a: AccountProps, b: AccountProps) =>
+        a.createdAt > b.createdAt ? 1 : -1,
+    })
+
+    columns.push({
+      title: 'Tình trạng',
+      dataIndex: 'isActivated',
+      render(text: string, record: AccountProps, index: number) {
+        return text == 'true' ? 'Đã dừng' : 'Đang hoạt động'
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 100 },
+        }
+      },
+      sorter: (a: AccountProps, b: AccountProps) =>
+        a.isActivated > b.isActivated ? 1 : -1,
     })
   }
 
   const getData = async () => {
-    await getAllAccount().then((res) => {
+    await getAllAccountBff().then((res) => {
       if (res?.StatusCode == 200) {
         const _data = res?.Data.map((item: any) => {
           return formatAccountDataXML(item)
         })
-        console.log('data', _data)
+        setData(_data)
       }
-    })
-
-    await axios.get(`${BASE_URL}/api/admin/accountData`).then((res) => {
-      setData(res.data)
     })
   }
 
@@ -138,14 +154,19 @@ const Account = () => {
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <InputSearch />
         </div>
-        <TableList<DataType>
+        <TableList<AccountProps>
           data={data}
           title='Danh sách nhân viên'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/account/detail'}
+          // selectUrl={BASE_URL + 'admin/account/detail'}
+          callback={(record: any) => {
+            if (record.role == 1)
+              router.push(Routes.admin.accountDetail + `?id=${record.id}`)
+            else router.push(Routes.admin.staffDetail + `?id=${record.id}`)
+          }}
           loading={loading}
           ellipsis={true}
-          scroll={{ x: '75vw' }}
+          scroll={{ x: '50vw' }}
         />
       </Space>
     </>

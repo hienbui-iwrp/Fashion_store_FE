@@ -227,7 +227,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
             </div>
             <ButtonClientPrimary
               name='Thêm vào giỏ hàng'
-              iconInput={
+              icon={
                 <FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />
               }
             />

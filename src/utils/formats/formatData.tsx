@@ -1,4 +1,4 @@
-import { BranchProps, RequestProps, StaffProps } from '../types'
+import { AccountProps, BranchProps, RequestProps, StaffProps } from '../types'
 import timeToDate from './timeToDate'
 
 export const formatBranchDataXML = (data: any): BranchProps => {
@@ -37,17 +37,26 @@ export const formatBranchDataXML2 = (data: any): BranchProps => {
   return _data
 }
 
-export const formatAccountDataXML = (data: any): any => {
+export const formatAccountDataXML = (data: any): AccountProps => {
   const _data: any = {
-    name: data.getElementsByTagName('Username')[0].value,
+    id: data.getElementsByTagName('Id')[0].value,
+    username: data.getElementsByTagName('Username')[0].value,
     role: data.getElementsByTagName('Role')[0].value,
+    phoneNumber: data.getElementsByTagName('PhoneNumber')[0].value,
+    startDate: new Date(data.getElementsByTagName('StartDate')[0].value),
+    street: data.getElementsByTagName('Street')[0].value,
+    ward: data.getElementsByTagName('Ward')[0].value,
+    district: data.getElementsByTagName('District')[0].value,
+    province: data.getElementsByTagName('Province')[0].value,
+    name: data.getElementsByTagName('Name')[0].value,
     isActivated: data.getElementsByTagName('isActivated')[0].value,
-    createdDate: data.getElementsByTagName('CreatedAt')[0].value,
+    createdAt: new Date(data.getElementsByTagName('CreatedAt')[0].value),
   }
-
+  console.log('format:', _data)
   return _data
 }
 
+// ----------OLD------------
 export const formatBranchData = (data: any): BranchProps => {
   const _data: BranchProps = {
     id: data?.BranchCode,

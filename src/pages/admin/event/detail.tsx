@@ -232,10 +232,7 @@ const Account = () => {
                       boxShadow: '1px 1px 2px 1px #ccc',
                     }}
                   />
-                  <AddButton
-                    iconInput={<FileImageOutlined />}
-                    label={'Chọn ảnh'}
-                  />
+                  <AddButton icon={<FileImageOutlined />} label={'Chọn ảnh'} />
                 </Space>
               </Col>
             </Row>
@@ -337,14 +334,10 @@ const Account = () => {
         <Space className='flex justify-end' size={'large'}>
           <RemoveButton
             label='Hủy'
-            iconInput={<CloseOutlined />}
+            icon={<CloseOutlined />}
             borderRadius={10}
           />
-          <AddButton
-            label='Lưu'
-            iconInput={<CheckOutlined />}
-            borderRadius={10}
-          />
+          <AddButton label='Lưu' icon={<CheckOutlined />} borderRadius={10} />
         </Space>
       </Card>
       <TableList<Goods>

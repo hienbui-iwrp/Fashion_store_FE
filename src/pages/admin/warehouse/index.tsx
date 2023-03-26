@@ -161,7 +161,7 @@ const Warehouse = () => {
           ellipsis={true}
           scroll={{ x: '75vw' }}
           onSelectRow={() => setModalAddEditWarehouse(true)}
-          callBack={(item: any) => setCurrentData(item)}
+          callback={(item: any) => setCurrentData(item)}
         />
       </Space>
       {modalAddEditWarehouse && (

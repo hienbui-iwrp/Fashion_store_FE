@@ -284,7 +284,7 @@ export default function LayoutClient({
             <Link href='/cart' prefetch={false} passHref>
               <ButtonHeader
                 name='Giỏ hàng'
-                iconInput={
+                icon={
                   <FontAwesomeIcon className='pr-2' icon={faCartShopping} />
                 }
               />
@@ -293,7 +293,7 @@ export default function LayoutClient({
               <Link href='/login'>
                 <ButtonHeader
                   name='Đăng nhập'
-                  iconInput={<FontAwesomeIcon className='pr-2' icon={faUser} />}
+                  icon={<FontAwesomeIcon className='pr-2' icon={faUser} />}
                 />
               </Link>
             ) : (
@@ -301,9 +301,7 @@ export default function LayoutClient({
                 <Link href='/user-info'>
                   <ButtonHeader
                     name='Nguyễn Đức A'
-                    iconInput={
-                      <FontAwesomeIcon className='pr-2' icon={faUser} />
-                    }
+                    icon={<FontAwesomeIcon className='pr-2' icon={faUser} />}
                   />
                 </Link>
               </Dropdown>

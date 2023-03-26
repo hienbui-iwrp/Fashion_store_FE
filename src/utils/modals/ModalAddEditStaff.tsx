@@ -114,13 +114,13 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
             <RemoveButton
               label='Hủy'
               key='cancel'
-              iconInput={<CloseOutlined />}
+              icon={<CloseOutlined />}
               onClick={props.cancel}
             />
             <AddButton
               key='add'
               label='Lưu'
-              iconInput={<CheckOutlined />}
+              icon={<CheckOutlined />}
               onClick={onSave}
             />
           </Space>,
@@ -219,7 +219,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                     )?.content ?? 'Giới tính'
                   }
                   items={Gender.map((item) => item.content)}
-                  callBack={(gender: any) => {
+                  callback={(gender: any) => {
                     form.setFieldValue(
                       'gender',
                       Gender.find((item: any) => item.content === gender)?.value
@@ -278,7 +278,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                       items={branchData?.map((item: BranchProps) => {
                         return `${item.name} (${item.id})`
                       })}
-                      callBack={(branch: string) => {
+                      callback={(branch: string) => {
                         form.setFieldValue(
                           'branchId',
                           branchData?.find(
@@ -295,7 +295,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                     items={branchData?.map((item: BranchProps) => {
                       return `${item.name} (${item.id})`
                     })}
-                    callBack={(branch: string) => {
+                    callback={(branch: string) => {
                       form.setFieldValue(
                         'branchId',
                         branchData?.find(
@@ -322,7 +322,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   items={Object.keys(StaffRole).map(
                     (item: string) => StaffRole[item]
                   )}
-                  callBack={(item: any) => {
+                  callback={(item: any) => {
                     form.setFieldValue('role', item)
                   }}
                 />

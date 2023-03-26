@@ -25,7 +25,7 @@ export default function RemoveButton(props: ButtonProps) {
         alignItems: 'center',
         flexShrink: 1,
       }}
-      icon={props?.iconInput ?? <DeleteFilled />}
+      icon={props?.icon ?? <DeleteFilled />}
       size='middle'
       onMouseEnter={() => {
         setIsHover(true)

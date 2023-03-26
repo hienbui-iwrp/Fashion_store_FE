@@ -24,7 +24,7 @@ import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import { addBranch, addBranchBff, updateBranch, updateBranchBff } from '@/api'
+import { addBranchBff, updateBranchBff } from '@/api'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -37,6 +37,17 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
   const [form] = Form.useForm()
   const routes = useRouter()
   const dispatch = useDispatch()
+
+  const initialValue =
+    {
+      ...props.extraData,
+      openTime:
+        props.extraData?.openTime &&
+        dayjs(formatTime(props.extraData?.openTime), 'HH:mm '),
+      closeTime:
+        props.extraData?.openTime &&
+        dayjs(formatTime(props.extraData?.closeTime), 'HH:mm '),
+    } ?? {}
 
   const onSave = async () => {
     try {
@@ -89,14 +100,14 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
             <RemoveButton
               label='Hủy'
               key='cancel'
-              iconInput={<CloseOutlined />}
+              icon={<CloseOutlined />}
               onClick={props.cancel}
             />
             ,
             <AddButton
               key='add'
               label='Lưu'
-              iconInput={<CheckOutlined />}
+              icon={<CheckOutlined />}
               onClick={onSave}
             />
           </Space>,
@@ -117,12 +128,17 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
               <AddButton
                 key='add'
                 label='Chọn ảnh'
-                iconInput={<FileImageOutlined />}
+                icon={<FileImageOutlined />}
               />
             </Space>
           </Col>
           <Col xs={24} sm={12}>
-            <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
+            <Form
+              layout={'vertical'}
+              form={form}
+              onValuesChange={() => {}}
+              initialValues={initialValue}
+            >
               <Form.Item
                 label='Tên chi nhánh'
                 name='name'
@@ -136,7 +152,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                 <Input
                   placeholder='Nhập tên chi nhánh'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.name}
+                  // defaultValue={props.extraData?.name}
                 />
               </Form.Item>
               <b>Địa chỉ</b>
@@ -154,7 +170,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   <Input
                     placeholder='Nhập tên đường'
                     className={styles.adminInputShadow}
-                    defaultValue={props.extraData?.street}
+                    // defaultValue={props.extraData?.street}
                   />
                 </Form.Item>
                 <Form.Item
@@ -170,7 +186,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   <Input
                     placeholder='Nhập xã, phường'
                     className={styles.adminInputShadow}
-                    defaultValue={props.extraData?.ward}
+                    // defaultValue={props.extraData?.ward}
                   />
                 </Form.Item>
               </Space>
@@ -188,7 +204,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   <Input
                     placeholder='Nhập quận, huyện'
                     className={styles.adminInputShadow}
-                    defaultValue={props.extraData?.district}
+                    // defaultValue={props.extraData?.district}
                   />
                 </Form.Item>
                 <Form.Item
@@ -204,7 +220,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   <Input
                     placeholder='Nhập tỉnh, thành phố'
                     className={styles.adminInputShadow}
-                    defaultValue={props.extraData?.province}
+                    // defaultValue={props.extraData?.province}
                   />
                 </Form.Item>
               </Space>
@@ -221,10 +237,10 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   ]}
                 >
                   <TimePicker
-                    defaultValue={
-                      props.extraData?.openTime &&
-                      dayjs(formatTime(props.extraData?.openTime), 'HH:mm ')
-                    }
+                    // defaultValue={
+                    //   props.extraData?.openTime &&
+                    //   dayjs(formatTime(props.extraData?.openTime), 'HH:mm ')
+                    // }
                     format={'HH:mm'}
                     onOk={(item) => {}}
                     className={styles.adminInputShadow}
@@ -241,10 +257,10 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
                   ]}
                 >
                   <TimePicker
-                    defaultValue={
-                      props.extraData?.closeTime &&
-                      dayjs(formatTime(props.extraData?.closeTime), 'HH:mm ')
-                    }
+                    // defaultValue={
+                    //   props.extraData?.closeTime &&
+                    //   dayjs(formatTime(props.extraData?.closeTime), 'HH:mm ')
+                    // }
                     format={'HH:mm'}
                     onOk={(item) => {}}
                     className={styles.adminInputShadow}
