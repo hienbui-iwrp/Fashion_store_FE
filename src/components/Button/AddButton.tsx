@@ -22,7 +22,7 @@ export default function AddButton(props: ButtonProps) {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      icon={props?.iconInput}
+      icon={props?.icon}
       size='middle'
       onMouseEnter={() => {
         setIsHover(true)

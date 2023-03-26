@@ -41,14 +41,14 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
             <RemoveButton
               label='Hủy'
               key='cancel'
-              iconInput={<CloseOutlined />}
+              icon={<CloseOutlined />}
               onClick={props.cancel}
             />
             ,
             <AddButton
               key='add'
               label='Lưu'
-              iconInput={<CheckOutlined />}
+              icon={<CheckOutlined />}
               onClick={async () => {
                 try {
                   const values = await form.validateFields()

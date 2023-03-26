@@ -164,6 +164,8 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname === Routes.admin.statistic ||
     router.pathname === Routes.admin.account ||
     router.pathname === Routes.admin.accountDetail ||
+    router.pathname === Routes.admin.event ||
+    router.pathname === Routes.admin.eventDetail ||
     router.pathname === Routes.admin.warehouse ||
     router.pathname === Routes.admin.order ||
     router.pathname === Routes.admin.orderDetail ||

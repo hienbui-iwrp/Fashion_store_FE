@@ -21,7 +21,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
     })
 
   const handleMenuClick: MenuProps['onClick'] = (e: MenuInfo) => {
-    props.callBack && props.callBack(e.key)
+    props.callback && props.callback(e.key)
     setLabel(e.key)
   }
 

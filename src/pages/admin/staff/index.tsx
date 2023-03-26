@@ -82,7 +82,7 @@ const Staff = () => {
         return {
           children: (
             <AddButton
-              iconInput={<EditOutlined />}
+              icon={<EditOutlined />}
               borderRadius={5}
               onClick={(e) => {
                 e.stopPropagation()

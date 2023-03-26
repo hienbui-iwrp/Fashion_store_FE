@@ -69,9 +69,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
             </div>
           )}
           <ButtonClientPrimary
-            iconInput={
-              <FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />
-            }
+            icon={<FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />}
           />
         </div>
       </Card>

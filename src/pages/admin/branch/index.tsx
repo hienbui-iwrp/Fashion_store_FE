@@ -3,13 +3,9 @@ import { ColumnsType } from 'antd/es/table'
 import { Routes } from '@/constants'
 import { EditOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
-import { AddButton, LayoutAdmin, TableList } from '@/components'
+import { AddButton, TableList } from '@/components'
 import { BranchProps, formatAddress, ModalAddEditBranch } from '@/utils'
-import { apiBranchService } from '@/utils/axios'
-import {
-  formatBranchData,
-  formatBranchDataXML,
-} from '@/utils/formats/formatData'
+import { formatBranchDataXML } from '@/utils/formats/formatData'
 import { getBranchBff } from '@/api'
 
 const Branch = () => {
@@ -22,13 +18,15 @@ const Branch = () => {
   if (data[0]) {
     columns.push({
       title: 'Mã chi nhánh',
-      width: '150px',
       dataIndex: 'id',
       sorter: (a: BranchProps, b: BranchProps) =>
         (a.id ?? 1) > (b.id ?? 1) ? 1 : -1,
       render(text: string, record: BranchProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 80 },
         }
       },
     })
@@ -39,8 +37,11 @@ const Branch = () => {
       sorter: (a: BranchProps, b: BranchProps) =>
         (a.name ?? 1) > (b.name ?? 1) ? 1 : -1,
       render(text: string, record: BranchProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
     })
@@ -51,8 +52,11 @@ const Branch = () => {
       sorter: (a: BranchProps, b: BranchProps) =>
         formatAddress(a) > formatAddress(b) ? 1 : -1,
       render(text: string, record: BranchProps, index: number) {
+        return formatAddress(record)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatAddress(record)}</div>,
+          style: { minWidth: 180 },
         }
       },
     })
@@ -60,26 +64,23 @@ const Branch = () => {
     columns.push({
       title: '',
       render(text: string, record: BranchProps, index: number) {
-        return {
-          children: (
-            <AddButton
-              iconInput={<EditOutlined />}
-              borderRadius={5}
-              onClick={(e) => {
-                setCurrentData(record)
-                e.stopPropagation()
-                setModalAddEditBranch(true)
-              }}
-            />
-          ),
-        }
+        return (
+          <AddButton
+            icon={<EditOutlined />}
+            borderRadius={5}
+            onClick={(e) => {
+              setCurrentData(record)
+              e.stopPropagation()
+              setModalAddEditBranch(true)
+            }}
+          />
+        )
       },
     })
   }
 
   const getData = async () => {
     await getBranchBff().then((res: any) => {
-      console.log('data: ', res)
       if (res.StatusCode != 200) throw new Error('FAIL')
       const _data = res.Data.map((item: any) => {
         return formatBranchDataXML(item)

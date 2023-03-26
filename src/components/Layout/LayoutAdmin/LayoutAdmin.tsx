@@ -29,8 +29,45 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
   }
 
   const [title, setTitle] = useState('')
-  const [itemSelected, setItemSelected] = useState(0)
-  const [logged, setLogged] = useState(false)
+  const [itemSelected, setItemSelected] = useState(
+    [
+      Routes.admin.homepage,
+      Routes.admin.branch,
+      Routes.admin.branchDetail,
+    ].includes(router.pathname)
+      ? 0
+      : [Routes.admin.statistic].includes(router.pathname)
+      ? 1
+      : [
+          Routes.admin.homepage,
+          Routes.admin.branch,
+          Routes.admin.branchDetail,
+        ].includes(router.pathname)
+      ? 0
+      : [Routes.admin.staff, Routes.admin.staffDetail].includes(router.pathname)
+      ? 20
+      : [Routes.admin.staffRequest].includes(router.pathname)
+      ? 21
+      : [Routes.admin.account, Routes.admin.accountDetail].includes(
+          router.pathname
+        )
+      ? 3
+      : [Routes.admin.event, Routes.admin.eventDetail].includes(router.pathname)
+      ? 4
+      : [
+          Routes.admin.goods,
+          Routes.admin.goodsDetail,
+          Routes.admin.goodsTranfer,
+        ].includes(router.pathname)
+      ? 5
+      : [Routes.admin.warehouse].includes(router.pathname)
+      ? 6
+      : [Routes.admin.order].includes(router.pathname)
+      ? 70
+      : [Routes.admin.orderOnline].includes(router.pathname)
+      ? 71
+      : 7
+  )
 
   const menuItem = [
     {
@@ -55,8 +92,14 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       icon: StaffIcon,
       children: ['Nhân viên', 'Yêu cầu'],
       props: {
-        size: itemSelected == 2 ? 22 : 18,
-        stroke: itemSelected == 2 ? Colors.white : Colors.gray,
+        size:
+          itemSelected == 20 || itemSelected == 21 || itemSelected == 2
+            ? 22
+            : 18,
+        stroke:
+          itemSelected == 20 || itemSelected == 21 || itemSelected == 2
+            ? Colors.white
+            : Colors.gray,
       },
     },
     {
@@ -96,8 +139,14 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       icon: OrderIcon,
       children: ['Cửa hàng', 'Trực tuyến'],
       props: {
-        size: itemSelected == 7 ? 22 : 18,
-        stroke: itemSelected == 7 ? Colors.white : Colors.gray,
+        size:
+          itemSelected == 70 || itemSelected == 71 || itemSelected == 7
+            ? 22
+            : 18,
+        stroke:
+          itemSelected == 70 || itemSelected == 71 || itemSelected == 7
+            ? Colors.white
+            : Colors.gray,
       },
     },
   ]

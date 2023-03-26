@@ -3,13 +3,13 @@ import { ReactNode } from 'react'
 export interface ComponentProps {
   style?: object
   className?: string
-  callBack?: (item: any) => void
+  callback?: (item: any) => void
   disabled?: boolean
 }
 
 export interface ButtonProps extends ComponentProps {
   label?: string
-  iconInput?: ReactNode
+  icon?: ReactNode
   onClick?: (e?: any) => void
   borderRadius?: number
   large?: boolean

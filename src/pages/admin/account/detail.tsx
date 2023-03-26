@@ -198,7 +198,7 @@ const Detail = () => {
             columns={columns}
             ellipsis={true}
             onSelectRow={() => setModalOrderDetail(true)}
-            callBack={(item) => {
+            callback={(item) => {
               setCurrentData(item)
             }}
             header={

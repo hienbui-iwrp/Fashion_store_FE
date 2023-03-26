@@ -5,12 +5,12 @@ import { Colors } from '@/constants'
 export default function ButtonClientPrimary({
   htmlType,
   name,
-  iconInput,
+  icon,
   onClick,
 }: {
   htmlType?: any
   name?: string
-  iconInput?: ReactNode
+  icon?: ReactNode
   onClick?: () => void
 }) {
   const [hover, setHover] = useState(false)
@@ -21,7 +21,7 @@ export default function ButtonClientPrimary({
       onClick={onClick}
       className={`flex justify-center px-3 items-center  text-white font-bold  rounded-xl  !w-auto hover:!text-white`}
       type='text'
-      icon={iconInput || null}
+      icon={icon || null}
       onMouseEnter={() => {
         setHover(true)
       }}

@@ -224,14 +224,10 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
                 <RemoveButton
                   label='Hủy'
                   key='cancel'
-                  iconInput={<CloseOutlined />}
+                  icon={<CloseOutlined />}
                   onClick={props.cancel}
                 />
-                <AddButton
-                  key='add'
-                  label='Lưu'
-                  iconInput={<CheckOutlined />}
-                />
+                <AddButton key='add' label='Lưu' icon={<CheckOutlined />} />
               </Space>,
             ]
           )

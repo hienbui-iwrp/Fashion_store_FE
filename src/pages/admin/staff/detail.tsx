@@ -288,7 +288,7 @@ const Detail = () => {
               <RemoveButton onClick={showModelConfirm} />
               <AddButton
                 label='Chỉnh sửa'
-                iconInput={<EditFilled />}
+                icon={<EditFilled />}
                 onClick={() => setModalAddEditStaff(true)}
               />
             </Space>
