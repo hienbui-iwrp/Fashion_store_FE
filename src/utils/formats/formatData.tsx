@@ -52,7 +52,6 @@ export const formatAccountDataXML = (data: any): AccountProps => {
     isActivated: data.getElementsByTagName('isActivated')[0].value,
     createdAt: new Date(data.getElementsByTagName('CreatedAt')[0].value),
   }
-  console.log('format:', _data)
   return _data
 }
 

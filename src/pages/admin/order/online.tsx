@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, Routes } from '@/constants'
 import axios from 'axios'
 import styles from '@/styles/Admin.module.css'
 import { Card, DatePicker, Space } from 'antd'
@@ -25,8 +25,11 @@ const Online = () => {
       title: 'STT',
       dataIndex: '',
       render(text: string, record: DataType, index: number) {
+        return index
+      },
+      onCell: (record) => {
         return {
-          children: <div>{index}</div>,
+          style: { minWidth: 50 },
         }
       },
     })
@@ -35,8 +38,11 @@ const Online = () => {
       title: 'Người dùng',
       dataIndex: 'user',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -47,8 +53,11 @@ const Online = () => {
       title: 'Mã đơn',
       dataIndex: 'id',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -59,8 +68,11 @@ const Online = () => {
       title: 'Ngày giao dịch',
       dataIndex: 'createdDate',
       render(text: string, record: DataType, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -71,8 +83,11 @@ const Online = () => {
       title: 'Giá trị',
       dataIndex: 'total',
       render(text: string, record: DataType, index: number) {
+        return formatNumber(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatNumber(text)}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.total > b.total ? 1 : -1),
@@ -111,7 +126,7 @@ const Online = () => {
           data={data}
           title='Danh sách nhân viên'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/order/detail'}
+          selectUrl={Routes.admin.orderDetail}
           loading={loading}
           ellipsis={true}
         />

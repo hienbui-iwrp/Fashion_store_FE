@@ -31,8 +31,11 @@ const Staff = () => {
       sorter: (a: StaffProps, b: StaffProps) =>
         (a.id ?? 1) > (b.id ?? 1) ? 1 : -1,
       render(text: string, record: StaffProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 80 },
         }
       },
     })
@@ -43,8 +46,11 @@ const Staff = () => {
       sorter: (a: StaffProps, b: StaffProps) =>
         (a.name ?? 1) > (b.name ?? 1) ? 1 : -1,
       render(text: string, record: StaffProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 80 },
         }
       },
     })
@@ -55,8 +61,11 @@ const Staff = () => {
       sorter: (a: StaffProps, b: StaffProps) =>
         (a.role ?? 1) > (b.role ?? 1) ? 1 : -1,
       render(text: string, record: StaffProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 80 },
         }
       },
     })
@@ -70,8 +79,11 @@ const Staff = () => {
         const name = branchData?.find((item: any) => {
           return item.id.toString() == text
         })?.name
+        return name
+      },
+      onCell: (record) => {
         return {
-          children: <div>{name}</div>,
+          style: { minWidth: 80 },
         }
       },
     })
@@ -91,6 +103,11 @@ const Staff = () => {
               }}
             />
           ),
+        }
+      },
+      onCell: (record) => {
+        return {
+          style: { maxWidth: 50 },
         }
       },
     })

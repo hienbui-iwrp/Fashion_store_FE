@@ -38,8 +38,11 @@ const Warehouse = () => {
       title: 'Mã kho',
       dataIndex: 'id',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
@@ -50,8 +53,11 @@ const Warehouse = () => {
       title: 'Tên kho',
       dataIndex: 'name',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
@@ -62,8 +68,11 @@ const Warehouse = () => {
       title: 'Địa chỉ',
       dataIndex: '',
       render(text: string, record: DataType, index: number) {
+        return formatAddress(record)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatAddress(record)}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -74,8 +83,11 @@ const Warehouse = () => {
       title: 'Sức chứa',
       dataIndex: 'capacity',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.capacity > b.capacity ? 1 : -1),
@@ -85,8 +97,11 @@ const Warehouse = () => {
       title: 'Còn lại',
       dataIndex: 'empty',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.empty > b.empty ? 1 : -1),
@@ -96,8 +111,11 @@ const Warehouse = () => {
       title: 'Quản lý',
       dataIndex: 'manager',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.manager > b.manager ? 1 : -1),
@@ -107,8 +125,11 @@ const Warehouse = () => {
       title: 'Nhân viên',
       dataIndex: 'staff',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.staff > b.staff ? 1 : -1),
@@ -118,8 +139,11 @@ const Warehouse = () => {
       title: 'Ngày thành lập',
       dataIndex: 'createdDate',
       render(text: string, record: DataType, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 130 },
         }
       },
       sorter: (a: DataType, b: DataType) =>

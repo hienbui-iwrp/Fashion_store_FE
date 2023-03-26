@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, Routes } from '@/constants'
 import axios from 'axios'
 import styles from '@/styles/Admin.module.css'
 import { Card, Space } from 'antd'
@@ -28,9 +28,13 @@ const Event = () => {
     columns.push({
       title: 'Mã sự kiện',
       dataIndex: 'id',
+      fixed: 'left',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
@@ -40,9 +44,7 @@ const Event = () => {
       title: 'Tên sự kiện',
       dataIndex: 'name',
       render(text: string, record: DataType, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
     })
@@ -51,9 +53,7 @@ const Event = () => {
       title: 'Thời gian bắt đầu',
       dataIndex: 'startTime',
       render(text: string, record: DataType, index: number) {
-        return {
-          children: <div>{formatTime(text) + ' - ' + formatDate(text)}</div>,
-        }
+        return formatTime(text) + ' - ' + formatDate(text)
       },
       sorter: (a: DataType, b: DataType) =>
         a.startTime > b.startTime ? 1 : -1,
@@ -62,9 +62,7 @@ const Event = () => {
       title: 'Thời gian kết thúc',
       dataIndex: 'endTime',
       render(text: string, record: DataType, index: number) {
-        return {
-          children: <div>{formatTime(text) + ' - ' + formatDate(text)}</div>,
-        }
+        return formatTime(text) + ' - ' + formatDate(text)
       },
       sorter: (a: DataType, b: DataType) => (a.endTime > b.endTime ? 1 : -1),
     })
@@ -73,8 +71,11 @@ const Event = () => {
       title: 'Mức giảm',
       dataIndex: 'discount',
       render(text: string, record: DataType, index: number) {
+        return text + '%'
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text + '%'}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.discount > b.discount ? 1 : -1),
@@ -109,7 +110,7 @@ const Event = () => {
           data={data}
           title='Danh sách sự kiện'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/event/detail'}
+          selectUrl={Routes.admin.eventDetail}
           loading={loading}
           ellipsis={true}
         />

@@ -174,7 +174,7 @@ const Detail = () => {
           </Row>
         </Card>
         <Card className='!max-w-full-lg'>
-          <LineChart data={statisticData} revenue profit={true} />
+          <LineChart data={statisticData} revenue={true} profit={true} />
         </Card>
         {modalAddEditBranch && (
           <ModalAddEditBranch

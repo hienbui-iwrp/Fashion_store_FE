@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, Routes } from '@/constants'
 import axios from 'axios'
 import { EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
@@ -43,9 +43,7 @@ const Goods = () => {
       title: 'STT',
       dataIndex: '',
       render(text: string, record: DateItem, index: number) {
-        return {
-          children: <div>{index}</div>,
-        }
+        return index
       },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })
@@ -54,29 +52,30 @@ const Goods = () => {
       title: 'Mã hàng hóa',
       dataIndex: 'id',
       render(text: string, record: DateItem, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })
+
     columns.push({
       title: 'Tên hàng hóa',
       dataIndex: 'name',
       render(text: string, record: DateItem, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })
+
     columns.push({
       title: 'Số lượng',
       dataIndex: 'quantity',
       render(text: string, record: DateItem, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })
@@ -122,7 +121,7 @@ const Goods = () => {
           <AddButton
             label='Thêm mới'
             onClick={() => {
-              router.push(BASE_URL + 'goods/detail')
+              router.push(Routes.admin.goodsDetail)
             }}
             large
           />
@@ -132,7 +131,7 @@ const Goods = () => {
           data={data}
           title='Danh sách hàng hóa'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/goods/detail'}
+          selectUrl={Routes.admin.goodsDetail}
           loading={loading}
         />
       </Space>

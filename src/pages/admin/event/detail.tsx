@@ -78,32 +78,33 @@ const Account = () => {
       title: 'Mã sản phẩm',
       dataIndex: 'id',
       render(text: string, record: Goods, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: Goods, b: Goods) => (a.id > b.id ? 1 : -1),
+      onCell: (record) => {
+        return {
+          style: { minWidth: 70 },
+        }
+      },
     })
 
     columns.push({
       title: 'Hình ảnh',
       dataIndex: 'image',
       render(text: string, record: Goods, index: number) {
-        return {
-          children: (
-            <Image
-              alt='img'
-              src={record?.image ? record?.image[0] : ''}
-              preview={{
-                src: record?.image ? record?.image[0] : '',
-              }}
-              style={{
-                maxWidth: 40,
-                maxHeight: 40,
-              }}
-            />
-          ),
-        }
+        return (
+          <Image
+            alt='img'
+            src={record?.image ? record?.image[0] : ''}
+            preview={{
+              src: record?.image ? record?.image[0] : '',
+            }}
+            style={{
+              maxWidth: 40,
+              maxHeight: 40,
+            }}
+          />
+        )
       },
     })
 
@@ -111,9 +112,7 @@ const Account = () => {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
       render(text: string, record: Goods, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: Goods, b: Goods) => (a.name > b.name ? 1 : -1),
     })
@@ -122,31 +121,35 @@ const Account = () => {
       title: 'Kích thước',
       dataIndex: 'size',
       render(text: string, record: Goods, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: Goods, b: Goods) => (a.size > b.size ? 1 : -1),
+      onCell: (record) => {
+        return {
+          style: { minWidth: 70 },
+        }
+      },
     })
 
     columns.push({
       title: 'Màu sắc',
       dataIndex: 'color',
       render(text: string, record: Goods, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: Goods, b: Goods) => (a.color > b.color ? 1 : -1),
+      onCell: (record) => {
+        return {
+          style: { minWidth: 70 },
+        }
+      },
     })
 
     columns.push({
       title: 'Giá gốc',
       dataIndex: 'cost',
       render(text: string, record: Goods, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: Goods, b: Goods) => (a.cost > b.cost ? 1 : -1),
     })
@@ -155,10 +158,11 @@ const Account = () => {
       title: '',
       dataIndex: '',
       render(text: string, record: Goods, index: number) {
+        return <RemoveButton label='' borderRadius={5} onClick={() => {}} />
+      },
+      onCell: (record) => {
         return {
-          children: (
-            <RemoveButton label='' borderRadius={5} onClick={() => {}} />
-          ),
+          style: { maxWidth: 30 },
         }
       },
     })
@@ -346,6 +350,7 @@ const Account = () => {
         columns={columns}
         loading={loading}
         ellipsis={true}
+        rowKey={['id', 'size', 'color']}
       />
       {modalAllGoods && (
         <ModalAllGoods

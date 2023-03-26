@@ -40,21 +40,14 @@ const Detail = () => {
   const columns: ColumnsType<Goods> = []
   if (data) {
     columns.push({
-      title: 'STT',
-      dataIndex: '',
-      render(text: string, record: Goods, index: number) {
-        return {
-          children: <div>{index}</div>,
-        }
-      },
-    })
-
-    columns.push({
-      title: 'Tên sản phẫm',
+      title: 'Tên sản phẩm',
       dataIndex: 'name',
       render(text: string, record: Goods, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: Goods, b: Goods) => (a.name > b.name ? 1 : -1),
@@ -63,8 +56,11 @@ const Detail = () => {
       title: 'Đơn giá',
       dataIndex: 'price',
       render(text: string, record: Goods, index: number) {
+        return formatNumber(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatNumber(text)}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: Goods, b: Goods) => (a.price > b.price ? 1 : -1),
@@ -73,8 +69,11 @@ const Detail = () => {
       title: 'Số lượng',
       dataIndex: 'quantity',
       render(text: string, record: Goods, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: Goods, b: Goods) => (a.quantity > b.quantity ? 1 : -1),
@@ -84,8 +83,11 @@ const Detail = () => {
       title: 'Thành tiền',
       dataIndex: '',
       render(text: string, record: Goods, index: number) {
+        return formatNumber(record.quantity * record.price)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatNumber(record.quantity * record.price)}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: Goods, b: Goods) =>

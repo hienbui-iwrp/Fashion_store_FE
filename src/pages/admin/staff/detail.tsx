@@ -12,6 +12,7 @@ import {
   BranchProps,
   formatAddress,
   formatBranchData,
+  formatBranchDataXML,
   formatDate,
   formatNumber,
   formatStaffData,
@@ -24,6 +25,7 @@ import {
   deleteStaff,
   getAttendace,
   getBranchDetail,
+  getBranchDetailBff,
   getStaffDetail,
 } from '@/api'
 import styles from '@/styles/Admin.module.css'
@@ -73,9 +75,7 @@ const Detail = () => {
       sorter: (a: AttendanceProps, b: AttendanceProps) =>
         (a.date ?? 1) > (b.date ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
-        return {
-          children: <div>{formatDate(text)}</div>,
-        }
+        return formatDate(text)
       },
     })
 
@@ -85,9 +85,7 @@ const Detail = () => {
       sorter: (a: AttendanceProps, b: AttendanceProps) =>
         (a.checkIn ?? 1) > (b.checkIn ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
-        return {
-          children: <div>{formatTime(text)}</div>,
-        }
+        return formatTime(text)
       },
     })
 
@@ -97,9 +95,7 @@ const Detail = () => {
       sorter: (a: AttendanceProps, b: AttendanceProps) =>
         (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
-        return {
-          children: <div>{formatTime(text)}</div>,
-        }
+        return formatTime(text)
       },
     })
 
@@ -112,11 +108,7 @@ const Detail = () => {
           ? 1
           : -1,
       render(text: any, record: AttendanceProps, index: number) {
-        return {
-          children: (
-            <div>{getWorkingTime(record.checkIn, record.checkOut)}</div>
-          ),
-        }
+        return getWorkingTime(record.checkIn, record.checkOut)
       },
     })
   }
@@ -156,10 +148,10 @@ const Detail = () => {
   }
 
   const getData = async () => {
-    // let staffData: StaffProps = {}
     await getStaffDetail(id).then((res: any) => {
-      if (res.data.Data.Status == 'res.data.Data') router.push(Routes.error)
-      const _data = formatStaffData(res.data.Data)
+      if (res.data.StatusCode != 200) router.push(Routes.error)
+      const _data = formatStaffData(res.data.Data[0])
+
       setData(_data)
     })
     setLoading(false)
@@ -172,10 +164,13 @@ const Detail = () => {
           return {
             date: new Date(item.AttendanceDate),
             checkIn: new Date(item.CheckinTime),
-            checkOut: new Date(item.CheckoutTime),
+            checkOut: new Date(
+              item.CheckoutTime.Valid ? item.CheckoutTime.Time : undefined
+            ),
           }
         }
       )
+      console.log('attend: ', _attendacceData)
 
       setAttendanceShowData(
         _attendacceData.filter((item: AttendanceProps) => {
@@ -212,9 +207,9 @@ const Detail = () => {
   }, [id])
 
   useEffect(() => {
-    if (data) {
-      getBranchDetail(data.branchId).then((res: any) => {
-        const _data = formatBranchData(res.data.Data)
+    if (data.branchId) {
+      getBranchDetailBff(data.branchId).then((res: any) => {
+        const _data = formatBranchDataXML(res)
         setListData(data, _data)
       })
     }
@@ -298,6 +293,7 @@ const Detail = () => {
           data={attendanceShowData ?? []}
           columns={columns}
           loading={loading}
+          rowKey={['date']}
           header={
             <Row>
               <Col xs={12} lg={6} className='mt-2'>
