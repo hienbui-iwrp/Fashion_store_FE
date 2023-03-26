@@ -115,21 +115,6 @@ const Account = () => {
       sorter: (a: AccountProps, b: AccountProps) =>
         a.createdAt > b.createdAt ? 1 : -1,
     })
-
-    columns.push({
-      title: 'Tình trạng',
-      dataIndex: 'isActivated',
-      render(text: string, record: AccountProps, index: number) {
-        return text == 'true' ? 'Đã dừng' : 'Đang hoạt động'
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 100 },
-        }
-      },
-      sorter: (a: AccountProps, b: AccountProps) =>
-        a.isActivated > b.isActivated ? 1 : -1,
-    })
   }
 
   const getData = async () => {
@@ -138,7 +123,7 @@ const Account = () => {
         const _data = res?.Data.map((item: any) => {
           return formatAccountDataXML(item)
         })
-        setData(_data)
+        setData(_data.filter((item: any) => item.isActivated == 'true'))
       }
     })
   }

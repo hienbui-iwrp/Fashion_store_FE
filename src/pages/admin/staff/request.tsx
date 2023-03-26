@@ -91,10 +91,13 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) => {
         return (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1
       },
-      render(text: string, record: RequestProps, index: number) {
+      onCell: (record: RequestProps) => {
         return {
-          children: <div>{findStaff(record)?.name}</div>,
+          style: { minWidth: 70 },
         }
+      },
+      render(text: string, record: RequestProps, index: number) {
+        return findStaff(record)?.name
       },
     })
     columns.push({
@@ -109,9 +112,7 @@ const Request = () => {
             staffData.find((s: StaffProps) => s.id == record.staffId)?.branchId
           )
         })?.name
-        return {
-          children: <div>{name}</div>,
-        }
+        return name
       },
     })
     columns.push({
@@ -120,31 +121,16 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return {
-          children: <div>{findStaff(record)?.role}</div>,
-        }
+        return findStaff(record)?.role
       },
     })
-    // columns.push({
-    //   title: 'Lương yêu cầu',
-    //   dataIndex: '',
-    //   sorter: (a: RequestProps, b: RequestProps) =>
-    //     (findStaff(a)?.salary ?? 1) > (findStaff(b)?.salary ?? 1) ? 1 : -1,
-    //   render(text: string, record: RequestProps, index: number) {
-    //     return {
-    //       children: <div>{formatNumber(findStaff(record)?.salary)}</div>,
-    //     }
-    //   },
-    // })
 
     columns.push({
       title: 'Ngày tạo',
       dataIndex: 'date',
       sorter: (a: RequestProps, b: RequestProps) => (a.date > b.date ? 1 : -1),
       render(text: string, record: RequestProps, index: number) {
-        return {
-          children: <div>{formatDate(text)}</div>,
-        }
+        return formatDate(text)
       },
     })
 
@@ -154,7 +140,7 @@ const Request = () => {
       render(text: string, record: RequestProps, index: number) {
         return {
           props: {
-            style: { maxWidth: 100 },
+            style: { maxWidth: 90 },
           },
           children: (
             <Space key={index + record.id}>
@@ -193,9 +179,7 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.id ?? 1) > (findStaff(b)?.id ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return {
-          children: <div>{findStaff(record)?.id}</div>,
-        }
+        return findStaff(record)?.id
       },
     })
     columns.push({
@@ -204,9 +188,7 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return {
-          children: <div>{findStaff(record)?.name}</div>,
-        }
+        return findStaff(record)?.name
       },
     })
 
@@ -222,9 +204,7 @@ const Request = () => {
             staffData.find((s: StaffProps) => s.id == record.staffId)?.branchId
           )
         })?.name
-        return {
-          children: <div>{name}</div>,
-        }
+        return name
       },
     })
 
@@ -234,43 +214,41 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return {
-          children: <div>{findStaff(record)?.role}</div>,
-        }
+        return findStaff(record)?.role
       },
     })
 
     columns.push({
       title: '',
       dataIndex: '',
-      render(text: string, record: RequestProps, index: number) {
+      onCell: (record: RequestProps) => {
         return {
-          props: {
-            style: { maxWidth: 70 },
-          },
-          children: (
-            <Space key={index + record.id}>
-              <RemoveButton
-                icon={<CloseOutlined />}
-                label={'Xóa'}
-                onClick={(e) => {
-                  requestId.current = record.id
-                  removeModal.showModelConfirm()
-                  e.stopPropagation()
-                }}
-              />
-              <AddButton
-                icon={<CheckOutlined />}
-                label={'Duyệt'}
-                onClick={(e) => {
-                  requestId.current = record.id
-                  acceptModal.showModelConfirm()
-                  e.stopPropagation()
-                }}
-              />
-            </Space>
-          ),
+          style: { maxWidth: 80 },
         }
+      },
+      render(text: string, record: RequestProps, index: number) {
+        return (
+          <Space key={index + record.id}>
+            <RemoveButton
+              icon={<CloseOutlined />}
+              label={'Xóa'}
+              onClick={(e) => {
+                requestId.current = record.id
+                removeModal.showModelConfirm()
+                e.stopPropagation()
+              }}
+            />
+            <AddButton
+              icon={<CheckOutlined />}
+              label={'Duyệt'}
+              onClick={(e) => {
+                requestId.current = record.id
+                acceptModal.showModelConfirm()
+                e.stopPropagation()
+              }}
+            />
+          </Space>
+        )
       },
     })
     return { data: _data, columns }

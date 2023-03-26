@@ -76,6 +76,11 @@ const Branch = () => {
           />
         )
       },
+      onCell: (record) => {
+        return {
+          style: { maxWidth: 50 },
+        }
+      },
     })
   }
 

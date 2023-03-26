@@ -48,42 +48,36 @@ const Detail = () => {
   const columns: ColumnsType<DataWarehouse> = []
   if (data) {
     columns.push({
-      title: 'STT',
-      dataIndex: '',
+      title: 'Mã kho',
+      dataIndex: 'id',
       render(text: string, record: DataWarehouse, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{index}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
 
     columns.push({
-      title: 'Mã kho',
-      dataIndex: 'id',
-      render(text: string, record: DataWarehouse, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
-      },
-      sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
-    })
-    columns.push({
       title: 'Tên kho',
       dataIndex: 'name',
       render(text: string, record: DataWarehouse, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
+        return text
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
     columns.push({
-      title: 'Số lượng trong kho',
+      title: 'Số lượng',
       dataIndex: 'quantity',
       render(text: string, record: DataWarehouse, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 70 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
@@ -93,9 +87,7 @@ const Detail = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdDate',
       render(text: string, record: DataWarehouse, index: number) {
-        return {
-          children: <div>{formatDate(text)}</div>,
-        }
+        return formatDate(text)
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
@@ -104,9 +96,7 @@ const Detail = () => {
       title: 'Ngày thêm',
       dataIndex: 'updateDate',
       render(text: string, record: DataWarehouse, index: number) {
-        return {
-          children: <div>{formatDate(text)}</div>,
-        }
+        return formatDate(text)
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
@@ -249,7 +239,7 @@ const Detail = () => {
               </Row>
             </Col>
           </Row>
-          <p className='flex flex-wrap my-3'>
+          <div className='flex flex-wrap my-3'>
             {data?.image?.map((img: string, index: number) => {
               return (
                 <span key={index} className='relative drop-shadow-md mx-2'>
@@ -290,7 +280,7 @@ const Detail = () => {
             >
               Thêm ảnh
             </Button>
-          </p>
+          </div>
           <p className='flex justify-end'>
             <AddButton label='Lưu' icon={<CheckOutlined />} />
           </p>

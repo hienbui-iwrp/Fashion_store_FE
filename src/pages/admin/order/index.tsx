@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, Routes } from '@/constants'
 import axios from 'axios'
 import styles from '@/styles/Admin.module.css'
 import { Card, DatePicker, Space } from 'antd'
@@ -22,21 +22,14 @@ const Order = () => {
   const columns: ColumnsType<DataType> = []
   if (data) {
     columns.push({
-      title: 'STT',
-      dataIndex: '',
-      render(text: string, record: DataType, index: number) {
-        return {
-          children: <div>{index}</div>,
-        }
-      },
-    })
-
-    columns.push({
       title: 'Cửa hàng',
       dataIndex: 'branch',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -47,8 +40,11 @@ const Order = () => {
       title: 'Mã đơn',
       dataIndex: 'id',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -59,8 +55,11 @@ const Order = () => {
       title: 'Ngày giao dịch',
       dataIndex: 'createdDate',
       render(text: string, record: DataType, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -71,8 +70,11 @@ const Order = () => {
       title: 'Giá trị',
       dataIndex: 'total',
       render(text: string, record: DataType, index: number) {
+        return formatNumber(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatNumber(text)}</div>,
+          style: { minWidth: 50 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.total > b.total ? 1 : -1),
@@ -108,9 +110,9 @@ const Order = () => {
         </div>
         <TableList<DataType>
           data={data}
-          title='Danh sách nhân viên'
+          title='Danh sách đơn hàng'
           columns={columns}
-          selectUrl={BASE_URL + 'admin/order/detail'}
+          selectUrl={Routes.admin.orderDetail}
           loading={loading}
           ellipsis={true}
         />

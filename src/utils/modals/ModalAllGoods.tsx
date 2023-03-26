@@ -43,7 +43,6 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   const [rowSelected, setRowSelected] = useState<string[]>(
     props?.extraData?.map((item: any) => item.id + item.size + item.color) ?? []
   )
-  console.log(props.single)
 
   const getAllGoods = async () => {
     await axios
@@ -115,8 +114,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'Nữ', value: 'Nữ' },
         { text: 'Unisex', value: 'Unisex' },
       ],
-      onFilter: (value: string, record: DataType) =>
-        record.gender.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.gender.includes(value.toString()),
     })
 
     columns.push({
@@ -132,8 +131,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'Áo khoác', value: 'Áo khoác' },
         { text: 'Áo thun', value: 'Áo thun' },
       ],
-      onFilter: (value: string, record: DataType) =>
-        record.type.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.type.includes(value.toString()),
     })
 
     columns.push({
@@ -149,7 +148,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'Người lớn', value: 'Người lớn' },
         { text: 'Trẻ em', value: 'Trẻ em' },
       ],
-      onFilter: (value: string, record: DataType) => record.age.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.age.includes(value.toString()),
     })
 
     columns.push({
@@ -169,8 +169,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'XXL', value: 'XXL' },
         { text: 'XXXL', value: 'XXXL' },
       ],
-      onFilter: (value: string, record: DataType) =>
-        record.size.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.size.includes(value.toString()),
     })
 
     columns.push({
