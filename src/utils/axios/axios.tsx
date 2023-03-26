@@ -103,7 +103,7 @@ bpelAccount.interceptors.response.use(
 )
 
 export const adminBff = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BPEL_ADMIN_BFF_PROXY,
+  baseURL: process.env.NEXT_PUBLIC_ADMIN_BFF_PROXY,
   headers: {
     'Content-Type': 'application/xml',
     'Access-Control-Allow-Origin': '*',
