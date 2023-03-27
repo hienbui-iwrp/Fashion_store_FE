@@ -26,7 +26,7 @@ const Branch = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 80 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -41,7 +41,7 @@ const Branch = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 100 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -56,7 +56,7 @@ const Branch = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 180 },
+          style: { minWidth: 120 },
         }
       },
     })

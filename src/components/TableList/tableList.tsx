@@ -31,7 +31,9 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
           )
           return key
         }
-      : (record: any) => record?.id ?? '',
+      : (record: any) => {
+          return record?.id ?? ''
+        },
   }
 
   const tableColumns = props?.columns?.map((item: any) => ({
@@ -48,7 +50,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         borderRadius: 12,
         paddingTop: props.header ? 15 : 0,
         paddingBottom: props.pagination ?? true ? 0 : 20,
-        maxWidth: '80vw',
+        maxWidth: props.maxWidth ?? '80vw',
       }}
     >
       <div style={{ marginBottom: 10 }}>{props.header}</div>

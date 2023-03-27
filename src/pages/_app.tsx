@@ -107,8 +107,6 @@ export default function App({ Component, pageProps }: AppProps) {
       router.pathname === Routes.manageOrders ||
       router.pathname === Routes.userInfo
     ) {
-      console.log('????????????????')
-
       if (localStorage.getItem('logged') === '') {
         router.replace('/login')
       }
@@ -149,6 +147,7 @@ export default function App({ Component, pageProps }: AppProps) {
         >
           <LayoutClient>
             <Component {...pageProps} />
+            <Notify />
           </LayoutClient>
         </ConfigProvider>
       </Provider>
@@ -183,7 +182,12 @@ export default function App({ Component, pageProps }: AppProps) {
       </Provider>
     )
 
-  return <Component {...pageProps} />
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+      <Notify />
+    </Provider>
+  )
 }
 
 const Notify = () => {

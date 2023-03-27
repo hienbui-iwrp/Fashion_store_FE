@@ -96,6 +96,11 @@ const Detail = () => {
       render(text: string, record: OrderData, index: number) {
         return text
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 100 },
+        }
+      },
       sorter: (a: OrderData, b: OrderData) => (a.id > b.id ? 1 : -1),
     })
     columns.push({
@@ -103,6 +108,11 @@ const Detail = () => {
       dataIndex: 'createdDate',
       render(text: string, record: OrderData, index: number) {
         return formatDate(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 100 },
+        }
       },
       sorter: (a: OrderData, b: OrderData) =>
         a.createdDate > b.createdDate ? 1 : -1,
@@ -120,16 +130,22 @@ const Detail = () => {
             background: index % 2 ? Colors.white : Colors.adminBackground,
             color:
               record.status == 'Đang giao' ? Colors.adminRed500 : Colors.black,
+            minWidth: 100,
           },
         }
       },
       sorter: (a: OrderData, b: OrderData) => (a.status > b.status ? 1 : -1),
     })
     columns.push({
-      title: 'Tổng giá trị đơn',
+      title: 'Tổng giá trị',
       dataIndex: 'total',
       render(text: string, record: OrderData, index: number) {
         return formatNumber(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 130 },
+        }
       },
       sorter: (a: OrderData, b: OrderData) => (a.total > b.total ? 1 : -1),
     })

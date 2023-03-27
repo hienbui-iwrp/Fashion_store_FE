@@ -47,7 +47,7 @@ const Detail = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: Goods, b: Goods) => (a.name > b.name ? 1 : -1),
@@ -60,7 +60,7 @@ const Detail = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 90 },
         }
       },
       sorter: (a: Goods, b: Goods) => (a.price > b.price ? 1 : -1),
@@ -73,7 +73,7 @@ const Detail = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: Goods, b: Goods) => (a.quantity > b.quantity ? 1 : -1),
@@ -87,7 +87,7 @@ const Detail = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: Goods, b: Goods) =>

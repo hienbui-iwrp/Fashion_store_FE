@@ -30,6 +30,7 @@ export interface TableListProps<T> extends ComponentProps {
   onSelectRow?: () => void
   rowSelection?: object
   rowKey?: string[]
+  maxWidth?: string | number
 }
 
 export interface LineChartProps extends ComponentProps {

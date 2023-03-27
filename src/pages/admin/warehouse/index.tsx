@@ -42,7 +42,7 @@ const Warehouse = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 100 },
+          style: { minWidth: 80 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
@@ -57,7 +57,7 @@ const Warehouse = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 100 },
+          style: { minWidth: 90 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),

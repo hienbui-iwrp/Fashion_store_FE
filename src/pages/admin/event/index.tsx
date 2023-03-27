@@ -34,7 +34,7 @@ const Event = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 100 },
+          style: { minWidth: 110 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
@@ -46,6 +46,11 @@ const Event = () => {
       render(text: string, record: DataType, index: number) {
         return text
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 110 },
+        }
+      },
       sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
     })
 
@@ -55,6 +60,11 @@ const Event = () => {
       render(text: string, record: DataType, index: number) {
         return formatTime(text) + ' - ' + formatDate(text)
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 150 },
+        }
+      },
       sorter: (a: DataType, b: DataType) =>
         a.startTime > b.startTime ? 1 : -1,
     })
@@ -63,6 +73,11 @@ const Event = () => {
       dataIndex: 'endTime',
       render(text: string, record: DataType, index: number) {
         return formatTime(text) + ' - ' + formatDate(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 150 },
+        }
       },
       sorter: (a: DataType, b: DataType) => (a.endTime > b.endTime ? 1 : -1),
     })

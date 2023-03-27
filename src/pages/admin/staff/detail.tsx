@@ -77,6 +77,11 @@ const Detail = () => {
       render(text: any, record: AttendanceProps, index: number) {
         return formatDate(text)
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
     })
 
     columns.push({
@@ -87,6 +92,11 @@ const Detail = () => {
       render(text: any, record: AttendanceProps, index: number) {
         return formatTime(text)
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 140 },
+        }
+      },
     })
 
     columns.push({
@@ -96,6 +106,11 @@ const Detail = () => {
         (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
         return formatTime(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
       },
     })
 
@@ -109,6 +124,11 @@ const Detail = () => {
           : -1,
       render(text: any, record: AttendanceProps, index: number) {
         return getWorkingTime(record.checkIn, record.checkOut)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
       },
     })
   }

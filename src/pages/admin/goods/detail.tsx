@@ -55,7 +55,7 @@ const Detail = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 80 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
@@ -67,6 +67,11 @@ const Detail = () => {
       render(text: string, record: DataWarehouse, index: number) {
         return text
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 80 },
+        }
+      },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
     columns.push({
@@ -77,7 +82,7 @@ const Detail = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 70 },
+          style: { minWidth: 90 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
@@ -89,6 +94,11 @@ const Detail = () => {
       render(text: string, record: DataWarehouse, index: number) {
         return formatDate(text)
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 100 },
+        }
+      },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
 
@@ -97,6 +107,11 @@ const Detail = () => {
       dataIndex: 'updateDate',
       render(text: string, record: DataWarehouse, index: number) {
         return formatDate(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 110 },
+        }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
@@ -303,28 +318,55 @@ const Detail = () => {
                   pagination={false}
                   loading={loading}
                   header={
-                    <div className='flex justify-between'>
-                      <Space>
-                        <b>Màu</b>
-                        <Input
-                          className={styles.adminInputShadow}
-                          defaultValue={item.color}
+                    <Row>
+                      <Col xs={24} sm={15} lg={10}>
+                        <Space className='mb-4'>
+                          <b>Màu</b>
+                          <Input
+                            className={styles.adminInputShadow}
+                            defaultValue={item.color}
+                          />
+                        </Space>
+                      </Col>
+                      <Col xs={24} sm={9} lg={8}>
+                        <Space className='mb-4'>
+                          <b>Kích thước</b>
+                          <DropdownButton label={item.size} items={['S']} />
+                        </Space>
+                      </Col>
+                      <Col xs={24} sm={24} lg={6}>
+                        <AddButton
+                          label='Thêm vào kho mới'
+                          onClick={() => {
+                            routes.push(
+                              `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
+                            )
+                          }}
                         />
-                      </Space>
+                      </Col>
+                    </Row>
+                    // <div className='flex justify-between'>
+                    //   <Space>
+                    //     <b>Màu</b>
+                    //     <Input
+                    //       className={styles.adminInputShadow}
+                    //       defaultValue={item.color}
+                    //     />
+                    //   </Space>
 
-                      <Space>
-                        <b>Màu</b>
-                        <DropdownButton label={item.size} items={['S']} />
-                      </Space>
-                      <AddButton
-                        label='Thêm vào kho mới'
-                        onClick={() => {
-                          routes.push(
-                            `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
-                          )
-                        }}
-                      />
-                    </div>
+                    //   <Space>
+                    //     <b>Kích thước</b>
+                    //     <DropdownButton label={item.size} items={['S']} />
+                    //   </Space>
+                    //   <AddButton
+                    //     label='Thêm vào kho mới'
+                    //     onClick={() => {
+                    //       routes.push(
+                    //         `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
+                    //       )
+                    //     }}
+                    //   />
+                    // </div>
                   }
                 />
               </div>
