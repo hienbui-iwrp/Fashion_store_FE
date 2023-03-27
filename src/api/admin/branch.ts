@@ -4,6 +4,7 @@ import {
   BranchProps,
   formatTime,
   adminBff,
+  formatResponse,
 } from '@/utils'
 
 export const getBranchBff = async () => {
@@ -17,14 +18,7 @@ export const getBranchBff = async () => {
   return await adminBff
     .post('/branch-service/get-all', xmls)
     .then((res) => {
-      const XMLParser = require('react-xml-parser')
-      const xml = new XMLParser().parseFromString(res.data)
-
-      return {
-        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-        Message: xml.getElementsByTagName('Message')[0].value,
-        Data: xml.getElementsByTagName('Data'),
-      }
+      return formatResponse(res.data)
     })
     .catch((err) => {
       console.log(err)
@@ -39,9 +33,7 @@ export const getBranchDetailBff = async (id: any) => {
   </soap:Body>
   `
   return await adminBff
-    .post(`/branch-service/get`, xmls, {
-      headers: { 'Content-Type': 'text/xml' },
-    })
+    .post(`/branch-service/get`, xmls)
     .then((res) => {
       const XMLParser = require('react-xml-parser')
       const xml = new XMLParser().parseFromString(res.data)

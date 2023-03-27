@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors, RequestStatus, RequestType } from '@/constants'
+import {
+  BASE_URL,
+  Colors,
+  RequestStatus,
+  RequestType,
+  StaffRole,
+  StaffStatus,
+} from '@/constants'
 import axios from 'axios'
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
@@ -9,15 +16,27 @@ import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
 import {
   BranchProps,
   formatBranchData,
+  formatBranchDataXML,
   formatDate,
   formatRequestData,
+  formatRequestDataXML,
   formatStaffData,
+  formatStaffDataXML,
   ModalStaffDetail,
   RequestProps,
   StaffProps,
 } from '@/utils'
 import { useModalConfirm } from '@/hooks'
-import { getBranch, getListRequest, getStaff, updateRequest } from '@/api'
+import {
+  getBranch,
+  getBranchBff,
+  getListRequest,
+  getListRequestBFF,
+  getStaff,
+  getStaffBff,
+  updateRequest,
+  updateRequestBFF,
+} from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
@@ -36,7 +55,7 @@ const Request = () => {
     title: 'Xóa yêu cầu',
     content: 'Bạn chắc chắn muốn xóa yêu cầu này?',
     onOk: async () => {
-      await updateRequest(requestId.current, RequestStatus.unApproved)
+      await updateRequestBFF(requestId.current, RequestStatus.unApproved)
         .then((res: any) => {
           dispatch(setNotificationValue('Xóa yêu cầu thành công'))
           setTimeout(() => {
@@ -57,8 +76,8 @@ const Request = () => {
   const acceptModal = useModalConfirm({
     title: 'Xác nhận yêu cầu',
     content: 'Bạn chắc chắn muốn chấp nhận yêu cầu này?',
-    onOk: () => {
-      updateRequest(requestId.current, RequestStatus.approved)
+    onOk: async () => {
+      await updateRequestBFF(requestId.current, RequestStatus.approved)
         .then((res: any) => {
           dispatch(setNotificationValue('Đã thêm nhân viên mới'))
           setLoading(true)
@@ -119,13 +138,17 @@ const Request = () => {
         }
       },
     })
+
     columns.push({
       title: 'Vị trí',
       dataIndex: '',
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return findStaff(record)?.role
+        const roleName = StaffRole.find(
+          (item: any) => item.value == findStaff(record)?.role
+        )?.content
+        return roleName ?? 'Nhân viên'
       },
       onCell: (record: RequestProps) => {
         return {
@@ -243,7 +266,10 @@ const Request = () => {
       sorter: (a: RequestProps, b: RequestProps) =>
         (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return findStaff(record)?.role
+        const roleName = StaffRole.find(
+          (item: any) => item.value == findStaff(record)?.role
+        )?.content
+        return roleName ?? 'Nhân viên'
       },
       onCell: (record: RequestProps) => {
         return {
@@ -289,29 +315,36 @@ const Request = () => {
   }
 
   const getData = async () => {
-    await getListRequest().then((res: any) => {
-      if (res.data.StatusCode != 200) throw new Error('FAIL')
-      const _data = res.data.Data.filter(
-        (item: any) => item.Status == RequestStatus.pending
-      ).map((item: any) => {
-        return formatRequestData(item)
-      })
-      console.log(_data)
+    await getListRequestBFF().then((res: any) => {
+      if (res.StatusCode != 200) throw new Error('FAIL')
+      const _data = res.Data.map((item: any) => {
+        return formatRequestDataXML(item)
+      }).filter((item: any) => item.status == RequestStatus.pending)
+
       setData(_data)
     })
 
-    await getStaff().then((res: any) => {
-      if (res.data.StatusCode != 200) throw new Error('FAIL')
-      const _data = res.data.Data.map((item: any) => {
-        return formatStaffData(item)
+    await getStaffBff()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: any) => formatStaffDataXML(item))
+        console.log(_data)
+        setStaffData(_data)
       })
-      setStaffData(_data)
-    })
+      .catch((err) => console.log(err))
 
-    await getBranch().then((res: any) => {
-      const _data = res.data.Data.map((item: any) => {
-        if (res.data.StatusCode != 200) throw new Error('FAIL')
-        return formatBranchData(item)
+    // await getBranch().then((res: any) => {
+    //   const _data = res.data.Data.map((item: any) => {
+    //     if (res.data.StatusCode != 200) throw new Error('FAIL')
+    //     return formatBranchData(item)
+    //   })
+    //   setBranchData(_data)
+    // })
+
+    await getBranchBff().then((res: any) => {
+      if (res.StatusCode != 200) throw new Error('FAIL')
+      const _data = res.Data.map((item: any) => {
+        return formatBranchDataXML(item)
       })
       setBranchData(_data)
     })
