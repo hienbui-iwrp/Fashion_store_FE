@@ -10,7 +10,6 @@ import {
   BranchProps,
   formatBranchData,
   formatDate,
-  formatNumber,
   formatRequestData,
   formatStaffData,
   ModalStaffDetail,
@@ -93,7 +92,7 @@ const Request = () => {
       },
       onCell: (record: RequestProps) => {
         return {
-          style: { minWidth: 70 },
+          style: { minWidth: 150 },
         }
       },
       render(text: string, record: RequestProps, index: number) {
@@ -114,6 +113,11 @@ const Request = () => {
         })?.name
         return name
       },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
     })
     columns.push({
       title: 'Vị trí',
@@ -122,6 +126,11 @@ const Request = () => {
         (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
         return findStaff(record)?.role
+      },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 80 },
+        }
       },
     })
 
@@ -132,39 +141,44 @@ const Request = () => {
       render(text: string, record: RequestProps, index: number) {
         return formatDate(text)
       },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
     })
 
     columns.push({
       title: '',
       dataIndex: '',
-      render(text: string, record: RequestProps, index: number) {
+      onCell: (record: RequestProps) => {
         return {
-          props: {
-            style: { maxWidth: 90 },
-          },
-          children: (
-            <Space key={index + record.id}>
-              <RemoveButton
-                icon={<CloseOutlined />}
-                label={'Xóa'}
-                onClick={(e) => {
-                  requestId.current = record.id
-                  removeModal.showModelConfirm()
-                  e.stopPropagation()
-                }}
-              />
-              <AddButton
-                icon={<CheckOutlined />}
-                label={'Duyệt'}
-                onClick={(e) => {
-                  requestId.current = record.id
-                  acceptModal.showModelConfirm()
-                  e.stopPropagation()
-                }}
-              />
-            </Space>
-          ),
+          style: { maxWidth: 210 },
         }
+      },
+      render(text: string, record: RequestProps, index: number) {
+        return (
+          <Space key={index + record.id}>
+            <RemoveButton
+              icon={<CloseOutlined />}
+              label={'Xóa'}
+              onClick={(e) => {
+                requestId.current = record.id
+                removeModal.showModelConfirm()
+                e.stopPropagation()
+              }}
+            />
+            <AddButton
+              icon={<CheckOutlined />}
+              label={'Duyệt'}
+              onClick={(e) => {
+                requestId.current = record.id
+                acceptModal.showModelConfirm()
+                e.stopPropagation()
+              }}
+            />
+          </Space>
+        )
       },
     })
     return { data: _data, columns }
@@ -181,6 +195,11 @@ const Request = () => {
       render(text: string, record: RequestProps, index: number) {
         return findStaff(record)?.id
       },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
     })
     columns.push({
       title: 'Tên nhân viên',
@@ -189,6 +208,11 @@ const Request = () => {
         (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
         return findStaff(record)?.name
+      },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 120 },
+        }
       },
     })
 
@@ -206,6 +230,11 @@ const Request = () => {
         })?.name
         return name
       },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
     })
 
     columns.push({
@@ -216,6 +245,11 @@ const Request = () => {
       render(text: string, record: RequestProps, index: number) {
         return findStaff(record)?.role
       },
+      onCell: (record: RequestProps) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
     })
 
     columns.push({
@@ -223,7 +257,7 @@ const Request = () => {
       dataIndex: '',
       onCell: (record: RequestProps) => {
         return {
-          style: { maxWidth: 80 },
+          style: { maxWidth: 210 },
         }
       },
       render(text: string, record: RequestProps, index: number) {
@@ -289,10 +323,6 @@ const Request = () => {
     getData()
   }, [])
 
-  useEffect(() => {
-    getData()
-  }, [])
-
   return (
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
@@ -306,7 +336,7 @@ const Request = () => {
             setCurrentStaffData(findStaff(i))
           }}
           onSelectRow={() => setModalStaffDetail(true)}
-          rowKey={['id', 'staffId']}
+          rowKey={['id', 'type']}
         />
 
         <TableList<RequestProps>
@@ -319,7 +349,7 @@ const Request = () => {
           onSelectRow={() => setModalStaffDetail(true)}
           loading={loading}
           ellipsis={true}
-          rowKey={['id', 'staffId']}
+          rowKey={['id', 'type']}
         />
       </Space>
       <ModalStaffDetail

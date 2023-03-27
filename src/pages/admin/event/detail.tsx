@@ -83,7 +83,7 @@ const Account = () => {
       sorter: (a: Goods, b: Goods) => (a.id > b.id ? 1 : -1),
       onCell: (record) => {
         return {
-          style: { minWidth: 70 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -106,6 +106,11 @@ const Account = () => {
           />
         )
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 80 },
+        }
+      },
     })
 
     columns.push({
@@ -113,6 +118,11 @@ const Account = () => {
       dataIndex: 'name',
       render(text: string, record: Goods, index: number) {
         return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
       },
       sorter: (a: Goods, b: Goods) => (a.name > b.name ? 1 : -1),
     })
@@ -126,7 +136,7 @@ const Account = () => {
       sorter: (a: Goods, b: Goods) => (a.size > b.size ? 1 : -1),
       onCell: (record) => {
         return {
-          style: { minWidth: 70 },
+          style: { minWidth: 100 },
         }
       },
     })
@@ -140,7 +150,7 @@ const Account = () => {
       sorter: (a: Goods, b: Goods) => (a.color > b.color ? 1 : -1),
       onCell: (record) => {
         return {
-          style: { minWidth: 70 },
+          style: { minWidth: 90 },
         }
       },
     })
@@ -150,6 +160,11 @@ const Account = () => {
       dataIndex: 'cost',
       render(text: string, record: Goods, index: number) {
         return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 90 },
+        }
       },
       sorter: (a: Goods, b: Goods) => (a.cost > b.cost ? 1 : -1),
     })
@@ -162,7 +177,7 @@ const Account = () => {
       },
       onCell: (record) => {
         return {
-          style: { maxWidth: 30 },
+          style: { maxWidth: 60 },
         }
       },
     })

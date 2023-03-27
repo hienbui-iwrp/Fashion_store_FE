@@ -60,41 +60,52 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Mã sản phẩm',
       dataIndex: 'id',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
+      fixed: 'left',
     })
 
     columns.push({
       title: 'Hình ảnh',
       dataIndex: 'image',
       render(text: string, record: DataType, index: number) {
+        return (
+          <Image
+            alt='img'
+            src={record?.image ? record?.image[0] : ''}
+            preview={{
+              src: record?.image ? record?.image[0] : '',
+            }}
+            style={{
+              maxWidth: 32,
+              maxHeight: 32,
+            }}
+          />
+        )
+      },
+      onCell: (record) => {
         return {
-          children: (
-            <Image
-              alt='img'
-              src={record?.image ? record?.image[0] : ''}
-              preview={{
-                src: record?.image ? record?.image[0] : '',
-              }}
-              style={{
-                maxWidth: 32,
-                maxHeight: 32,
-              }}
-            />
-          ),
+          style: { minWidth: 120 },
         }
       },
+      fixed: 'left',
     })
 
     columns.push({
       title: 'Tên sản phẩm',
       dataIndex: 'name',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
@@ -104,8 +115,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Giới tính',
       dataIndex: 'gender',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.gender > b.gender ? 1 : -1),
@@ -122,8 +136,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Loại',
       dataIndex: 'type',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.type > b.type ? 1 : -1),
@@ -139,8 +156,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Lứa tuổi',
       dataIndex: 'age',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.age > b.age ? 1 : -1),
@@ -156,8 +176,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Kích thước',
       dataIndex: 'size',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.size > b.size ? 1 : -1),
@@ -177,8 +200,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Màu sắc',
       dataIndex: 'color',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.color > b.color ? 1 : -1),
@@ -250,6 +276,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
           }
           rowKey={['id', 'size', 'color']}
           scroll={{ y: '50vh' }}
+          maxWidth={'100%'}
         />
       </Modal>
     </>

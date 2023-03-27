@@ -29,7 +29,7 @@ const Order = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -44,7 +44,7 @@ const Order = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 90 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -59,7 +59,7 @@ const Order = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 130 },
         }
       },
       sorter: (a: DataType, b: DataType) =>

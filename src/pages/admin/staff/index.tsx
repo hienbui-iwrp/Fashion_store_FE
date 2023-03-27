@@ -35,7 +35,7 @@ const Staff = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 80 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -50,7 +50,7 @@ const Staff = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 80 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -65,7 +65,7 @@ const Staff = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 80 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -83,7 +83,7 @@ const Staff = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 80 },
+          style: { minWidth: 120 },
         }
       },
     })
@@ -91,19 +91,17 @@ const Staff = () => {
     columns.push({
       title: '',
       render(text: string, record: StaffProps, index: number) {
-        return {
-          children: (
-            <AddButton
-              icon={<EditOutlined />}
-              borderRadius={5}
-              onClick={(e) => {
-                e.stopPropagation()
-                setCurrentData(record)
-                setModalAddEditStaff(true)
-              }}
-            />
-          ),
-        }
+        return (
+          <AddButton
+            icon={<EditOutlined />}
+            borderRadius={5}
+            onClick={(e) => {
+              e.stopPropagation()
+              setCurrentData(record)
+              setModalAddEditStaff(true)
+            }}
+          />
+        )
       },
       onCell: (record) => {
         return {

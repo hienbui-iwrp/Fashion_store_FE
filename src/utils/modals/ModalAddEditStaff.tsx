@@ -41,6 +41,13 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   const [curBranch, setCurBranch] = useState<BranchProps>()
   const dispatch = useDispatch()
 
+  const initialValues = {
+    ...props.extraData,
+    birthdate:
+      props.extraData?.birthdate &&
+      dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY'),
+  }
+
   const getData = () => {
     getBranch().then((res: any) => {
       const _data = res.data.Data.map((item: any) => {
@@ -126,7 +133,12 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
           </Space>,
         ]}
       >
-        <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
+        <Form
+          layout={'vertical'}
+          form={form}
+          onValuesChange={() => {}}
+          initialValues={initialValues}
+        >
           <Row>
             <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Form.Item
@@ -142,7 +154,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên họ tên'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.name ?? ''}
+                  // defaultValue={props?.extraData?.name ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -158,10 +170,10 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <DatePicker
                   className={styles.adminInputShadow}
                   style={{ width: '100%' }}
-                  defaultValue={
-                    props.extraData?.birthdate &&
-                    dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY')
-                  }
+                  // defaultValue={
+                  //   props.extraData?.birthdate &&
+                  //   dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY')
+                  // }
                   format={'DD/MM/YYYY'}
                   onChange={(date) => {
                     console.log(
@@ -183,7 +195,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên quê quán'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.hometown ?? ''}
+                  // defaultValue={props?.extraData?.hometown ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -199,7 +211,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên căn cước'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.citizenId ?? ''}
+                  // defaultValue={props?.extraData?.citizenId ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -242,7 +254,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập email'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.email ?? ''}
+                  // defaultValue={props?.extraData?.email ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -258,7 +270,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên điện thoại'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.phone ?? ''}
+                  // defaultValue={props?.extraData?.phone ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -346,7 +358,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   placeholder='Nhập lương'
                   className={styles.adminInputShadow}
                   style={{ width: '100%' }}
-                  defaultValue={props?.extraData?.salary ?? ''}
+                  // defaultValue={props?.extraData?.salary ?? ''}
                 />
               </Form.Item>
             </Col>
@@ -367,7 +379,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên đường'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.street}
+                  // defaultValue={props.extraData?.street}
                 />
               </Form.Item>
             </Col>
@@ -385,7 +397,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập xã, phường'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.ward}
+                  // defaultValue={props.extraData?.ward}
                 />
               </Form.Item>
             </Col>
@@ -405,7 +417,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập huyện, thành phố'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.district}
+                  // defaultValue={props.extraData?.district}
                 />
               </Form.Item>
             </Col>
@@ -423,7 +435,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tỉnh, thành phố'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.province}
+                  // defaultValue={props.extraData?.province}
                 />
               </Form.Item>
             </Col>

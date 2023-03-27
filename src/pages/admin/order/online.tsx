@@ -22,19 +22,6 @@ const Online = () => {
   const columns: ColumnsType<DataType> = []
   if (data) {
     columns.push({
-      title: 'STT',
-      dataIndex: '',
-      render(text: string, record: DataType, index: number) {
-        return index
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 50 },
-        }
-      },
-    })
-
-    columns.push({
       title: 'Người dùng',
       dataIndex: 'user',
       render(text: string, record: DataType, index: number) {
@@ -42,7 +29,7 @@ const Online = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 110 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -57,7 +44,7 @@ const Online = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 90 },
         }
       },
       sorter: (a: DataType, b: DataType) =>
@@ -72,7 +59,7 @@ const Online = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 130 },
         }
       },
       sorter: (a: DataType, b: DataType) =>

@@ -45,6 +45,11 @@ const Goods = () => {
       render(text: string, record: DateItem, index: number) {
         return index
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 70 },
+        }
+      },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })
 
@@ -56,7 +61,7 @@ const Goods = () => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
@@ -68,6 +73,11 @@ const Goods = () => {
       render(text: string, record: DateItem, index: number) {
         return text
       },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })
 
@@ -76,6 +86,11 @@ const Goods = () => {
       dataIndex: 'quantity',
       render(text: string, record: DateItem, index: number) {
         return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 90 },
+        }
       },
       sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
     })

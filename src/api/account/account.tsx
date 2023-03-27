@@ -35,22 +35,24 @@ export const signInBff = async (account: {
 }
 
 export const signUpBff = async (account: {
-  Username: string
-  Password: string
+  username: string
+  email: string
+  name: string
+  phoneNumber: string
+  password: string
 }) => {
-  let xmls = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  const xmls = `
+  <?xml version="1.0" encoding="utf-8"?>
   <soap:Body>
-        <ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callAccountService/signIn">
-              <ns1:Username>${account.Username}</ns1:Username>
-              <ns1:Password>${account.Password}</ns1:Password>
-    </ns1:Body>
-</soap:Body>
-</soap:Envelope>
+      <Username>${account.username}</Username>
+      <Password>${account.password}</Password>
+      <Email>${account.email}</Email>
+      <Name>${account.name}</Name>
+      <Phone>${account.phoneNumber}</Phone>
+  </soap:Body>
 `
-  return await bpelAccount
-    .post('', xmls, {
-      headers: { 'Content-Type': 'text/xml' },
-    })
+  return await adminBff
+    .post('/account-service/account/sign-up', xmls)
     .then((res) => {
       console.log(res)
       const XMLParser = require('react-xml-parser')
