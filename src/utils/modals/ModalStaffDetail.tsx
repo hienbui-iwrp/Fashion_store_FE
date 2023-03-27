@@ -13,6 +13,7 @@ import {
 } from '../formats'
 import { getBranchDetail } from '@/api'
 import { BranchProps } from '../types'
+import { StaffRole } from '@/constants'
 
 dayjs.extend(customParseFormat)
 
@@ -59,7 +60,12 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
     setDataItems2([
       { name: 'Quê quán', content: props?.extraData?.hometown ?? '' },
       { name: 'Nơi làm việc', content: branch.name ?? '' },
-      { name: 'Vị trí', content: props?.extraData?.role ?? '' },
+      {
+        name: 'Vị trí',
+        content:
+          StaffRole.find((item: any) => item.value == props?.extraData?.role)
+            ?.content ?? 'Nhân viên',
+      },
       {
         name: 'Lương',
         content: formatNumber(props?.extraData?.salary ?? 0) + ' VND',
@@ -67,10 +73,6 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
       {
         name: 'Ngày bắt đầu',
         content: formatDate(props?.extraData?.startDate) ?? '',
-      },
-      {
-        name: 'Tài khoản',
-        content: props?.extraData?.account ?? 'Không có',
       },
     ])
   }
