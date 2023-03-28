@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL, Gender, Routes, StaffRole } from '@/constants'
-import axios from 'axios'
+import { Gender, Routes, StaffRole } from '@/constants'
 import { EditFilled } from '@ant-design/icons'
-import { Card, Col, Row, List, Space, Divider, DatePicker } from 'antd'
+import { Card, Col, Row, Space, Divider, DatePicker } from 'antd'
 import { useRouter } from 'next/router'
-import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
+import { AddButton, RemoveButton, TableList } from '@/components'
 import { useModalConfirm } from '@/hooks'
 import {
-  apiStaffService,
   AttendanceProps,
   BranchProps,
   formatAddress,
   formatAttendanceDataXML,
-  formatBranchData,
   formatBranchDataXML,
   formatDate,
   formatNumber,
-  formatStaffData,
   formatStaffDataXML,
   formatTime,
   ModalAddEditStaff,
@@ -25,12 +21,8 @@ import {
 import { ColumnsType } from 'antd/es/table'
 import {
   deleteStaff,
-  getAttendace,
   getAttendaceBff,
-  getBranchDetail,
   getBranchDetailBff,
-  getStaffBff,
-  getStaffDetail,
   getStaffDetailBFF,
 } from '@/api'
 import styles from '@/styles/Admin.module.css'

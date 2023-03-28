@@ -97,11 +97,17 @@ const Request = () => {
   })
 
   const findStaff = (request: RequestProps) => {
-    return staffData.find((item: StaffProps) => item.id == request.staffId)
+    return (
+      staffData.find((item: StaffProps) => item.id == request.staffId) ?? {}
+    )
   }
 
   const getDataAdd = (): any => {
-    const _data = data.filter((item: any) => item.type === RequestType.add)
+    const _data = data.filter(
+      (item: any) =>
+        item.type === RequestType.add &&
+        findStaff(item)?.status == StaffStatus.pending
+    )
     const columns: ColumnsType<RequestProps> = []
     columns.push({
       title: 'Tên nhân viên mới',
@@ -208,7 +214,11 @@ const Request = () => {
   }
 
   const getDataRemove = (): any => {
-    const _data = data.filter((item: any) => item.type === RequestType.delete)
+    const _data = data.filter(
+      (item: any) =>
+        item.type === RequestType.delete &&
+        findStaff(item)?.status == StaffStatus.approved
+    )
     const columns: ColumnsType<RequestProps> = []
     columns.push({
       title: 'Mã nhân viên',
@@ -332,14 +342,6 @@ const Request = () => {
         setStaffData(_data)
       })
       .catch((err) => console.log(err))
-
-    // await getBranch().then((res: any) => {
-    //   const _data = res.data.Data.map((item: any) => {
-    //     if (res.data.StatusCode != 200) throw new Error('FAIL')
-    //     return formatBranchData(item)
-    //   })
-    //   setBranchData(_data)
-    // })
 
     await getBranchBff().then((res: any) => {
       if (res.StatusCode != 200) throw new Error('FAIL')

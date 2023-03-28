@@ -129,17 +129,6 @@ export const updateStaffBFF = async (id: any, staff: any) => {
     })
 }
 
-export const deleteStaffBFF = async (id: any) => {
-  return await adminBff
-    .post(`/staff/${id}`)
-    .then((res) => {
-      return res
-    })
-    .catch((error) => {
-      console.error(error)
-    })
-}
-
 export const getListRequestBFF = async () => {
   const payload = `
   <?xml version="1.0" encoding="utf-8"?>
@@ -165,6 +154,23 @@ export const updateRequestBFF = async (id: any, status: string) => {
   `
   return await adminBff
     .post(`/staff-service/update-request-status`, payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+export const deleteStaffBFF = async (id: any) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body>
+        <StaffId>${id}</StaffId>
+    </soap:Body>
+  `
+  return await adminBff
+    .post(`/staff-service/delete-staff`, payload)
     .then((res) => {
       return formatResponse(res.data)
     })
