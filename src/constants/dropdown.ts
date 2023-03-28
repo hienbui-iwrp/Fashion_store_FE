@@ -5,7 +5,7 @@ export const Gender = [
 ]
 
 export const StaffStatus = {
-  pendind: 'PENDING',
+  pending: 'PENDING',
   approved: 'APPROVED',
   deleted: 'DELETED',
 }
