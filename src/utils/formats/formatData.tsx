@@ -1,5 +1,22 @@
-import { AccountProps, BranchProps, RequestProps, StaffProps } from '../types'
+import { AccountProps, BranchProps, RequestProps, StaffProps, CustomerInfoProps } from '../types'
 import timeToDate from './timeToDate'
+
+export const formatUserDataXML = (data: any): CustomerInfoProps => {
+  const _data: CustomerInfoProps = {
+    username: data.getElementsByTagName('Username')[0].value,
+    name: data.getElementsByTagName('Name')[0].value,
+    email: data.getElementsByTagName('Email')[0].value,
+    phone: data.getElementsByTagName('Phone')[0].value,
+    street: data.getElementsByTagName('Street')[0].value,
+    ward: data.getElementsByTagName('Ward')[0].value,
+    district: data.getElementsByTagName('District')[0].value,
+    province: data.getElementsByTagName('Province')[0].value,
+    age: Number(data.getElementsByTagName('Age')[0].value),
+    gender: data.getElementsByTagName('Gender')[0].value,
+  }
+
+  return _data
+}
 
 export const formatBranchDataXML = (data: any): BranchProps => {
   const _data: BranchProps = {

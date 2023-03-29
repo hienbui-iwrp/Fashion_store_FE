@@ -1,7 +1,7 @@
 import { styles } from '@/utils/toasts';
 import { api } from '../axios';
 
-const products = '/products';
+const products = '/api/products';
 const product = '/product';
 
 export const getAllProducts = async () => {

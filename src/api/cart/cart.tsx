@@ -3,7 +3,7 @@ import { api } from '../axios';
 import { ProductInCartProps } from '@/utils';
 
 const cartService = '/cart-service';
-const cart = '/cart';
+const cart = '/api/cart';
 
 export const getCart = async (customerId: string) => {
   return await api
@@ -20,7 +20,7 @@ export const getCart = async (customerId: string) => {
 export const addToCart = async (product: ProductInCartProps) => {
   return await api
     // .get(product + `/${productId}`, {})
-    .post(cart + `/detail`, {...product})
+    .post(cart + `/detail`, { ...product })
     .then((response) => {
       return response;
     })

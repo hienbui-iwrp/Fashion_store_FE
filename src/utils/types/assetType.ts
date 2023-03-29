@@ -14,10 +14,11 @@ export interface AccountProps {
 }
 
 export interface CustomerInfoProps {
-  customerId: string
   name?: string
-  phoneNumber?: string
+  phone?: string
   username: string
+  gender?: string
+  age?: number
   email: string
   street?: string
   ward?: string
@@ -59,6 +60,7 @@ export interface ProductDetailDataProps {
   gender: string
   age: string
   description: string
+  tax: number
 }
 
 export interface ProductInCartProps {
@@ -71,6 +73,7 @@ export interface ProductInCartProps {
   size: string
   color: string
   discount: number
+  tax: number
 }
 
 export interface OrderProps {

@@ -20,6 +20,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 10,
+        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -35,6 +36,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 0,
+        tax: 10,
         gender: 'woman',
         age: 'baby',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -50,6 +52,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 10,
+        tax: 10,
         gender: 'man',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -65,6 +68,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'jacket',
         discount: 10,
+        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -80,6 +84,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'sweater',
         discount: 10,
+        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -95,6 +100,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'short',
         discount: 0,
+        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -110,6 +116,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 10,
+        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -125,6 +132,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 10,
+        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -140,6 +148,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 0,
+        tax: 10,
         gender: 'unisex',
         age: 'baby',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -155,6 +164,7 @@ export default function handler(
         color: ['yellow', 'green', 'red', 'blue'],
         type: 'áo khoác',
         discount: 0,
+        tax: 10,
         gender: 'man',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`

@@ -9,7 +9,6 @@ export default function handler(
 ) {
   res.status(200).json(
     {
-      customerId: '1',
       name: 'account1',
       username: 'account',
       email: 'string@gmail.com',
