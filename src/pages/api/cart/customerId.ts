@@ -15,18 +15,20 @@ export default function handler(
       quantity: 1,
       size: '36',
       color: 'yellow',
-      discount: 10
+      discount: 10,
+      tax: 10,
     },
     {
       goodsId: '2',
       image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
       name: 'Áo khoác mùa đông a',
       unitPrice: 100000,
-      price: 90000,
-      quantity: 1,
+      price: 100000,
+      quantity: 2,
       size: '36',
       color: 'yellow',
       discount: 0,
+      tax: 10,
     },
     {
       goodsId: '3',
@@ -34,10 +36,11 @@ export default function handler(
       name: 'Áo khoác mùa đông a',
       unitPrice: 100000,
       price: 90000,
-      quantity: 1,
+      quantity: 3,
       size: '36',
       color: 'yellow',
       discount: 10,
+      tax: 10,
     }
   ])
 }

@@ -185,7 +185,7 @@ export default function Products(props: ProductsProps) {
   }
 
   const fetchData = async () => {
-    getAllProducts().then((res) => {
+    await getAllProducts().then((res) => {
       console.log(res)
       setData(res?.data)
       filterProducts(checkedList, listValueFilter)

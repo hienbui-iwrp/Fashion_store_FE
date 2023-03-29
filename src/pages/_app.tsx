@@ -98,6 +98,12 @@ export default function App({ Component, pageProps }: AppProps) {
   // }
 
   if (typeof window !== 'undefined') {
+    var now = new Date().getTime();
+    var setupTime = localStorage.getItem('setupTime');
+    // if (now - Number(setupTime) > 2 * 60 * 1000) {
+    if (now - Number(setupTime) > 24 * 60 * 60 * 1000) {
+      localStorage.clear();
+    }
     if (!localStorage.getItem('logged')) {
       localStorage.setItem('logged', '')
     }

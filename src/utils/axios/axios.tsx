@@ -110,6 +110,22 @@ export const adminBff = axios.create({
   },
 })
 
+export const shareBffCheckWh = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BFF_PROXY_CHECK_WH,
+  headers: {
+    'Content-Type': 'text/xml',
+    'Access-Control-Allow-Origin': '*',
+  },
+})
+
+export const customerBff = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_CUSTOMER_BFF_PROXY,
+  headers: {
+    'Content-Type': 'application/xml',
+    'Access-Control-Allow-Origin': '*',
+  },
+})
+
 adminBff.interceptors.response.use(
   (response) => {
     return response

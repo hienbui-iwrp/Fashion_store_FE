@@ -20,7 +20,8 @@ export default function handler(
         quantity: 1,
         size: '36',
         color: 'yellow',
-        discount: 10
+        discount: 10,
+        tax: 10,
       }],
       totalPrice: 500000,
       totalGoods: 3,
