@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAppDispatch } from '@/redux/store'
 import { selectProductsPayment, selectUser } from '@/redux/selectors'
 import moment from 'moment';
-import { productsPaymentActions, setNotificationValue } from '@/redux/slices'
+import { productsPaymentActions, setNotificationType, setNotificationValue } from '@/redux/slices'
 import { Typography, Input, Row, Col, Form, Radio, Image, Checkbox, Button, Space, notification } from 'antd'
 import type { RadioChangeEvent } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import { useRouter } from 'next/router';
 import { FormatMoney } from '@/utils';
-import { makeOrder } from '@/api/customer-order';
+import { createOrder, makeOrder } from '@/api/customer-order';
 
 export interface PaymentProps {
 }
@@ -27,28 +27,6 @@ export interface CartItemProps {
   color: string;
   discount: number;
 }
-// const listCartItem: CartItemProps[] = [
-//   {
-//     goodsId: '1',
-//     image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-//     name: 'Áo khoác thời trang mùa đông 2208B7013',
-//     unitPrice: 100000,
-//     quantity: 1,
-//     size: '36',
-//     color: 'yellow',
-//     discount: 10
-//   },
-//   {
-//     goodsId: '2',
-//     image: 'https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp',
-//     name: 'Áo khoác thời trang mùa đông 2208B7013',
-//     unitPrice: 100000,
-//     quantity: 1,
-//     size: '36',
-//     color: 'yellow',
-//     discount: 10
-//   }
-// ]
 
 export default function Payment(props: PaymentProps) {
   const router = useRouter();
@@ -62,35 +40,49 @@ export default function Payment(props: PaymentProps) {
   const [methodOnline, setMethodOnline] = React.useState('Momo');
   const [totalOrder, setTotalOrder] = React.useState(dataProductsPayment.totalPrice)
   const [shipFee, setShipFee] = React.useState<number | null>(null)
-  const [expectedDelivery, setExpectedDelivery] = React.useState(null)
+  const [expectedDate, setExpectedDate] = React.useState<string | null>(null)
   const onFinish = (values: any) => {
     const orderData = {
       ...values, goodsList: dataProductsPayment.listProductPayment,
       shipFee, totalPrice: dataProductsPayment.totalPrice,
       customerId: dataUser.info.username,
-      transactionDate: moment().format("MM-DD-YYYY"),
+      transactionDate: moment().format("YYYY-MM-DD"),
       address: {
         street: values.street,
         ward: values.ward,
         district: values.district,
         province: values.province
       },
-      expectedDelivery: expectedDelivery ? expectedDelivery : '2023-04-08'
+      expectedDate: expectedDate ? expectedDate : '2023-04-08'
     }
-    console.log('data', orderData);
     sendOrderInfo(orderData);
     if (values.paymentMethod === 'offline') {
-      dispatch(setNotificationValue('Đã thêm chi nhánh mới'))
-      router.push('/manage-orders');
+      completedOrder(orderData)
+        .then((res) => {
+          console.log('res', res);
+          if (res?.StatusCode === '200') {
+            dispatch(setNotificationValue('Tạo đơn hàng thành công'));
+            router.push('/manage-orders');
+          } else {
+            dispatch(setNotificationType('error'));
+            dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
+          }
+        })
+    } else {
+
     }
-    // router.push('/manage-orders');
   };
+
+  const completedOrder = async (orderData: any) => {
+    return await createOrder(orderData);
+  }
 
   const sendOrderInfo = async (orderData: any) => {
     await makeOrder(orderData)
       .then((res) => {
         console.log(res);
-        setShipFee(Number(res?.Data))
+        setShipFee(Number(res?.Data.shipFee));
+        setExpectedDate(res?.Data.expectedDate);
       })
   }
 
@@ -108,6 +100,7 @@ export default function Payment(props: PaymentProps) {
     //@ts-ignore
     const formData = formRef.current.getFieldsValue();
     if (formData.province && formData.district && formData.ward && formData.street) {
+      setExpectedDate('2023-04-08');
       const orderData = {
         ...formData, goodsList: dataProductsPayment.listProductPayment,
         shipFee, totalPrice: dataProductsPayment.totalPrice,
@@ -119,7 +112,7 @@ export default function Payment(props: PaymentProps) {
           district: formData.district,
           province: formData.province
         },
-        expectedDelivery: expectedDelivery ? expectedDelivery : '2023-04-08'
+        expectedDate: expectedDate ? expectedDate : '2023-04-08'
       }
       sendOrderInfo(orderData);
     }
@@ -379,7 +372,7 @@ export default function Payment(props: PaymentProps) {
               <div className='px-4 flex justify-between items-center'>
                 <div className='flex flex-col'>
                   <Text strong>Tổng đơn</Text>
-                  <Text className='text-[#6A983C]'>Nhận hàng: {expectedDelivery ? expectedDelivery : 'Vui lòng nhập đầy đủ thông tin'}</Text>
+                  <Text className='text-[#6A983C]'>Nhận hàng: {expectedDate ? expectedDate : 'Vui lòng nhập đầy đủ thông tin'}</Text>
                 </div>
                 <Text strong className='text-[#6A983C] text-2xl'>{FormatMoney(totalOrder + shipFee)}</Text>
               </div>

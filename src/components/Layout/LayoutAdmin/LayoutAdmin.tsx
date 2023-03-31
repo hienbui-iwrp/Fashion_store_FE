@@ -270,6 +270,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       case 6:
         setTitle('Quản lý kho')
         break
+      case 7:
       case 70:
       case 71:
         setTitle('Quản lý đơn hàng')

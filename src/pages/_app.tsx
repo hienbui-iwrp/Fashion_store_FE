@@ -153,6 +153,7 @@ export default function App({ Component, pageProps }: AppProps) {
         >
           <LayoutClient>
             <Component {...pageProps} />
+            <Notify />
           </LayoutClient>
         </ConfigProvider>
       </Provider>
@@ -187,7 +188,12 @@ export default function App({ Component, pageProps }: AppProps) {
       </Provider>
     )
 
-  return <Component {...pageProps} />
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+      <Notify />
+    </Provider>
+  )
 }
 
 const Notify = () => {

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { BASE_URL, Colors } from '@/constants'
 import axios from 'axios'
 import styles from '@/styles/Admin.module.css'
-import { Card, Col, DatePicker, List, Row, Space } from 'antd'
-import { LayoutAdmin, TableList } from '@/components'
+import { Card, Col, DatePicker, List, Row } from 'antd'
+import { TableList } from '@/components'
 import { useRouter } from 'next/router'
 import { formatDate, formatNumber, ModalOrderDetail } from '@/utils'
 import { ColumnsType } from 'antd/es/table'
@@ -87,7 +87,6 @@ const Detail = () => {
     getOrderData()
     setLoading(false)
   }, [])
-  console.log(orderData)
 
   const columns: ColumnsType<OrderData> = []
   if (data) {
@@ -95,8 +94,11 @@ const Detail = () => {
       title: 'Mã đơn',
       dataIndex: 'id',
       render(text: string, record: OrderData, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: OrderData, b: OrderData) => (a.id > b.id ? 1 : -1),
@@ -105,42 +107,49 @@ const Detail = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdDate',
       render(text: string, record: OrderData, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: OrderData, b: OrderData) =>
         a.createdDate > b.createdDate ? 1 : -1,
     })
+
     columns.push({
       title: 'Trạng thái',
       dataIndex: 'status',
       render(text: string, record: OrderData, index: number) {
+        return text
+      },
+      onCell: (record, index: number) => {
         return {
-          props: {
-            style: {
-              background: index % 2 ? Colors.white : Colors.adminBackground,
-              color: text == 'Đang giao' ? Colors.adminRed500 : Colors.black,
-            },
+          style: {
+            background: index % 2 ? Colors.white : Colors.adminBackground,
+            color:
+              record.status == 'Đang giao' ? Colors.adminRed500 : Colors.black,
+            minWidth: 100,
           },
-          children: <div>{text}</div>,
         }
       },
       sorter: (a: OrderData, b: OrderData) => (a.status > b.status ? 1 : -1),
     })
     columns.push({
-      title: 'Tổng giá trị đơn',
+      title: 'Tổng giá trị',
       dataIndex: 'total',
       render(text: string, record: OrderData, index: number) {
+        return formatNumber(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatNumber(text)}</div>,
+          style: { minWidth: 130 },
         }
       },
       sorter: (a: OrderData, b: OrderData) => (a.total > b.total ? 1 : -1),
     })
   }
-
-  const content = <></>
 
   return (
     <>

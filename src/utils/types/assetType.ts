@@ -149,7 +149,6 @@ export type StaffProps = {
   role?: string
   salary?: number
   startDate?: Date
-  account?: string
   status?: string
   email?: string
   gender?: string

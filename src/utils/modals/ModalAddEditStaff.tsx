@@ -23,7 +23,13 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import { Gender, Routes, StaffRole } from '@/constants'
 import { useRouter } from 'next/router'
-import { addStaff, getBranch, updateStaff } from '@/api'
+import {
+  addStaff,
+  addStaffBFF,
+  getBranch,
+  updateStaff,
+  updateStaffBFF,
+} from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
@@ -40,6 +46,13 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   const [branchData, setBranchData] = useState<BranchProps[]>()
   const [curBranch, setCurBranch] = useState<BranchProps>()
   const dispatch = useDispatch()
+
+  const initialValues = {
+    ...props.extraData,
+    birthdate:
+      props.extraData?.birthdate &&
+      dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY'),
+  }
 
   const getData = () => {
     getBranch().then((res: any) => {
@@ -64,13 +77,11 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   const onSave = async () => {
     try {
       const values = await form.validateFields()
-      console.log(values)
 
       if (!props.extraData) {
-        addStaff(values)
+        addStaffBFF(values)
           .then((res: any) => {
-            if (res.data.StatusCode != 200) throw new Error('FAIL')
-
+            if (res.StatusCode != 200) throw new Error('FAIL')
             dispatch(setNotificationValue('Đã thêm nhân viên mới'))
             routes.push(Routes.admin.staff)
           })
@@ -79,9 +90,9 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
             dispatch(setNotificationValue('Có lỗi khi thực hiện'))
           })
       } else {
-        updateStaff(props.extraData.id, values)
+        updateStaffBFF(props.extraData.id, values)
           .then((res: any) => {
-            if (res.data.StatusCode != 200) throw new Error('FAIL')
+            if (res.StatusCode != 200) throw new Error('FAIL')
             dispatch(setNotificationValue('Đã cập nhật thông tin'))
             routes.push(Routes.admin.staff)
           })
@@ -100,6 +111,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
       console.log('Failed:', errorInfo)
     }
   }
+  console.log(branchData)
 
   return (
     <>
@@ -126,7 +138,12 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
           </Space>,
         ]}
       >
-        <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
+        <Form
+          layout={'vertical'}
+          form={form}
+          onValuesChange={() => {}}
+          initialValues={initialValues}
+        >
           <Row>
             <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Form.Item
@@ -142,7 +159,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên họ tên'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.name ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -158,10 +174,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <DatePicker
                   className={styles.adminInputShadow}
                   style={{ width: '100%' }}
-                  defaultValue={
-                    props.extraData?.birthdate &&
-                    dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY')
-                  }
                   format={'DD/MM/YYYY'}
                   onChange={(date) => {
                     console.log(
@@ -183,7 +195,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên quê quán'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.hometown ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -199,7 +210,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên căn cước'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.citizenId ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -242,7 +252,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập email'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.email ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -258,7 +267,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên điện thoại'
                   className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.phone ?? ''}
                 />
               </Form.Item>
               <Form.Item
@@ -271,7 +279,22 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   },
                 ]}
               >
-                {props.extraData ? (
+                <DropdownButton
+                  label={curBranch ? curBranch.name : 'Nơi làm việc'}
+                  items={branchData?.map((item: BranchProps) => {
+                    return `${item.name} (${item.id})`
+                  })}
+                  callback={(branch: string) => {
+                    form.setFieldValue(
+                      'branchId',
+                      branchData?.find(
+                        (item: any) =>
+                          item.id == branch.split(')')[0].split('(')[1]
+                      )?.id
+                    )
+                  }}
+                />
+                {/* {props.extraData ? (
                   curBranch && (
                     <DropdownButton
                       label={curBranch.name}
@@ -293,6 +316,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   <DropdownButton
                     label={'Nơi làm việc'}
                     items={branchData?.map((item: BranchProps) => {
+                      console.log(item)
                       return `${item.name} (${item.id})`
                     })}
                     callback={(branch: string) => {
@@ -305,7 +329,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                       )
                     }}
                   />
-                )}
+                )} */}
               </Form.Item>
               <Form.Item
                 label='Vị trí'
@@ -319,18 +343,15 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
               >
                 <DropdownButton
                   label={form.getFieldValue('role') ?? 'Vị trí'}
-                  items={Object.keys(StaffRole).map(
-                    (item: string) => StaffRole[item]
-                  )}
-                  callback={(item: any) => {
-                    form.setFieldValue('role', item)
+                  items={StaffRole.map((item: any) => item.content)}
+                  callback={(i: any) => {
+                    const role = StaffRole.find(
+                      (item: any) => item.content == i
+                    )?.value
+                    console.log(role)
+                    form.setFieldValue('role', role)
                   }}
                 />
-                {/* <Input
-                  placeholder='Nhập tên vị trí'
-                  className={styles.adminInputShadow}
-                  defaultValue={props?.extraData?.role ?? ''}
-                /> */}
               </Form.Item>
               <Form.Item
                 label='Lương'
@@ -346,7 +367,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   placeholder='Nhập lương'
                   className={styles.adminInputShadow}
                   style={{ width: '100%' }}
-                  defaultValue={props?.extraData?.salary ?? ''}
+                  // defaultValue={props?.extraData?.salary ?? ''}
                 />
               </Form.Item>
             </Col>
@@ -367,7 +388,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên đường'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.street}
+                  // defaultValue={props.extraData?.street}
                 />
               </Form.Item>
             </Col>
@@ -385,7 +406,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập xã, phường'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.ward}
+                  // defaultValue={props.extraData?.ward}
                 />
               </Form.Item>
             </Col>
@@ -405,7 +426,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập huyện, thành phố'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.district}
+                  // defaultValue={props.extraData?.district}
                 />
               </Form.Item>
             </Col>
@@ -423,7 +444,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tỉnh, thành phố'
                   className={styles.adminInputShadow}
-                  defaultValue={props.extraData?.province}
+                  // defaultValue={props.extraData?.province}
                 />
               </Form.Item>
             </Col>

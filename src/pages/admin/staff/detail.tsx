@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL, Gender, Routes } from '@/constants'
-import axios from 'axios'
+import { Gender, Routes, StaffRole } from '@/constants'
 import { EditFilled } from '@ant-design/icons'
-import { Card, Col, Row, List, Space, Divider, DatePicker } from 'antd'
+import { Card, Col, Row, Space, Divider, DatePicker } from 'antd'
 import { useRouter } from 'next/router'
-import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
+import { AddButton, RemoveButton, TableList } from '@/components'
 import { useModalConfirm } from '@/hooks'
 import {
-  apiStaffService,
   AttendanceProps,
   BranchProps,
   formatAddress,
-  formatBranchData,
+  formatAttendanceDataXML,
+  formatBranchDataXML,
   formatDate,
   formatNumber,
-  formatStaffData,
+  formatStaffDataXML,
   formatTime,
   ModalAddEditStaff,
   StaffProps,
@@ -22,9 +21,9 @@ import {
 import { ColumnsType } from 'antd/es/table'
 import {
   deleteStaff,
-  getAttendace,
-  getBranchDetail,
-  getStaffDetail,
+  getAttendaceBff,
+  getBranchDetailBff,
+  getStaffDetailBFF,
 } from '@/api'
 import styles from '@/styles/Admin.module.css'
 import dayjs from 'dayjs'
@@ -52,13 +51,12 @@ interface ItemType {
 
 const Detail = () => {
   const [loading, setLoading] = useState(true)
-  const [dataItems1, setDataItems1] = useState<ItemType[]>([])
-  const [dataItems2, setDataItems2] = useState<ItemType[]>([])
   const [attendanceData, setAttendanceData] = useState<AttendanceProps[]>([])
   const [attendanceShowData, setAttendanceShowData] = useState<
     AttendanceProps[]
   >([])
   const [data, setData] = useState<StaffProps>({})
+  const [branchData, setBranchData] = useState<BranchProps>({})
   const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
   const dispatch = useDispatch()
 
@@ -73,8 +71,11 @@ const Detail = () => {
       sorter: (a: AttendanceProps, b: AttendanceProps) =>
         (a.date ?? 1) > (b.date ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 120 },
         }
       },
     })
@@ -85,8 +86,11 @@ const Detail = () => {
       sorter: (a: AttendanceProps, b: AttendanceProps) =>
         (a.checkIn ?? 1) > (b.checkIn ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
+        return formatTime(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatTime(text)}</div>,
+          style: { minWidth: 140 },
         }
       },
     })
@@ -97,8 +101,11 @@ const Detail = () => {
       sorter: (a: AttendanceProps, b: AttendanceProps) =>
         (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
       render(text: any, record: AttendanceProps, index: number) {
+        return formatTime(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatTime(text)}</div>,
+          style: { minWidth: 120 },
         }
       },
     })
@@ -112,71 +119,39 @@ const Detail = () => {
           ? 1
           : -1,
       render(text: any, record: AttendanceProps, index: number) {
+        return getWorkingTime(record.checkIn, record.checkOut)
+      },
+      onCell: (record) => {
         return {
-          children: (
-            <div>{getWorkingTime(record.checkIn, record.checkOut)}</div>
-          ),
+          style: { minWidth: 120 },
         }
       },
     })
   }
 
-  const setListData = (data: StaffProps, branch: BranchProps) => {
-    setDataItems1([
-      { name: 'Mã nhân viên', content: data.id ?? '' },
-      { name: 'Địa chỉ', content: formatAddress(data) },
-      {
-        name: 'Giới tính',
-        content:
-          Gender.find((item: any) => item.value === data.gender)?.content ??
-          'Chưa xác định',
-      },
-      { name: 'Số điện thoại', content: data.phone ?? '' },
-      { name: 'Căn cước', content: data.citizenId ?? '' },
-      {
-        name: 'Ngày sinh',
-        content: formatDate(data.birthdate),
-      },
-      { name: 'Email', content: data.email ?? '' },
-    ])
-    setDataItems2([
-      { name: 'Quê quán', content: data.hometown ?? '' },
-      { name: 'Nơi làm việc', content: branch.name ?? '' },
-      { name: 'Vị trí', content: data.role ?? '' },
-      { name: 'Lương', content: formatNumber(data.salary) + ' VND' },
-      {
-        name: 'Ngày bắt đầu',
-        content: formatDate(data.startDate),
-      },
-      {
-        name: 'Tài khoản',
-        content: data.account ?? 'Không có',
-      },
-    ])
-  }
-
   const getData = async () => {
-    // let staffData: StaffProps = {}
-    await getStaffDetail(id).then((res: any) => {
-      if (res.data.Data.Status == 'res.data.Data') router.push(Routes.error)
-      const _data = formatStaffData(res.data.Data)
-      setData(_data)
-    })
+    await getStaffDetailBFF(id)
+      .then((res: any) => {
+        const _data = formatStaffDataXML(res.Data[0])
+        setData(_data)
+        _data.branchId &&
+          getBranchDetailBff(_data.branchId).then((res: any) => {
+            const _branchData = formatBranchDataXML(
+              res.getElementsByTagName('Data')[0]
+            )
+            setBranchData(_branchData)
+          })
+      })
+
+      .catch((err) => console.log(err))
     setLoading(false)
   }
 
   const getAttendacceData = () => {
-    getAttendace(id).then((res: any) => {
-      const _attendacceData: AttendanceProps[] = res.data.Data.map(
-        (item: any) => {
-          return {
-            date: new Date(item.AttendanceDate),
-            checkIn: new Date(item.CheckinTime),
-            checkOut: new Date(item.CheckoutTime),
-          }
-        }
-      )
-
+    getAttendaceBff(id).then((res: any) => {
+      const _attendacceData: AttendanceProps[] = res.Data.map((item: any) => {
+        return formatAttendanceDataXML(item)
+      })
       setAttendanceShowData(
         _attendacceData.filter((item: AttendanceProps) => {
           return item.date?.getMonth() == new Date().getMonth()
@@ -212,10 +187,10 @@ const Detail = () => {
   }, [id])
 
   useEffect(() => {
-    if (data) {
-      getBranchDetail(data.branchId).then((res: any) => {
-        const _data = formatBranchData(res.data.Data)
-        setListData(data, _data)
+    if (data.branchId) {
+      getBranchDetailBff(data.branchId).then((res: any) => {
+        const _data = formatBranchDataXML(res)
+        // setListData(data, _data)
       })
     }
   }, [data])
@@ -233,25 +208,58 @@ const Detail = () => {
           <Row justify='center' align='middle'>
             <Col xs={24} sm={13}>
               <Row>
-                <Col xs={24} sm={23}>
-                  <List
-                    bordered={false}
-                    dataSource={dataItems1 ?? []}
-                    renderItem={(item) => {
-                      return (
-                        <Row style={{ padding: 8 }}>
-                          <Col xs={24} lg={8}>
-                            <b>{item.name}</b>
-                          </Col>
-                          <Col xs={24} lg={16}>
-                            {item.content}
-                          </Col>
-                        </Row>
-                      )
-                    }}
-                  />
+                <Col xs={24} sm={22}>
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} lg={8}>
+                      <b>Mã nhân viên</b>
+                    </Col>
+                    <Col xs={24} lg={16}>
+                      {data.id}
+                    </Col>
+                  </Row>
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} lg={8}>
+                      <b>Địa chỉ</b>
+                    </Col>
+                    <Col xs={24} lg={16}>
+                      {formatAddress(data)}
+                    </Col>
+                  </Row>
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} lg={8}>
+                      <b>Giới tính</b>
+                    </Col>
+                    <Col xs={24} lg={16}>
+                      {Gender.find((item: any) => item.value === data.gender)
+                        ?.content ?? 'Chưa xác định'}
+                    </Col>
+                  </Row>
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} lg={8}>
+                      <b>Số điện thoại</b>
+                    </Col>
+                    <Col xs={24} lg={16}>
+                      {data.phone}
+                    </Col>
+                  </Row>
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} lg={8}>
+                      <b>Căn cước</b>
+                    </Col>
+                    <Col xs={24} lg={16}>
+                      {data.citizenId}
+                    </Col>
+                  </Row>
+                  <Row style={{ padding: 8 }}>
+                    <Col xs={24} lg={8}>
+                      <b>Ngày sinh</b>
+                    </Col>
+                    <Col xs={24} lg={16}>
+                      {formatDate(data.birthdate)}
+                    </Col>
+                  </Row>
                 </Col>
-                <Col xs={0} sm={1}>
+                <Col xs={0} sm={2}>
                   <Divider
                     type='vertical'
                     style={{
@@ -263,24 +271,55 @@ const Detail = () => {
               </Row>
             </Col>
             <Col xs={24} sm={10}>
-              <List
-                bordered={false}
-                dataSource={dataItems2 ?? []}
-                renderItem={(item) => {
-                  return (
-                    item && (
-                      <Row style={{ padding: 8 }}>
-                        <Col xs={24} lg={8}>
-                          <b>{item.name}</b>
-                        </Col>
-                        <Col xs={24} lg={16}>
-                          {item.content}
-                        </Col>
-                      </Row>
-                    )
-                  )
-                }}
-              />
+              <Row style={{ padding: 8 }}>
+                <Col xs={24} lg={8}>
+                  <b>Email</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {data.email}
+                </Col>
+              </Row>
+              <Row style={{ padding: 8 }}>
+                <Col xs={24} lg={8}>
+                  <b>Quê quán</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {data.hometown}
+                </Col>
+              </Row>
+              <Row style={{ padding: 8 }}>
+                <Col xs={24} lg={8}>
+                  <b>Nơi làm việc</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {branchData.name ? branchData.name : 'Toàn hệ thống'}
+                </Col>
+              </Row>
+              <Row style={{ padding: 8 }}>
+                <Col xs={24} lg={8}>
+                  <b>Vị trí</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {StaffRole.find((item: any) => item.value == data.role)
+                    ?.content ?? 'Nhân viên'}
+                </Col>
+              </Row>
+              <Row style={{ padding: 8 }}>
+                <Col xs={24} lg={8}>
+                  <b>Lương</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {formatNumber(data.salary) + ' VND'}
+                </Col>
+              </Row>
+              <Row style={{ padding: 8 }}>
+                <Col xs={24} lg={8}>
+                  <b>Ngày bắt đầu</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {formatDate(data.startDate)}
+                </Col>
+              </Row>
             </Col>
           </Row>
           <Row justify='end' align='bottom'>
@@ -298,6 +337,7 @@ const Detail = () => {
           data={attendanceShowData ?? []}
           columns={columns}
           loading={loading}
+          rowKey={['date']}
           header={
             <Row>
               <Col xs={12} lg={6} className='mt-2'>
@@ -343,9 +383,23 @@ Detail.displayName = 'Staff Detail'
 export default Detail
 
 const getWorkingTime = (start: any, end: any) => {
-  const a = new Date(start).valueOf()
-  const b = new Date(end).valueOf()
-  return (Math.abs(b - a) / 3600000.0 - 1).toFixed(1)
+  const time1 = new Date(start)
+  const time2 = new Date(end)
+
+  const hours1 = time1.getHours()
+  const minutes1 = time1.getMinutes()
+  const seconds1 = time1.getSeconds()
+
+  const hours2 = time2.getHours()
+  const minutes2 = time2.getMinutes()
+  const seconds2 = time2.getSeconds()
+
+  return (
+    hours2 -
+    hours1 +
+    (minutes2 - minutes1) / 60 +
+    (seconds2 - seconds1) / 3600
+  ).toFixed(1)
 }
 
 const countWorkingDate = (data: AttendanceProps[]) => {

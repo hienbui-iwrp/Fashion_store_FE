@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import {
-  Col,
-  Modal,
-  Row,
-  Space,
-  Image,
-  Form,
-  Input,
-  TimePicker,
-  InputNumber,
-} from 'antd'
+import React from 'react'
+import { Modal, Space, Form, Input, InputNumber } from 'antd'
 import { AddButton, RemoveButton } from '@/components'
-import {
-  CheckOutlined,
-  CloseOutlined,
-  FileImageOutlined,
-} from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { formatTime, ModalAddEditWarehouseProps } from '..'
+import { ModalAddEditWarehouseProps } from '..'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import axios from 'axios'
 
 dayjs.extend(customParseFormat)
 
 const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
   const [form] = Form.useForm()
+  const initialValues = {
+    ...props.extraData,
+  }
 
   return (
     <>
@@ -61,7 +49,12 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
           </Space>,
         ]}
       >
-        <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
+        <Form
+          layout={'vertical'}
+          form={form}
+          onValuesChange={() => {}}
+          initialValues={initialValues}
+        >
           <Form.Item
             name='name'
             label='Tên kho'
@@ -75,7 +68,7 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
             <Input
               placeholder='Nhập tên kho'
               className={styles.adminInputShadow}
-              defaultValue={props.extraData?.name}
+              // defaultValue={props.extraData?.name}
             />
           </Form.Item>
           <b>Địa chỉ</b>
@@ -93,7 +86,7 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
               <Input
                 placeholder='Nhập tên đường'
                 className={styles.adminInputShadow}
-                defaultValue={props.extraData?.street}
+                // defaultValue={props.extraData?.street}
               />
             </Form.Item>
             <Form.Item
@@ -109,7 +102,7 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
               <Input
                 placeholder='Nhập xã, phường'
                 className={styles.adminInputShadow}
-                defaultValue={props.extraData?.ward}
+                // defaultValue={props.extraData?.ward}
               />
             </Form.Item>
           </Space>
@@ -127,7 +120,7 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
               <Input
                 placeholder='Nhập huyện, thành phố'
                 className={styles.adminInputShadow}
-                defaultValue={props.extraData?.district}
+                // defaultValue={props.extraData?.district}
               />
             </Form.Item>
             <Form.Item
@@ -143,7 +136,7 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
               <Input
                 placeholder='Nhập tỉnh, thành phố'
                 className={styles.adminInputShadow}
-                defaultValue={props.extraData?.province}
+                // defaultValue={props.extraData?.province}
               />
             </Form.Item>
           </Space>
@@ -161,7 +154,7 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
             <InputNumber
               placeholder='Nhập sức chứa`'
               className={styles.adminInputShadow}
-              defaultValue={props.extraData?.capacity}
+              // defaultValue={props.extraData?.capacity}
             />
           </Form.Item>
         </Form>

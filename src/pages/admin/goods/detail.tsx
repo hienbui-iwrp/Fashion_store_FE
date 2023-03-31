@@ -48,42 +48,41 @@ const Detail = () => {
   const columns: ColumnsType<DataWarehouse> = []
   if (data) {
     columns.push({
-      title: 'STT',
-      dataIndex: '',
+      title: 'Mã kho',
+      dataIndex: 'id',
       render(text: string, record: DataWarehouse, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{index}</div>,
+          style: { minWidth: 80 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
 
     columns.push({
-      title: 'Mã kho',
-      dataIndex: 'id',
-      render(text: string, record: DataWarehouse, index: number) {
-        return {
-          children: <div>{text}</div>,
-        }
-      },
-      sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
-    })
-    columns.push({
       title: 'Tên kho',
       dataIndex: 'name',
       render(text: string, record: DataWarehouse, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 80 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
     })
     columns.push({
-      title: 'Số lượng trong kho',
+      title: 'Số lượng',
       dataIndex: 'quantity',
       render(text: string, record: DataWarehouse, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 90 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
@@ -93,8 +92,11 @@ const Detail = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdDate',
       render(text: string, record: DataWarehouse, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 100 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
@@ -104,8 +106,11 @@ const Detail = () => {
       title: 'Ngày thêm',
       dataIndex: 'updateDate',
       render(text: string, record: DataWarehouse, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
         return {
-          children: <div>{formatDate(text)}</div>,
+          style: { minWidth: 110 },
         }
       },
       sorter: (a: DataWarehouse, b: DataWarehouse) => (a.id > b.id ? 1 : -1),
@@ -249,7 +254,7 @@ const Detail = () => {
               </Row>
             </Col>
           </Row>
-          <p className='flex flex-wrap my-3'>
+          <div className='flex flex-wrap my-3'>
             {data?.image?.map((img: string, index: number) => {
               return (
                 <span key={index} className='relative drop-shadow-md mx-2'>
@@ -290,7 +295,7 @@ const Detail = () => {
             >
               Thêm ảnh
             </Button>
-          </p>
+          </div>
           <p className='flex justify-end'>
             <AddButton label='Lưu' icon={<CheckOutlined />} />
           </p>
@@ -313,28 +318,55 @@ const Detail = () => {
                   pagination={false}
                   loading={loading}
                   header={
-                    <div className='flex justify-between'>
-                      <Space>
-                        <b>Màu</b>
-                        <Input
-                          className={styles.adminInputShadow}
-                          defaultValue={item.color}
+                    <Row>
+                      <Col xs={24} sm={15} lg={10}>
+                        <Space className='mb-4'>
+                          <b>Màu</b>
+                          <Input
+                            className={styles.adminInputShadow}
+                            defaultValue={item.color}
+                          />
+                        </Space>
+                      </Col>
+                      <Col xs={24} sm={9} lg={8}>
+                        <Space className='mb-4'>
+                          <b>Kích thước</b>
+                          <DropdownButton label={item.size} items={['S']} />
+                        </Space>
+                      </Col>
+                      <Col xs={24} sm={24} lg={6}>
+                        <AddButton
+                          label='Thêm vào kho mới'
+                          onClick={() => {
+                            routes.push(
+                              `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
+                            )
+                          }}
                         />
-                      </Space>
+                      </Col>
+                    </Row>
+                    // <div className='flex justify-between'>
+                    //   <Space>
+                    //     <b>Màu</b>
+                    //     <Input
+                    //       className={styles.adminInputShadow}
+                    //       defaultValue={item.color}
+                    //     />
+                    //   </Space>
 
-                      <Space>
-                        <b>Màu</b>
-                        <DropdownButton label={item.size} items={['S']} />
-                      </Space>
-                      <AddButton
-                        label='Thêm vào kho mới'
-                        onClick={() => {
-                          routes.push(
-                            `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
-                          )
-                        }}
-                      />
-                    </div>
+                    //   <Space>
+                    //     <b>Kích thước</b>
+                    //     <DropdownButton label={item.size} items={['S']} />
+                    //   </Space>
+                    //   <AddButton
+                    //     label='Thêm vào kho mới'
+                    //     onClick={() => {
+                    //       routes.push(
+                    //         `${BASE_URL}/admin/goods/tranfer?id=${id}&size=${item.size}&color=${item.color}`
+                    //       )
+                    //     }}
+                    //   />
+                    // </div>
                   }
                 />
               </div>

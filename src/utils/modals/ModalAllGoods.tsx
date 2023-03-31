@@ -43,7 +43,6 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   const [rowSelected, setRowSelected] = useState<string[]>(
     props?.extraData?.map((item: any) => item.id + item.size + item.color) ?? []
   )
-  console.log(props.single)
 
   const getAllGoods = async () => {
     await axios
@@ -61,41 +60,52 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Mã sản phẩm',
       dataIndex: 'id',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
+      fixed: 'left',
     })
 
     columns.push({
       title: 'Hình ảnh',
       dataIndex: 'image',
       render(text: string, record: DataType, index: number) {
+        return (
+          <Image
+            alt='img'
+            src={record?.image ? record?.image[0] : ''}
+            preview={{
+              src: record?.image ? record?.image[0] : '',
+            }}
+            style={{
+              maxWidth: 32,
+              maxHeight: 32,
+            }}
+          />
+        )
+      },
+      onCell: (record) => {
         return {
-          children: (
-            <Image
-              alt='img'
-              src={record?.image ? record?.image[0] : ''}
-              preview={{
-                src: record?.image ? record?.image[0] : '',
-              }}
-              style={{
-                maxWidth: 32,
-                maxHeight: 32,
-              }}
-            />
-          ),
+          style: { minWidth: 120 },
         }
       },
+      fixed: 'left',
     })
 
     columns.push({
       title: 'Tên sản phẩm',
       dataIndex: 'name',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
@@ -105,8 +115,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       title: 'Giới tính',
       dataIndex: 'gender',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.gender > b.gender ? 1 : -1),
@@ -115,16 +128,19 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'Nữ', value: 'Nữ' },
         { text: 'Unisex', value: 'Unisex' },
       ],
-      onFilter: (value: string, record: DataType) =>
-        record.gender.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.gender.includes(value.toString()),
     })
 
     columns.push({
       title: 'Loại',
       dataIndex: 'type',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.type > b.type ? 1 : -1),
@@ -132,16 +148,19 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'Áo khoác', value: 'Áo khoác' },
         { text: 'Áo thun', value: 'Áo thun' },
       ],
-      onFilter: (value: string, record: DataType) =>
-        record.type.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.type.includes(value.toString()),
     })
 
     columns.push({
       title: 'Lứa tuổi',
       dataIndex: 'age',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.age > b.age ? 1 : -1),
@@ -149,15 +168,19 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'Người lớn', value: 'Người lớn' },
         { text: 'Trẻ em', value: 'Trẻ em' },
       ],
-      onFilter: (value: string, record: DataType) => record.age.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.age.includes(value.toString()),
     })
 
     columns.push({
       title: 'Kích thước',
       dataIndex: 'size',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.size > b.size ? 1 : -1),
@@ -169,16 +192,19 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         { text: 'XXL', value: 'XXL' },
         { text: 'XXXL', value: 'XXXL' },
       ],
-      onFilter: (value: string, record: DataType) =>
-        record.size.includes(value),
+      onFilter: (value: string | number | boolean, record: DataType) =>
+        record.size.includes(value.toString()),
     })
 
     columns.push({
       title: 'Màu sắc',
       dataIndex: 'color',
       render(text: string, record: DataType, index: number) {
+        return text
+      },
+      onCell: (record) => {
         return {
-          children: <div>{text}</div>,
+          style: { minWidth: 120 },
         }
       },
       sorter: (a: DataType, b: DataType) => (a.color > b.color ? 1 : -1),
@@ -250,6 +276,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
           }
           rowKey={['id', 'size', 'color']}
           scroll={{ y: '50vh' }}
+          maxWidth={'100%'}
         />
       </Modal>
     </>
