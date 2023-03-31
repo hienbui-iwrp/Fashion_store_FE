@@ -16,20 +16,20 @@ export interface CustomerOrdersProps {
 const { Title, Text } = Typography;
 
 function OrderItem(props: OrderProps) {
-
+  const router = useRouter()
   return (
     <div className='px-2 pb-4 pt-1 border-t-8 border-[#F1F1F1]'>
       <Link href={`/manage-orders/${props.orderId}`}>
         <div className='flex justify-between items-center'>
           <Text strong className='text-xl pr-4'>
-            Đơn #{props.orderId}
+            Đơn #{props.orderId}f
           </Text>
           <Text strong className='text-red-600'>
             {props.statusShips[props.statusShips.length - 1].status}
           </Text>
-          <Link href='/cart'>
-            <ButtonClientPrimary name='Mua lại' />
-          </Link>
+          <ButtonClientPrimary name='Mua lại' onClick={() => {
+            router.push('/cart');
+          }} />
         </div>
         {props.listGoods.map((item, index) => {
           return (

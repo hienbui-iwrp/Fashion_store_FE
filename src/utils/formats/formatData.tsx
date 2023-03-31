@@ -1,11 +1,4 @@
-import {
-  AccountProps,
-  AttendanceProps,
-  BranchProps,
-  RequestProps,
-  StaffProps,
-  CustomerInfoProps,
-} from '../types'
+import { AccountProps, BranchProps, RequestProps, StaffProps, AttendanceProps, CustomerInfoProps } from '../types'
 import timeToDate from './timeToDate'
 
 export const formatResponse = (data: any) => {
