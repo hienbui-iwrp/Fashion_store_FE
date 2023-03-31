@@ -7,6 +7,9 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import Loading from '@/components/Loading'
+import { useSelector } from 'react-redux';
+import { selectUser, setNotificationType, setNotificationValue, useAppDispatch } from '@/redux';
+import { updateCustomerInfoBff } from '@/api';
 
 const { Title, Text } = Typography
 export interface UserInfoProps {
@@ -32,15 +35,31 @@ const beforeUpload = (file: RcFile) => {
 export default function UserInfo(props: UserInfoProps) {
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter();
+  const dispatch = useAppDispatch()
+  const { info } = useSelector(selectUser);
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    router.push('/login');
+    updateUserInfo(values);
   };
+  const updateUserInfo = async (userData: any) => {
+    console.log('new data', { ...info, ...userData });
+    return updateCustomerInfoBff({ ...info, ...userData })
+      .then((res) => {
+        if (res?.StatusCode === '200') {
+          dispatch(setNotificationValue('Cập nhật thông tin thành công'));
+          router.push('/user-info');
+        }
+        else {
+          dispatch(setNotificationType('error'));
+          dispatch(setNotificationValue('Có lỗi xảy ra, thay đổi thông tin thất bại'));
+        }
+      })
+  }
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string>();
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
@@ -99,9 +118,18 @@ export default function UserInfo(props: UserInfoProps) {
     setIsModalOpen(false);
   };
 
+  const formRef = React.useRef(null);
+
   useEffect(() => {
+    if (formRef.current) {
+      console.log('object yes');
+      for (let field in info) {
+        //@ts-ignore
+        formRef.current.setFieldValue(field, info[field]);
+      }
+    }
     setIsLoading(false);
-  }, [])
+  }, [info])
 
   return (
     isLoading ? <Loading /> :
@@ -112,6 +140,7 @@ export default function UserInfo(props: UserInfoProps) {
         <Form
           name="basic"
           layout="vertical"
+          ref={formRef}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
@@ -123,7 +152,7 @@ export default function UserInfo(props: UserInfoProps) {
                 name="name"
                 rules={[]}
               >
-                <Input className='' placeholder='Tên người nhận' />
+                <Input className='' placeholder='Tên người dùng' />
               </Form.Item>
               <Form.Item
                 className='mb-1'
@@ -187,7 +216,7 @@ export default function UserInfo(props: UserInfoProps) {
                 <Form.Item
                   className='mb-1'
                   label={<Text strong>Số nhà, đường</Text>}
-                  name="road"
+                  name="street"
                   rules={[]}
                 >
                   <Input className='' placeholder='Số nhà, đường' />
@@ -199,7 +228,7 @@ export default function UserInfo(props: UserInfoProps) {
             </Col>
             <Col span={9} className="flex justify-center items-center">
               <div>
-                <Avatar size={128} src={<img src={'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} alt="avatar" />} />
+                <Avatar size={128} src={<img src={'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'} alt="avatar" />} />
                 <Upload
                   className="avatar-uploader !flex justify-center mt-2"
                   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"

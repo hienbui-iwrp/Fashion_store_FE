@@ -1,8 +1,15 @@
 import * as React from 'react';
-import { Typography, Input, Row, Col, Form, Radio, Image, Checkbox, Button, Space } from 'antd'
+import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch } from '@/redux/store'
+import { selectProductsPayment, selectUser } from '@/redux/selectors'
+import moment from 'moment';
+import { productsPaymentActions, setNotificationType, setNotificationValue } from '@/redux/slices'
+import { Typography, Input, Row, Col, Form, Radio, Image, Checkbox, Button, Space, notification } from 'antd'
 import type { RadioChangeEvent } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import { useRouter } from 'next/router';
+import { FormatMoney } from '@/utils';
+import { createOrder, makeOrder } from '@/api/customer-order';
 
 export interface PaymentProps {
 }
@@ -20,37 +27,64 @@ export interface CartItemProps {
   color: string;
   discount: number;
 }
-const listCartItem: CartItemProps[] = [
-  {
-    goodsId: '1',
-    image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    name: 'Áo khoác thời trang mùa đông 2208B7013',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  },
-  {
-    goodsId: '2',
-    image: 'https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp',
-    name: 'Áo khoác thời trang mùa đông 2208B7013',
-    unitPrice: 100000,
-    quantity: 1,
-    size: '36',
-    color: 'yellow',
-    discount: 10
-  }
-]
 
 export default function Payment(props: PaymentProps) {
-  const router = useRouter()
+  const router = useRouter();
+  const formRef = React.useRef(null);
+  const dispatch = useDispatch()
+  const dataProductsPayment: any = useSelector(selectProductsPayment);
+  const dataUser = useSelector(selectUser);
+  const listCartItem: CartItemProps[] = dataProductsPayment.listProductPayment;
+  // console.log('redux data products payment', dataProductsPayment);
   const [paymentMethod, setPaymentMethod] = React.useState('offline');
   const [methodOnline, setMethodOnline] = React.useState('Momo');
+  const [totalOrder, setTotalOrder] = React.useState(dataProductsPayment.totalPrice)
+  const [shipFee, setShipFee] = React.useState<number | null>(null)
+  const [expectedDate, setExpectedDate] = React.useState<string | null>(null)
   const onFinish = (values: any) => {
-    console.log('Success:', values);
-    router.push('/manage-orders');
+    const orderData = {
+      ...values, goodsList: dataProductsPayment.listProductPayment,
+      shipFee, totalPrice: dataProductsPayment.totalPrice,
+      customerId: dataUser.info.username,
+      transactionDate: moment().format("YYYY-MM-DD"),
+      address: {
+        street: values.street,
+        ward: values.ward,
+        district: values.district,
+        province: values.province
+      },
+      expectedDate: expectedDate ? expectedDate : '2023-04-08'
+    }
+    sendOrderInfo(orderData);
+    if (values.paymentMethod === 'offline') {
+      completedOrder(orderData)
+        .then((res) => {
+          console.log('res', res);
+          if (res?.StatusCode === '200') {
+            dispatch(setNotificationValue('Tạo đơn hàng thành công'));
+            router.push('/manage-orders');
+          } else {
+            dispatch(setNotificationType('error'));
+            dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
+          }
+        })
+    } else {
+
+    }
   };
+
+  const completedOrder = async (orderData: any) => {
+    return await createOrder(orderData);
+  }
+
+  const sendOrderInfo = async (orderData: any) => {
+    await makeOrder(orderData)
+      .then((res) => {
+        console.log(res);
+        setShipFee(Number(res?.Data.shipFee));
+        setExpectedDate(res?.Data.expectedDate);
+      })
+  }
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -62,10 +96,32 @@ export default function Payment(props: PaymentProps) {
   const handleChangeMethodOnline = (e: RadioChangeEvent) => {
     setPaymentMethod(e.target.value);
   }
+  const handleBlur = (event: any) => {
+    //@ts-ignore
+    const formData = formRef.current.getFieldsValue();
+    if (formData.province && formData.district && formData.ward && formData.street) {
+      setExpectedDate('2023-04-08');
+      const orderData = {
+        ...formData, goodsList: dataProductsPayment.listProductPayment,
+        shipFee, totalPrice: dataProductsPayment.totalPrice,
+        customerId: dataUser.info.username,
+        transactionDate: moment().format("MM-DD-YYYY"),
+        address: {
+          street: formData.street,
+          ward: formData.ward,
+          district: formData.district,
+          province: formData.province
+        },
+        expectedDate: expectedDate ? expectedDate : '2023-04-08'
+      }
+      sendOrderInfo(orderData);
+    }
+  };
 
   return (
     <div className='px-8 payment'>
       <Form
+        ref={formRef}
         name="basic"
         layout="vertical"
         onFinish={onFinish}
@@ -81,7 +137,7 @@ export default function Payment(props: PaymentProps) {
               <Form.Item
                 className='mb-1'
                 label={<Text strong>Tên</Text>}
-                name="name"
+                name="nameReceiver"
                 rules={[{ required: true, message: 'Vui lòng nhập tên người nhận!' }]}
               >
                 <Input className='' placeholder='Tên người nhận' />
@@ -89,7 +145,7 @@ export default function Payment(props: PaymentProps) {
               <Form.Item
                 className='mb-1'
                 label={<Text strong>Số điện thoại</Text>}
-                name="phone"
+                name="phoneReceiver"
                 rules={[{ required: true, message: 'Vui lòng nhập số điện thoại người nhận!' }]}
               >
                 <Input className='' placeholder='Số điện thoại' />
@@ -97,7 +153,7 @@ export default function Payment(props: PaymentProps) {
               <Form.Item
                 className='mb-1'
                 label={<Text strong>Email</Text>}
-                name="email"
+                name="emailReceiver"
                 rules={[
                   {
                     type: 'email',
@@ -122,7 +178,7 @@ export default function Payment(props: PaymentProps) {
                         },
                       ]}
                     >
-                      <Input className='' placeholder='Tỉnh thành' />
+                      <Input onBlur={handleBlur} className='' placeholder='Tỉnh thành' />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -137,7 +193,7 @@ export default function Payment(props: PaymentProps) {
                         },
                       ]}
                     >
-                      <Input className='' placeholder='Quận huyện' />
+                      <Input onBlur={handleBlur} className='' placeholder='Quận huyện' />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -152,14 +208,14 @@ export default function Payment(props: PaymentProps) {
                         },
                       ]}
                     >
-                      <Input className='' placeholder='Phường xã' />
+                      <Input onBlur={handleBlur} className='' placeholder='Phường xã' />
                     </Form.Item>
                   </Col>
                 </Row>
                 <Form.Item
                   className='mb-1'
                   label={<Text strong>Số nhà, đường</Text>}
-                  name="road"
+                  name="street"
                   rules={[
                     {
                       required: true,
@@ -167,7 +223,7 @@ export default function Payment(props: PaymentProps) {
                     },
                   ]}
                 >
-                  <Input className='' placeholder='Số nhà, đường' />
+                  <Input onBlur={handleBlur} className='' placeholder='Số nhà, đường' />
                 </Form.Item>
               </div>
               <div>
@@ -255,7 +311,9 @@ export default function Payment(props: PaymentProps) {
               </Title>
               {listCartItem.map((item, index) => {
                 return (
-                  <>
+                  <div
+                    key={item.goodsId}
+                  >
                     <div className="flex">
                       <Image width={140} height={160} preview={false} className='rounded-xl' src={item.image} alt='' />
                       <div className='flex-1 pl-4'>
@@ -299,23 +357,24 @@ export default function Payment(props: PaymentProps) {
                       </div>
                     </div>
                     <br />
-                  </>
+                  </div>
                 )
               })}
+              <hr className="py-1" />
               <div className='px-4 flex justify-between'>
                 <Text strong>Tổng cộng</Text>
-                <Text strong className='text-lg'>500.000 đ</Text>
+                <Text strong className='text-lg'>{FormatMoney(totalOrder)}</Text>
               </div>
               <div className='px-4 flex justify-between'>
                 <Text strong>Vận chuyển</Text>
-                <Text strong className='text-lg'>30.000 đ</Text>
+                <Text strong className='text-lg'>{shipFee ? FormatMoney(shipFee) : FormatMoney(0)}</Text>
               </div>
               <div className='px-4 flex justify-between items-center'>
                 <div className='flex flex-col'>
                   <Text strong>Tổng đơn</Text>
-                  <Text className='text-[#6A983C]'>Nhận hàng: 17-20 tháng 10</Text>
+                  <Text className='text-[#6A983C]'>Nhận hàng: {expectedDate ? expectedDate : 'Vui lòng nhập đầy đủ thông tin'}</Text>
                 </div>
-                <Text strong className='text-[#6A983C] text-2xl'>530.000 đ</Text>
+                <Text strong className='text-[#6A983C] text-2xl'>{FormatMoney(totalOrder + shipFee)}</Text>
               </div>
             </div>
           </Col>

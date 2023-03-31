@@ -1,6 +1,8 @@
+import axios from 'axios';
 import { api } from '../axios'
+import { customerBff, shareBffCheckWh } from '@/utils';
 
-const service = '/customer-order-service'
+const service = '/api/customer-order-service'
 const listOrder = '/list-order'
 const order = '/order'
 
@@ -27,4 +29,106 @@ export const getOrderDetail = async (orderId: string) => {
     .catch((err) => {
       console.log(err);
     });
+}
+
+export const makeOrder = async (orderData: any) => {
+  const payload = `
+  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    	<soap:Body>
+        		<ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/callNewOrderService/BPELProcess1">
+            			<ns1:CustomerId>${orderData.customerId}</ns1:CustomerId>
+            			<ns1:PaymentMethod>${orderData.paymentMethod}</ns1:PaymentMethod>
+            			<ns1:ListElements>
+                    ${orderData.goodsList.map((goods: any) => {
+    return `<ns1:Elements>
+                      <ns1:GoodsCode>${goods.goodsId}</ns1:GoodsCode>
+                      <ns1:GoodsColor>${goods.color}</ns1:GoodsColor>
+                      <ns1:GoodsSize>${goods.size}</ns1:GoodsSize>
+                      <ns1:Quantity>${goods.quantity}</ns1:Quantity>
+                    </ns1:Elements>`
+  }).join('\n')}
+                  </ns1:ListElements>
+            			<ns1:TotalPrice>${orderData.totalPrice}</ns1:TotalPrice>
+            			<ns1:ShipFee>${orderData.shipFee}</ns1:ShipFee>
+            			<ns1:TransactionDate>${orderData.transactionDate}</ns1:TransactionDate>
+            			<ns1:NameReceiver>${orderData.nameReceiver}</ns1:NameReceiver>
+            			<ns1:PhoneReceiver>${orderData.phoneReceiver}</ns1:PhoneReceiver>
+            			<ns1:EmailReceiver>${orderData.emailReceiver}</ns1:EmailReceiver>
+            			<ns1:Address>
+                				<ns1:Province>${orderData.address.province}</ns1:Province>
+                				<ns1:District>${orderData.address.district}</ns1:District>
+                				<ns1:Ward>${orderData.address.ward}</ns1:Ward>
+                				<ns1:Street>${orderData.address.street}</ns1:Street>
+            </ns1:Address>
+            <ExpectedDate>${orderData.expectedDate}</ExpectedDate>
+        </ns1:Body>
+    </soap:Body>
+</soap:Envelope>`
+  // <Note>${orderData.note ? orderData.note : ''}</Note>
+  // <ExpectedDelivery>${orderData.expectedDelivery}</ExpectedDelivery>
+  console.log(payload);
+  return await shareBffCheckWh
+    .post('', payload)
+    .then((res) => {
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+      return {
+        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+        Message: xml.getElementsByTagName('Message')[0].value,
+        Data: {
+          shipFee: xml.getElementsByTagName('ShipFee')[0].value,
+          expectedDate: xml.getElementsByTagName('ExpectedDate')[0].value,
+        },
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
+
+export const createOrder = async (orderData: any) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+    	<soap:Body>
+            			<CustomerId>${orderData.customerId}</CustomerId>
+            			<PaymentMethod>${orderData.paymentMethod}</PaymentMethod>
+                    ${orderData.goodsList.map((goods: any) => {
+    return `<GoodsList>
+                      <GoodsId>${goods.goodsId}</GoodsId>
+                      <UnitPrice>${goods.unitPrice}</UnitPrice>
+                      <Price>${goods.price}</Price>
+                      <Quantity>${goods.quantity}</Quantity>
+                      <Size>${goods.size}</Size>
+                      <Color>${goods.color}</Color>
+                      <Discount>${goods.discount}</Discount>
+                      <Tax>${goods.tax}</Tax>
+                    </GoodsList>`
+  })}
+            			<TotalPrice>${orderData.totalPrice}</TotalPrice>
+            			<ShipFee>${orderData.shipFee}</ShipFee>
+            			<TransactionDate>${orderData.transactionDate}</TransactionDate>
+            			<NameReceiver>${orderData.nameReceiver}</NameReceiver>
+            			<PhoneReceiver>${orderData.phoneReceiver}</PhoneReceiver>
+            			<EmailReceiver>${orderData.emailReceiver}</EmailReceiver>
+            			<Address>
+                				<Province>${orderData.address.province}</Province>
+                				<District>${orderData.address.district}</District>
+                				<Ward>${orderData.address.ward}</Ward>
+                				<Street>${orderData.address.street}</Street>
+            </Address>
+            <ExpectedDate>${orderData.expectedDate}</ExpectedDate>
+    </soap:Body>`;
+  return await customerBff
+    .post('order-service/customer/make-order', payload)
+    .then((res) => {
+      const XMLParser = require('react-xml-parser')
+      const xml = new XMLParser().parseFromString(res.data)
+      return {
+        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
+        Message: xml.getElementsByTagName('Message')[0].value,
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }

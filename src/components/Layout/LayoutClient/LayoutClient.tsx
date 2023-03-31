@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Router, useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+import { useAppDispatch } from '@/redux'
+import { selectUser } from '@/redux'
+import { userActions } from '@/redux'
 import type { MenuProps } from 'antd'
 import {
   Layout,
@@ -18,6 +22,8 @@ import ButtonHeader from './../../Button/ButtonHeader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { Routes } from '@/constants'
+import { getCustomerInfoBff } from '@/api'
+import { formatUserDataXML } from '@/utils'
 
 const { Header, Footer, Content } = Layout
 const { Search } = Input
@@ -225,8 +231,13 @@ export default function LayoutClient({
   children: React.ReactNode
 }) {
   const router = useRouter()
+  const dispatch = useAppDispatch();
+  const { setUserInfo } = userActions;
+  const dataCustomer = useSelector(selectUser);
+
   const [navbar, setNavbar] = useState(false)
   const [logged, setLogged] = useState(false)
+
   const items: MenuProps['items'] = [
     {
       key: '1',
@@ -243,9 +254,17 @@ export default function LayoutClient({
     },
   ]
 
+  const fetchUserInfo = async () => {
+    const res = await getCustomerInfoBff(localStorage.getItem('userId') || '');
+    const dataUser = formatUserDataXML(res?.Data[0])
+    dispatch(setUserInfo(dataUser));
+  }
+
   useEffect(() => {
     if (localStorage.getItem('logged') !== '') {
-      setLogged(true)
+      setLogged(true);
+      fetchUserInfo();
+      console.log('object select', dataCustomer);
       console.log(localStorage.getItem('userRole'))
       if (localStorage.getItem('userRole') !== '1') {
         router.replace(Routes.error)
@@ -274,7 +293,7 @@ export default function LayoutClient({
               className='pl-10 w-2/5 md:w-3/5'
               placeholder='Tìm kiếm...'
               onSearch={onSearch}
-              // style={{ width: 200 }}
+            // style={{ width: 200 }}
             />
           </Col>
           <Col span={9} className='flex justify-around items-center'>
@@ -300,7 +319,7 @@ export default function LayoutClient({
               <Dropdown menu={{ items }} placement='bottom'>
                 <Link href='/user-info'>
                   <ButtonHeader
-                    name='Nguyễn Đức A'
+                    name={dataCustomer.info.name}
                     icon={<FontAwesomeIcon className='pr-2' icon={faUser} />}
                   />
                 </Link>
@@ -368,9 +387,8 @@ export default function LayoutClient({
             </div>
             <div>
               <div
-                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
-                  navbar ? 'block' : 'hidden'
-                }`}
+                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'
+                  }`}
               >
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 '>
                   {listItem.map((item, index) => {

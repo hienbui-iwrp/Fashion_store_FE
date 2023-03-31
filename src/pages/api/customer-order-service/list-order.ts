@@ -9,7 +9,7 @@ export default function handler(
 ) {
   res.status(200).json([
     {
-      orderId: '1',
+      orderId: 'goods_1680116118',
       paymentMethod: 'momo',
       listGoods: [{
         goodsId: '1',
@@ -20,7 +20,8 @@ export default function handler(
         quantity: 1,
         size: '36',
         color: 'yellow',
-        discount: 10
+        discount: 10,
+        tax: 10,
       }],
       totalPrice: 500000,
       totalGoods: 3,
@@ -52,7 +53,8 @@ export default function handler(
           quantity: 1,
           size: '36',
           color: 'yellow',
-          discount: 10
+          discount: 10,
+          tax: 10,
         },
         {
           goodsId: '2',
@@ -63,7 +65,8 @@ export default function handler(
           quantity: 1,
           size: '36',
           color: 'yellow',
-          discount: 10
+          discount: 10,
+          tax: 10,
         },
       ],
       totalPrice: 500000,
@@ -96,7 +99,8 @@ export default function handler(
           quantity: 1,
           size: '36',
           color: 'yellow',
-          discount: 10
+          discount: 10,
+          tax: 10,
         },
         {
           goodsId: '2',
@@ -107,7 +111,8 @@ export default function handler(
           quantity: 1,
           size: '36',
           color: 'yellow',
-          discount: 10
+          discount: 10,
+          tax: 10,
         },
       ],
       totalPrice: 500000,

@@ -66,10 +66,25 @@ export default function Login() {
           content: '',
           type: 'success',
         })
-        localStorage.setItem('logged', 'true')
+        localStorage.setItem('logged', 'true');
+        var now = new Date().getTime();
+        localStorage.setItem('setupTime', now.toString())
+        // var setupTime = localStorage.getItem('setupTime');
+        // if (setupTime == null) {
+        //   localStorage.setItem('setupTime', now)
+        // } else {
+        //   if (now - setupTime > 24 * 60 * 60 * 1000) {
+        //     localStorage.clear()
+        //     localStorage.setItem('setupTime', now);
+        //   }
+        // }
         localStorage.setItem(
           'userRole',
           res.Data[0].getElementsByTagName('Role')[0].value
+        )
+        localStorage.setItem(
+          'userId',
+          res.Data[0].getElementsByTagName('UserId')[0].value
         )
         if (res.Data[0].getElementsByTagName('Role')[0].value == 1) {
           router.push('/')
@@ -127,7 +142,7 @@ export default function Login() {
           name='Password'
           rules={[
             { required: true, message: 'Vui lòng nhập mật khẩu!' },
-            ({}) => ({
+            ({ }) => ({
               validator(_, value) {
                 if (!value || value.length > 5) {
                   return Promise.resolve()
