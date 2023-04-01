@@ -23,7 +23,7 @@ import CardProductClient from '../Card/CardProductClient'
 import { ProductsDataProps, ProductDetailDataProps } from '@/utils'
 import axios from 'axios'
 import { getAllProducts } from '@/api/products'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL, Colors, goodsOptions } from '@/constants'
 import styles from './Products.module.css'
 import { FilterTag } from '../FilterTag'
 
@@ -49,37 +49,44 @@ export default function Products(props: ProductsProps) {
   const [loaded, setLoaded] = useState(false)
   const { setListProduct } = productsActions;
   const dataProducts: ProductsDataProps = useSelector(selectProducts);
-  const options: SelectProps['options'] = [
-    { value: 'man', label: 'Nam' },
-    { value: 'woman', label: 'Nữ' },
-    { value: 'unisex', label: 'Unisex' },
-    { value: 'jacket', label: 'Áo khoác' },
-    { value: 'sweater', label: 'Áo len' },
-    { value: 'T-shirt', label: 'Áo thun' },
-    { value: 'Trousers', label: 'Quần tây' },
-    { value: 'kaki', label: 'Quần kaki' },
-    { value: 'short', label: 'Quần sọt' },
-    { value: 'sport Shoes', label: 'Giày thể thao' },
-    { value: 'western shoes', label: 'Giày tây' },
-    { value: 'sandal', label: 'Dép' },
-    { value: 'ring', label: 'Nhẫn' },
-    { value: 'hat', label: 'Nón' },
-    { value: 'bag', label: 'Túi/balo' },
-    { value: '31', label: '31' },
-    { value: '32', label: '32' },
-    { value: '33', label: '33' },
-    { value: '34', label: '34' },
-    { value: '35', label: '35' },
-    { value: '36', label: '36' },
-    { value: '37', label: '37' },
-    { value: '38', label: '38' },
-    { value: '39', label: '39' },
-    { value: '40', label: '40' },
-    { value: '41', label: '41' },
-    { value: '42', label: '42' },
-    { value: '43', label: '43' },
-    { value: '44', label: '44' },
-  ]
+  const options = goodsOptions;
+  // const options: SelectProps['options'] = [
+  //   { value: 'man', label: 'Nam' },
+  //   { value: 'woman', label: 'Nữ' },
+  //   { value: 'unisex', label: 'Unisex' },
+  //   { value: 'jacket', label: 'Áo khoác' },
+  //   { value: 'sweater', label: 'Áo len' },
+  //   { value: 'T-shirt', label: 'Áo thun' },
+  //   { value: 'Trousers', label: 'Quần tây' },
+  //   { value: 'kaki', label: 'Quần kaki' },
+  //   { value: 'short', label: 'Quần sọt' },
+  //   { value: 'sport Shoes', label: 'Giày thể thao' },
+  //   { value: 'western shoes', label: 'Giày tây' },
+  //   { value: 'sandal', label: 'Dép' },
+  //   { value: 'ring', label: 'Nhẫn' },
+  //   { value: 'hat', label: 'Nón' },
+  //   { value: 'bag', label: 'Túi/balo' },
+  //   { value: '31', label: '31' },
+  //   { value: '32', label: '32' },
+  //   { value: '33', label: '33' },
+  //   { value: '34', label: '34' },
+  //   { value: '35', label: '35' },
+  //   { value: '36', label: '36' },
+  //   { value: '37', label: '37' },
+  //   { value: '38', label: '38' },
+  //   { value: '39', label: '39' },
+  //   { value: '40', label: '40' },
+  //   { value: '41', label: '41' },
+  //   { value: '42', label: '42' },
+  //   { value: '43', label: '43' },
+  //   { value: '44', label: '44' },
+  //   { value: 'S', label: 'S' },
+  //   { value: 'M', label: 'M' },
+  //   { value: 'L', label: 'L' },
+  //   { value: 'XL', label: 'XL' },
+  //   { value: 'XXL', label: 'XXL' },
+  //   { value: 'XXXL', label: 'XXXL' },
+  // ]
   const [value, setValue] = useState('default')
   const [data, setData] = useState<ProductsDataProps>({
     ...dataProducts
