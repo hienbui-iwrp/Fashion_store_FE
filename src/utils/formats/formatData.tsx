@@ -1,4 +1,12 @@
-import { AccountProps, BranchProps, RequestProps, StaffProps, AttendanceProps, CustomerInfoProps } from '../types'
+import {
+  AccountProps,
+  BranchProps,
+  RequestProps,
+  StaffProps,
+  AttendanceProps,
+  CustomerInfoProps,
+  EventProps,
+} from '../types'
 import timeToDate from './timeToDate'
 
 export const formatResponse = (data: any) => {
@@ -116,10 +124,10 @@ export const formatAttendanceDataXML = (data: any): AttendanceProps => {
       .getElementsByTagName('CheckoutTime')[0]
       ?.getElementsByTagName('Valid')[0].value
       ? new Date(
-        _data
-          .getElementsByTagName('CheckoutTime')[0]
-          ?.getElementsByTagName('Time')[0].value
-      )
+          _data
+            .getElementsByTagName('CheckoutTime')[0]
+            ?.getElementsByTagName('Time')[0].value
+        )
       : undefined,
   }
 }
@@ -134,53 +142,14 @@ export const formatRequestDataXML = (data: any): RequestProps => {
   }
 }
 
-// ----------OLD------------
-export const formatBranchData = (data: any): BranchProps => {
-  const _data: BranchProps = {
-    id: data?.BranchCode,
-    name: data?.BranchName,
-    street: data?.BranchStreet,
-    ward: data?.BranchWard,
-    district: data?.BranchDistrict,
-    province: data?.BranchProvince,
-    createdAt: new Date(data.CreatedAt),
-    openTime: timeToDate(data?.OpenTime),
-    closeTime: timeToDate(data?.CloseTime),
-    manager: data?.Manager,
-    image: data?.Image,
-  }
-
-  return _data
-}
-
-export const formatStaffData = (data: any): StaffProps => {
+export const formatEventDataXML = (data: any): EventProps => {
   return {
-    id: data?.StaffId,
-    name: data?.StaffName,
-    role: data?.Role,
-    branchId: data?.BranchId,
-    citizenId: data?.CitizenId,
-    phone: data?.PhoneNumber,
-    street: data?.Street,
-    ward: data?.Ward,
-    district: data?.District,
-    province: data?.Province,
-    birthdate: new Date(data?.Birthdate),
-    hometown: data?.Hometown,
-    salary: data?.Salary,
-    startDate: new Date(data?.StartDate),
-    status: data?.Status,
-    email: data?.Email,
-    gender: data?.Gender,
-  }
-}
-
-export const formatRequestData = (data: any): RequestProps => {
-  return {
-    id: data.Id,
-    staffId: data.StaffId,
-    status: data.Status,
-    type: data.RequestType,
-    date: new Date(data.RequestDate),
+    id: data.getElementsByTagName('Id')[0]?.value,
+    name: data.getElementsByTagName('Name')[0]?.value,
+    discount: parseFloat(data.getElementsByTagName('Discount')[0]?.value),
+    startTime: data.getElementsByTagName('StartTime')[0]?.value,
+    endTime: data.getElementsByTagName('EndTime')[0]?.value,
+    image: data.getElementsByTagName('Image')[0]?.value,
+    goods: data.getElementsByTagName('Goods').map((item: any) => item.value),
   }
 }

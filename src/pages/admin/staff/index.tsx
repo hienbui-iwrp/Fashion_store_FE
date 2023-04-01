@@ -6,9 +6,7 @@ import { Space } from 'antd'
 import { AddButton, TableList } from '@/components'
 import {
   BranchProps,
-  formatBranchData,
   formatBranchDataXML,
-  formatStaffData,
   formatStaffDataXML,
   ModalAddEditStaff,
   StaffProps,

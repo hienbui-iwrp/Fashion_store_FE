@@ -27,10 +27,22 @@ export const adminBff = axios.create({
   },
 })
 
-export const shareBffCheckWh = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BFF_PROXY_CHECK_WH,
+adminBff.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    console.warn('Error status', error.response?.status)
+    console.log('show notification')
+    console.log(error.response?.data)
+    return Promise.reject(error)
+  }
+)
+
+export const shareBff = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_SHARE_BFF_PROXY,
   headers: {
-    'Content-Type': 'text/xml',
+    'Content-Type': 'application/xml',
     'Access-Control-Allow-Origin': '*',
   },
 })
@@ -43,14 +55,10 @@ export const customerBff = axios.create({
   },
 })
 
-adminBff.interceptors.response.use(
-  (response) => {
-    return response
+export const shareBffCheckWh = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BFF_PROXY_CHECK_WH,
+  headers: {
+    'Content-Type': 'text/xml',
+    'Access-Control-Allow-Origin': '*',
   },
-  (error) => {
-    console.warn('Error status', error.response?.status)
-    console.log('show notification')
-    console.log(error.response?.data)
-    return Promise.reject(error)
-  }
-)
+})

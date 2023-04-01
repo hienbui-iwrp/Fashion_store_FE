@@ -1,26 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import {
-  BASE_URL,
-  Colors,
-  RequestStatus,
-  RequestType,
-  StaffRole,
-  StaffStatus,
-} from '@/constants'
-import axios from 'axios'
-import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons'
-import styles from '@/styles/Admin.module.css'
+import { RequestStatus, RequestType, StaffRole, StaffStatus } from '@/constants'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
-import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
+import { AddButton, RemoveButton, TableList } from '@/components'
 import {
   BranchProps,
-  formatBranchData,
   formatBranchDataXML,
   formatDate,
-  formatRequestData,
   formatRequestDataXML,
-  formatStaffData,
   formatStaffDataXML,
   ModalStaffDetail,
   RequestProps,
@@ -28,13 +16,9 @@ import {
 } from '@/utils'
 import { useModalConfirm } from '@/hooks'
 import {
-  getBranch,
   getBranchBff,
-  getListRequest,
   getListRequestBFF,
-  getStaff,
   getStaffBff,
-  updateRequest,
   updateRequestBFF,
 } from '@/api'
 import { useDispatch } from 'react-redux'
