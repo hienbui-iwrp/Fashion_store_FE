@@ -8,14 +8,7 @@ import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
-import {
-  BranchProps,
-  formatAddress,
-  formatDate,
-  formatTime,
-  timeToDate,
-} from '@/utils'
-import { apiBranchService } from '@/utils/axios'
+import { BranchProps, formatAddress, formatDate, formatTime } from '@/utils'
 import { useDispatch } from 'react-redux'
 import {
   setNotificationType,
@@ -25,7 +18,7 @@ import {
   formatBranchData,
   formatBranchDataXML,
 } from '@/utils/formats/formatData'
-import { deleteBranchBff, getBranchDetailBff } from '@/api'
+import { deleteBranchBff, getBranchDetailBff, getBranchStaffBff } from '@/api'
 
 interface ItemType {
   name: string
@@ -59,8 +52,8 @@ const Detail = () => {
       _data = formatBranchDataXML(data)
     })
 
-    await apiBranchService.get(`/staff/${id}`).then((res) => {
-      _data.staff = res.data.Data.length
+    await getBranchStaffBff(id).then((res: any) => {
+      _data.staff = res.Data.length
     })
     setData(_data)
   }

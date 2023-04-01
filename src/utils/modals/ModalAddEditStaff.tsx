@@ -13,7 +13,7 @@ import { ModalAddEditStaffProps } from '../types/modalType'
 import { AddButton, DropdownButton, RemoveButton } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { BranchProps, formatBranchData, formatDate } from '..'
+import { BranchProps, formatBranchDataXML, formatDate } from '..'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -23,13 +23,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import { Gender, Routes, StaffRole } from '@/constants'
 import { useRouter } from 'next/router'
-import {
-  addStaff,
-  addStaffBFF,
-  getBranch,
-  updateStaff,
-  updateStaffBFF,
-} from '@/api'
+import { addStaffBFF, getBranchBff, updateStaffBFF } from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
@@ -55,10 +49,10 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   }
 
   const getData = () => {
-    getBranch().then((res: any) => {
-      const _data = res.data.Data.map((item: any) => {
-        if (res.data.StatusCode != 200) throw new Error('FAIL')
-        return formatBranchData(item)
+    getBranchBff().then((res: any) => {
+      const _data = res.Data.map((item: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        return formatBranchDataXML(item)
       })
       setBranchData(_data)
       setCurBranch(
@@ -77,11 +71,31 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
   const onSave = async () => {
     try {
       const values = await form.validateFields()
+      // await addAccountBff('a', '123456', form.getFieldValue('role'))
 
       if (!props.extraData) {
-        addStaffBFF(values)
-          .then((res: any) => {
+        await addStaffBFF(values)
+          .then(async (res: any) => {
             if (res.StatusCode != 200) throw new Error('FAIL')
+
+            // const username = form.setFieldValue('email').split('@')[0]
+            // await addAccountBff(
+            //   username,
+            //   '123456',
+            //   form.getFieldValue('role')
+            // )
+            //   .then((res) => {
+            //     console.log('-------------: ', res)
+            //   })
+            //   .catch(async () => {
+            //     await updateRoleBff(
+            //       username,
+            //       form.getFieldValue('role')
+            //     ).catch(() => {
+            //       throw new Error('FAIL')
+            //     })
+            //   })
+
             dispatch(setNotificationValue('Đã thêm nhân viên mới'))
             routes.push(Routes.admin.staff)
           })
@@ -90,9 +104,21 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
             dispatch(setNotificationValue('Có lỗi khi thực hiện'))
           })
       } else {
-        updateStaffBFF(props.extraData.id, values)
-          .then((res: any) => {
+        await updateStaffBFF(props.extraData.id, values)
+          .then(async (res: any) => {
             if (res.StatusCode != 200) throw new Error('FAIL')
+            // const username = props?.extraData?.id ?? ''
+            // await updateRoleBff(username, form.getFieldValue('role')).catch(
+            //   async () => {
+            //     await addAccountBff(
+            //       username,
+            //       '123456',
+            //       form.getFieldValue('role')
+            //     ).catch(() => {
+            //       throw new Error('FAIL')
+            //     })
+            //   }
+            // )
             dispatch(setNotificationValue('Đã cập nhật thông tin'))
             routes.push(Routes.admin.staff)
           })
@@ -111,7 +137,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
       console.log('Failed:', errorInfo)
     }
   }
-  console.log(branchData)
 
   return (
     <>
@@ -348,7 +373,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                     const role = StaffRole.find(
                       (item: any) => item.content == i
                     )?.value
-                    console.log(role)
                     form.setFieldValue('role', role)
                   }}
                 />

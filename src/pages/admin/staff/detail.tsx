@@ -20,7 +20,7 @@ import {
 } from '@/utils'
 import { ColumnsType } from 'antd/es/table'
 import {
-  deleteStaff,
+  deleteStaffBFF,
   getAttendaceBff,
   getBranchDetailBff,
   getStaffDetailBFF,
@@ -166,9 +166,9 @@ const Detail = () => {
     title: 'Xóa nhân viên',
     content: 'Bạn có chắc  chắn muốn xóa nhân viên này?',
     onOk: () => {
-      deleteStaff(id)
+      deleteStaffBFF(id)
         .then((res: any) => {
-          if (res.data.StatusCode != 200) throw new Error('FAIL')
+          if (res.StatusCode != 200) throw new Error('FAIL')
           router.push(Routes.admin.staff)
           dispatch(setNotificationValue('Xóa nhân viên thành công'))
         })

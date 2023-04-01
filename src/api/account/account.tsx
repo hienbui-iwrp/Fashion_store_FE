@@ -1,4 +1,4 @@
-import { adminBff, bpelAccount } from '@/utils'
+import { adminBff } from '@/utils'
 import axios from 'axios'
 
 const baseUrl = 'http://localhost:3000'

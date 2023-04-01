@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { Routes } from '@/constants'
+import { Routes, StaffRole } from '@/constants'
 import { Space } from 'antd'
 import { TableList } from '@/components'
 import {
@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 const Account = () => {
   const router = useRouter()
   const [data, setData] = useState<AccountProps[]>([])
+  const [allData, setAllData] = useState<AccountProps[]>([])
   const [loading, setLoading] = useState(true)
 
   const columns: ColumnsType<AccountProps> = []
@@ -71,7 +72,10 @@ const Account = () => {
       title: 'Vai trò',
       dataIndex: '',
       render(text: string, record: AccountProps, index: number) {
-        return record.role == 1 ? 'Khách hàng' : 'Quản trị viên'
+        return record.role == 1
+          ? 'Khách hàng'
+          : StaffRole.find((item: any) => record.role == item.value)?.content ??
+              'Quản trị viên'
       },
       sorter: (a: AccountProps, b: AccountProps) => (a.role > b.role ? 1 : -1),
     })
@@ -123,7 +127,11 @@ const Account = () => {
         const _data = res?.Data.map((item: any) => {
           return formatAccountDataXML(item)
         })
-        setData(_data.filter((item: any) => item.isActivated == 'true'))
+        const allData = _data.filter(
+          (item: any) => item.isActivated == 'true' && item.role != 7
+        )
+        setAllData(allData)
+        setData(allData)
       }
     })
   }
@@ -137,13 +145,27 @@ const Account = () => {
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <InputSearch />
+          <InputSearch
+            onEnter={(item) => {
+              setLoading(true)
+              setData(
+                allData.filter(
+                  (account: AccountProps) =>
+                    account.id.includes(item) || account.name.includes(item)
+                )
+              )
+              setLoading(false)
+              // setTimeout(() => {}, 300)
+            }}
+            onClear={() => {
+              setData(allData)
+            }}
+          />
         </div>
         <TableList<AccountProps>
           data={data}
           title='Danh sách nhân viên'
           columns={columns}
-          // selectUrl={BASE_URL + 'admin/account/detail'}
           callback={(record: any) => {
             if (record.role == 1)
               router.push(Routes.admin.accountDetail + `?id=${record.id}`)
