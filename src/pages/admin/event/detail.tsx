@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors } from '@/constants'
+import { BASE_URL } from '@/constants'
 import axios from 'axios'
 import {
   CheckOutlined,
   CloseOutlined,
-  EditOutlined,
   FileImageOutlined,
 } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
@@ -19,10 +18,15 @@ import {
   Space,
   TimePicker,
   Image,
-  Form,
 } from 'antd'
-import { AddButton, LayoutAdmin, RemoveButton, TableList } from '@/components'
-import { formatDate, formatTime, ModalAllGoods } from '@/utils'
+import { AddButton, RemoveButton, TableList } from '@/components'
+import {
+  EventProps,
+  formatDate,
+  formatEventDataXML,
+  formatTime,
+  ModalAllGoods,
+} from '@/utils'
 import { useRouter } from 'next/router'
 
 import dayjs from 'dayjs'
@@ -32,6 +36,7 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
+import { getEventDetailBFF } from '@/api'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -39,16 +44,6 @@ dayjs.extend(weekday)
 dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
-
-interface DataType {
-  id: string
-  name: string
-  discount: number
-  startTime: Date
-  endTime: Date
-  goods: Goods[]
-  image: string
-}
 
 interface Goods {
   id: string
@@ -64,8 +59,8 @@ interface Goods {
   image?: string[]
 }
 
-const Account = () => {
-  const [data, setData] = useState<DataType>()
+const Detail = () => {
+  const [data, setData] = useState<EventProps>()
   const [loading, setLoading] = useState(true)
   const [modalAllGoods, setModalAllGoods] = useState(false)
 
@@ -184,11 +179,16 @@ const Account = () => {
   }
 
   const getData = async () => {
-    await axios
-      .get(`${BASE_URL}/api/admin/eventDetailData?id=${id}`)
-      .then((res) => {
-        setData(res.data)
-      })
+    // await axios
+    //   .get(`${BASE_URL}/api/admin/eventDetailData?id=${id}`)
+    //   .then((res) => {
+    //     setData(res.data)
+    //   })
+
+    await getEventDetailBFF(id).then((res: any) => {
+      const _data = formatEventDataXML(res.Data[0])
+      setData(_data)
+    })
   }
 
   useEffect(() => {
@@ -350,7 +350,7 @@ const Account = () => {
             </Row>
           </Col>
         </Row>
-        <Space className='flex justify-end' size={'large'}>
+        <Space className='flex justify-end mt-6' size={'large'}>
           <RemoveButton
             label='Hủy'
             icon={<CloseOutlined />}
@@ -380,6 +380,6 @@ const Account = () => {
   )
 }
 
-Account.displayName = 'Account Management'
+Detail.displayName = 'Event Detail Management'
 
-export default Account
+export default Detail

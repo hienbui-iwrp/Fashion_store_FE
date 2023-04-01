@@ -146,12 +146,13 @@ const Account = () => {
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <InputSearch
-            onEnter={(item) => {
+            onEnter={(text) => {
               setLoading(true)
               setData(
                 allData.filter(
                   (account: AccountProps) =>
-                    account.id.includes(item) || account.name.includes(item)
+                    account.id.toLowerCase().includes(text.toLowerCase()) ||
+                    account.name.toLowerCase().includes(text.toLowerCase())
                 )
               )
               setLoading(false)

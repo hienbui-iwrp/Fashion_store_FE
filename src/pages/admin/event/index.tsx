@@ -1,35 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors, Routes } from '@/constants'
-import axios from 'axios'
-import styles from '@/styles/Admin.module.css'
-import { Card, Space } from 'antd'
-import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatDate, formatTime } from '@/utils'
+import { BASE_URL, Routes } from '@/constants'
+import { Space } from 'antd'
+import { AddButton, TableList } from '@/components'
+import { EventProps, formatDate, formatEventDataXML, formatTime } from '@/utils'
 import { InputSearch } from '@/components'
 import { useRouter } from 'next/router'
-
-interface DataType {
-  id: string
-  name: string
-  startTime: Date
-  endTime: Date
-  discount: number
-}
+import { getEventBFF } from '@/api'
+import { all } from 'axios'
 
 const Event = () => {
-  const [data, setData] = useState<DataType[]>([])
+  const [data, setData] = useState<EventProps[]>([])
+  const [allData, setAllData] = useState<EventProps[]>([])
   const [loading, setLoading] = useState(true)
 
   const router = useRouter()
 
-  const columns: ColumnsType<DataType> = []
+  const columns: ColumnsType<EventProps> = []
   if (data) {
     columns.push({
       title: 'Mã sự kiện',
       dataIndex: 'id',
       fixed: 'left',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: EventProps, index: number) {
         return text
       },
       onCell: (record) => {
@@ -37,13 +30,13 @@ const Event = () => {
           style: { minWidth: 110 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
+      sorter: (a: EventProps, b: EventProps) => (a.id > b.id ? 1 : -1),
     })
 
     columns.push({
       title: 'Tên sự kiện',
       dataIndex: 'name',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: EventProps, index: number) {
         return text
       },
       onCell: (record) => {
@@ -51,13 +44,13 @@ const Event = () => {
           style: { minWidth: 110 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
+      sorter: (a: EventProps, b: EventProps) => (a.name > b.name ? 1 : -1),
     })
 
     columns.push({
       title: 'Thời gian bắt đầu',
       dataIndex: 'startTime',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: EventProps, index: number) {
         return formatTime(text) + ' - ' + formatDate(text)
       },
       onCell: (record) => {
@@ -65,13 +58,13 @@ const Event = () => {
           style: { minWidth: 150 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
+      sorter: (a: EventProps, b: EventProps) =>
         a.startTime > b.startTime ? 1 : -1,
     })
     columns.push({
       title: 'Thời gian kết thúc',
       dataIndex: 'endTime',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: EventProps, index: number) {
         return formatTime(text) + ' - ' + formatDate(text)
       },
       onCell: (record) => {
@@ -79,27 +72,31 @@ const Event = () => {
           style: { minWidth: 150 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.endTime > b.endTime ? 1 : -1),
+      sorter: (a: EventProps, b: EventProps) =>
+        a.endTime > b.endTime ? 1 : -1,
     })
 
     columns.push({
       title: 'Mức giảm',
       dataIndex: 'discount',
-      render(text: string, record: DataType, index: number) {
-        return text + '%'
+      render(text: string, record: EventProps, index: number) {
+        return parseFloat(text) * 100 + '%'
       },
       onCell: (record) => {
         return {
           style: { minWidth: 100 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.discount > b.discount ? 1 : -1),
+      sorter: (a: EventProps, b: EventProps) =>
+        a.discount > b.discount ? 1 : -1,
     })
   }
 
   const getData = async () => {
-    await axios.get(`${BASE_URL}/api/admin/eventData`).then((res) => {
-      setData(res.data)
+    await getEventBFF().then((res: any) => {
+      const _data = res.Data.map((item: any) => formatEventDataXML(item))
+      setData(_data)
+      setAllData(_data)
     })
   }
 
@@ -115,13 +112,26 @@ const Event = () => {
           <AddButton
             label='Thêm mới'
             onClick={() => {
-              router.push(BASE_URL + 'event/detail')
+              router.push(Routes.admin.eventDetail)
             }}
             large
           />
-          <InputSearch />
+          <InputSearch
+            onEnter={(text) => {
+              setData(
+                allData.filter(
+                  (item: EventProps) =>
+                    item.id.toLowerCase().includes(text.toLowerCase()) ||
+                    item.name.toLowerCase().includes(text.toLowerCase())
+                )
+              )
+            }}
+            onClear={async () => {
+              setData(allData)
+            }}
+          />
         </div>
-        <TableList<DataType>
+        <TableList<EventProps>
           data={data}
           title='Danh sách sự kiện'
           columns={columns}

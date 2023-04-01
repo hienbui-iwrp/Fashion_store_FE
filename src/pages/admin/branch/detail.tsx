@@ -14,10 +14,7 @@ import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import {
-  formatBranchData,
-  formatBranchDataXML,
-} from '@/utils/formats/formatData'
+import { formatBranchDataXML } from '@/utils/formats/formatData'
 import { deleteBranchBff, getBranchDetailBff, getBranchStaffBff } from '@/api'
 
 interface ItemType {

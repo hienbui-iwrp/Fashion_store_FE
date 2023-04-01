@@ -45,9 +45,14 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   )
 
   const getAllGoods = async () => {
-    await axios
-      .get(`${BASE_URL}/api/admin/goodsData`)
-      .then((response) => setData(response.data))
+    await axios.get(`${BASE_URL}/api/admin/goodsData`).then((response: any) => {
+      const _data = response.data.reduce((acc: DataType[], item: DataType) => {
+        if (!acc?.find((i: DataType) => i.id == item.id)) {
+          return [...acc, item]
+        } else return acc
+      }, [])
+      setData(_data)
+    })
   }
 
   useEffect(() => {
@@ -172,43 +177,43 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         record.age.includes(value.toString()),
     })
 
-    columns.push({
-      title: 'Kích thước',
-      dataIndex: 'size',
-      render(text: string, record: DataType, index: number) {
-        return text
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 120 },
-        }
-      },
-      sorter: (a: DataType, b: DataType) => (a.size > b.size ? 1 : -1),
-      filters: [
-        { text: 'S', value: 'S' },
-        { text: 'M', value: 'M' },
-        { text: 'L', value: 'L' },
-        { text: 'XL', value: 'XL' },
-        { text: 'XXL', value: 'XXL' },
-        { text: 'XXXL', value: 'XXXL' },
-      ],
-      onFilter: (value: string | number | boolean, record: DataType) =>
-        record.size.includes(value.toString()),
-    })
+    // columns.push({
+    //   title: 'Kích thước',
+    //   dataIndex: 'size',
+    //   render(text: string, record: DataType, index: number) {
+    //     return text
+    //   },
+    //   onCell: (record) => {
+    //     return {
+    //       style: { minWidth: 120 },
+    //     }
+    //   },
+    //   sorter: (a: DataType, b: DataType) => (a.size > b.size ? 1 : -1),
+    //   filters: [
+    //     { text: 'S', value: 'S' },
+    //     { text: 'M', value: 'M' },
+    //     { text: 'L', value: 'L' },
+    //     { text: 'XL', value: 'XL' },
+    //     { text: 'XXL', value: 'XXL' },
+    //     { text: 'XXXL', value: 'XXXL' },
+    //   ],
+    //   onFilter: (value: string | number | boolean, record: DataType) =>
+    //     record.size.includes(value.toString()),
+    // })
 
-    columns.push({
-      title: 'Màu sắc',
-      dataIndex: 'color',
-      render(text: string, record: DataType, index: number) {
-        return text
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 120 },
-        }
-      },
-      sorter: (a: DataType, b: DataType) => (a.color > b.color ? 1 : -1),
-    })
+    // columns.push({
+    //   title: 'Màu sắc',
+    //   dataIndex: 'color',
+    //   render(text: string, record: DataType, index: number) {
+    //     return text
+    //   },
+    //   onCell: (record) => {
+    //     return {
+    //       style: { minWidth: 120 },
+    //     }
+    //   },
+    //   sorter: (a: DataType, b: DataType) => (a.color > b.color ? 1 : -1),
+    // })
   }
 
   const rowSelection: TableRowSelection<DataType> = {
@@ -227,7 +232,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
     onSelectAll: (selected, selectedRows, changeRows) => {
       if (selected)
         setRowSelected(
-          data?.map((item: any) => item.id + item.size + item.color) ?? []
+          // data?.map((item: any) => item.id + item.size + item.color) ?? []
+          data?.map((item: any) => item.id) ?? []
         )
       else setRowSelected([])
     },
