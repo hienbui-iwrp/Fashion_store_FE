@@ -3,15 +3,13 @@ import { Col, Modal, Row, List, Divider } from 'antd'
 import { ModalStaffDetailProps } from '../types/modalType'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import styles from '@/styles/Admin.module.css'
-import { useRouter } from 'next/router'
 import {
   formatAddress,
-  formatBranchData,
+  formatBranchDataXML,
   formatDate,
   formatNumber,
 } from '../formats'
-import { getBranchDetail } from '@/api'
+import { getBranchDetailBff } from '@/api'
 import { BranchProps } from '../types'
 import { StaffRole } from '@/constants'
 
@@ -79,8 +77,9 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
 
   useEffect(() => {
     if (props.extraData) {
-      getBranchDetail(props.extraData.branchId).then((res: any) => {
-        const _data = formatBranchData(res.data.Data)
+      getBranchDetailBff(props.extraData.branchId).then((res: any) => {
+        console.log(res)
+        const _data = formatBranchDataXML(res.getElementsByTagName('Data')[0])
         updateData(_data)
       })
     }
