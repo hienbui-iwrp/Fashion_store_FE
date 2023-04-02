@@ -177,3 +177,18 @@ export type EventProps = {
   image?: string
   goods?: string[]
 }
+
+export type GoodsProps = {
+  id: string
+  name: string
+  size: string
+  color: string
+  type: string
+  gender: string
+  age: string
+  suplier: string
+  isSale: boolean
+  price: number
+  description: string
+  image?: string
+}

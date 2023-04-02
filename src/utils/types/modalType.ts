@@ -1,4 +1,4 @@
-import { BranchProps, StaffProps } from './assetType'
+import { BranchProps, GoodsProps, StaffProps } from './assetType'
 export interface ModalSampleProps {
   open: boolean
   cancel: () => void
@@ -32,19 +32,7 @@ export interface ModalOrderDetailProps extends ModalSampleProps {
 }
 
 export interface ModalAllGoodsProps extends ModalSampleProps {
-  extraData?: {
-    id: string
-    name?: string
-    cost?: number
-    price?: number
-    supplier?: string
-    gender?: string
-    type?: string
-    age?: string
-    color: string
-    size: string
-    image?: string[]
-  }[]
+  extraData?: GoodsProps[]
   single?: boolean
 }
 

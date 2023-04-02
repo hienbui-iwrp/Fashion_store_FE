@@ -10,16 +10,6 @@ export const StaffStatus = {
   deleted: 'DELETED',
 }
 
-// export const StaffRole = {
-//   admin: 'Quản trị viên', //2
-//   branch: 'Quản lý chi nhánh', //3
-//   warehouse: 'Quản lý kho', //4
-//   goods: 'Quản lý hàng hóa', //5
-//   branchLead: 'Trưởng chi nhánh', //6
-//   normal: 'Nhân viên', //7
-//   // staff: 'Quản lý nhân viên', //
-// }
-
 export const StaffRole = [
   { content: 'Quản trị viên', value: 2 },
   { content: 'Quản lý chi nhánh', value: 3 },
@@ -40,13 +30,13 @@ export const RequestType = {
   delete: 'DELETE',
 }
 
-export const goodsGenders = [
-  { value: 'man', label: 'Nam' },
-  { value: 'woman', label: 'Nữ' },
-  { value: 'unisex', label: 'Unisex' },
+export const GoodsGenders = [
+  { value: '1', label: 'Nam' },
+  { value: '2', label: 'Nữ' },
+  { value: '3', label: 'Unisex' },
 ]
 
-export const goodsTypes = [
+export const GoodsTypes = [
   { value: 'jacket', label: 'Áo khoác' },
   { value: 'sweater', label: 'Áo len' },
   { value: 'T-shirt', label: 'Áo thun' },
@@ -61,7 +51,7 @@ export const goodsTypes = [
   { value: 'bag', label: 'Túi/balo' },
 ]
 
-export const goodsSizes = [
+export const GoodsSizes = [
   { value: '31', label: '31' },
   { value: '32', label: '32' },
   { value: '33', label: '33' },
@@ -84,12 +74,15 @@ export const goodsSizes = [
   { value: 'XXXL', label: 'XXXL' },
 ]
 
-export const goodsAges = [
-  { value: 'baby', label: 'Trẻ em' },
-  { value: 'adult', label: 'Trưởng thành' },
-  { value: 'older', label: 'Người cao tuổi' },
+export const GoodsAges = [
+  { value: 'KID', label: 'Trẻ em' },
+  { value: 'ADULT', label: 'Người lớn' },
+  { value: 'ALL', label: 'Mọi lứa tuổi' },
 ]
 
-export const goodsOptions = [
-  goodsGenders, ...goodsSizes, ...goodsTypes, ...goodsAges
+export const GoodsOptions = [
+  GoodsGenders,
+  ...GoodsSizes,
+  ...GoodsTypes,
+  ...GoodsAges,
 ]

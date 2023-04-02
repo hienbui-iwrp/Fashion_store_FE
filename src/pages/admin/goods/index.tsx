@@ -1,132 +1,114 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors, Routes } from '@/constants'
-import axios from 'axios'
-import { EditOutlined } from '@ant-design/icons'
-import styles from '@/styles/Admin.module.css'
+import { GoodsTypes, Routes } from '@/constants'
 import { Space } from 'antd'
-import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { ModalAddEditStaff } from '@/utils'
+import { AddButton, TableList } from '@/components'
+import { GoodsProps, formatGoodsDataXML } from '@/utils'
 import { InputSearch } from '@/components'
 import { useRouter } from 'next/router'
-
-interface DataType {
-  id: string
-  name: string
-  price: number
-  cost: number
-  supplier: string
-  gender: string
-  type: string
-  age: string
-  color: string
-  size: string
-  image: string[]
-  quantity: number
-}
-
-interface DateItem {
-  id: string
-  name: string
-  quantity: number
-}
+import { getGoodsBFF } from '@/api/goods'
 
 const Goods = () => {
-  const [data, setData] = useState<DateItem[]>([])
+  const [data, setData] = useState<GoodsProps[]>([])
+  const [allData, setAllData] = useState<GoodsProps[]>([])
   const [loading, setLoading] = useState(true)
 
   const router = useRouter()
 
-  const columns: ColumnsType<DateItem> = []
+  const columns: ColumnsType<GoodsProps> = []
   if (data[0]) {
     columns.push({
-      title: 'STT',
-      dataIndex: '',
-      render(text: string, record: DateItem, index: number) {
-        return index
+      title: 'Mã hàng hóa',
+      dataIndex: 'id',
+      render(text: string, record: GoodsProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.id > b.id ? 1 : -1),
+    })
+
+    columns.push({
+      title: 'Tên hàng hóa',
+      dataIndex: 'name',
+      render(text: string, record: GoodsProps, index: number) {
+        return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.id > b.id ? 1 : -1),
+    })
+
+    columns.push({
+      title: 'Loại',
+      dataIndex: 'type',
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsTypes.find((item: any) => item.value == record.type)?.label ??
+          'Không xác định'
+        )
       },
       onCell: (record) => {
         return {
           style: { minWidth: 70 },
         }
       },
-      sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
+      filters: GoodsTypes.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.type == value,
     })
 
     columns.push({
-      title: 'Mã hàng hóa',
-      dataIndex: 'id',
-      render(text: string, record: DateItem, index: number) {
-        return text
+      title: 'Trạng thái',
+      dataIndex: 'isSale',
+      render(text: string, record: GoodsProps, index: number) {
+        return record.isSale ? 'Đang bán' : 'Tạm ngưng'
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 120 },
+          style: { minWidth: 100 },
         }
       },
-      sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
-    })
-
-    columns.push({
-      title: 'Tên hàng hóa',
-      dataIndex: 'name',
-      render(text: string, record: DateItem, index: number) {
-        return text
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 120 },
-        }
-      },
-      sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
-    })
-
-    columns.push({
-      title: 'Số lượng',
-      dataIndex: 'quantity',
-      render(text: string, record: DateItem, index: number) {
-        return text
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 90 },
-        }
-      },
-      sorter: (a: DateItem, b: DateItem) => (a.id > b.id ? 1 : -1),
+      filters: [
+        { text: 'Đang bán', value: true },
+        { text: 'Tạm ngưng', value: false },
+      ],
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.isSale == value,
     })
   }
 
   const getData = async () => {
-    await axios.get(`${BASE_URL}/api/admin/goodsData`).then((res) => {
-      const listId = Array.from(
-        new Set(
-          res.data.map((item: any) => {
-            return item.id
-          })
-        )
-      )
+    setLoading(true)
+    await getGoodsBFF()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
 
-      const _data = listId.map((id: any) => {
-        console.log(
-          id.value,
-          'name: ',
-          res.data.find((item: any) => item.id == id)
-        )
-        return {
-          id: id,
-          name: res.data.find((item: any) => item.id == id).name,
-          quantity: res.data.reduce((acc: number, item: any) => {
-            return acc + (item.id == id ? item.quantity : 0)
-          }, 0),
-        }
+        const _data = res.Data.map((item: GoodsProps) =>
+          formatGoodsDataXML(item)
+        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
+          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
+            return [...acc, item]
+          } else return acc
+        }, [])
+
+        setData(_data)
+        setAllData(_data)
       })
-      setData(_data)
-    })
+      .catch((err) => console.log(err))
+    setLoading(false)
   }
 
   useEffect(() => {
     getData()
-    setLoading(false)
   }, [])
 
   return (
@@ -140,9 +122,24 @@ const Goods = () => {
             }}
             large
           />
-          <InputSearch />
+          <InputSearch
+            onEnter={(text) => {
+              setLoading(true)
+              setData(
+                allData.filter(
+                  (account: GoodsProps) =>
+                    account.id.toLowerCase().includes(text.toLowerCase()) ||
+                    account.name.toLowerCase().includes(text.toLowerCase())
+                )
+              )
+              setLoading(false)
+            }}
+            onClear={() => {
+              setData(allData)
+            }}
+          />
         </div>
-        <TableList<DateItem>
+        <TableList<GoodsProps>
           data={data}
           title='Danh sách hàng hóa'
           columns={columns}

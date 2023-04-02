@@ -3,8 +3,7 @@ import { Modal, Space, Image } from 'antd'
 import { ModalAllGoodsProps } from '../types/modalType'
 import { AddButton, InputSearch, RemoveButton, TableList } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import styles from '@/styles/Admin.module.css'
-import { formatDate } from '..'
+import { GoodsProps, formatGoodsDataXML } from '..'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -12,10 +11,10 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
-import axios from 'axios'
-import { BASE_URL, Colors } from '@/constants'
+import { Colors, GoodsAges, GoodsGenders, GoodsTypes } from '@/constants'
 import { ColumnsType } from 'antd/es/table'
 import { TableRowSelection } from 'antd/es/table/interface'
+import { getGoodsBFF } from '@/api'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -24,47 +23,44 @@ dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
-type DataType = {
-  id: string
-  name: string
-  price: number
-  cost: number
-  supplier: string
-  gender: string
-  type: string
-  age: string
-  color: string
-  size: string
-  image: string[]
-}
-
 const ModalAllGoods = (props: ModalAllGoodsProps) => {
-  const [data, setData] = useState<DataType[]>()
+  const [data, setData] = useState<GoodsProps[]>()
+  const [allData, setAllData] = useState<GoodsProps[]>([])
   const [rowSelected, setRowSelected] = useState<string[]>(
-    props?.extraData?.map((item: any) => item.id + item.size + item.color) ?? []
+    props?.extraData?.map((item: any) => item.id) ?? []
   )
+  const [loading, setLoading] = useState(false)
 
   const getAllGoods = async () => {
-    await axios.get(`${BASE_URL}/api/admin/goodsData`).then((response: any) => {
-      const _data = response.data.reduce((acc: DataType[], item: DataType) => {
-        if (!acc?.find((i: DataType) => i.id == item.id)) {
-          return [...acc, item]
-        } else return acc
-      }, [])
-      setData(_data)
-    })
+    setLoading(true)
+    await getGoodsBFF()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: GoodsProps) =>
+          formatGoodsDataXML(item)
+        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
+          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
+            return [...acc, item]
+          } else return acc
+        }, [])
+
+        setData(_data)
+        setAllData(_data)
+      })
+      .catch((err) => console.log(err))
+    setLoading(false)
   }
 
   useEffect(() => {
     getAllGoods()
   }, [])
 
-  const columns: ColumnsType<DataType> = []
+  const columns: ColumnsType<GoodsProps> = []
   if (data) {
     columns.push({
       title: 'Mã sản phẩm',
       dataIndex: 'id',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return text
       },
       onCell: (record) => {
@@ -72,21 +68,22 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
           style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.id > b.id ? 1 : -1),
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.id > b.id ? 1 : -1),
       fixed: 'left',
     })
 
     columns.push({
       title: 'Hình ảnh',
       dataIndex: 'image',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return (
           <Image
             alt='img'
-            src={record?.image ? record?.image[0] : ''}
-            preview={{
-              src: record?.image ? record?.image[0] : '',
-            }}
+            src={
+              record?.image
+                ? record?.image[0]
+                : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
+            }
             style={{
               maxWidth: 32,
               maxHeight: 32,
@@ -96,7 +93,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 120 },
+          style: { minWidth: 80 },
         }
       },
       fixed: 'left',
@@ -105,7 +102,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
     columns.push({
       title: 'Tên sản phẩm',
       dataIndex: 'name',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return text
       },
       onCell: (record) => {
@@ -113,118 +110,83 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
           style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.name > b.name ? 1 : -1),
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.name > b.name ? 1 : -1),
     })
 
     columns.push({
       title: 'Giới tính',
       dataIndex: 'gender',
-      render(text: string, record: DataType, index: number) {
-        return text
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsGenders.find((item: any) => item.value == record.gender)
+            ?.label ?? 'Không xác định'
+        )
       },
       onCell: (record) => {
         return {
           style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.gender > b.gender ? 1 : -1),
-      filters: [
-        { text: 'Nam', value: 'Nam' },
-        { text: 'Nữ', value: 'Nữ' },
-        { text: 'Unisex', value: 'Unisex' },
-      ],
-      onFilter: (value: string | number | boolean, record: DataType) =>
-        record.gender.includes(value.toString()),
+      filters: GoodsGenders.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.gender == value,
     })
 
     columns.push({
       title: 'Loại',
       dataIndex: 'type',
-      render(text: string, record: DataType, index: number) {
-        return text
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsTypes.find((item: any) => item.value == record.type)?.label ??
+          'Không xác định'
+        )
       },
       onCell: (record) => {
         return {
           style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.type > b.type ? 1 : -1),
-      filters: [
-        { text: 'Áo khoác', value: 'Áo khoác' },
-        { text: 'Áo thun', value: 'Áo thun' },
-      ],
-      onFilter: (value: string | number | boolean, record: DataType) =>
-        record.type.includes(value.toString()),
+      filters: GoodsTypes.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.type == value,
     })
 
     columns.push({
       title: 'Lứa tuổi',
       dataIndex: 'age',
-      render(text: string, record: DataType, index: number) {
-        return text
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsAges.find((item: any) => item.value == record.age)?.label ??
+          'Không xác định'
+        )
       },
       onCell: (record) => {
         return {
           style: { minWidth: 120 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.age > b.age ? 1 : -1),
-      filters: [
-        { text: 'Người lớn', value: 'Người lớn' },
-        { text: 'Trẻ em', value: 'Trẻ em' },
-      ],
-      onFilter: (value: string | number | boolean, record: DataType) =>
-        record.age.includes(value.toString()),
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.age > b.age ? 1 : -1),
+      filters: GoodsAges.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.age == value,
     })
-
-    // columns.push({
-    //   title: 'Kích thước',
-    //   dataIndex: 'size',
-    //   render(text: string, record: DataType, index: number) {
-    //     return text
-    //   },
-    //   onCell: (record) => {
-    //     return {
-    //       style: { minWidth: 120 },
-    //     }
-    //   },
-    //   sorter: (a: DataType, b: DataType) => (a.size > b.size ? 1 : -1),
-    //   filters: [
-    //     { text: 'S', value: 'S' },
-    //     { text: 'M', value: 'M' },
-    //     { text: 'L', value: 'L' },
-    //     { text: 'XL', value: 'XL' },
-    //     { text: 'XXL', value: 'XXL' },
-    //     { text: 'XXXL', value: 'XXXL' },
-    //   ],
-    //   onFilter: (value: string | number | boolean, record: DataType) =>
-    //     record.size.includes(value.toString()),
-    // })
-
-    // columns.push({
-    //   title: 'Màu sắc',
-    //   dataIndex: 'color',
-    //   render(text: string, record: DataType, index: number) {
-    //     return text
-    //   },
-    //   onCell: (record) => {
-    //     return {
-    //       style: { minWidth: 120 },
-    //     }
-    //   },
-    //   sorter: (a: DataType, b: DataType) => (a.color > b.color ? 1 : -1),
-    // })
   }
 
-  const rowSelection: TableRowSelection<DataType> = {
+  const rowSelection: TableRowSelection<GoodsProps> = {
     onChange: (selectedRowKeys, selectedRows) => {},
     onSelect: (record, selected, selectedRows) => {
       let _rowSelected = rowSelected
       if (selected) {
-        _rowSelected = [..._rowSelected, record.id + record.size + record.color]
+        _rowSelected = [..._rowSelected, record.id]
       } else {
         _rowSelected = rowSelected.filter((item: any) => {
-          return record.id + record.size + record.color != item
+          return record.id != item
         })
       }
       setRowSelected(_rowSelected)
@@ -259,28 +221,49 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
                   icon={<CloseOutlined />}
                   onClick={props.cancel}
                 />
-                <AddButton key='add' label='Lưu' icon={<CheckOutlined />} />
+                <AddButton
+                  key='add'
+                  label='Lưu'
+                  icon={<CheckOutlined />}
+                  onClick={() => {
+                    props.callback && props.callback(rowSelected)
+                    props.cancel && props.cancel()
+                  }}
+                />
               </Space>,
             ]
           )
         }
         width={'90%'}
       >
-        <TableList<DataType>
+        <TableList<GoodsProps>
           header={
             <div className='flex justify-between'>
               <b>Tất cả sản phẩm</b>
               <InputSearch
                 style={{ backgroundColor: Colors.adminBackground }}
+                onEnter={(text) => {
+                  setData(
+                    allData.filter(
+                      (account: GoodsProps) =>
+                        account.id.toLowerCase().includes(text.toLowerCase()) ||
+                        account.name.toLowerCase().includes(text.toLowerCase())
+                    )
+                  )
+                }}
+                onClear={() => {
+                  setData(allData)
+                }}
               />
             </div>
           }
+          loading={loading}
           data={data ?? []}
           columns={columns}
           rowSelection={
             props.single ? undefined : { ...rowSelection, checkStrictly: true }
           }
-          rowKey={['id', 'size', 'color']}
+          rowKey={['id']}
           scroll={{ y: '50vh' }}
           maxWidth={'100%'}
         />

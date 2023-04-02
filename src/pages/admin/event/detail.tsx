@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL } from '@/constants'
-import axios from 'axios'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -24,7 +22,9 @@ import {
   EventProps,
   formatDate,
   formatEventDataXML,
+  formatGoodsDataXML,
   formatTime,
+  GoodsProps,
   ModalAllGoods,
 } from '@/utils'
 import { useRouter } from 'next/router'
@@ -36,7 +36,8 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
-import { getEventDetailBFF } from '@/api'
+import { getEventDetailBFF, getGoodsBFF } from '@/api'
+import { GoodsAges, GoodsGenders, GoodsTypes } from '@/constants'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -45,37 +46,25 @@ dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
-interface Goods {
-  id: string
-  name: string
-  cost: number
-  price?: number
-  supplier?: string
-  gender?: string
-  type?: string
-  age?: string
-  color: string
-  size: string
-  image?: string[]
-}
-
 const Detail = () => {
   const [data, setData] = useState<EventProps>()
-  const [loading, setLoading] = useState(true)
+  const [goodsData, setGoodsData] = useState<GoodsProps[]>([])
+  const [allGoodsData, setAllGoodsData] = useState<GoodsProps[]>([])
+  const [loading, setLoading] = useState(false)
   const [modalAllGoods, setModalAllGoods] = useState(false)
 
   const router = useRouter()
   const { id } = router.query
 
-  const columns: ColumnsType<Goods> = []
+  const columns: ColumnsType<GoodsProps> = []
   if (data) {
     columns.push({
       title: 'Mã sản phẩm',
       dataIndex: 'id',
-      render(text: string, record: Goods, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return text
       },
-      sorter: (a: Goods, b: Goods) => (a.id > b.id ? 1 : -1),
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.id > b.id ? 1 : -1),
       onCell: (record) => {
         return {
           style: { minWidth: 120 },
@@ -86,13 +75,19 @@ const Detail = () => {
     columns.push({
       title: 'Hình ảnh',
       dataIndex: 'image',
-      render(text: string, record: Goods, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return (
           <Image
             alt='img'
-            src={record?.image ? record?.image[0] : ''}
+            src={
+              record?.image
+                ? record?.image[0]
+                : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
+            }
             preview={{
-              src: record?.image ? record?.image[0] : '',
+              src: record?.image
+                ? record?.image[0]
+                : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
             }}
             style={{
               maxWidth: 40,
@@ -111,7 +106,7 @@ const Detail = () => {
     columns.push({
       title: 'Tên sản phẩm',
       dataIndex: 'name',
-      render(text: string, record: Goods, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return text
       },
       onCell: (record) => {
@@ -119,55 +114,77 @@ const Detail = () => {
           style: { minWidth: 120 },
         }
       },
-      sorter: (a: Goods, b: Goods) => (a.name > b.name ? 1 : -1),
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.name > b.name ? 1 : -1),
     })
 
     columns.push({
-      title: 'Kích thước',
-      dataIndex: 'size',
-      render(text: string, record: Goods, index: number) {
-        return text
+      title: 'Giới tính',
+      dataIndex: 'gender',
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsGenders.find((item: any) => item.value == record.gender)
+            ?.label ?? 'Không xác định'
+        )
       },
-      sorter: (a: Goods, b: Goods) => (a.size > b.size ? 1 : -1),
       onCell: (record) => {
         return {
-          style: { minWidth: 100 },
+          style: { minWidth: 120 },
         }
       },
+      filters: GoodsGenders.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.gender == value,
     })
 
     columns.push({
-      title: 'Màu sắc',
-      dataIndex: 'color',
-      render(text: string, record: Goods, index: number) {
-        return text
+      title: 'Loại',
+      dataIndex: 'type',
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsTypes.find((item: any) => item.value == record.type)?.label ??
+          'Không xác định'
+        )
       },
-      sorter: (a: Goods, b: Goods) => (a.color > b.color ? 1 : -1),
       onCell: (record) => {
         return {
-          style: { minWidth: 90 },
+          style: { minWidth: 120 },
         }
       },
+      filters: GoodsTypes.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.type == value,
     })
 
     columns.push({
-      title: 'Giá gốc',
-      dataIndex: 'cost',
-      render(text: string, record: Goods, index: number) {
-        return text
+      title: 'Lứa tuổi',
+      dataIndex: 'age',
+      render(text: string, record: GoodsProps, index: number) {
+        return (
+          GoodsAges.find((item: any) => item.value == record.age)?.label ??
+          'Không xác định'
+        )
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 90 },
+          style: { minWidth: 120 },
         }
       },
-      sorter: (a: Goods, b: Goods) => (a.cost > b.cost ? 1 : -1),
+      sorter: (a: GoodsProps, b: GoodsProps) => (a.age > b.age ? 1 : -1),
+      filters: GoodsAges.map((item: any) => {
+        return { text: item.label, value: item.value }
+      }),
+      onFilter: (value: string | number | boolean, record: GoodsProps) =>
+        record.age == value,
     })
 
     columns.push({
       title: '',
       dataIndex: '',
-      render(text: string, record: Goods, index: number) {
+      render(text: string, record: GoodsProps, index: number) {
         return <RemoveButton label='' borderRadius={5} onClick={() => {}} />
       },
       onCell: (record) => {
@@ -178,23 +195,58 @@ const Detail = () => {
     })
   }
 
-  const getData = async () => {
-    // await axios
-    //   .get(`${BASE_URL}/api/admin/eventDetailData?id=${id}`)
-    //   .then((res) => {
-    //     setData(res.data)
-    //   })
+  const onSave = () => {}
 
+  const getData = async () => {
     await getEventDetailBFF(id).then((res: any) => {
       const _data = formatEventDataXML(res.Data[0])
       setData(_data)
     })
+
+    await getGoodsBFF()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: GoodsProps) =>
+          formatGoodsDataXML(item)
+        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
+          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
+            return [...acc, item]
+          } else return acc
+        }, [])
+        setAllGoodsData(_data)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const getGoodsData = async () => {
+    setLoading(true)
+    await getGoodsBFF()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: GoodsProps) =>
+          formatGoodsDataXML(item)
+        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
+          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
+            return [...acc, item]
+          } else return acc
+        }, [])
+        setAllGoodsData(_data)
+
+        setGoodsData(
+          _data.filter((item: GoodsProps) => data?.goods?.includes(item.id))
+        )
+      })
+      .catch((err) => console.log(err))
+    setLoading(false)
   }
 
   useEffect(() => {
     if (id) getData()
-    setLoading(false)
   }, [id])
+
+  useEffect(() => {
+    if (data) getGoodsData()
+  }, [data])
 
   return (
     <>
@@ -340,7 +392,7 @@ const Detail = () => {
               </Col>
               <Col span={16}>
                 <div className='flex items-center	justify-between'>
-                  <span>2 Sản phẩm</span>
+                  <span>{goodsData.length} sản phẩm</span>
                   <AddButton
                     label='Chọn sản phẩm'
                     onClick={() => setModalAllGoods(true)}
@@ -359,21 +411,26 @@ const Detail = () => {
           <AddButton label='Lưu' icon={<CheckOutlined />} borderRadius={10} />
         </Space>
       </Card>
-      <TableList<Goods>
-        data={data?.goods ?? []}
+      <TableList<GoodsProps>
+        data={goodsData ?? []}
         title='Sản phẩm áp dụng'
         columns={columns}
         loading={loading}
         ellipsis={true}
-        rowKey={['id', 'size', 'color']}
+        // rowKey={['id']}
       />
       {modalAllGoods && (
         <ModalAllGoods
           open={modalAllGoods}
           cancel={() => setModalAllGoods(false)}
-          extraData={data?.goods.map((item) => {
-            return { id: item.id, color: item.color, size: item.size }
-          })}
+          callback={(listGoods: string[]) => {
+            setGoodsData(
+              allGoodsData.filter((item: GoodsProps) =>
+                listGoods.includes(item.id)
+              )
+            )
+          }}
+          extraData={goodsData}
         />
       )}
     </>

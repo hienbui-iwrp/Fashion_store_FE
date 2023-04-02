@@ -6,6 +6,7 @@ import {
   AttendanceProps,
   CustomerInfoProps,
   EventProps,
+  GoodsProps,
 } from '../types'
 import timeToDate from './timeToDate'
 
@@ -151,5 +152,21 @@ export const formatEventDataXML = (data: any): EventProps => {
     endTime: data.getElementsByTagName('EndTime')[0]?.value,
     image: data.getElementsByTagName('Image')[0]?.value,
     goods: data.getElementsByTagName('Goods').map((item: any) => item.value),
+  }
+}
+
+export const formatGoodsDataXML = (data: any): GoodsProps => {
+  return {
+    id: data.getElementsByTagName('GoodsCode')[0]?.value,
+    name: data.getElementsByTagName('GoodsName')[0]?.value,
+    size: data.getElementsByTagName('GoodsSize')[0]?.value,
+    color: data.getElementsByTagName('GoodsColor')[0]?.value,
+    type: data.getElementsByTagName('GoodsType')[0]?.value,
+    gender: data.getElementsByTagName('GoodsGender')[0]?.value,
+    age: data.getElementsByTagName('GoodsAge')[0]?.value,
+    suplier: data.getElementsByTagName('Manufacturer')[0]?.value,
+    isSale: data.getElementsByTagName('IsForSale')[0]?.value == 1,
+    price: data.getElementsByTagName('UnitPrice')[0]?.value,
+    description: data.getElementsByTagName('Description')[0]?.value,
   }
 }
