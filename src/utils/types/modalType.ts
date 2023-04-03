@@ -34,6 +34,7 @@ export interface ModalOrderDetailProps extends ModalSampleProps {
 export interface ModalAllGoodsProps extends ModalSampleProps {
   extraData?: GoodsProps[]
   single?: boolean
+  allGoods?: GoodsProps[]
 }
 
 export interface ModalAddEditWarehouseProps extends ModalSampleProps {

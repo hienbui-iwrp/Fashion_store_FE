@@ -38,7 +38,12 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
-import { getEventDetailBFF, getGoodsBFF, updateEventBff } from '@/api'
+import {
+  addEventBff,
+  getEventDetailBFF,
+  getGoodsBFF,
+  updateEventBff,
+} from '@/api'
 import { GoodsAges, GoodsGenders, GoodsTypes, Routes } from '@/constants'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
@@ -65,7 +70,7 @@ const Detail = () => {
   const [data, setData] = useState<EventProps>()
   const [goodsData, setGoodsData] = useState<GoodsProps[]>([])
   const [allGoodsData, setAllGoodsData] = useState<GoodsProps[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [modalAllGoods, setModalAllGoods] = useState(false)
   const dispatch = useDispatch()
   const [formData, setFormData] = useState<EventForm>({})
@@ -74,7 +79,7 @@ const Detail = () => {
   const { id } = router.query
 
   const columns: ColumnsType<GoodsProps> = []
-  if (data) {
+  if (goodsData) {
     columns.push({
       title: 'Mã sản phẩm',
       dataIndex: 'id',
@@ -216,7 +221,7 @@ const Detail = () => {
     const event: EventProps = {
       id: '',
       name: formData?.name,
-      discount: formData?.discount,
+      discount: formData?.discount && formData?.discount / 100,
       startTime: FormatDateAndTime(
         new Date(formData.startDate ?? data?.startTime ?? ''),
         new Date(formData.startTime ?? data?.startTime ?? '')
@@ -229,70 +234,71 @@ const Detail = () => {
       goods: goodsData.map((goods) => goods.id),
     }
 
-    await updateEventBff(id, event)
-      .then(async (res: any) => {
-        if (res.StatusCode != 200) throw new Error('FAIL')
-        dispatch(setNotificationValue('Đã thêm nhân viên mới'))
-        router.push(Routes.admin.event)
-      })
-      .catch((error) => {
-        dispatch(setNotificationType('error'))
-        dispatch(setNotificationValue('Có lỗi khi thực hiện'))
-      })
+    if (data) {
+      await updateEventBff(id, event)
+        .then(async (res: any) => {
+          if (res.StatusCode != 200) throw new Error('FAIL')
+          dispatch(setNotificationValue('Đã cập nhật thông tin'))
+          router.push(Routes.admin.event)
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
+    } else {
+      await addEventBff(event)
+        .then(async (res: any) => {
+          if (res.StatusCode != 200) throw new Error('FAIL')
+          dispatch(setNotificationValue('Đã thêm sự kiện mới'))
+          router.push(Routes.admin.event)
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
+    }
   }
+
+  const getAllGoods = async () => {
+    await getGoodsBFF()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: GoodsProps) =>
+          formatGoodsDataXML(item)
+        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
+          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
+            return [...acc, item]
+          } else return acc
+        }, [])
+        setAllGoodsData(_data)
+      })
+      .catch((err) => console.log(err))
+    setLoading(false)
+  }
+  useEffect(() => {
+    getAllGoods()
+  }, [])
 
   const getData = async () => {
     await getEventDetailBFF(id).then((res: any) => {
       const _data = formatEventDataXML(res.Data[0])
       setData(_data)
     })
-
-    await getGoodsBFF()
-      .then((res: any) => {
-        if (res.StatusCode != 200) throw new Error('FAIL')
-        const _data = res.Data.map((item: GoodsProps) =>
-          formatGoodsDataXML(item)
-        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
-          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
-            return [...acc, item]
-          } else return acc
-        }, [])
-        setAllGoodsData(_data)
-      })
-      .catch((err) => console.log(err))
   }
-
-  const getGoodsData = async () => {
-    setLoading(true)
-    await getGoodsBFF()
-      .then((res: any) => {
-        if (res.StatusCode != 200) throw new Error('FAIL')
-        const _data = res.Data.map((item: GoodsProps) =>
-          formatGoodsDataXML(item)
-        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
-          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
-            return [...acc, item]
-          } else return acc
-        }, [])
-        setAllGoodsData(_data)
-
-        setGoodsData(
-          _data.filter((item: GoodsProps) => data?.goods?.includes(item.id))
-        )
-      })
-      .catch((err) => console.log(err))
-    setLoading(false)
-  }
-
   useEffect(() => {
     if (id) getData()
+    getAllGoods()
   }, [id])
 
   useEffect(() => {
-    if (data) {
-      getGoodsData()
+    if (data && allGoodsData) {
+      setGoodsData(
+        allGoodsData.filter((item: GoodsProps) =>
+          data?.goods?.includes(item.id)
+        )
+      )
     }
-  }, [data])
+  }, [data, allGoodsData])
 
   return (
     <>
@@ -325,7 +331,7 @@ const Detail = () => {
             </Row>
             <Row className={styles.adminRow}>
               <Col span={8}>
-                <b>Mức giảm</b>
+                <b>Mức giảm (%)</b>
               </Col>
               <Col span={16}>
                 {data && (
@@ -512,13 +518,13 @@ const Detail = () => {
         columns={columns}
         loading={loading}
         ellipsis={true}
-        // rowKey={['id']}
       />
       {modalAllGoods && (
         <ModalAllGoods
           open={modalAllGoods}
           cancel={() => setModalAllGoods(false)}
           callback={(listGoods: string[]) => {
+            console.log(listGoods)
             setGoodsData(
               allGoodsData.filter((item: GoodsProps) =>
                 listGoods.includes(item.id)
@@ -526,6 +532,7 @@ const Detail = () => {
             )
           }}
           extraData={goodsData}
+          allGoods={allGoodsData}
         />
       )}
     </>
