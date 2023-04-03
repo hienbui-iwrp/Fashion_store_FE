@@ -52,7 +52,8 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   }
 
   useEffect(() => {
-    getAllGoods()
+    if (!props.allGoods) getAllGoods()
+    else setData(props.allGoods)
   }, [])
 
   const columns: ColumnsType<GoodsProps> = []

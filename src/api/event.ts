@@ -72,3 +72,38 @@ export const updateEventBff = async (id: any, event: EventProps) => {
       console.log('getEvent err: ', err)
     })
 }
+
+export const addEventBff = async (event: EventProps) => {
+  const startTime = event.startTime ? FormatOutputFullDate(event.startTime) : ''
+  const endTime = event.endTime ? FormatOutputFullDate(event.endTime) : ''
+
+  const goodsXml =
+    event?.goods && event.goods.length > 0
+      ? event.goods.reduce(
+          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+          ''
+        )
+      : '<Goods></Goods>'
+
+  const payload = `
+    <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body>
+      <Name>${event?.name ?? ''}</Name>
+      <Discount>${event?.discount ?? ''}</Discount>
+      <StartTime>${startTime ?? ''}</StartTime>
+      <EndTime>${endTime ?? ''}</EndTime>
+      <Image>${event?.image ?? ''}</Image>
+      ${goodsXml}
+    </soap:Body>
+    </soap:Body>
+      `
+
+  return await adminBff
+    .post(`/event-service/add-event`, payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getEvent err: ', err)
+    })
+}

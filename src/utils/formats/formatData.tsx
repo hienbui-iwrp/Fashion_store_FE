@@ -147,7 +147,7 @@ export const formatEventDataXML = (data: any): EventProps => {
   return {
     id: data.getElementsByTagName('Id')[0]?.value,
     name: data.getElementsByTagName('Name')[0]?.value,
-    discount: parseFloat(data.getElementsByTagName('Discount')[0]?.value),
+    discount: parseFloat(data.getElementsByTagName('Discount')[0]?.value) * 100,
     startTime: data.getElementsByTagName('StartTime')[0]?.value,
     endTime: data.getElementsByTagName('EndTime')[0]?.value,
     image: data.getElementsByTagName('Image')[0]?.value,
