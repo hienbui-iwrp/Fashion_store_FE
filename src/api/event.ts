@@ -45,7 +45,7 @@ export const updateEventBff = async (id: any, event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-          (acc: string, item: string) => `<Goods>${item}</Goods>\n`,
+          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
           ''
         )
       : '<Goods></Goods>'
@@ -53,12 +53,12 @@ export const updateEventBff = async (id: any, event: EventProps) => {
   const payload = `
     <?xml version="1.0" encoding="utf-8"?>
     <soap:Body>
-      <EventId>${id}</EventId>
-      <Name>${event?.name}</Name>
-      <Discount>${event?.discount}</Discount>
-      <StartTime>${startTime}</StartTime>
-      <EndTime>${endTime}</EndTime>
-      <Image>${event?.image}</Image>
+      <EventId>${id ?? ''}</EventId>
+      <Name>${event?.name ?? ''}</Name>
+      <Discount>${event?.discount ?? ''}</Discount>
+      <StartTime>${startTime ?? ''}</StartTime>
+      <EndTime>${endTime ?? ''}</EndTime>
+      <Image>${event?.image ?? ''}</Image>
       ${goodsXml}
     </soap:Body>
       `

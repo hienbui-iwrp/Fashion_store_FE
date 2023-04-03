@@ -169,11 +169,11 @@ export type RequestProps = {
 }
 
 export type EventProps = {
-  id: string
-  name: string
-  discount: number
-  startTime: Date
-  endTime: Date
+  id?: string
+  name?: string
+  discount?: number
+  startTime?: Date
+  endTime?: Date
   image?: string
   goods?: string[]
 }
