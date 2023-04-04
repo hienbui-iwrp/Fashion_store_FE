@@ -1,11 +1,14 @@
-import { BranchProps, GoodsProps, StaffProps } from './assetType'
+import {
+  BranchProps,
+  GoodsProps,
+  StaffProps,
+  WarehouseProps,
+} from './assetType'
 export interface ModalSampleProps {
   open: boolean
   cancel: () => void
   extraData?: object
   callback?: (item: any) => void
-  render?: boolean
-  setRender?: (item: boolean) => void
 }
 
 export interface ModalAddEditBranchProps extends ModalSampleProps {
@@ -38,17 +41,5 @@ export interface ModalAllGoodsProps extends ModalSampleProps {
 }
 
 export interface ModalAddEditWarehouseProps extends ModalSampleProps {
-  extraData?: {
-    id?: string
-    name?: string
-    street?: string
-    ward?: string
-    district?: string
-    province?: string
-    capacity?: string
-    empty?: string
-    manager?: string
-    staff?: number
-    createdDate?: Date
-  }
+  extraData?: WarehouseProps
 }

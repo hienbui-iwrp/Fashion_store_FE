@@ -24,9 +24,13 @@ export const adminBff = axios.create({
   headers: {
     'Content-Type': 'application/xml',
     'Access-Control-Allow-Origin': '*',
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
   },
 })
+if (typeof window !== 'undefined') {
+  adminBff.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${localStorage.getItem('token')}`
+}
 
 adminBff.interceptors.response.use(
   (response) => {
