@@ -1,5 +1,6 @@
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { Button } from 'antd'
+import { Colors } from '@/constants'
 
 export default function ButtonHeader({
   name,
@@ -8,10 +9,19 @@ export default function ButtonHeader({
   name: string
   icon?: ReactNode
 }) {
+  const [hover, setHover] = useState(false)
   return (
     <Button
-      className='bg-[#D9D9D9] hover:!bg-[#D9D9D9]'
-      type='text'
+      type="primary"
+      onMouseEnter={() => {
+        setHover(true)
+      }}
+      onMouseLeave={() => {
+        setHover(false)
+      }}
+      style={{
+        backgroundColor: hover ? Colors.adminGreen500 : Colors.adminGreen700,
+      }}
       icon={icon || null}
     >
       {name}

@@ -24,6 +24,8 @@ import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { Routes } from '@/constants'
 import { getCustomerInfoBff } from '@/api'
 import { formatUserDataXML } from '@/utils'
+import { InputSearch } from '@/components/Input'
+import styles from './LayoutClient.module.css'
 
 const { Header, Footer, Content } = Layout
 const { Search } = Input
@@ -289,12 +291,12 @@ export default function LayoutClient({
                 }}
               />
             </a>
-            <Search
-              className='pl-10 w-2/5 md:w-3/5'
-              placeholder='Tìm kiếm...'
-              onSearch={onSearch}
-            // style={{ width: 200 }}
-            />
+            <div className='pl-10 w-2/5 md:w-3/5'>
+              <InputSearch
+                placeholder='Tìm kiếm...'
+              // onSearch={onSearch}
+              />
+            </div>
           </Col>
           <Col span={9} className='flex justify-around items-center'>
             <Link href='/manage-orders' prefetch={false} passHref>
@@ -327,20 +329,8 @@ export default function LayoutClient({
             )}
           </Col>
         </Row>
-        {/* <Menu
-          className='bg-[#F9F9F9] !leading-8'
-          mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={listItem.map((item, index) => {
-            const key = index + 1;
-            return {
-              key,
-              label: item.label,
-            };
-          })}
-        /> */}
         <nav
-          className='w-full !bg-green-100 shadow'
+          className='w-full !bg-green-100 bg-cyan-500'
           // className='w-full bg-[#F9F9F9] shadow'
           style={{ backgroundColor: '#ddd' }}
         >
@@ -408,7 +398,7 @@ export default function LayoutClient({
           </div>
         </nav>
       </Header>
-      <Content className='bg-stone-50 pt-6 pb-24 px-3 sm:px-6 md:px-8 lg:px-16 '>
+      <Content className='bg-[#fefefe] pt-6 pb-24 px-3 sm:px-6 md:px-8 lg:px-16 '>
         {children}
       </Content>
       <Footer className='!bg-black !text-white'>

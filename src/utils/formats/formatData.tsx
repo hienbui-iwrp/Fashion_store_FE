@@ -14,7 +14,7 @@ import timeToDate from './timeToDate'
 
 export const formatResponse = (data: any) => {
   const XMLParser = require('react-xml-parser')
-  console.log(data.data)
+  console.log(data)
   const xml = new XMLParser().parseFromString(data)
   return {
     StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
@@ -127,10 +127,10 @@ export const formatAttendanceDataXML = (data: any): AttendanceProps => {
       .getElementsByTagName('CheckoutTime')[0]
       ?.getElementsByTagName('Valid')[0].value
       ? new Date(
-          _data
-            .getElementsByTagName('CheckoutTime')[0]
-            ?.getElementsByTagName('Time')[0].value
-        )
+        _data
+          .getElementsByTagName('CheckoutTime')[0]
+          ?.getElementsByTagName('Time')[0].value
+      )
       : undefined,
   }
 }
