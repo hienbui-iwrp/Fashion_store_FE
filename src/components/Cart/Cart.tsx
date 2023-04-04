@@ -230,7 +230,7 @@ export default function Cart(props: CartProps) {
 
   return (
     loading ? <Loading /> :
-      <div className='w-[550px] m-auto border mt-4 mb-8 rounded-xl p-2'>
+      <div className='bg-white w-[550px] m-auto border mt-4 mb-8 rounded-xl p-2'>
         <Title level={3}>Giỏ hàng</Title>
         <div className={styles.listCartItem}>
 
