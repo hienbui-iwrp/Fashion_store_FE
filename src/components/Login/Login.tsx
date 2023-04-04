@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
-import { signIn, signInBff } from '@/api/account'
-import { Button, Checkbox, Form, Input, Typography, notification } from 'antd'
+import React from 'react'
+import { signInBff } from '@/api/account'
+import { Form, Input, Typography, notification } from 'antd'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Toast from '../Toast'
 import ButtonClientPrimary from '../Button/ButtonClientPrimary'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error'
@@ -35,49 +34,12 @@ export default function Login() {
   }
 
   const onFinish = async (values: any) => {
-    // openNotificationWithIcon({title:'Đăng nhập thành công', content:'', type:'success'})
-    // await signIn({ ...values }).then((res) => {
-    //   // console.log(res);
-    //   if (res?.StatusCode === 200) {
-    //     openNotificationWithIcon({
-    //       title: 'Đăng nhập thành công',
-    //       content: '',
-    //       type: 'success',
-    //     })
-    //     localStorage.setItem('logged', 'true')
-    //     localStorage.setItem('userRole', res.Data.Role)
-    //     if (res?.Data.Role === 0) {
-    //       router.push('/')
-    //     } else {
-    //       router.push('/admin')
-    //     }
-    //   } else {
-    //     openNotificationWithIcon({
-    //       title: 'Đăng nhập thất bại',
-    //       content: '',
-    //       type: 'error',
-    //     })
-    //   }
-    // })
     await signInBff({ ...values }).then((res: any) => {
       if (res?.StatusCode == 200) {
-        openNotificationWithIcon({
-          title: 'Đăng nhập thành công',
-          content: '',
-          type: 'success',
-        })
-        localStorage.setItem('logged', 'true');
-        var now = new Date().getTime();
+        localStorage.setItem('logged', 'true')
+        var now = new Date().getTime()
         localStorage.setItem('setupTime', now.toString())
-        // var setupTime = localStorage.getItem('setupTime');
-        // if (setupTime == null) {
-        //   localStorage.setItem('setupTime', now)
-        // } else {
-        //   if (now - setupTime > 24 * 60 * 60 * 1000) {
-        //     localStorage.clear()
-        //     localStorage.setItem('setupTime', now);
-        //   }
-        // }
+        console.log(res)
         localStorage.setItem(
           'userRole',
           res.Data[0].getElementsByTagName('Role')[0].value
@@ -86,6 +48,15 @@ export default function Login() {
           'userId',
           res.Data[0].getElementsByTagName('UserId')[0].value
         )
+        localStorage.setItem(
+          'token',
+          res.Data[0].getElementsByTagName('Token')[0].value
+        )
+        openNotificationWithIcon({
+          title: 'Đăng nhập thành công',
+          content: '',
+          type: 'success',
+        })
         if (res.Data[0].getElementsByTagName('Role')[0].value == 1) {
           router.push('/')
         } else {
@@ -142,7 +113,7 @@ export default function Login() {
           name='Password'
           rules={[
             { required: true, message: 'Vui lòng nhập mật khẩu!' },
-            ({ }) => ({
+            ({}) => ({
               validator(_, value) {
                 if (!value || value.length > 5) {
                   return Promise.resolve()

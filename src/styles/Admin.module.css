@@ -1,14 +1,14 @@
 .adminSider {
   max-width: none !important;
   min-width: 150px !important;
-  flex: 0 0 20% !important;
+  flex: 0 0 17% !important;
 }
 
 .adminContainer {
   min-width: 150px !important;
   overflow-y: scroll;
   position: fixed;
-  width: 20%;
+  width: 17%;
   background-color: var(--admin-green900) !important;
   height: 100vh;
 }

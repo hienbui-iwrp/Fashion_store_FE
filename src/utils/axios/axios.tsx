@@ -24,6 +24,7 @@ export const adminBff = axios.create({
   headers: {
     'Content-Type': 'application/xml',
     'Access-Control-Allow-Origin': '*',
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
   },
 })
 

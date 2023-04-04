@@ -12,22 +12,28 @@ import {
 import styles from '@/styles/Admin.module.css'
 import { Card, Col, Input, InputNumber, Row, Space, Image, Button } from 'antd'
 import { AddButton, DropdownButton, LayoutAdmin, TableList } from '@/components'
-import { formatDate, ModalAddEditStaff } from '@/utils'
+import {
+  formatDate,
+  formatGoodsDataXML,
+  GoodsProps,
+  ModalAddEditStaff,
+} from '@/utils'
 import { InputSearch } from '@/components'
 import { useRouter } from 'next/router'
+import { getGoodsDetailBFF } from '@/api'
 
-interface DataType {
-  id: string
-  name: string
-  price: number
-  cost: number
-  supplier: string
-  gender: string
-  age: string
-  type: string
-  image: string[]
-  classify: { size: string; color: string; containedAt: DataWarehouse[] }[]
-}
+// interface GoodsProps {
+//   id: string
+//   name: string
+//   price: number
+//   cost: number
+//   supplier: string
+//   gender: string
+//   age: string
+//   type: string
+//   image: string[]
+//   classify: { size: string; color: string; containedAt: DataWarehouse[] }[]
+// }
 
 type DataWarehouse = {
   id: string
@@ -38,8 +44,8 @@ type DataWarehouse = {
 }
 
 const Detail = () => {
-  const [data, setData] = useState<DataType>()
-  const [classifyData, setClassifyData] = useState<DataType>()
+  const [data, setData] = useState<GoodsProps>()
+  const [classifyData, setClassifyData] = useState<GoodsProps>()
   const [loading, setLoading] = useState(true)
 
   const routes = useRouter()
@@ -124,6 +130,13 @@ const Detail = () => {
         setData(res.data)
         setClassifyData(res.data.classify)
       })
+
+    await getGoodsDetailBFF(id)
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        setData(formatGoodsDataXML(res.Data[0]))
+      })
+      .catch((err) => console.log('err getGoodsDetailBFF: ', err))
   }
 
   useEffect(() => {
@@ -137,8 +150,12 @@ const Detail = () => {
         <Card>
           {id && (
             <Row className={styles.adminRow}>
-              <b className='mr-10'>Mã sản phẩm</b>
-              {data?.id}
+              <Col xs={12} sm={4}>
+                <b>Mã sản phẩm</b>
+              </Col>
+              <Col xs={12} sm={20}>
+                <b>{data?.id}</b>
+              </Col>
             </Row>
           )}
           <Row>

@@ -186,9 +186,10 @@ export type GoodsProps = {
   type: string
   gender: string
   age: string
-  suplier: string
+  supplier: string
   isSale: boolean
   price: number
   description: string
+  cost?: number
   image?: string
 }

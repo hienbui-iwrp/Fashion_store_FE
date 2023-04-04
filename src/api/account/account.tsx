@@ -1,4 +1,4 @@
-import { adminBff, formatResponse } from '@/utils'
+import { adminBff, formatResponse, shareBff } from '@/utils'
 import axios from 'axios'
 
 const baseUrl = 'http://localhost:3000'
@@ -16,18 +16,10 @@ export const signInBff = async (account: {
     </soap:Body>
   `
 
-  return await adminBff
+  return await shareBff
     .post('/account-service/account/sign-in', payload)
     .then((res) => {
-      console.log(res)
-      const XMLParser = require('react-xml-parser')
-      const xml = new XMLParser().parseFromString(res.data)
-      console.log('check', xml.getElementsByTagName('Data'))
-      return {
-        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-        Message: xml.getElementsByTagName('Message')[0].value,
-        Data: xml.getElementsByTagName('Data'),
-      }
+      return formatResponse(res.data)
     })
     .catch((err) => {
       console.log(err)
@@ -51,18 +43,10 @@ export const signUpBff = async (account: {
       <Phone>${account.phoneNumber}</Phone>
   </soap:Body>
 `
-  return await adminBff
+  return await shareBff
     .post('/account-service/account/sign-up', xmls)
     .then((res) => {
-      console.log(res)
-      const XMLParser = require('react-xml-parser')
-      const xml = new XMLParser().parseFromString(res.data)
-      console.log('check', xml.getElementsByTagName('Data'))
-      return {
-        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-        Message: xml.getElementsByTagName('Message')[0].value,
-        Data: xml.getElementsByTagName('Data'),
-      }
+      return formatResponse(res.data)
     })
     .catch((err) => {
       console.log(err)
@@ -95,14 +79,7 @@ export const getAllAccount = async () => {
       headers: { 'Content-Type': 'text/xml' },
     })
     .then((res) => {
-      console.log(res)
-      const XMLParser = require('react-xml-parser')
-      const xml = new XMLParser().parseFromString(res.data)
-      return {
-        StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
-        Message: xml.getElementsByTagName('Message')[0].value,
-        Data: xml.getElementsByTagName('Data'),
-      }
+      formatResponse(res.data)
     })
     .catch((err) => {
       console.log(err)

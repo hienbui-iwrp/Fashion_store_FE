@@ -12,8 +12,8 @@ import timeToDate from './timeToDate'
 
 export const formatResponse = (data: any) => {
   const XMLParser = require('react-xml-parser')
+  console.log(data.data)
   const xml = new XMLParser().parseFromString(data)
-
   return {
     StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
     Message: xml.getElementsByTagName('Message')[0].value,
@@ -164,9 +164,10 @@ export const formatGoodsDataXML = (data: any): GoodsProps => {
     type: data.getElementsByTagName('GoodsType')[0]?.value,
     gender: data.getElementsByTagName('GoodsGender')[0]?.value,
     age: data.getElementsByTagName('GoodsAge')[0]?.value,
-    suplier: data.getElementsByTagName('Manufacturer')[0]?.value,
+    supplier: data.getElementsByTagName('Manufacturer')[0]?.value,
     isSale: data.getElementsByTagName('IsForSale')[0]?.value == 1,
     price: data.getElementsByTagName('UnitPrice')[0]?.value,
+    cost: data.getElementsByTagName('UnitCost')[0]?.value,
     description: data.getElementsByTagName('Description')[0]?.value,
   }
 }

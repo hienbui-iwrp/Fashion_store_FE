@@ -74,7 +74,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: 'Chi nhánh',
       icon: BranchIcon,
       props: {
-        size: itemSelected == 0 ? 22 : 18,
+        size: itemSelected == 0 ? 25 : 18,
         height: 22,
         stroke: itemSelected == 0 ? Colors.white : Colors.gray,
       },
@@ -83,7 +83,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: 'Kinh doanh',
       icon: StatisticIcon,
       props: {
-        size: itemSelected == 1 ? 22 : 18,
+        size: itemSelected == 1 ? 25 : 18,
         stroke: itemSelected == 1 ? Colors.white : Colors.gray,
       },
     },
@@ -94,7 +94,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       props: {
         size:
           itemSelected == 20 || itemSelected == 21 || itemSelected == 2
-            ? 22
+            ? 25
             : 18,
         stroke:
           itemSelected == 20 || itemSelected == 21 || itemSelected == 2
@@ -106,7 +106,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: 'Tài khoản',
       icon: AccountIcon,
       props: {
-        size: itemSelected == 3 ? 22 : 18,
+        size: itemSelected == 3 ? 25 : 18,
         stroke: itemSelected == 3 ? Colors.white : Colors.gray,
       },
     },
@@ -114,7 +114,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: 'Sự kiện',
       icon: EventIcon,
       props: {
-        size: itemSelected == 4 ? 22 : 18,
+        size: itemSelected == 4 ? 25 : 18,
         stroke: itemSelected == 4 ? Colors.white : Colors.gray,
       },
     },
@@ -122,7 +122,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: 'Hàng hóa',
       icon: GoodsIcon,
       props: {
-        size: itemSelected == 5 ? 22 : 18,
+        size: itemSelected == 5 ? 25 : 18,
         stroke: itemSelected == 5 ? Colors.white : Colors.gray,
       },
     },
@@ -130,7 +130,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: 'Kho',
       icon: WarehouseIcon,
       props: {
-        size: itemSelected == 6 ? 22 : 18,
+        size: itemSelected == 6 ? 25 : 18,
         stroke: itemSelected == 6 ? Colors.white : Colors.gray,
       },
     },
@@ -141,7 +141,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       props: {
         size:
           itemSelected == 70 || itemSelected == 71 || itemSelected == 7
-            ? 22
+            ? 25
             : 18,
         stroke:
           itemSelected == 70 || itemSelected == 71 || itemSelected == 7
