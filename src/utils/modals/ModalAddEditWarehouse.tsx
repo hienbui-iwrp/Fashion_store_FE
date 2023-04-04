@@ -1,11 +1,25 @@
-import React from 'react'
-import { Modal, Space, Form, Input, InputNumber } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Modal, Space, Form, Input, InputNumber, Row, Col } from 'antd'
 import { AddButton, RemoveButton } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { ModalAddEditWarehouseProps } from '..'
+import {
+  ModalAddEditWarehouseProps,
+  StaffProps,
+  WarehouseProps,
+  formatStaffDataXML,
+} from '..'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import {
+  addWarehouseBFF,
+  getWarehouseManagerBFF,
+  getWarehouseStaffBFF,
+  updateWarehouseBFF,
+} from '@/api'
+import { useDispatch } from 'react-redux'
+import { setNotificationType, setNotificationValue } from '@/redux'
+import { useRouter } from 'next/router'
 
 dayjs.extend(customParseFormat)
 
@@ -14,6 +28,101 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
   const initialValues = {
     ...props.extraData,
   }
+  const [manager, setManager] = useState<StaffProps>()
+  const [staff, setStaff] = useState<StaffProps[]>()
+
+  const dispatch = useDispatch()
+
+  const onSave = async () => {
+    try {
+      const values = await form.validateFields()
+      if (!props.extraData) {
+        addWarehouseBFF(values)
+          .then((data: any) => {
+            if (data.StatusCode != 200) throw new Error('FAIL')
+            dispatch(setNotificationValue('Đã thêm kho mới'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+      } else {
+        const warehouse: WarehouseProps = {
+          id: values.id && values.id != '' ? values.id : props.extraData.id,
+          name:
+            values.name && values.name != ''
+              ? values.name
+              : props.extraData.name,
+          street:
+            values.street && values.street != ''
+              ? values.street
+              : props.extraData.street,
+          ward:
+            values.ward && values.ward != ''
+              ? values.ward
+              : props.extraData.ward,
+          district:
+            values.district && values.district != ''
+              ? values.district
+              : props.extraData.district,
+          province:
+            values.province && values.province != ''
+              ? values.province
+              : props.extraData.province,
+          capacity:
+            values.capacity && values.capacity != ''
+              ? values.capacity
+              : props.extraData.capacity,
+          createdDate: new Date(),
+        }
+
+        await updateWarehouseBFF(props.extraData.id, warehouse)
+          .then((res: any) => {
+            if (res.StatusCode != 200) throw new Error('FAIL')
+            dispatch(setNotificationValue('Đã cập nhật thông tin'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+      }
+
+      props.callback && props.callback({})
+      props.cancel && props.cancel()
+
+      console.log('Success', values)
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo)
+    }
+  }
+
+  const getData = async () => {
+    await getWarehouseStaffBFF(props.extraData?.id)
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+
+        const _data = res.Data.map((item: StaffProps) =>
+          formatStaffDataXML(item)
+        )
+        setStaff(_data)
+      })
+      .catch((err) => console.log(err))
+
+    await getWarehouseManagerBFF(props.extraData?.id)
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+
+        const _data = formatStaffDataXML(res.Data[0])
+        setManager(_data)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    if (props.extraData) {
+      getData()
+    }
+  }, [])
 
   return (
     <>
@@ -37,18 +146,34 @@ const ModalAddEditWarehouse = (props: ModalAddEditWarehouseProps) => {
               key='add'
               label='Lưu'
               icon={<CheckOutlined />}
-              onClick={async () => {
-                try {
-                  const values = await form.validateFields()
-                  console.log('Success:', values)
-                } catch (errorInfo) {
-                  console.log('Failed:', errorInfo)
-                }
-              }}
+              onClick={onSave}
             />
           </Space>,
         ]}
       >
+        {props.extraData && (
+          <>
+            <Row className='pl-4 mb-2'>
+              <Col span={8}>
+                <span style={{ fontWeight: 500 }}>Mã kho:</span>
+              </Col>
+              <Col span={16}>{props.extraData?.id ?? ''}</Col>
+            </Row>
+            <Row className='pl-4 mb-2'>
+              <Col span={8}>
+                <span style={{ fontWeight: 500 }}>Quản lý:</span>
+              </Col>
+              <Col span={12}>{manager?.name ?? 'Chưa có'}</Col>
+            </Row>
+            <Row className='pl-4 mb-4'>
+              <Col span={8}>
+                <span style={{ fontWeight: 500 }}>Số nhân viên:</span>
+              </Col>
+              <Col span={12}>{staff?.length ?? 0}</Col>
+            </Row>
+          </>
+        )}
+
         <Form
           layout={'vertical'}
           form={form}

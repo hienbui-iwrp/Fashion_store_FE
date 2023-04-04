@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Routes } from '@/constants'
+import { Routes } from '@/constants'
 import { Space } from 'antd'
 import { AddButton, TableList } from '@/components'
 import { EventProps, formatDate, formatEventDataXML, formatTime } from '@/utils'
 import { InputSearch } from '@/components'
 import { useRouter } from 'next/router'
 import { getEventBFF } from '@/api'
-import { all } from 'axios'
 
 const Event = () => {
   const [data, setData] = useState<EventProps[]>([])
@@ -30,7 +29,8 @@ const Event = () => {
           style: { minWidth: 110 },
         }
       },
-      sorter: (a: EventProps, b: EventProps) => (a.id > b.id ? 1 : -1),
+      sorter: (a: EventProps, b: EventProps) =>
+        (a?.id ?? 1) > (b?.id ?? 1) ? 1 : -1,
     })
 
     columns.push({
@@ -44,7 +44,8 @@ const Event = () => {
           style: { minWidth: 110 },
         }
       },
-      sorter: (a: EventProps, b: EventProps) => (a.name > b.name ? 1 : -1),
+      sorter: (a: EventProps, b: EventProps) =>
+        (a.name ?? 1) > (b.name ?? 1) ? 1 : -1,
     })
 
     columns.push({
@@ -59,7 +60,7 @@ const Event = () => {
         }
       },
       sorter: (a: EventProps, b: EventProps) =>
-        a.startTime > b.startTime ? 1 : -1,
+        (a.startTime ?? 1) > (b.startTime ?? 1) ? 1 : -1,
     })
     columns.push({
       title: 'Thời gian kết thúc',
@@ -73,7 +74,7 @@ const Event = () => {
         }
       },
       sorter: (a: EventProps, b: EventProps) =>
-        a.endTime > b.endTime ? 1 : -1,
+        (a.endTime ?? 1) > (b.endTime ?? 1) ? 1 : -1,
     })
 
     columns.push({
@@ -88,7 +89,7 @@ const Event = () => {
         }
       },
       sorter: (a: EventProps, b: EventProps) =>
-        a.discount > b.discount ? 1 : -1,
+        (a.discount ?? 1) > (b.discount ?? 1) ? 1 : -1,
     })
   }
 
@@ -121,8 +122,8 @@ const Event = () => {
               setData(
                 allData.filter(
                   (item: EventProps) =>
-                    item.id.toLowerCase().includes(text.toLowerCase()) ||
-                    item.name.toLowerCase().includes(text.toLowerCase())
+                    item.id?.toLowerCase().includes(text.toLowerCase()) ||
+                    item.name?.toLowerCase().includes(text.toLowerCase())
                 )
               )
             }}

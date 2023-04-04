@@ -193,3 +193,14 @@ export type GoodsProps = {
   cost?: number
   image?: string
 }
+
+export type WarehouseProps = {
+  id: string
+  name: string
+  street: string
+  ward: string
+  district: string
+  province: string
+  capacity: string
+  createdDate: Date
+}
