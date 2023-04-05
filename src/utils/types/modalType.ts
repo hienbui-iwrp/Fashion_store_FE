@@ -1,5 +1,6 @@
 import {
   BranchProps,
+  GoodsClassifyProps,
   GoodsProps,
   StaffProps,
   WarehouseProps,
@@ -38,6 +39,10 @@ export interface ModalAllGoodsProps extends ModalSampleProps {
   extraData?: GoodsProps[]
   single?: boolean
   allGoods?: GoodsProps[]
+}
+
+export interface ModalTranferGoodsProps extends ModalSampleProps {
+  extraData?: WarehouseProps[]
 }
 
 export interface ModalAddEditWarehouseProps extends ModalSampleProps {

@@ -11,18 +11,6 @@ import { ModalAllGoods } from '@/utils'
 
 dayjs.extend(customParseFormat)
 
-interface DataType {
-  id: string
-  name: string
-  address: string
-  manager: string
-  area: number
-  staff: number
-  startTime: Date
-  endTime: Date
-  image?: string
-}
-
 interface StatisticDataType {
   revenue?: number
   profit?: number
