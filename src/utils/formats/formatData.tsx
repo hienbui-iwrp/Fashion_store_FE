@@ -8,6 +8,7 @@ import {
   EventProps,
   GoodsProps,
   WarehouseProps,
+  GoodsInWarehouseProps,
 } from '../types'
 import timeToDate from './timeToDate'
 
@@ -170,6 +171,24 @@ export const formatGoodsDataXML = (data: any): GoodsProps => {
     price: data.getElementsByTagName('UnitPrice')[0]?.value,
     cost: data.getElementsByTagName('UnitCost')[0]?.value,
     description: data.getElementsByTagName('Description')[0]?.value,
+    image: data.getElementsByTagName('Image').map((item: any) => item.value),
+  }
+}
+
+export const formatGoodsInWarehouseDataXML = (
+  data: any
+): GoodsInWarehouseProps => {
+  const updateDate = new Date(
+    data.getElementsByTagName('UpdatedDate')[0]?.value
+  )
+  return {
+    id: data.getElementsByTagName('GoodsCode')[0]?.value,
+    size: data.getElementsByTagName('GoodsSize')[0]?.value,
+    color: data.getElementsByTagName('GoodsColor')[0]?.value,
+    quantity: data.getElementsByTagName('Quantity')[0]?.value,
+    createdDate: new Date(data.getElementsByTagName('CreatedDate')[0]?.value),
+    updateDate: updateDate.getTime() > 0 ? updateDate : undefined,
+    warehouseId: data.getElementsByTagName('WhCode')[0]?.value,
   }
 }
 

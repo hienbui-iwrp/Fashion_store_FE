@@ -31,6 +31,11 @@ const DropdownButton = (props: DropdownButtonProps) => {
         menu={{ items: items ?? [], onClick: handleMenuClick }}
         placement='bottomLeft'
         className={styles.adminInputShadow}
+        overlayStyle={{
+          maxHeight: 200,
+          overflowY: 'scroll',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+        }}
         {...props}
       >
         <Button

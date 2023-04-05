@@ -188,10 +188,26 @@ export type GoodsProps = {
   age: string
   supplier: string
   isSale: boolean
-  price: number
+  price: string
   description: string
-  cost?: number
-  image?: string
+  cost: string
+  image?: string[]
+}
+
+export type GoodsInWarehouseProps = {
+  id: string
+  size: string
+  color: string
+  quantity: number
+  createdDate: Date
+  updateDate?: Date
+  warehouseId: string
+}
+
+export type GoodsClassifyProps = {
+  id?: string
+  size: string
+  color: string
 }
 
 export type WarehouseProps = {

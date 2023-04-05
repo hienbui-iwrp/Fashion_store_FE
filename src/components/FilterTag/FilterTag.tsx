@@ -15,6 +15,7 @@ export default function FilterTag(props: ButtonProps) {
         display: 'flex',
         alignItems: 'center',
         width: 'fit-content',
+        margin: '3px',
         ...props.style,
       }}
     >
