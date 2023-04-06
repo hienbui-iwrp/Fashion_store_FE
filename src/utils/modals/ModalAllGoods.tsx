@@ -245,7 +245,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
                 style={{ backgroundColor: Colors.adminBackground }}
                 onEnter={(text) => {
                   setData(
-                    allData.filter(
+                    (props.allGoods ?? allData).filter(
                       (account: GoodsProps) =>
                         account.id.toLowerCase().includes(text.toLowerCase()) ||
                         account.name.toLowerCase().includes(text.toLowerCase())
@@ -253,7 +253,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
                   )
                 }}
                 onClear={() => {
-                  setData(allData)
+                  setData(props.allGoods ?? allData)
                 }}
               />
             </div>

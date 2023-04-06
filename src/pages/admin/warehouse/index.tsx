@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL } from '@/constants'
-import axios from 'axios'
 import { Space } from 'antd'
 import { AddButton, TableList } from '@/components'
 import {
@@ -209,8 +207,12 @@ const Warehouse = () => {
           open={modalAddEditWarehouse}
           cancel={() => setModalAddEditWarehouse(false)}
           extraData={currentData}
-          callback={() => {
-            getData()
+          callback={(item) => {
+            setLoading(true)
+            setTimeout(() => {
+              getData()
+              setLoading(false)
+            }, 1000)
           }}
         />
       )}

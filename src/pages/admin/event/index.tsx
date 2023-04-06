@@ -81,7 +81,7 @@ const Event = () => {
       title: 'Mức giảm',
       dataIndex: 'discount',
       render(text: string, record: EventProps, index: number) {
-        return parseFloat(text) * 100 + '%'
+        return text + '%'
       },
       onCell: (record) => {
         return {

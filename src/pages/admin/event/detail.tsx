@@ -29,7 +29,7 @@ import {
   GoodsProps,
   ModalAllGoods,
 } from '@/utils'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
@@ -207,7 +207,18 @@ const Detail = () => {
       title: '',
       dataIndex: '',
       render(text: string, record: GoodsProps, index: number) {
-        return <RemoveButton label='' borderRadius={5} onClick={() => {}} />
+        return (
+          <RemoveButton
+            label=''
+            borderRadius={5}
+            onClick={() => {
+              const _goodsData = [...goodsData]
+              setGoodsData(
+                _goodsData.filter((item: any) => item.id != record.id)
+              )
+            }}
+          />
+        )
       },
       onCell: (record) => {
         return {
@@ -503,6 +514,9 @@ const Detail = () => {
             label='Hủy'
             icon={<CloseOutlined />}
             borderRadius={10}
+            onClick={() => {
+              router.push(Routes.admin.event)
+            }}
           />
           <AddButton
             label='Lưu'
