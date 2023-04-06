@@ -77,25 +77,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
         await addStaffBFF(values)
           .then(async (res: any) => {
             if (res.StatusCode != 200) throw new Error('FAIL')
-
-            // const username = form.setFieldValue('email').split('@')[0]
-            // await addAccountBff(
-            //   username,
-            //   '123456',
-            //   form.getFieldValue('role')
-            // )
-            //   .then((res) => {
-            //     console.log('-------------: ', res)
-            //   })
-            //   .catch(async () => {
-            //     await updateRoleBff(
-            //       username,
-            //       form.getFieldValue('role')
-            //     ).catch(() => {
-            //       throw new Error('FAIL')
-            //     })
-            //   })
-
             dispatch(setNotificationValue('Đã thêm nhân viên mới'))
             routes.push(Routes.admin.staff)
           })
@@ -107,18 +88,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
         await updateStaffBFF(props.extraData.id, values)
           .then(async (res: any) => {
             if (res.StatusCode != 200) throw new Error('FAIL')
-            // const username = props?.extraData?.id ?? ''
-            // await updateRoleBff(username, form.getFieldValue('role')).catch(
-            //   async () => {
-            //     await addAccountBff(
-            //       username,
-            //       '123456',
-            //       form.getFieldValue('role')
-            //     ).catch(() => {
-            //       throw new Error('FAIL')
-            //     })
-            //   }
-            // )
+
             dispatch(setNotificationValue('Đã cập nhật thông tin'))
             routes.push(Routes.admin.staff)
           })
