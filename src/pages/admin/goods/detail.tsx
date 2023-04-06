@@ -57,6 +57,7 @@ const Detail = () => {
   const [sizes, setSizes] = useState<string[]>([])
   const [colors, setColors] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+  const [curGoodsClassify, setCurGoodsClassify] = useState<GoodsClassifyProps>()
   const [modalTranferGoods, setModalTranferGoods] = useState(false)
 
   const router = useRouter()
@@ -140,7 +141,7 @@ const Detail = () => {
 
   const onSave = async () => {
     if (id) {
-      await updateGoodsBff(id, data, sizes, colors)
+      await updateGoodsBff(id, data ?? newGoods, sizes, colors)
         .then((res: any) => {
           if (res.StatusCode != 200) throw new Error('FAIL')
           dispatch(setNotificationValue('Đã cập nhật thông tin hàng'))
@@ -645,7 +646,9 @@ const Detail = () => {
             return sizes.map((sizeItem: any, sizeIndex: number) => {
               const _data = goodsInwarehouseData?.filter(
                 (item: GoodsInWarehouseProps) =>
-                  item.size == sizeItem && item.color == colorItem
+                  item.size == sizeItem &&
+                  item.color == colorItem &&
+                  item.quantity > 0
               )
               return (
                 <div key={`${sizeIndex}${colorIndex}`} className='my-2'>
@@ -674,6 +677,11 @@ const Detail = () => {
                           <AddButton
                             label='Vận chuyển hàng'
                             onClick={() => {
+                              setCurGoodsClassify({
+                                id: id?.toString(),
+                                size: sizeItem,
+                                color: colorItem,
+                              })
                               setModalTranferGoods(true)
                             }}
                           />
@@ -686,11 +694,19 @@ const Detail = () => {
             })
           })}
       </Space>
-      <ModalTranferGoods
-        open={modalTranferGoods}
-        cancel={() => setModalTranferGoods(false)}
-        extraData={warehouseData}
-      />
+      {modalTranferGoods && (
+        <ModalTranferGoods
+          open={modalTranferGoods}
+          cancel={() => setModalTranferGoods(false)}
+          extraData={{
+            goodsClassify: curGoodsClassify,
+            allWarehouse: warehouseData,
+          }}
+          callback={(item) => {
+            getData()
+          }}
+        />
+      )}
     </>
   )
 }

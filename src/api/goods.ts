@@ -1,4 +1,10 @@
-import { GoodsProps, adminBff, formatResponse, shareBff } from '@/utils'
+import {
+  GoodsClassifyProps,
+  GoodsProps,
+  adminBff,
+  formatResponse,
+  shareBff,
+} from '@/utils'
 
 export const getGoodsBFF = () => {
   return shareBff
@@ -126,9 +132,143 @@ export const updateGoodsBff = (
   )}
   </soap:Body>`
 
-  console.log('payload :', payload)
   return adminBff
     .post('/goods-service/goods/update', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getGoodsBFF err: ', err)
+    })
+}
+
+export const importGoodsBff = (
+  goods: GoodsClassifyProps,
+  quantity: string,
+  supplier: string,
+  warehouseId: string
+) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+  <soap:Body>
+      <GoodsCode>${goods.id}</GoodsCode>
+      <GoodsSize>${goods.size}</GoodsSize>
+      <GoodsColor>${goods.color}</GoodsColor>
+      <Quantity>${quantity}</Quantity>
+      <From>${supplier}</From>
+      <To>${warehouseId}</To>
+  </soap:Body>`
+
+  return adminBff
+    .post('/goods-service/goods/import', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getGoodsBFF err: ', err)
+    })
+}
+
+export const exportGoodsBff = (
+  goods: GoodsClassifyProps,
+  quantity: string,
+  supplier: string,
+  orderId: string
+) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+  <soap:Body>
+      <GoodsCode>${goods.id}</GoodsCode>
+      <GoodsSize>${goods.size}</GoodsSize>
+      <GoodsColor>${goods.color}</GoodsColor>
+      <Quantity>${quantity}</Quantity>
+      <From>${supplier}</From>
+      <To>${orderId}</To>
+  </soap:Body>`
+  console.log(payload)
+  return adminBff
+    .post('/goods-service/goods/export', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getGoodsBFF err: ', err)
+    })
+}
+
+export const tranferGoodsBff = (
+  goods: GoodsClassifyProps,
+  quantity: string,
+  warehouseIdExport: string,
+  warehouseIdImport: string
+) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+  <soap:Body>
+      <GoodsCode>${goods.id}</GoodsCode>
+      <GoodsSize>${goods.size}</GoodsSize>
+      <GoodsColor>${goods.color}</GoodsColor>
+      <Quantity>${quantity}</Quantity>
+      <From>${warehouseIdExport}</From>
+      <To>${warehouseIdImport}</To>
+  </soap:Body>`
+
+  return shareBff
+    .post('/goods-service/wh-transfer', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getGoodsBFF err: ', err)
+    })
+}
+
+export const returnGoodsBff = (
+  goods: GoodsClassifyProps,
+  quantity: string,
+  warehouseId: string,
+  supplier: string
+) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+<soap:Body>
+    <GoodsCode>${goods.id}</GoodsCode>
+    <GoodsSize>${goods.size}</GoodsSize>
+    <GoodsColor>${goods.color}</GoodsColor>
+    <Quantity>${quantity}</Quantity>
+    <From>${warehouseId}</From>
+    <To>${supplier}</To>
+</soap:Body>`
+
+  return adminBff
+    .post('/goods-service/goods/return-manufact', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getGoodsBFF err: ', err)
+    })
+}
+
+export const customerReturnGoodsBff = (
+  goods: GoodsClassifyProps,
+  quantity: string,
+  customerId: string,
+  warehouseId: string
+) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+<soap:Body>
+    <GoodsCode>${goods.id}</GoodsCode>
+    <GoodsSize>${goods.size}</GoodsSize>
+    <GoodsColor>${goods.color}</GoodsColor>
+    <Quantity>${quantity}</Quantity>
+    <From>${customerId}</From>
+    <To>${warehouseId}</To>
+</soap:Body>`
+
+  return adminBff
+    .post('/goods-service/goods/cust-return', payload)
     .then((res) => {
       return formatResponse(res.data)
     })

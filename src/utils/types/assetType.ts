@@ -206,8 +206,8 @@ export type GoodsInWarehouseProps = {
 
 export type GoodsClassifyProps = {
   id?: string
-  size: string
-  color: string
+  size?: string
+  color?: string
 }
 
 export type WarehouseProps = {

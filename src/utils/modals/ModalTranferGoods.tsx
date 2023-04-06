@@ -8,15 +8,136 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 import { useDispatch } from 'react-redux'
+import {
+  customerReturnGoodsBff,
+  exportGoodsBff,
+  importGoodsBff,
+  returnGoodsBff,
+  tranferGoodsBff,
+} from '@/api'
+import { useRouter } from 'next/router'
+import { setNotificationType, setNotificationValue } from '@/redux'
 
 dayjs.extend(customParseFormat)
 
+const Action = {
+  null: -1,
+  import: 0,
+  tranfer: 1,
+  export: 2,
+  return: 3,
+  customerReturn: 4,
+}
+
 const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
-  const [mode, setMode] = useState<number>(-1)
+  const [mode, setMode] = useState<number>(Action.null)
+  const [warehouseImport, setWarehouseImport] = useState<string>('')
+  const [warehouseExport, setWarehouseExport] = useState<string>('')
+  const [suppiler, setSuppiler] = useState<string>('')
+  const [order, setOrder] = useState<string>('')
+  const [quantity, setQuantity] = useState<string>('')
 
   const dispatch = useDispatch()
 
-  const onSave = async () => {}
+  const onSave = async () => {
+    console.log(props.extraData)
+    switch (mode) {
+      case Action.import:
+        await importGoodsBff(
+          props?.extraData?.goodsClassify ?? {},
+          quantity,
+          suppiler,
+          warehouseImport
+        )
+          .then(async (res: any) => {
+            if (res.StatusCode != 200) throw new Error('FAIL')
+            props.callback && props.callback({})
+            props?.cancel()
+            dispatch(setNotificationValue('Thực hiện thành công'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+        break
+      case Action.export:
+        await exportGoodsBff(
+          props?.extraData?.goodsClassify ?? {},
+          quantity,
+          warehouseExport,
+          order
+        )
+          .then(async (res: any) => {
+            if (res.StatusCode != 200) throw new Error('FAIL')
+            props.callback && props.callback({})
+            props?.cancel()
+            dispatch(setNotificationValue('Thực hiện thành công'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+        break
+      case Action.tranfer:
+        await tranferGoodsBff(
+          props?.extraData?.goodsClassify ?? {},
+          quantity,
+          warehouseExport,
+          warehouseImport
+        )
+          .then(async (res: any) => {
+            if (res.StatusCode != 200) throw new Error('FAIL')
+            props.callback && props.callback({})
+            props?.cancel()
+            dispatch(setNotificationValue('Thực hiện thành công'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+        break
+      case Action.return:
+        await returnGoodsBff(
+          props?.extraData?.goodsClassify ?? {},
+          quantity,
+          warehouseExport,
+          suppiler
+        )
+          .then(async (res: any) => {
+            if (res.StatusCode != 200) throw new Error('FAIL')
+            props.callback && props.callback({})
+            props?.cancel()
+            dispatch(setNotificationValue('Thực hiện thành công'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+        break
+      case Action.customerReturn:
+        await customerReturnGoodsBff(
+          props?.extraData?.goodsClassify ?? {},
+          quantity,
+          order,
+          warehouseImport
+        )
+          .then(async (res: any) => {
+            if (res.StatusCode != 200) throw new Error('FAIL')
+            props.callback && props.callback({})
+            props?.cancel()
+            dispatch(setNotificationValue('Thực hiện thành công'))
+          })
+          .catch((error) => {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+          })
+        break
+      default:
+        dispatch(setNotificationType('error'))
+        dispatch(setNotificationValue('Vui lòng chọn tác vụ'))
+        break
+    }
+  }
 
   return (
     <>
@@ -48,7 +169,7 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
       >
         <div style={{ margin: '0 20px' }}>
           <div className='mb-1 pt-2'>
-            <b>Hành động</b>
+            <b>Tác vụ</b>
           </div>
           <Radio.Group
             onChange={(event: any) => {
@@ -59,19 +180,19 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
           >
             <Row className={styles.row}>
               <Col xs={24} sm={8} lg={4} className='my-1'>
-                <Radio value={0}>Nhập kho</Radio>
+                <Radio value={Action.import}>Nhập kho</Radio>
               </Col>
               <Col xs={24} sm={8} lg={4} className='my-1'>
-                <Radio value={1}>Chuyển kho</Radio>
+                <Radio value={Action.tranfer}>Chuyển kho</Radio>
               </Col>
               <Col xs={24} sm={8} lg={4} className='my-1'>
-                <Radio value={2}>Xuất kho</Radio>
+                <Radio value={Action.export}>Xuất kho</Radio>
               </Col>
               <Col xs={24} sm={12} lg={6} className='my-1'>
-                <Radio value={3}>Trả hàng nhà cung cấp</Radio>
+                <Radio value={Action.return}>Trả hàng nhà cung cấp</Radio>
               </Col>
               <Col xs={24} sm={12} lg={6} className='my-1'>
-                <Radio value={4}>Khách trả hàng</Radio>
+                <Radio value={Action.customerReturn}>Khách trả hàng</Radio>
               </Col>
             </Row>
           </Radio.Group>
@@ -85,8 +206,23 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
                 <Col xs={14} lg={15}>
                   <DropdownButton
                     label='Chọn kho'
-                    items={props.extraData?.map((item) => item.name)}
-                    disabled={![0, 1, 4].includes(mode)}
+                    items={props.extraData?.allWarehouse?.map(
+                      (item) => item.name
+                    )}
+                    disabled={
+                      ![
+                        Action.import,
+                        Action.tranfer,
+                        Action.customerReturn,
+                      ].includes(mode)
+                    }
+                    callback={(text: string) => {
+                      setWarehouseImport(
+                        props.extraData?.allWarehouse?.find(
+                          (item) => item.name == text
+                        )?.id ?? ''
+                      )
+                    }}
                   />
                 </Col>
               </Row>
@@ -100,8 +236,21 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
                 <Col xs={14} lg={16}>
                   <DropdownButton
                     label='Chọn kho'
-                    items={props.extraData?.map((item) => item.name)}
-                    disabled={![1, 2, 3].includes(mode)}
+                    items={props.extraData?.allWarehouse?.map(
+                      (item) => item.name
+                    )}
+                    disabled={
+                      ![Action.export, Action.tranfer, Action.return].includes(
+                        mode
+                      )
+                    }
+                    callback={(text: string) => {
+                      setWarehouseExport(
+                        props.extraData?.allWarehouse?.find(
+                          (item) => item.name == text
+                        )?.id ?? ''
+                      )
+                    }}
                   />
                 </Col>
               </Row>
@@ -116,7 +265,8 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
                 <Col xs={14} lg={15}>
                   <Input
                     className={styles.adminInputShadow}
-                    disabled={![0, 3].includes(mode)}
+                    disabled={![Action.import, Action.return].includes(mode)}
+                    onBlur={(e) => setSuppiler(e.target.value)}
                   />
                 </Col>
               </Row>
@@ -128,7 +278,10 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
                   <b>Số lượng</b>
                 </Col>
                 <Col xs={14} lg={16}>
-                  <InputNumber className={styles.adminInputShadow} />
+                  <InputNumber
+                    className={styles.adminInputShadow}
+                    onBlur={(e) => setQuantity(e.target.value)}
+                  />
                 </Col>
               </Row>
             </Col>
@@ -137,30 +290,37 @@ const ModalTranferGoods = (props: ModalTranferGoodsProps) => {
             <Col xs={24} sm={11} lg={10}>
               <Row className={styles.adminRow}>
                 <Col xs={10} lg={9}>
-                  <b>Giao vận</b>
+                  <b>Mã đơn</b>
                 </Col>
                 <Col xs={14} lg={15}>
-                  <DropdownButton
-                    label='GHN'
-                    items={['a', 'a']}
-                    disabled={![1, 2, 3].includes(mode)}
+                  <Input
+                    className={styles.adminInputShadow}
+                    disabled={
+                      ![Action.export, Action.customerReturn].includes(mode)
+                    }
+                    onBlur={(e) => setOrder(e.target.value)}
                   />
                 </Col>
               </Row>
             </Col>
             <Col xs={24} sm={2} lg={4}></Col>
             <Col xs={24} sm={11} lg={10}>
-              <Row className={styles.adminRow}>
+              {/* <Row className={styles.adminRow}>
                 <Col xs={10} lg={8}>
-                  <b>Mã đơn</b>
+                  <b>Giao vận</b>
                 </Col>
                 <Col xs={14} lg={16}>
-                  <Input
-                    className={styles.adminInputShadow}
-                    disabled={![2, 4].includes(mode)}
+                  <DropdownButton
+                    label='GHN'
+                    items={['a', 'a']}
+                    disabled={
+                      ![Action.export, Action.tranfer, Action.return].includes(
+                        mode
+                      )
+                    }
                   />
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
           </Row>
         </div>

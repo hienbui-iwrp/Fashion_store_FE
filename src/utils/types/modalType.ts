@@ -42,7 +42,10 @@ export interface ModalAllGoodsProps extends ModalSampleProps {
 }
 
 export interface ModalTranferGoodsProps extends ModalSampleProps {
-  extraData?: WarehouseProps[]
+  extraData?: {
+    goodsClassify?: GoodsClassifyProps
+    allWarehouse?: WarehouseProps[]
+  }
 }
 
 export interface ModalAddEditWarehouseProps extends ModalSampleProps {
