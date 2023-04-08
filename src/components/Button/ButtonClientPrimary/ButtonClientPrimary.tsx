@@ -4,11 +4,13 @@ import { Colors } from '@/constants'
 
 export default function ButtonClientPrimary({
   htmlType,
+  disabled,
   name,
   icon,
   onClick,
 }: {
   htmlType?: any
+  disabled?: any
   name?: string
   icon?: ReactNode
   onClick?: () => void
@@ -17,10 +19,10 @@ export default function ButtonClientPrimary({
 
   return (
     <Button
+      disabled={disabled}
       htmlType={htmlType}
       onClick={onClick}
-      className={`flex justify-center px-3 items-center  text-white font-bold  rounded-xl  !w-auto hover:!text-white`}
-      type='text'
+      className={`flex justify-center px-3 items-center ${disabled ? '' : 'text-white hover:!text-white'} font-bold rounded-xl !w-auto`}
       icon={icon || null}
       onMouseEnter={() => {
         setHover(true)
@@ -29,11 +31,11 @@ export default function ButtonClientPrimary({
         setHover(false)
       }}
       style={{
-        backgroundColor: hover ? Colors.adminGreen300 : Colors.adminGreen700,
+        backgroundColor: disabled ? undefined : (hover ? Colors.adminGreen300 : Colors.adminGreen700),
       }}
     >
       {name ? (
-        <Typography className='px-6 text-white'>{name}</Typography>
+        <Typography className={`px-6 ${disabled ? 'text-gray-300' : 'text-white'}`}>{name}</Typography>
       ) : null}
     </Button>
   )

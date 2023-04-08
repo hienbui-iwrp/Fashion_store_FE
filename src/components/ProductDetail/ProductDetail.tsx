@@ -25,26 +25,24 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import styles from './ProductDetail.module.css'
 import { Colors } from '@/constants'
 
-export interface ProductDetailProps {
-  goodsId: string
-  name: string
-  unitPrice: number
-  image: string
-  quantity: number
-  size: string
-  color: string
-  discount: number
-}
-
 const { Title, Text } = Typography
 
 export default function ProductDetail(props: ProductDetailDataProps) {
   const [quantity, setQuantity] = useState<number>(1)
-  const maxQuantity = props.quantity
-  // const [maxQuantity, setMaxQuantity] = useState<number>(props.quantity)
+  const [maxQuantity, setMaxQuantity] = useState<number>(props.listQuantity.length > 0 ? props.listQuantity[0].quantity : 0);
   const [imageShow, setImageShow] = useState<string>(props.images[0])
-  const [valueSize, setValueSize] = useState(props.size[0])
-  const [valueColor, setValueColor] = useState(props.color[0])
+  const [valueSize, setValueSize] = useState(props.listQuantity.length > 0 ? props.listQuantity[0].size : '0')
+  const [valueColor, setValueColor] = useState(props.listQuantity.length > 0 ? props.listQuantity[0].color : '0')
+  var listColor: string[] = [];
+  var listSize: string[] = [];
+  props.listQuantity.map((itemQuantity, _) => {
+    if (listColor.indexOf(itemQuantity.color) === -1) {
+      listColor = [...listColor, itemQuantity.color];
+    }
+    if (listSize.indexOf(itemQuantity.size) === -1) {
+      listSize = [...listSize, itemQuantity.size];
+    }
+  })
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -54,7 +52,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
   ]
 
   const onChangeQuantity = (value: number | null) => {
-    if (value !== null && value > 0 && value < maxQuantity) {
+    if (value !== null && value > 0 && value <= maxQuantity) {
       setQuantity(value)
     }
   }
@@ -62,11 +60,39 @@ export default function ProductDetail(props: ProductDetailDataProps) {
   const onChangeColor = (e: RadioChangeEvent) => {
     console.log(`radio checked:${e.target.value}`)
     setValueColor(e.target.value)
+    const checkQuantity = props.listQuantity.filter((item, _) => {
+      return item.color === e.target.value && item.size === valueSize
+    })
+    if (checkQuantity.length > 0) {
+      if (checkQuantity[0].quantity) {
+        setQuantity(1);
+        setMaxQuantity(checkQuantity[0].quantity);
+      } else {
+        setQuantity(0);
+        setMaxQuantity(0);
+      }
+    }
   }
 
   const onChangeSize = (e: RadioChangeEvent) => {
     console.log(`radio checked:${e.target.value}`)
     setValueSize(e.target.value)
+    const checkQuantity = props.listQuantity.filter((item, _) => {
+      return item.size === e.target.value && item.color === valueColor
+    })
+    if (checkQuantity.length > 0) {
+      if (checkQuantity[0].quantity) {
+        setQuantity(1);
+        setMaxQuantity(checkQuantity[0].quantity);
+      } else {
+        setQuantity(0);
+        setMaxQuantity(0);
+      }
+
+    } else {
+      setQuantity(0);
+      setMaxQuantity(0);
+    }
   }
 
   const onChangeTabs = (key: string) => {
@@ -79,10 +105,10 @@ export default function ProductDetail(props: ProductDetailDataProps) {
 
   useEffect(() => {
     setImageShow(props.images[0])
-    setValueColor(props.color[0])
-    setValueSize(props.size[0])
-    // setMaxQuantity(props.quantity)
+    setValueColor(props.listQuantity[0].color)
+    setValueSize(props.listQuantity[0].size)
   }, [props])
+  console.log('quantity', quantity);
 
   return (
     <div className='mb-4 px-8'>
@@ -131,13 +157,13 @@ export default function ProductDetail(props: ProductDetailDataProps) {
             </Space>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Tình trạng:</Text>
-              {props.quantity === 0 ? (
-                <Text strong style={{ color: Colors.adminRed500 }}>
-                  Hết hàng
-                </Text>
-              ) : (
+              {props.listQuantity.find(elementQuantity => elementQuantity.quantity > 0) ? (
                 <Text strong style={{ color: Colors.adminGreen700 }}>
                   Còn hàng
+                </Text>
+              ) : (
+                <Text strong style={{ color: Colors.adminRed500 }}>
+                  Hết hàng
                 </Text>
               )}
             </Space>
@@ -151,7 +177,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
                 value={valueColor}
                 className={styles.productColor}
               >
-                {props.color.map((item, index) => {
+                {listColor.map((item, index) => {
                   return (
                     <Radio.Button key={index} value={item}>
                       {item}
@@ -170,7 +196,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
                 value={valueSize}
                 className={styles.productSize}
               >
-                {props.size.map((item, index) => {
+                {listSize.map((item, index) => {
                   return (
                     <Radio.Button key={index} value={item}>
                       {item}
@@ -226,6 +252,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
               />
             </div>
             <ButtonClientPrimary
+              disabled={quantity === 0}
               name='Thêm vào giỏ hàng'
               icon={
                 <FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />

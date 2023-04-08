@@ -46,21 +46,28 @@ export interface ProductsDataProps {
   totalProducts: number
   listProduct: ProductDetailDataProps[]
 }
+
+export interface QuantityObj {
+  size: string
+  color: string
+  quantity: Number
+}
+
 export interface ProductDetailDataProps {
   goodsId: string
   name: string
   unitPrice: number
   price: number
   images: string[]
-  quantity: number
-  size: string[]
-  color: string[]
+  listQuantity: QuantityObj[]
+  // quantity: number
+  // size: string[]
+  // color: string[]
   discount: number
   type: string
   gender: string
   age: string
   description: string
-  tax: number
 }
 
 export interface ProductInCartProps {
@@ -219,4 +226,9 @@ export type WarehouseProps = {
   province: string
   capacity: string
   createdDate: Date
+}
+
+export type Paging = {
+  pageSize: number
+  offset: number
 }

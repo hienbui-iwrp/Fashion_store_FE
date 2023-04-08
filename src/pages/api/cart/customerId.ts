@@ -7,7 +7,7 @@ export default function handler(
 ) {
   res.status(200).json([
     {
-      goodsId: 'goods_1680116118',
+      goodsId: 'goods_1680666555',
       image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
       name: 'Áo khoác mùa đông a',
       unitPrice: 100000,
@@ -19,25 +19,25 @@ export default function handler(
       tax: 10,
     },
     {
-      goodsId: 'goods_1680116360',
+      goodsId: 'goods_1680666559',
       image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
       name: 'Áo khoác mùa đông a',
       unitPrice: 100000,
       price: 100000,
       quantity: 2,
-      size: '38',
+      size: '37',
       color: 'Yellow',
       discount: 0,
       tax: 10,
     },
     {
-      goodsId: 'goods_1680116354',
+      goodsId: 'goods_1680666563',
       image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
       name: 'Áo khoác mùa Hè',
       unitPrice: 100000,
       price: 90000,
       quantity: 3,
-      size: '37',
+      size: '38',
       color: 'Yellow',
       discount: 10,
       tax: 10,

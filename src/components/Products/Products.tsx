@@ -20,10 +20,10 @@ import type { RadioChangeEvent } from 'antd'
 import type { SelectProps } from 'antd'
 import { CaretDownOutlined, FilterOutlined } from '@ant-design/icons'
 import CardProductClient from '../Card/CardProductClient'
-import { ProductsDataProps, ProductDetailDataProps } from '@/utils'
+import { ProductsDataProps, ProductDetailDataProps, formatProductsDataXML } from '@/utils'
 import axios from 'axios'
-import { getAllProducts } from '@/api/products'
-import { BASE_URL, Colors, goodsOptions } from '@/constants'
+import { getAllProducts, getAllProductsBff } from '@/api/products'
+import { BASE_URL, Colors, GoodsOptions } from '@/constants'
 import styles from './Products.module.css'
 import { FilterTag } from '../FilterTag'
 
@@ -49,7 +49,7 @@ export default function Products(props: ProductsProps) {
   const [loaded, setLoaded] = useState(false)
   const { setListProduct } = productsActions;
   const dataProducts: ProductsDataProps = useSelector(selectProducts);
-  const options = goodsOptions;
+  const options = GoodsOptions;
   // const options: SelectProps['options'] = [
   //   { value: 'man', label: 'Nam' },
   //   { value: 'woman', label: 'Nữ' },
@@ -192,12 +192,29 @@ export default function Products(props: ProductsProps) {
   }
 
   const fetchData = async () => {
-    await getAllProducts().then((res) => {
+    // await getAllProducts().then((res) => {
+    //   console.log(res)
+    //   setData(res?.data)
+    //   filterProducts(checkedList, listValueFilter)
+    //   dispatch(setListProduct(res?.data))
+    //   setLoaded(true)
+    // })
+    console.log('object redux', dataProducts);
+    await getAllProductsBff({ pageSize: 100, offset: 1 }).then((res) => {
       console.log(res)
-      setData(res?.data)
-      filterProducts(checkedList, listValueFilter)
-      dispatch(setListProduct(res?.data))
-      setLoaded(true)
+      console.log('object pre data', data);
+      if (res?.StatusCode === '200') {
+        console.log(res?.Data);
+        console.log('object check');
+        const data = formatProductsDataXML(res?.Data);
+        console.log('object');
+        setData({ totalProducts: 0, listProduct: data });
+        console.log('data', data);
+        dispatch(setListProduct({ totalProducts: 0, listProduct: data }));
+        console.log('after redux', dataProducts);
+        filterProducts(checkedList, listValueFilter);
+        setLoaded(true);
+      }
     })
   }
 
@@ -209,15 +226,6 @@ export default function Products(props: ProductsProps) {
     <div className='products-content '>
       <div className='products-title flex justify-between'>
         <Title level={3}>Tất cả sản phẩm</Title>
-        {/* <Space>
-          <Text
-            className='rounded-lg px-2'
-            style={{ backgroundColor: Colors.adminGreen500 }}
-          >
-            {data.totalProducts}
-          </Text>
-          <Text> sản phẩm</Text>
-        </Space> */}
       </div>
       <div className='products-filter'>
         <div className='flex gap-2'>
