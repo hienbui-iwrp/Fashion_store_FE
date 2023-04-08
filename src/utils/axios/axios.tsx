@@ -59,6 +59,11 @@ export const customerBff = axios.create({
     'Access-Control-Allow-Origin': '*',
   },
 })
+if (typeof window !== 'undefined') {
+  customerBff.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${localStorage.getItem('token')}`
+}
 
 export const shareBffCheckWh = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BFF_PROXY_CHECK_WH,

@@ -8,6 +8,8 @@ import {
   EventProps,
   GoodsProps,
   WarehouseProps,
+  ProductDetailDataProps,
+  QuantityObj,
   GoodsInWarehouseProps,
 } from '../types'
 import timeToDate from './timeToDate'
@@ -38,6 +40,51 @@ export const formatUserDataXML = (data: any): CustomerInfoProps => {
   }
 
   return _data
+}
+
+export const formatProductsDataXML = (data: any): ProductDetailDataProps[] => {
+  let dataReturn: any = [];
+  data.forEach((itemData: any) => {
+    dataReturn.push(formatProductDataXML(itemData))
+  })
+  return dataReturn;
+}
+
+export const formatProductDataXML = (data: any): ProductDetailDataProps => {
+  let listObjQuantity: QuantityObj[] = [];
+  const lenOfQuantity = data.getElementsByTagName('ListQuantity').length;
+  const listSize = data.getElementsByTagName('GoodsSize');
+  const listColor = data.getElementsByTagName('GoodsColor');
+  const listQuantity = data.getElementsByTagName('Quantity');
+  listQuantity.map((quantity: any, index: number) => {
+    listObjQuantity.push({
+      quantity: Number(quantity.value),
+      color: listColor[index].value,
+      size: listSize[index].value,
+    })
+  })
+
+  let images: string[] = [];
+  const imagesXML = data.getElementsByTagName('Images');
+  if (imagesXML.length) {
+    imagesXML.forEach((element: any) => {
+      images.push(element.value);
+    });
+  }
+
+  return {
+    goodsId: data.getElementsByTagName('GoodsID')[0]?.value,
+    name: data.getElementsByTagName('Name')[0]?.value,
+    gender: data.getElementsByTagName('GoodsGender')[0]?.value,
+    age: data.getElementsByTagName('GoodsAge')[0]?.value,
+    images: images,
+    listQuantity: listObjQuantity,
+    discount: Number(data.getElementsByTagName('Discount')[0]?.value),
+    type: data.getElementsByTagName('GoodsType')[0]?.value,
+    unitPrice: Number(data.getElementsByTagName('UnitPrice')[0]?.value),
+    price: Number(data.getElementsByTagName('Price')[0]?.value),
+    description: data.getElementsByTagName('Description')[0]?.value,
+  }
 }
 
 export const formatBranchDataXML = (data: any): BranchProps => {

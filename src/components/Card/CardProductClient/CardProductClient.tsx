@@ -23,7 +23,7 @@ export interface CardProductClientProps {
 export default function CardProductClient(props: ProductDetailDataProps) {
   const link = `/products/${props.goodsId}`
   const router = useRouter()
-  const handleAddToCart = () => {}
+  const handleAddToCart = () => { }
   const handleClickCard = () => {
     router.replace(link)
   }
@@ -40,7 +40,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
           borderRadius: 12,
         }}
       >
-        <Image src={props.images[0]} preview={false} className='pb-2' />
+        <Image src={props.images[0] || 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} preview={false} className='pb-2' />
         {/* <img className='' alt='example'  /> */}
         <Text strong className='text-lg ' style={{ lineHeight: '1rem' }}>
           {props.name}

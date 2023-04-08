@@ -1,34 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProductDetail from '@/components/ProductDetail'
-import { ProductDetailDataProps } from '@/utils'
+import { ProductDetailDataProps, formatProductDataXML } from '@/utils'
 import axios from 'axios'
-import { getProductDetail } from '@/api/products';
+import { getProductDetail, getProductDetailBff } from '@/api/products';
 import { BASE_URL } from '@/constants'
-
-export interface ProductDetailProps {
-  goodsId: string;
-  name: string;
-  unitPrice: number;
-  image: string;
-  quantity: number;
-  size: string;
-  color: string;
-  discount: number;
-}
+import Loading from '@/components/Loading';
 
 export default function ProductDetailPage(props: ProductDetailDataProps) {
   const router = useRouter();
-  console.log(router.asPath.split('/').at(-1));
+  // const { id } = router.query;
+  // const productId = router.asPath.split('/').at(-1)
+  const { productId } = router.query;
+  const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<ProductDetailDataProps>({
     goodsId: '',
     images: [''],
     name: '',
     unitPrice: 0,
     price: 0,
-    quantity: 0,
-    size: [],
-    color: [],
+    listQuantity: [],
     type: '',
     discount: 0,
     gender: '',
@@ -37,12 +28,16 @@ export default function ProductDetailPage(props: ProductDetailDataProps) {
   })
 
   const fetchData = async () => {
-    getProductDetail('1')
-      .then((res) => {
-        console.log('fetch check', res)
-        setData(res?.data);
-      })
-
+    if (productId) {
+      await getProductDetailBff(String(productId))
+        .then((res) => {
+          if (res?.StatusCode === '200') {
+            const data = formatProductDataXML(res?.Data[0]);
+            setData(data);
+            setLoading(false);
+          }
+        })
+    }
     // await axios
     //   .get(`${BASE_URL}/api/product/detail`)
     //   .then((res) => {
@@ -50,10 +45,18 @@ export default function ProductDetailPage(props: ProductDetailDataProps) {
     //     setData(res.data);
     //   })
   }
+
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [])
   return (
-    <ProductDetail {...data} />
+    loading ? <Loading /> :
+      <ProductDetail {...data} />
   );
+}
+
+export async function getServerSideProps(context: any) {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
 }

@@ -18,9 +18,88 @@ export default function handler(
     name: 'Áo khoác mùa đông a',
     unitPrice: 100000,
     price: 90000,
-    quantity: 111,
-    size: ['36', '37', '38'],
-    color: ['yellow', 'green', 'red', 'blue'],
+    listQuantity: [
+      {
+        size: '36',
+        color: 'trắng',
+        quantity: 5,
+      },
+      {
+        size: '36',
+        color: 'xanh',
+        quantity: 5,
+      },
+      {
+        size: '36',
+        color: 'vàng',
+        quantity: 5,
+      },
+      {
+        size: '36',
+        color: 'đen',
+        quantity: 5,
+      },
+      {
+        size: '37',
+        color: 'trắng',
+        quantity: 0,
+      },
+      {
+        size: '37',
+        color: 'xanh',
+        quantity: 5,
+      },
+      {
+        size: '37',
+        color: 'vàng',
+        quantity: 5,
+      },
+      {
+        size: '37',
+        color: 'đen',
+        quantity: 5,
+      },
+      {
+        size: '38',
+        color: 'trắng',
+        quantity: 10,
+      },
+      {
+        size: '38',
+        color: 'xanh',
+        quantity: 5,
+      },
+      {
+        size: '38',
+        color: 'vàng',
+        quantity: 5,
+      },
+      {
+        size: '38',
+        color: 'đen',
+        quantity: 5,
+      },
+      {
+        size: '39',
+        color: 'trắng',
+        quantity: 5,
+      },
+      {
+        size: '39',
+        color: 'xanh',
+        quantity: 5,
+      },
+      {
+        size: '39',
+        color: 'vàng',
+        quantity: 5,
+      },
+      {
+        size: '39',
+        color: 'đen',
+        quantity: 5,
+      },
+    ],
     type: 'áo khoác',
     discount: 10,
     tax: 10,

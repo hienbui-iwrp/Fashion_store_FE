@@ -15,12 +15,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 100000,
         price: 90000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 10,
-        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -31,12 +109,90 @@ export default function handler(
         name: 'Quần khoác mùa đông a',
         unitPrice: 100000,
         price: 100000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 0,
-        tax: 10,
         gender: 'woman',
         age: 'baby',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -47,12 +203,90 @@ export default function handler(
         name: 'Mũ khoác mùa đông a',
         unitPrice: 100000,
         price: 90000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 10,
-        tax: 10,
         gender: 'man',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -63,12 +297,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 150000,
         price: 135000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'jacket',
         discount: 10,
-        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -79,12 +391,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 100000,
         price: 90000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'sweater',
         discount: 10,
-        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -95,12 +485,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 200000,
         price: 200000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'short',
         discount: 0,
-        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -111,12 +579,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 100000,
         price: 90000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 10,
-        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -127,12 +673,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 1100000,
         price: 1000000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 10,
-        tax: 10,
         gender: 'woman',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -143,12 +767,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 2000000,
         price: 2000000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 0,
-        tax: 10,
         gender: 'unisex',
         age: 'baby',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
@@ -159,12 +861,90 @@ export default function handler(
         name: 'Áo khoác mùa đông a',
         unitPrice: 3500000,
         price: 3500000,
-        quantity: 1,
-        size: ['36', '37', '38'],
-        color: ['yellow', 'green', 'red', 'blue'],
+        listQuantity: [
+          {
+            size: '36',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '36',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '37',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '38',
+            color: 'đen',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'trắng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'xanh',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'vàng',
+            quantity: 5,
+          },
+          {
+            size: '39',
+            color: 'đen',
+            quantity: 5,
+          },
+        ],
         type: 'áo khoác',
         discount: 0,
-        tax: 10,
         gender: 'man',
         age: 'adult',
         description: `Áo khoác thời trang nam nữ 2208B7013 được làm từ sợi nilong và đảm bảo cho bạn 1 một mùa đông ấm áp`
