@@ -4,6 +4,7 @@ import { Colors } from '@/constants'
 
 export default function ButtonClientPrimary({
   htmlType,
+  type,
   disabled,
   name,
   icon,
@@ -11,9 +12,10 @@ export default function ButtonClientPrimary({
 }: {
   htmlType?: any
   disabled?: any
+  type?: string
   name?: string
   icon?: ReactNode
-  onClick?: () => void
+  onClick?: (e?: any) => void
 }) {
   const [hover, setHover] = useState(false)
 

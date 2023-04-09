@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAppDispatch } from '@/redux/store'
-import { productsPaymentActions } from '@/redux/slices'
+import { productsPaymentActions, setNotificationType, setNotificationValue } from '@/redux/slices'
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
-import { Space, Typography, Image, Row, Col, Divider, Radio, InputNumber, Spin } from 'antd';
+import { Space, Typography, Image, Row, Col, Divider, Radio, InputNumber, Spin, Button } from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { Checkbox } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { ProductInCartProps } from '@/utils'
-import { getCart } from '@/api/cart';
+import { ProductInCartProps, formatCartDataXML, formatResponse } from '@/utils'
+import { deleteAllGoodsBff, deleteGoodsBff, getCart, getCartBff, updateCartBff } from '@/api/cart';
 import { FormatMoney } from '@/utils';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
 import styles from './Cart.module.css'
+import { FormatMoneyD } from '@/utils/formats/FormatMoney';
+import { ImageEmpty } from '@/constants/image';
 
 const { Title, Text } = Typography
 
@@ -21,7 +24,7 @@ export interface CartProps {
 }
 
 interface Option {
-  label: string;
+  label: JSX.Element;
   key: string;
   value: string;
   disabled?: boolean;
@@ -41,6 +44,7 @@ export interface CartItemProps {
 export default function Cart(props: CartProps) {
   const router = useRouter();
   const dispatch: any = useAppDispatch();
+  const [cartId, setCartId] = useState<string>();
   const { setProductsPayment } = productsPaymentActions;
   const [loading, setLoading] = useState(true);
   const [sum, setSum] = useState(0);
@@ -65,25 +69,56 @@ export default function Cart(props: CartProps) {
     }
   };
 
+  const updateCart = async () => {
+    if (cartId) {
+      console.log('cartId: ', cartId);
+      console.log('cartData: ', data);
+      await updateCartBff(cartId, data)
+        .then((res) => {
+          console.log('res update', res);
+          if (res?.StatusCode === '200') {
+            setOptions(setForOptions(data));
+          } else {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
+          }
+        })
+    }
+  }
+
   const onChangeQuantity = (index: number, value: number) => {
     if (value > 0 && value < maxQuantity) {
-      const newOptions = options.map((product: Option, idx) => {
-        if (idx === index) {
-          const objProduct = JSON.parse(product.value);
-          objProduct.quantity = value;
-          return { ...product, value: JSON.stringify(objProduct) };
-        }
-        return product;
-      })
-      // setOptions(newOptions)
+      data[index].quantity = value;
+      updateCart()
     }
   };
 
-  const onRemoveProductItem = (goodsId: string) => {
-    const newOptions = options.filter((product, idx) => {
-      return JSON.parse(product.value).goodsId !== goodsId;
-    })
-    // setOptions([...newOptions]);
+  const onRemoveProductItem = async (index: number, goods: ProductInCartProps) => {
+    await deleteGoodsBff(cartId ?? '', [goods])
+      .then(res => {
+        if (res?.StatusCode === '200') {
+          data.splice(index, 1);
+          setOptions(setForOptions(data));
+        }
+        else {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
+        }
+      })
+  }
+
+  const onRemoveAll = async () => {
+    await deleteAllGoodsBff(cartId ?? '')
+      .then(res => {
+        if (res?.StatusCode === '200') {
+          setData([]);
+          setOptions(setForOptions([]));
+        }
+        else {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
+        }
+      })
   }
 
   const handleToPayment = () => {
@@ -91,124 +126,134 @@ export default function Cart(props: CartProps) {
     router.push('/payment');
   }
 
-  const fetchData = async () => {
-    await getCart('1')
-      .then((res) => {
-        // console.log(res?.data)
-        setData(res?.data)
-        setOptions(res?.data.map((product: ProductInCartProps, index: number) => {
-          return {
-            label:
-              <div className='flex w-[500px]'>
-                <Image
-                  width={140}
-                  height={160}
-                  preview={false}
-                  className=''
-                  src={product.image}
-                  alt={product.name}
-                />
-                <div className='flex-1 pl-4'>
-                  <Row className='flex-1'>
-                    <Col span={19}>
-                      <Text>{product.name}</Text>
-                    </Col>
-                    <Col span={5}>
-                      <Title
-                        className='!text-red-600 underline flex justify-end'
-                        level={5}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onRemoveProductItem(product.goodsId)
-                        }
-                        }
-                      >
-                        Xóa
-                      </Title>
-                    </Col>
-                  </Row>
-                  <div className='mt-0'>
-                    <Space>
-                      <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                      <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{product.color}</Text>
-                    </Space>
-                  </div>
-                  <div className='mt-2'>
-                    <Space>
-                      <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                      <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{product.size}</Text>
-                    </Space>
-                  </div>
-                  <div className='flex justify-between items-center mt-10'>
-                    {product.discount === 0 ? (
-                      <Text strong className='text-lg'>
-                        {product.unitPrice} đ
-                      </Text>
-                    ) : (
-                      <div className='flex flex-col leading-none'>
-                        <Text
-                          strong
-                          className='text-lg text-red-600 leading-none'
-                        >
-                          {(
-                            product.unitPrice *
-                            (1 - product.discount / 100)
-                          ).toFixed(0)}{' '}
-                          đ
-                        </Text>
-                        <div>
-                          <Text
-                            strong
-                            className='text-xs line-through text-gray-400 pr-1 leading-none'
-                          >
-                            {product.unitPrice} đ
-                          </Text>
-                          <Text strong className='text-xs leading-none'>
-                            -{product.discount}%
-                          </Text>
-                        </div>
-                      </div>
-                    )}
+  const setForOptions = (products: ProductInCartProps[]) => {
+    return products.map((product: ProductInCartProps, index: number) => {
+      return {
+        label:
+          <div className='flex w-[500px]'>
+            <Image
+              width={140}
+              height={160}
+              preview={false}
+              className=''
+              src={product.image ?? ImageEmpty}
+              alt={product.name}
+            />
+            <div className='flex-1 pl-4'>
+              <Row className='flex-1'>
+                <Col span={19}>
+                  <Link href={`products/${product.goodsId}`}>
+                    <Text>{product.name}</Text>
+                  </Link>
+                </Col>
+                <Col span={5}>
+                  <Title
+                    className='!text-red-600 underline flex justify-end'
+                    level={5}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onRemoveProductItem(index, product);
+                    }
+                    }
+                  >
+                    Xóa
+                  </Title>
+                </Col>
+              </Row>
+              <div className='mt-0'>
+                <Space>
+                  <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
+                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{product.goodsColor}</Text>
+                </Space>
+              </div>
+              <div className='mt-2'>
+                <Space>
+                  <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
+                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{product.goodsSize}</Text>
+                </Space>
+              </div>
+              <div className='flex justify-between items-center mt-10'>
+                {product.discount === 0 ? (
+                  <Text strong className='text-lg'>
+                    {FormatMoney(product.unitPrice)}
+                  </Text>
+                ) : (
+                  <div className='flex flex-col leading-none'>
+                    <Text
+                      strong
+                      className='text-lg text-red-600 leading-none'
+                    >
+                      {/* {(
+                        product.unitPrice *
+                        (1 - product.discount / 100)
+                      ).toFixed(0)}{' '} */}
+                      {FormatMoney(product.price)}
+                    </Text>
                     <div>
-                      <MinusCircleOutlined
-                        className='cursor-pointer text-lg'
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onChangeQuantity(
-                            index,
-                            product.quantity - 1
-                          )
-                        }}
-                      />
-                      <InputNumber
-                        className={styles.inputQuantity}
-                        size='small'
-                        min={1}
-                        max={1000}
-                        value={product.quantity}
-                        onChange={(value) =>
-                          onChangeQuantity(index, value || 0)
-                        }
-                      />
-                      <PlusCircleOutlined
-                        className='cursor-pointer text-lg'
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onChangeQuantity(
-                            index,
-                            product.quantity + 1
-                          )
-                        }}
-                      />
+                      <Text
+                        strong
+                        className='text-xs line-through text-gray-400 pr-1 leading-none'
+                      >
+                        {FormatMoney(product.unitPrice)}
+                      </Text>
+                      <Text strong className='text-xs leading-none'>
+                        {product.discount}%
+                      </Text>
                     </div>
                   </div>
+                )}
+                <div>
+                  <MinusCircleOutlined
+                    className='cursor-pointer text-lg'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onChangeQuantity(
+                        index,
+                        product.quantity - 1
+                      )
+                    }}
+                  />
+                  <InputNumber
+                    className={styles.inputQuantity}
+                    size='small'
+                    min={1}
+                    max={product.maxQuantity || 1000}
+                    value={product.quantity}
+                    onChange={(value) =>
+                      onChangeQuantity(index, value || 0)
+                    }
+                  />
+                  <PlusCircleOutlined
+                    className='cursor-pointer text-lg'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onChangeQuantity(
+                        index,
+                        product.quantity + 1
+                      )
+                    }}
+                  />
                 </div>
-              </div>,
-            value: JSON.stringify({ ...product }),
-            key: product.goodsId
-          }
+              </div>
+            </div>
+          </div>,
+        value: JSON.stringify({ ...product }),
+        key: product.goodsId
+      }
+    }
+    )
+  }
+
+  const fetchData = async () => {
+    await getCartBff(localStorage.getItem('userId') || '')
+      .then((res) => {
+        if (res?.StatusCode === '200') {
+          const tempData = formatCartDataXML(res?.Data[0]);
+          console.log('object data', tempData);
+          setCartId(tempData.cartId);
+          setData(tempData.productsInCart);
+          setOptions(setForOptions(data));
         }
-        ));
       })
     setLoading(false);
   }
@@ -231,138 +276,45 @@ export default function Cart(props: CartProps) {
   return (
     loading ? <Loading /> :
       <div className='bg-white w-[550px] m-auto border mt-4 mb-8 rounded-xl p-2'>
-        <Title level={3}>Giỏ hàng</Title>
-        <div className={styles.listCartItem}>
+        <div className='flex justify-between'>
+          <Title level={3}>Giỏ hàng</Title>
+          {data.length ? <Button type="link" danger onClick={() => {
+            onRemoveAll();
+          }}>
+            Xóa tất cả
+          </Button>
+            :
+            null}
+        </div>
+        {data.length ?
+          <div>
+            <div className={styles.listCartItem}>
 
-          <Checkbox.Group
-            options={options}
-            onChange={onChange}
-            className='flex flex-wrap'
-          />
+              <Checkbox.Group
+                options={options}
+                onChange={onChange}
+                className='flex flex-wrap'
+              />
+            </div>
+            <div className='px-4 flex justify-between'>
+              <Text strong>Tổng cộng</Text>
+              <Text strong className='text-red-600 text-lg'>
+                {FormatMoney(sum)}
+              </Text>
+            </div>
+            <div className='px-4 pt-2 flex justify-end'>
+              <ButtonClientPrimary name='Thanh toán' onClick={handleToPayment} />
+            </div>
+          </div>
+          :
+          <div className='flex flex-col items-center'>
+            <Text >Bạn chưa có sản phẩm nào trong giỏ hàng.</Text>
+            <Link href={`/products`}>
+              <ButtonClientPrimary type='primary' name='Xem sản phẩm' />
+            </Link>
+          </div>
+        }
 
-          {/* {data.map((item, index) => {
-            return (
-              <div key={index + item.toString()}>
-                <Checkbox
-                  key={index}
-                  onChange={onSelectItemGoods}
-                  // value={`checked`}
-                  // value={JSON.stringify({ ...item })}
-                  className='w-full flex-1'
-                >
-                  <div className='flex'>
-                    <Image
-                      width={140}
-                      height={160}
-                      preview={false}
-                      className=''
-                      src={item.image}
-                      alt={item.name}
-                    />
-                    <div className='flex-1 pl-4'>
-                      <Row className='flex-1'>
-                        <Col span={19}>
-                          <Text>{item.name}</Text>
-                        </Col>
-                        <Col span={5}>
-                          <Title
-                            className='!text-red-600 underline flex justify-end'
-                            level={5}
-                          >
-                            Xóa
-                          </Title>
-                        </Col>
-                      </Row>
-                      <div className='mt-0'>
-                        <Space>
-                          <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                          <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{item.color}</Text>
-                        </Space>
-                      </div>
-                      <div className='mt-2'>
-                        <Space>
-                          <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                          <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{item.size}</Text>
-                        </Space>
-                      </div>
-                      <div className='flex justify-between items-center mt-10'>
-                        {item.discount === 0 ? (
-                          <Text strong className='text-lg'>
-                            {item.unitPrice} đ
-                          </Text>
-                        ) : (
-                          <div className='flex flex-col leading-none'>
-                            <Text
-                              strong
-                              className='text-lg text-red-600 leading-none'
-                            >
-                              {(
-                                item.unitPrice *
-                                (1 - item.discount / 100)
-                              ).toFixed(0)}{' '}
-                              đ
-                            </Text>
-                            <div>
-                              <Text
-                                strong
-                                className='text-xs line-through text-gray-400 pr-1 leading-none'
-                              >
-                                {item.unitPrice} đ
-                              </Text>
-                              <Text strong className='text-xs leading-none'>
-                                -{item.discount}%
-                              </Text>
-                            </div>
-                          </div>
-                        )}
-                        <div>
-                          <MinusCircleOutlined
-                            className='cursor-pointer text-lg'
-                            onClick={() => {
-                              onChangeQuantity(
-                                index,
-                                data[index].quantity - 1
-                              )
-                            }}
-                          />
-                          <InputNumber
-                            className={styles.inputQuantity}
-                            size='small'
-                            min={1}
-                            max={1000}
-                            value={item.quantity}
-                            onChange={(value) =>
-                              onChangeQuantity(index, value || 0)
-                            }
-                          />
-                          <PlusCircleOutlined
-                            className='cursor-pointer text-lg'
-                            onClick={() => {
-                              onChangeQuantity(
-                                index,
-                                data[index].quantity + 1
-                              )
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Checkbox>
-                <Divider className='my-2' />
-              </div>
-            )
-          })} */}
-        </div>
-        <div className='px-4 flex justify-between'>
-          <Text strong>Tổng cộng</Text>
-          <Text strong className='text-red-600 text-lg'>
-            {FormatMoney(sum)}
-          </Text>
-        </div>
-        <div className='px-4 pt-2 flex justify-end'>
-          <ButtonClientPrimary name='Thanh toán' onClick={handleToPayment} />
-        </div>
       </div>
   )
 }

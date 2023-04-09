@@ -50,7 +50,7 @@ export interface ProductsDataProps {
 export interface QuantityObj {
   size: string
   color: string
-  quantity: Number
+  quantity: number
 }
 
 export interface ProductDetailDataProps {
@@ -70,6 +70,11 @@ export interface ProductDetailDataProps {
   description: string
 }
 
+export interface CartProps {
+  cartId: string
+  productsInCart: ProductInCartProps[]
+}
+
 export interface ProductInCartProps {
   goodsId: string
   name: string
@@ -77,19 +82,21 @@ export interface ProductInCartProps {
   price: number
   image: string
   quantity: number
-  size: string
-  color: string
+  maxQuantity?: number
+  goodsSize: string
+  goodsColor: string
   discount: number
-  tax: number
 }
 
 export interface OrderProps {
   orderId: string
+  orderCode: string
   isCompleted: boolean
   paymentMethod: string //
   listGoods: ProductInCartProps[]
   totalGoods: number
   totalPrice: number
+  totalOrder: number
   totalDiscount: number
   shipFee: number
   statusShips: StatusShip[]

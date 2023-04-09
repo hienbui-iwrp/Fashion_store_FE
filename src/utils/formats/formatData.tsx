@@ -11,6 +11,9 @@ import {
   ProductDetailDataProps,
   QuantityObj,
   GoodsInWarehouseProps,
+  CartProps,
+  ProductInCartProps,
+  OrderProps,
 } from '../types'
 import timeToDate from './timeToDate'
 
@@ -85,6 +88,75 @@ export const formatProductDataXML = (data: any): ProductDetailDataProps => {
     price: Number(data.getElementsByTagName('Price')[0]?.value),
     description: data.getElementsByTagName('Description')[0]?.value,
   }
+}
+
+export const formatCartDataXML = (data: any): CartProps => {
+  let listProduct: ProductInCartProps[] = [];
+  const listGoods = data.getElementsByTagName('Goods');
+  listGoods.map((goods: any) => {
+    const listQuantity = goods.getElementsByTagName('ListQuantity');
+    listQuantity.map((quantityObj: any, index: number) => {
+      listProduct.push({
+        goodsId: goods.getElementsByTagName('GoodsId')[0].value,
+        name: goods.getElementsByTagName('Name')[0]?.value,
+        unitPrice: Number(goods.getElementsByTagName('UnitPrice')[0]?.value),
+        price: Number(goods.getElementsByTagName('Price')[0]?.value),
+        image: goods.getElementsByTagName('Images')[0]?.value,
+        quantity: Number(quantityObj.getElementsByTagName('Quantity')[0]?.value),
+        maxQuantity: Number(quantityObj.getElementsByTagName('MaxQuantity')[0]?.value),
+        goodsSize: quantityObj.getElementsByTagName('GoodsSize')[0]?.value,
+        goodsColor: quantityObj.getElementsByTagName('GoodsColor')[0]?.value,
+        discount: Number(goods.getElementsByTagName('Discount')[0]?.value),
+      })
+    })
+  })
+
+  return {
+    cartId: data.getElementsByTagName('CartId')[0].value,
+    productsInCart: listProduct,
+  }
+}
+
+export const formatOrdersDataXML = (data: any): OrderProps[] => {
+  let listOrder: OrderProps[] = [];
+  data.map((order: any) => {
+    const listGoods = order.getElementsByTagName('ListGoods').map((goods: any) => {
+      return {
+        goodsId: goods.getElementsByTagName('GoodsId')[0].value,
+        name: goods.getElementsByTagName('Name')[0]?.value,
+        unitPrice: Number(goods.getElementsByTagName('UnitPrice')[0]?.value),
+        price: Number(goods.getElementsByTagName('Price')[0]?.value),
+        image: goods.getElementsByTagName('Images')[0]?.value,
+        quantity: Number(goods.getElementsByTagName('Quantity')[0]?.value),
+        goodsSize: goods.getElementsByTagName('Size')[0]?.value,
+        goodsColor: goods.getElementsByTagName('Color')[0]?.value,
+        discount: Number(goods.getElementsByTagName('Discount')[0]?.value),
+      }
+    });
+    const statusShips = order.getElementsByTagName('StatusShip').map((statusShip: any) => {
+      return {
+        status: statusShip.getElementsByTagName('State')[0].value,
+        // statusNumber: statusShip.getElementsByTagName('StatusNumber')[0].value,
+        time: new Date(statusShip.getElementsByTagName('Time')[0].value),
+      }
+    });
+    listOrder.push({
+      orderId: order.getElementsByTagName('OrderId')[0].value,
+      orderCode: order.getElementsByTagName('OrderCode')[0].value,
+      paymentMethod: order.getElementsByTagName('PaymentMethod')[0].value,
+      totalPrice: Number(order.getElementsByTagName('TotalPrice')[0].value),
+      totalGoods: Number(order.getElementsByTagName('TotalGoods')[0].value),
+      totalDiscount: Number(order.getElementsByTagName('TotalDiscount')[0].value),
+      totalOrder: Number(order.getElementsByTagName('TotalOrder')[0].value),
+      isCompleted: order.getElementsByTagName('IsCompleted')[0].value === 'true',
+      shipFee: order.getElementsByTagName('ShipFee')[0].value,
+      transactionDate: order.getElementsByTagName('TransactionDate')[0].value,
+      listGoods,
+      statusShips,
+    })
+  })
+
+  return listOrder;
 }
 
 export const formatBranchDataXML = (data: any): BranchProps => {
