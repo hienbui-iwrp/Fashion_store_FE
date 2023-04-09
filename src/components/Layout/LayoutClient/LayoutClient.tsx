@@ -20,8 +20,21 @@ import {
 } from 'antd'
 import ButtonHeader from './../../Button/ButtonHeader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
-import { Routes } from '@/constants'
+import {
+  faUser,
+  faCartShopping,
+  faFileInvoice,
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  Colors,
+  FacebookIcon,
+  GoodsTypes,
+  InstagramIcon,
+  NavbarCloseIcon,
+  NavbarIcon,
+  Routes,
+  TwitterIcon,
+} from '@/constants'
 import { getCustomerInfoBff } from '@/api'
 import { formatUserDataXML } from '@/utils'
 import { InputSearch } from '@/components/Input'
@@ -38,193 +51,50 @@ interface ItemNavProps {
   key: string
 }
 
-const listItem: ItemNavProps[] = [
+const secondaryList: ItemNavProps[] = [
+  {
+    label: 'Nam',
+    link: Routes.products + '?gender=man',
+    hasSubItem: false,
+    key: 'Nam',
+  },
+  {
+    label: 'Nữ',
+    link: Routes.products + '?gender=woman',
+    hasSubItem: false,
+    key: 'Nữ',
+  },
+  ...GoodsTypes.map((item) => {
+    return {
+      label: item.label,
+      link: Routes.products + '?type=' + item.value,
+      hasSubItem: false,
+      key: 'item.label',
+    }
+  }),
+]
+
+const primaryList: ItemNavProps[] = [
   {
     label: 'Giới thiệu',
-    link: 'intro',
+    link: Routes.intro,
     hasSubItem: false,
     key: 'Giới thiệu',
   },
   {
-    label: 'Tất cả sản phẩm',
-    link: 'products',
-    hasSubItem: true,
-    listSubItem: [
-      {
-        label: 'Giày',
-        key: 'shoe',
-      },
-      {
-        label: 'Dép',
-        key: 'dep',
-      },
-      {
-        label: 'Áo khoác',
-        key: 'coat',
-      },
-      {
-        label: 'Áo thun',
-        key: 'T-shirt',
-      },
-    ],
-    key: 'Tất cả sản phẩm',
+    label: 'Sản phẩm',
+    link: Routes.products,
+    hasSubItem: false,
+    key: 'Sản phẩm',
   },
-  {
-    label: 'Nam',
-    link: 'man',
-    hasSubItem: true,
-    listSubItem: [
-      {
-        label: 'Giày',
-        key: 'shoe',
-      },
-      {
-        label: 'Dép',
-        key: 'dep',
-      },
-      {
-        label: 'Áo khoác',
-        key: 'coat',
-      },
-      {
-        label: 'Áo thun',
-        key: 'T-shirt',
-      },
-    ],
-    key: 'Tất cả sản phẩm',
-  },
-  {
-    label: 'Nữ',
-    link: 'woman',
-    hasSubItem: true,
-    listSubItem: [
-      {
-        label: 'Giày',
-        key: 'shoe',
-      },
-      {
-        label: 'Dép',
-        key: 'dep',
-      },
-      {
-        label: 'Áo khoác',
-        key: 'coat',
-      },
-      {
-        label: 'Áo thun',
-        key: 'T-shirt',
-      },
-    ],
-    key: 'Nữ',
-  },
-  {
-    label: 'Trẻ em',
-    link: 'baby',
-    hasSubItem: true,
-    listSubItem: [
-      {
-        label: 'Giày',
-        key: 'shoe',
-      },
-      {
-        label: 'Dép',
-        key: 'dep',
-      },
-      {
-        label: 'Áo khoác',
-        key: 'coat',
-      },
-      {
-        label: 'Áo thun',
-        key: 'T-shirt',
-      },
-    ],
-    key: 'Trẻ em',
-  },
-  {
-    label: 'Phụ kiện',
-    link: 'accessory',
-    hasSubItem: true,
-    listSubItem: [
-      {
-        label: 'Giày',
-        key: 'shoe',
-      },
-      {
-        label: 'Dép',
-        key: 'dep',
-      },
-      {
-        label: 'Áo khoác',
-        key: 'coat',
-      },
-      {
-        label: 'Áo thun',
-        key: 'T-shirt',
-      },
-    ],
-    key: 'phụ kiện',
-  },
-  // {
-  //   label: 'Mới về',
-  //   link: 'new',
-  //   hasSubItem: false,
-  //   key: 'Mới về',
-  // },
-  // {
-  //   label: 'Flash sale',
-  //   link: 'sales',
-  //   hasSubItem: false,
-  //   key: 'Flash sale',
-  // },
   {
     label: 'Hỗ trợ',
-    link: 'support',
+    link: Routes.support,
     hasSubItem: false,
     key: 'Hỗ trợ',
   },
 ]
 
-const iconFb: React.ReactNode = (
-  <svg
-    className='w-5 h-5'
-    fill='currentColor'
-    viewBox='0 0 24 24'
-    aria-hidden='true'
-  >
-    <path
-      fillRule='evenodd'
-      d='M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z'
-      clipRule='evenodd'
-    />
-  </svg>
-)
-const iconIg: React.ReactNode = (
-  <svg
-    className='w-5 h-5'
-    fill='currentColor'
-    viewBox='0 0 24 24'
-    aria-hidden='true'
-  >
-    <path
-      fillRule='evenodd'
-      d='M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z'
-      clipRule='evenodd'
-    />
-  </svg>
-)
-const iconTwitter: React.ReactNode = (
-  <svg
-    className='w-5 h-5'
-    fill='currentColor'
-    viewBox='0 0 24 24'
-    aria-hidden='true'
-  >
-    <path d='M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84' />
-  </svg>
-)
-// Children must be rendered, otherwise the child routes cannot be displayed
-// Here you can also set global provision
 const onSearch = (value: string) => console.log(value)
 
 export default function LayoutClient({
@@ -233,9 +103,9 @@ export default function LayoutClient({
   children: React.ReactNode
 }) {
   const router = useRouter()
-  const dispatch = useAppDispatch();
-  const { setUserInfo } = userActions;
-  const dataCustomer = useSelector(selectUser);
+  const dispatch = useAppDispatch()
+  const { setUserInfo } = userActions
+  const dataCustomer = useSelector(selectUser)
 
   const [navbar, setNavbar] = useState(false)
   const [logged, setLogged] = useState(false)
@@ -247,7 +117,7 @@ export default function LayoutClient({
         <button
           onClick={() => {
             localStorage.setItem('logged', '')
-            router.push('/login')
+            router.push(Routes.login)
           }}
         >
           Đăng xuất
@@ -257,16 +127,16 @@ export default function LayoutClient({
   ]
 
   const fetchUserInfo = async () => {
-    const res = await getCustomerInfoBff(localStorage.getItem('userId') || '');
+    const res = await getCustomerInfoBff(localStorage.getItem('userId') || '')
     const dataUser = formatUserDataXML(res?.Data[0])
-    dispatch(setUserInfo(dataUser));
+    dispatch(setUserInfo(dataUser))
   }
 
   useEffect(() => {
     if (localStorage.getItem('logged') !== '') {
-      setLogged(true);
-      fetchUserInfo();
-      console.log('object select', dataCustomer);
+      setLogged(true)
+      fetchUserInfo()
+      console.log('object select', dataCustomer)
       console.log(localStorage.getItem('userRole'))
       if (localStorage.getItem('userRole') !== '1') {
         router.replace(Routes.error)
@@ -275,15 +145,20 @@ export default function LayoutClient({
   }, [router.pathname])
 
   return (
-    <Layout className='m-auto bg-gray-200' style={{ minHeight: '100vh' }}>
-      <Header className='header-client !bg-neutral-50 !p-0 !h-full'>
-        <Row className='flex'>
-          <Col span={15} className='flex items-center '>
-            <a href='#' className='flex'>
+    <Layout
+      className='m-auto bg-gray-200 relative'
+      style={{ minHeight: '100vh' }}
+    >
+      <Header
+        className='header-client !bg-white !p-0 z-50  fixed right-0	left-0	top-0 w-full '
+        style={{ boxShadow: `0px 3px 4px 0px ${Colors.shadow}` }}
+      >
+        <Row align='middle'>
+          <Col xs={6} sm={8} md={4} lg={4} xl={4}>
+            <a href='#' className='flex items-center px-4'>
               <Image
                 alt='img'
-                width='150px'
-                className='pl-10'
+                style={{ maxWidth: 180, width: '100%' }}
                 src='/logo_pth.png'
                 preview={false}
                 onClick={() => {
@@ -291,114 +166,170 @@ export default function LayoutClient({
                 }}
               />
             </a>
-            <div className='pl-10 w-2/5 md:w-3/5'>
+          </Col>
+          <Col xs={0} sm={0} md={0} lg={6} xl={5}>
+            <ul className='items-center justify-around  w-full hidden md:flex'>
+              {primaryList.map((item, index) => {
+                const textColor =
+                  item.link == router.pathname
+                    ? 'text-gray-700'
+                    : 'text-gray-300'
+                return (
+                  <li
+                    key={index}
+                    className='text-sm hover:cursor-pointer px-2'
+                    style={{ fontWeight: '600' }}
+                  >
+                    <Link
+                      className={`${textColor}	 hover:text-gray-700	 text-lg`}
+                      // className='text-emerald-600 hover:text-emerald-400 text-lg	'
+                      href={`/${item.link}` || '/'}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </Col>
+          <Col xs={8} sm={10} md={15} lg={10} xl={12}>
+            <div className=' px-2 md:px-8 w-full'>
               <InputSearch
+                style={{
+                  width: '100%',
+                  backgroundColor: Colors.clientBlack100,
+                }}
                 placeholder='Tìm kiếm...'
-              // onSearch={onSearch}
               />
             </div>
           </Col>
-          <Col span={9} className='flex justify-around items-center'>
-            <Link href='/manage-orders' prefetch={false} passHref>
-              <ButtonHeader name='Quản lý đơn hàng' />
-            </Link>
-            <Link href='/cart' prefetch={false} passHref>
-              <ButtonHeader
-                name='Giỏ hàng'
-                icon={
-                  <FontAwesomeIcon className='pr-2' icon={faCartShopping} />
-                }
-              />
-            </Link>
-            {!logged ? (
-              <Link href='/login'>
-                <ButtonHeader
-                  name='Đăng nhập'
-                  icon={<FontAwesomeIcon className='pr-2' icon={faUser} />}
-                />
-              </Link>
-            ) : (
-              <Dropdown menu={{ items }} placement='bottom'>
-                <Link href='/user-info'>
+          <Col xs={10} sm={6} md={5} lg={4} xl={3}>
+            <div className='flex justify-around items-center w-full pr-4'>
+              {logged && (
+                <Link href='/manage-orders' prefetch={false} passHref>
                   <ButtonHeader
-                    name={dataCustomer.info.name}
-                    icon={<FontAwesomeIcon className='pr-2' icon={faUser} />}
+                    icon={
+                      <FontAwesomeIcon
+                        className='w-5 h-5'
+                        icon={faFileInvoice}
+                      />
+                    }
                   />
                 </Link>
-              </Dropdown>
-            )}
+              )}
+              {logged && (
+                <Link href='/cart' prefetch={false} passHref>
+                  <ButtonHeader
+                    icon={
+                      <FontAwesomeIcon
+                        className='w-5 h-5'
+                        icon={faCartShopping}
+                      />
+                    }
+                  />
+                </Link>
+              )}
+              {!logged ? (
+                <Link
+                  href='/login'
+                  className='hover:bg-gray-100 rounded-full h-10 pl-4 flex items-center hover:text-gray-700'
+                >
+                  <span className='w-max'>Đăng nhập</span>
+                  <ButtonHeader
+                    icon={<FontAwesomeIcon className='w-5 h-5' icon={faUser} />}
+                  />
+                </Link>
+              ) : (
+                <Dropdown menu={{ items }} placement='bottom'>
+                  <Link href='/user-info'>
+                    <ButtonHeader
+                      icon={
+                        <FontAwesomeIcon className='w-5 h-5' icon={faUser} />
+                      }
+                    />
+                  </Link>
+                </Dropdown>
+              )}
+              <div className='flex items-center justify-end md:hidden'>
+                <button
+                  className='p-2 text-black rounded-md outline-none border mr-4'
+                  onClick={() => setNavbar(!navbar)}
+                  style={{
+                    borderColor: Colors.clientBlack950,
+                    height: 'fit-content',
+                  }}
+                >
+                  {navbar ? (
+                    <NavbarCloseIcon
+                      fill={Colors.clientBlack950}
+                      stroke={Colors.clientBlack950}
+                    />
+                  ) : (
+                    <NavbarIcon
+                      fill={Colors.clientBlack950}
+                      stroke={Colors.clientBlack950}
+                    />
+                  )}
+                </button>
+              </div>
+            </div>
           </Col>
         </Row>
         <nav
-          className='w-full !bg-green-100 bg-cyan-500'
-          // className='w-full bg-[#F9F9F9] shadow'
-          style={{ backgroundColor: '#ddd' }}
+          className='w-full bg-white'
+          style={{ boxShadow: `0px 3px 4px 0px ${Colors.shadow}` }}
         >
           <div className='mx-auto md:items-center md:flex md:px-8 lg:px-16 '>
-            <div>
-              <div className='flex items-center justify-end py-3 md:py-5 md:block'>
-                <div className='md:hidden'>
-                  <button
-                    className='p-2 text-black rounded-md outline-none border-black border'
-                    onClick={() => setNavbar(!navbar)}
-                  >
-                    {navbar ? (
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        className='w-6 h-6 text-black'
-                        viewBox='0 0 20 20'
-                        fill='currentColor'
+            <div
+              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${
+                navbar ? 'flex' : 'hidden'
+              }`}
+            >
+              <ul className='justify-start w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 pb-2 hidden md:flex '>
+                {secondaryList.map((item, index) => {
+                  return (
+                    <li
+                      key={index}
+                      className='text-sm hover:cursor-pointer text-xs  hover:bg-gray-100	 px-2 rounded-full'
+                      style={{ fontWeight: '600' }}
+                    >
+                      <Link
+                        className='text-gray-700 hover:text-gray-700 text-xs	'
+                        // className='text-emerald-600 hover:text-emerald-600 text-xs	'
+                        href={`/${item.link}` || '/'}
                       >
-                        <path
-                          fillRule='evenodd'
-                          d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                          clipRule='evenodd'
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        className='w-6 h-6 text-black'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        stroke='currentColor'
-                        strokeWidth={2}
+                        {item.label}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+              <ul className='justify-start w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 pb-2 md:hidden block'>
+                {primaryList.map((item, index) => {
+                  return (
+                    <li
+                      key={index}
+                      className='text-sm hover:cursor-pointer text-xs  hover:bg-gray-100	py-2 px-2 rounded-full'
+                      style={{ fontWeight: '600' }}
+                    >
+                      <Link
+                        className='text-gray-700 hover:text-gray-700 text-xs	'
+                        href={`/${item.link}` || '/'}
                       >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          d='M4 6h16M4 12h16M4 18h16'
-                        />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div
-                className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'
-                  }`}
-              >
-                <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 '>
-                  {listItem.map((item, index) => {
-                    return (
-                      <li
-                        key={index}
-                        className='text-black text-sm hover:cursor-pointer'
-                        style={{ fontWeight: '600' }}
-                      >
-                        <Link href={`/${item.link}` || '/'}>{item.label}</Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
+                        {item.label}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
           </div>
         </nav>
       </Header>
-      <Content className='bg-[#fefefe] pt-6 pb-24 px-3 sm:px-6 md:px-8 lg:px-16 '>
+      <Content
+        className='bg-[#fefefe] md:pt-28 pt-20 pb-24 px-3 sm:px-6 md:px-8 lg:px-16 '
+        style={{ backgroundColor: Colors.clientBackground }}
+      >
         {children}
       </Content>
       <Footer className='!bg-black !text-white'>
@@ -416,21 +347,24 @@ export default function LayoutClient({
               <div className='flex mt-1 space-x-6'>
                 <a
                   href='#'
-                  className='text-yellow-600 hover:text-yellow-400 dark:hover:text-yellow-400'
+                  className='hover:text-yellow-400 dark:hover:text-yellow-400'
+                  style={{ color: Colors.clientGreen700 }}
                 >
-                  {iconFb}
+                  <FacebookIcon />
                 </a>
                 <a
                   href='#'
-                  className='text-yellow-600 hover:text-yellow-400 dark:hover:text-yellow-400'
+                  className=' hover:text-yellow-400 dark:hover:text-yellow-400'
+                  style={{ color: Colors.clientGreen700 }}
                 >
-                  {iconIg}
+                  <InstagramIcon />
                 </a>
                 <a
                   href='#'
-                  className='text-yellow-600 hover:text-yellow-400 dark:hover:text-yellow-400'
+                  className='hover:text-yellow-400 dark:hover:text-yellow-400'
+                  style={{ color: Colors.clientGreen700 }}
                 >
-                  {iconTwitter}
+                  <TwitterIcon />
                 </a>
               </div>
             </div>

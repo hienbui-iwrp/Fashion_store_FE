@@ -6,13 +6,13 @@ export default function ButtonHeader({
   name,
   icon,
 }: {
-  name: string
+  name?: string
   icon?: ReactNode
 }) {
   const [hover, setHover] = useState(false)
   return (
     <Button
-      type="primary"
+      type='primary'
       onMouseEnter={() => {
         setHover(true)
       }}
@@ -20,11 +20,16 @@ export default function ButtonHeader({
         setHover(false)
       }}
       style={{
-        backgroundColor: hover ? Colors.adminGreen500 : Colors.adminGreen700,
+        backgroundColor: hover ? Colors.clientBlack100 : Colors.tranparent,
+        borderRadius: 25,
+        width: 42,
+        height: 42,
+        color: Colors.clientBlack700,
+        boxShadow: '0 0 0',
       }}
       icon={icon || null}
     >
-      {name}
+      {name ?? ''}
     </Button>
   )
 }

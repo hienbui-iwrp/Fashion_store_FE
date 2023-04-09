@@ -69,7 +69,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <ConfigProvider
           theme={{
             token: {
-              colorPrimary: Colors.adminGreen700,
+              colorPrimary: Colors.clientGreen700,
             },
           }}
         >
