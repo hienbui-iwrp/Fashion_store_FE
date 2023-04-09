@@ -5,10 +5,11 @@ import { useRouter } from 'next/router';
 import type { TabsProps } from 'antd';
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary';
 import styles from './CustomerOrders.module.css'
-import { getListOrder } from '@/api/customer-order';
-import { OrderProps } from '@/utils';
+import { getListOrder, getListOrderBff } from '@/api/customer-order';
+import { FormatMoney, OrderProps, formatOrdersDataXML } from '@/utils';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
+import { ImageEmpty } from '@/constants/image';
 
 export interface CustomerOrdersProps {
 }
@@ -19,13 +20,13 @@ function OrderItem(props: OrderProps) {
   const router = useRouter()
   return (
     <div className='px-2 pb-4 pt-1 border-t-8 border-[#F1F1F1]'>
-      <Link href={`/manage-orders/${props.orderId}`}>
+      <Link href={`/manage-orders/${props.orderCode}`}>
         <div className='flex justify-between items-center'>
           <Text strong className='text-xl pr-4'>
-            Đơn #{props.orderId}f
+            Đơn #{props.orderCode}
           </Text>
           <Text strong className='text-red-600'>
-            {props.statusShips[props.statusShips.length - 1].status}
+            {props.statusShips.length > 0 ? props.statusShips[props.statusShips.length - 1].status : null}
           </Text>
           <ButtonClientPrimary name='Mua lại' onClick={() => {
             router.push('/cart');
@@ -36,7 +37,7 @@ function OrderItem(props: OrderProps) {
             <div key={index}>
               <hr className='my-1 font-bold' />
               <div className="flex">
-                <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image} alt='' />
+                <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image || ImageEmpty} alt={item.name} />
                 <div className='flex-1 pl-4'>
                   <Row className='flex-1'>
                     <Col span={19}>
@@ -46,13 +47,13 @@ function OrderItem(props: OrderProps) {
                       <div className='mt-2'>
                         <Space>
                           <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                          <Text className='w-16'>{item.color}</Text>
+                          <Text className='w-16'>{item.goodsColor}</Text>
                         </Space>
                       </div>
                       <div className='mt-2'>
                         <Space>
                           <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                          <Text className=' w-16'>{item.size}</Text>
+                          <Text className=' w-16'>{item.goodsSize}</Text>
                         </Space>
                       </div>
                       <div className='mt-2'>
@@ -67,10 +68,14 @@ function OrderItem(props: OrderProps) {
                         {item.discount === 0 ?
                           <Text strong className="text-lg">{item.unitPrice} đ</Text> :
                           <div className='flex flex-col leading-none'>
-                            <Text strong className="text-lg text-red-600 leading-none">{(item.unitPrice * (1 - item.discount / 100)).toFixed(0)} đ</Text>
+                            <Text strong className="text-lg text-red-600 leading-none">
+                              {FormatMoney(item.price)}
+                            </Text>
                             <div>
-                              <Text strong className="text-xs line-through text-gray-400 pr-1 leading-none">{item.unitPrice} đ</Text>
-                              <Text strong className="text-xs leading-none">-{item.discount}%</Text>
+                              <Text strong className="text-xs line-through text-gray-400 pr-1 leading-none">
+                                {FormatMoney(item.unitPrice)}
+                              </Text>
+                              <Text strong className="text-xs leading-none">{item.discount}%</Text>
                             </div>
                           </div>
                         }
@@ -118,37 +123,41 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
     },
   ]
 
-  const fetchData = () => {
-    console.log('fetch');
-    getListOrder('1')
+  const fetchData = async () => {
+    await getListOrderBff(localStorage.getItem('userId') || '')
       .then((res) => {
-        console.log(res?.data);
-        setData(res?.data)
-        const nonCompleted: OrderProps[] = res?.data.filter((item: OrderProps) => {
-          return item.isCompleted === false
-        })
-        const completed: OrderProps[] = res?.data.filter((item: OrderProps) => {
-          return item.isCompleted === true
-        })
-        setNonReceived(
-          <div>
-            {nonCompleted.map((item, index) => {
-              return (
-                <OrderItem key={index} {...item} />
-              )
-            })}
-          </div>
-        )
-        setReceived(
-          <div>
-            {completed.map((item, index) => {
-              return (
-                <OrderItem key={index} {...item} />
-              )
-            })}
-          </div>
-        )
-        setLoading(false)
+        if (res?.StatusCode === '200') {
+          console.log(res?.Data);
+          const tempData = formatOrdersDataXML(res?.Data);
+          console.log(tempData);
+          setData(tempData);
+
+          const nonCompleted: OrderProps[] = tempData.filter((item: OrderProps) => {
+            return item.isCompleted === false
+          })
+          const completed: OrderProps[] = tempData.filter((item: OrderProps) => {
+            return item.isCompleted === true
+          })
+          setNonReceived(
+            <div>
+              {nonCompleted.map((item, index) => {
+                return (
+                  <OrderItem key={index} {...item} />
+                )
+              })}
+            </div>
+          )
+          setReceived(
+            <div>
+              {completed.map((item, index) => {
+                return (
+                  <OrderItem key={index} {...item} />
+                )
+              })}
+            </div>
+          )
+          setLoading(false)
+        }
       })
   }
 

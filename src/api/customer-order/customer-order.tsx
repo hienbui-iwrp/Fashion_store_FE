@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { api } from '../axios'
-import { customerBff, shareBffCheckWh } from '@/utils';
+import { customerBff, formatResponse, shareBffCheckWh } from '@/utils';
 
-const service = '/api/customer-order-service'
+const service = '/api/customer-order-service'; ///order-service/customer/get-list
 const listOrder = '/list-order'
-const order = '/order'
+const orderService = '/order-service/customer';
+const getList = '/get-list';
+const getDetail = '/get-detail';
 
 export const getListOrder = async (customerId: string) => {
   return await api
@@ -18,11 +20,45 @@ export const getListOrder = async (customerId: string) => {
     });
 };
 
+export const getListOrderBff = async (customerId: string) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body>
+        <CustomerId>${customerId}</CustomerId>
+    </soap:Body>
+  `
+  return await customerBff
+    .post(orderService + getList, payload)
+    .then((res) => {
+      return formatResponse(res.data);
+    })
+    .catch((err) => {
+      console.log('get list order err: ', err);
+    });
+};
+
+export const getOrderDetailBff = async (orderId: string) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body>
+        <OrderId>${orderId}</OrderId>
+    </soap:Body>
+  `
+  return await customerBff
+    .post(orderService + getDetail, payload)
+    .then((res) => {
+      return formatResponse(res.data);
+    })
+    .catch((err) => {
+      console.log('get order detail err: ', err);
+    });
+};
+
 export const getOrderDetail = async (orderId: string) => {
   return await api
     // .get(service + listOrder + `/${customerId}`, {})
     // .get(service + order + `/${orderId}`, {})
-    .get(service + order + '/detail', {})
+    .get(service + '/detail', {})
     .then((res) => {
       return res;
     })
@@ -95,6 +131,8 @@ export const createOrder = async (orderData: any) => {
                     ${orderData.goodsList.map((goods: any) => {
     return `<GoodsList>
                       <GoodsId>${goods.goodsId}</GoodsId>
+                      <Name>${goods.name}</Name>
+                      <Image>${goods.image}</Image>
                       <UnitPrice>${goods.unitPrice}</UnitPrice>
                       <Price>${goods.price}</Price>
                       <Quantity>${goods.quantity}</Quantity>

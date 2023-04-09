@@ -35,7 +35,6 @@ export const getAllProductsBff = async (page: Paging) => {
 
 export const getProductDetail = async (productId: string) => {
   return await api
-    // .get(product + `/${productId}`, {})
     .get(product + `/detail`, {})
     .then((response) => {
       return response;

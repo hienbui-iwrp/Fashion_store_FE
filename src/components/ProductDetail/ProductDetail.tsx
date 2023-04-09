@@ -18,16 +18,19 @@ import {
 import type { RadioChangeEvent } from 'antd'
 import type { TabsProps } from 'antd'
 import { Radio } from 'antd'
-import { ProductDetailDataProps } from '@/utils'
+import { FormatMoney, ProductDetailDataProps } from '@/utils'
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import styles from './ProductDetail.module.css'
 import { Colors } from '@/constants'
+import { addGoodsBff } from '@/api'
+import { setNotificationType, setNotificationValue, useAppDispatch } from '@/redux'
 
 const { Title, Text } = Typography
 
 export default function ProductDetail(props: ProductDetailDataProps) {
+  const dispatch = useAppDispatch()
   const [quantity, setQuantity] = useState<number>(1)
   const [maxQuantity, setMaxQuantity] = useState<number>(props.listQuantity.length > 0 ? props.listQuantity[0].quantity : 0);
   const [imageShow, setImageShow] = useState<string>(props.images[0])
@@ -103,6 +106,22 @@ export default function ProductDetail(props: ProductDetailDataProps) {
     setImageShow(image)
   }
 
+  const onAddToCart = async () => {
+    if (localStorage.getItem('userId')) {
+      await addGoodsBff(localStorage.getItem('userId') ?? '',
+        { ...props, goodsColor: valueColor, goodsSize: valueSize, quantity, image: '' })
+        .then(res => {
+          if (res?.StatusCode === '200') {
+            dispatch(setNotificationValue('Thêm vào giỏ hàng thành công'))
+          }
+          else {
+            dispatch(setNotificationType('error'))
+            dispatch(setNotificationValue('Có lỗi khi thêm vào giỏ hàng, vui lòng thử lại'))
+          }
+        })
+    }
+  }
+
   useEffect(() => {
     setImageShow(props.images[0])
     setValueColor(props.listQuantity[0].color)
@@ -144,12 +163,12 @@ export default function ProductDetail(props: ProductDetailDataProps) {
         <Col span={15}>
           <Title level={3} className='pb-8'>
             {' '}
-            sản phẩm x
+            {props.name}
           </Title>
           <div className='flex flex-col'>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Mã hàng:</Text>
-              <Text strong>ABDNCd</Text>
+              <Text strong>{props.goodsId}</Text>
             </Space>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Loại:</Text>
@@ -209,22 +228,22 @@ export default function ProductDetail(props: ProductDetailDataProps) {
           <div className='flex justify-between items-center mt-10'>
             {props.discount === 0 ? (
               <Text strong className='text-lg'>
-                {props.unitPrice} đ
+                {FormatMoney(props.unitPrice)}
               </Text>
             ) : (
               <div className='flex flex-col leading-none'>
                 <Text strong className='text-lg text-red-600 leading-none'>
-                  {(props.unitPrice * (1 - props.discount / 100)).toFixed(0)} đ
+                  {FormatMoney(props.price)}
                 </Text>
                 <div>
                   <Text
                     strong
                     className='text-xs line-through text-gray-400 pr-1 leading-none'
                   >
-                    {props.unitPrice} đ
+                    {FormatMoney(props.unitPrice)}
                   </Text>
                   <Text strong className='text-xs leading-none'>
-                    -{props.discount}%
+                    {props.discount}%
                   </Text>
                 </div>
               </div>
@@ -253,6 +272,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
             </div>
             <ButtonClientPrimary
               disabled={quantity === 0}
+              onClick={onAddToCart}
               name='Thêm vào giỏ hàng'
               icon={
                 <FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />
