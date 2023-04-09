@@ -5,7 +5,7 @@ import FeaturedProducts from '../FeaturedProducts'
 export interface HomeClientProps {}
 
 const contentStyle: React.CSSProperties = {
-  height: '260px',
+  height: '450px',
   color: '#fff',
   lineHeight: '260px',
   textAlign: 'center',

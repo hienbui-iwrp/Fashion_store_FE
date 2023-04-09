@@ -12,4 +12,17 @@ export const Colors = {
   adminRed500: '#FF4A4A',
 
   shadow: '#ccc',
+
+  clientGreen700: '#047857',
+  clientGreen500: '#10b981',
+  clientGreen400: '#34d399',
+  clientGreen100: '#d1fae5',
+  clientGreen50: '#ecfdf5',
+  clientBlack100: '#f3f4f6',
+  clientBlack300: '#d1d5db',
+  clientBlack700: '#374151',
+  clientBlack950: '#030712',
+  clientBackground: '#fafafa',
+
+  tranparent: '#10b98100',
 }
