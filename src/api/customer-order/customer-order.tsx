@@ -136,10 +136,10 @@ export const createOrder = async (orderData: any) => {
                       <UnitPrice>${goods.unitPrice}</UnitPrice>
                       <Price>${goods.price}</Price>
                       <Quantity>${goods.quantity}</Quantity>
-                      <Size>${goods.size}</Size>
-                      <Color>${goods.color}</Color>
-                      <Discount>${goods.discount}</Discount>
-                      <Tax>${goods.tax}</Tax>
+                      <Size>${goods.goodsSize}</Size>
+                      <Color>${goods.goodsColor}</Color>
+                      <Discount>${goods.discount / 100}</Discount>
+                      <Tax>0.1</Tax>
                     </GoodsList>`
   })}
             			<TotalPrice>${orderData.totalPrice}</TotalPrice>

@@ -26,8 +26,8 @@ const OrderDetail: OrderDetailProps = {
     unitPrice: 0,
     price: 0,
     quantity: 0,
-    size: '',
-    color: '',
+    goodsSize: '',
+    goodsColor: '',
     discount: 0
   }],
   totalPrice: 0,
@@ -91,8 +91,8 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
       unitPrice: 0,
       price: 0,
       quantity: 0,
-      size: '',
-      color: '',
+      goodsSize: '',
+      goodsColor: '',
       discount: 0
     }],
     totalPrice: 0,
@@ -267,13 +267,13 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                           <div className='mt-2'>
                             <Space>
                               <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                              <Text className='w-16'>{item.color}</Text>
+                              <Text className='w-16'>{item.goodsColor}</Text>
                             </Space>
                           </div>
                           <div className='mt-2'>
                             <Space>
                               <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                              <Text className=' w-16'>{item.size}</Text>
+                              <Text className=' w-16'>{item.goodsSize}</Text>
                             </Space>
                           </div>
                           <div className='mt-2'>
@@ -291,7 +291,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                                 <Text strong className="text-lg text-red-600 leading-none">{item.price} đ</Text>
                                 <div>
                                   <Text strong className="text-xs line-through text-gray-400 pr-1 leading-none">{item.unitPrice} đ</Text>
-                                  <Text strong className="text-xs leading-none">-{item.discount}%</Text>
+                                  <Text strong className="text-xs leading-none">-{item.discount * 100}%</Text>
                                 </div>
                               </div>
                             }

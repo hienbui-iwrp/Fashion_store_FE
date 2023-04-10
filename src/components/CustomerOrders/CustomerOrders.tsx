@@ -75,7 +75,7 @@ function OrderItem(props: OrderProps) {
                               <Text strong className="text-xs line-through text-gray-400 pr-1 leading-none">
                                 {FormatMoney(item.unitPrice)}
                               </Text>
-                              <Text strong className="text-xs leading-none">{item.discount}%</Text>
+                              <Text strong className="text-xs leading-none">-{item.discount * 100}%</Text>
                             </div>
                           </div>
                         }
