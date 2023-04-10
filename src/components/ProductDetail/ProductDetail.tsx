@@ -243,7 +243,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
                     {FormatMoney(props.unitPrice)}
                   </Text>
                   <Text strong className='text-xs leading-none'>
-                    {props.discount}%
+                    -{props.discount}%
                   </Text>
                 </div>
               </div>

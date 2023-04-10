@@ -8,8 +8,9 @@ import { Typography, Input, Row, Col, Form, Radio, Image, Checkbox, Button, Spac
 import type { RadioChangeEvent } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import { useRouter } from 'next/router';
-import { FormatMoney } from '@/utils';
+import { FormatMoney, ProductInCartProps } from '@/utils';
 import { createOrder, makeOrder } from '@/api/customer-order';
+import { deleteGoodsBff } from '@/api';
 
 export interface PaymentProps {
 }
@@ -17,16 +18,6 @@ export interface PaymentProps {
 const { Text, Title } = Typography
 const { TextArea } = Input
 
-export interface CartItemProps {
-  goodsId: string;
-  name: string;
-  unitPrice: number;
-  image: string;
-  quantity: number;
-  size: string;
-  color: string;
-  discount: number;
-}
 
 export default function Payment(props: PaymentProps) {
   const router = useRouter();
@@ -34,7 +25,7 @@ export default function Payment(props: PaymentProps) {
   const dispatch = useDispatch()
   const dataProductsPayment: any = useSelector(selectProductsPayment);
   const dataUser = useSelector(selectUser);
-  const listCartItem: CartItemProps[] = dataProductsPayment.listProductPayment;
+  const listCartItem: ProductInCartProps[] = dataProductsPayment.listProductPayment;
   // console.log('redux data products payment', dataProductsPayment);
   const [paymentMethod, setPaymentMethod] = React.useState('offline');
   const [methodOnline, setMethodOnline] = React.useState('Momo');
@@ -57,10 +48,10 @@ export default function Payment(props: PaymentProps) {
     }
     sendOrderInfo(orderData);
     if (values.paymentMethod === 'offline') {
-      completedOrder(orderData)
-        .then((res) => {
-          console.log('res', res);
-          if (res?.StatusCode === '200') {
+      Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
+        .then(([resCompleteOrder, resRemove]) => {
+          console.log('res', resCompleteOrder);
+          if (resCompleteOrder?.StatusCode === '200') {
             dispatch(setNotificationValue('Tạo đơn hàng thành công'));
             router.push('/manage-orders');
           } else {
@@ -68,6 +59,7 @@ export default function Payment(props: PaymentProps) {
             dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
           }
         })
+        .catch(err => console.log('có lỗi xảy ra:', err));
     } else {
 
     }
@@ -75,6 +67,10 @@ export default function Payment(props: PaymentProps) {
 
   const completedOrder = async (orderData: any) => {
     return await createOrder(orderData);
+  }
+
+  const removeProductBoughtInCart = async (orderData: any) => {
+    return await deleteGoodsBff(orderData.customerId, orderData.goodsList);
   }
 
   const sendOrderInfo = async (orderData: any) => {
@@ -327,13 +323,13 @@ export default function Payment(props: PaymentProps) {
                         <div className='mt-0'>
                           <Space>
                             <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                            <Text className='w-16'>{item.color}</Text>
+                            <Text className='w-16'>{item.goodsColor}</Text>
                           </Space>
                         </div>
                         <div className='mt-0'>
                           <Space>
                             <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                            <Text className=' w-16'>{item.size}</Text>
+                            <Text className=' w-16'>{item.goodsSize}</Text>
                           </Space>
                         </div>
                         <div className='mt-0'>

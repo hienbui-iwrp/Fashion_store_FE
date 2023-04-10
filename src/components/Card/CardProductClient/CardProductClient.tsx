@@ -29,7 +29,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
   var valueColor = '';
   var valueSize = '';
   var quantity = 0;
-  for (let i = 0; i < props.listQuantity.length; i++) {
+  for (let i = 0; i < props.listQuantity?.length; i++) {
     if (props.listQuantity[i].quantity > 0) {
       valueColor = props.listQuantity[i].color;
       valueSize = props.listQuantity[i].size;
@@ -101,7 +101,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
                   {FormatMoney(props.unitPrice)}
                 </Text>
                 <Text strong className='text-xs leading-none'>
-                  {props.discount}%
+                  -{props.discount}%
                 </Text>
               </div>
             </div>
