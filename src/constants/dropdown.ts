@@ -49,6 +49,7 @@ export const GoodsTypes = [
   { value: 'ring', label: 'Nhẫn' },
   { value: 'hat', label: 'Nón' },
   { value: 'bag', label: 'Túi/balo' },
+  { value: 'dress', label: 'Váy' },
 ]
 
 export const GoodsSizes = [
