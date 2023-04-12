@@ -35,6 +35,7 @@ import {
   GoodsInWarehouseProps,
   GoodsProps,
   ModalTranferGoods,
+  ModalUploadGoodsImage,
   WarehouseProps,
 } from '@/utils'
 import { useRouter } from 'next/router'
@@ -59,6 +60,7 @@ const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [curGoodsClassify, setCurGoodsClassify] = useState<GoodsClassifyProps>()
   const [modalTranferGoods, setModalTranferGoods] = useState(false)
+  const [modalUploadGoodsImage, setModalUploadGoodsImage] = useState(false)
 
   const router = useRouter()
   const { id } = router.query
@@ -594,53 +596,59 @@ const Detail = () => {
               ))}
             </div>
           </Row>
-          <div className='flex flex-wrap my-3'>
-            {data?.image?.map((img: string, index: number) => {
-              return (
-                <span key={index} className='relative drop-shadow-md mx-2'>
-                  <Image
-                    style={{ maxWidth: 100, maxHeight: 100 }}
-                    src={img}
-                    alt='img'
-                  />
-                  <Button
-                    className='absolute flex items-center  justify-center'
-                    style={{
-                      top: -6,
-                      right: -6,
-                      width: 14,
-                      height: 14,
-                      fontSize: 8,
-                      borderRadius: 12,
-                      backgroundColor: Colors.adminRed900,
-                      color: Colors.white,
-                    }}
-                    icon={<CloseOutlined />}
-                  ></Button>
-                </span>
-              )
-            })}
-            <Button
-              icon={<FileImageOutlined />}
-              style={{
-                height: 100,
-                marginLeft: 10,
-                backgroundColor: Colors.adminGreen900,
-                color: Colors.white,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Thêm ảnh
-            </Button>
-          </div>
+          {id && (
+            <div className='flex flex-wrap my-3'>
+              {data?.image?.map((img: string, index: number) => {
+                return (
+                  <span key={index} className='relative drop-shadow-md mx-2'>
+                    <Image
+                      style={{ maxWidth: 100, maxHeight: 100 }}
+                      src={img}
+                      alt='img'
+                    />
+                    <Button
+                      className='absolute flex items-center  justify-center'
+                      style={{
+                        top: -6,
+                        right: -6,
+                        width: 14,
+                        height: 14,
+                        fontSize: 8,
+                        borderRadius: 12,
+                        backgroundColor: Colors.adminRed900,
+                        color: Colors.white,
+                      }}
+                      icon={<CloseOutlined />}
+                    ></Button>
+                  </span>
+                )
+              })}
+              <Button
+                icon={<FileImageOutlined />}
+                style={{
+                  height: 100,
+                  marginLeft: 10,
+                  backgroundColor: Colors.adminGreen900,
+                  color: Colors.white,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onClick={() => {
+                  setModalUploadGoodsImage(true)
+                }}
+              >
+                Thêm ảnh
+              </Button>
+            </div>
+          )}
           <p className='flex justify-end'>
             <AddButton label='Lưu' icon={<CheckOutlined />} onClick={onSave} />
           </p>
         </Card>
-        {sizes &&
+        {id &&
+          sizes &&
           colors &&
           colors.map((colorItem: any, colorIndex: number) => {
             return sizes.map((sizeItem: any, sizeIndex: number) => {
@@ -705,6 +713,14 @@ const Detail = () => {
           callback={(item) => {
             getData()
           }}
+        />
+      )}
+      {modalUploadGoodsImage && (
+        <ModalUploadGoodsImage
+          open={modalUploadGoodsImage}
+          cancel={() => setModalUploadGoodsImage(false)}
+          extraData={{ colors: colors, id: data?.id }}
+          callback={(item) => {}}
         />
       )}
     </>

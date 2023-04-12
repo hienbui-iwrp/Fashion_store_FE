@@ -20,7 +20,6 @@ import timeToDate from './timeToDate'
 
 export const formatResponse = (data: any) => {
   const XMLParser = require('react-xml-parser')
-  console.log(data)
   const xml = new XMLParser().parseFromString(data)
   return {
     StatusCode: xml.getElementsByTagName('StatusCode')[0].value,
@@ -47,19 +46,19 @@ export const formatUserDataXML = (data: any): CustomerInfoProps => {
 }
 
 export const formatProductsDataXML = (data: any): ProductDetailDataProps[] => {
-  let dataReturn: any = [];
+  let dataReturn: any = []
   data.forEach((itemData: any) => {
     dataReturn.push(formatProductDataXML(itemData))
   })
-  return dataReturn;
+  return dataReturn
 }
 
 export const formatProductDataXML = (data: any): ProductDetailDataProps => {
-  let listObjQuantity: QuantityObj[] = [];
-  const lenOfQuantity = data.getElementsByTagName('ListQuantity').length;
-  const listSize = data.getElementsByTagName('GoodsSize');
-  const listColor = data.getElementsByTagName('GoodsColor');
-  const listQuantity = data.getElementsByTagName('Quantity');
+  let listObjQuantity: QuantityObj[] = []
+  const lenOfQuantity = data.getElementsByTagName('ListQuantity').length
+  const listSize = data.getElementsByTagName('GoodsSize')
+  const listColor = data.getElementsByTagName('GoodsColor')
+  const listQuantity = data.getElementsByTagName('Quantity')
   listQuantity.map((quantity: any, index: number) => {
     listObjQuantity.push({
       quantity: Number(quantity.value),
@@ -68,12 +67,12 @@ export const formatProductDataXML = (data: any): ProductDetailDataProps => {
     })
   })
 
-  let images: string[] = [];
-  const imagesXML = data.getElementsByTagName('Images');
+  let images: string[] = []
+  const imagesXML = data.getElementsByTagName('Images')
   if (imagesXML.length) {
     imagesXML.forEach((element: any) => {
-      images.push(element.value);
-    });
+      images.push(element.value)
+    })
   }
 
   return {
@@ -300,10 +299,10 @@ export const formatAttendanceDataXML = (data: any): AttendanceProps => {
       .getElementsByTagName('CheckoutTime')[0]
       ?.getElementsByTagName('Valid')[0].value
       ? new Date(
-        _data
-          .getElementsByTagName('CheckoutTime')[0]
-          ?.getElementsByTagName('Time')[0].value
-      )
+          _data
+            .getElementsByTagName('CheckoutTime')[0]
+            ?.getElementsByTagName('Time')[0].value
+        )
       : undefined,
   }
 }

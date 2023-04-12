@@ -51,3 +51,7 @@ export interface ModalTranferGoodsProps extends ModalSampleProps {
 export interface ModalAddEditWarehouseProps extends ModalSampleProps {
   extraData?: WarehouseProps
 }
+
+export interface ModalUploadGoodsImageProps extends ModalSampleProps {
+  extraData?: { colors: string[]; id?: string }
+}

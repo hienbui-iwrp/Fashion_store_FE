@@ -276,3 +276,26 @@ export const customerReturnGoodsBff = (
       console.log('getGoodsBFF err: ', err)
     })
 }
+
+export const uploadGoodsImageBff = (file: {
+  file: any
+  goodsId?: string
+  goodsColor: string
+  isDefault: boolean
+}) => {
+  const form = new FormData()
+  form.append('images', file.file)
+  form.append('goodsId', file.goodsId ?? '')
+  form.append('goodsColor', file.goodsColor)
+  form.append('isDefault', file.isDefault.toString())
+
+  console.log('form: ', form)
+  return adminBff
+    .post('/goods-service/goods/image', form)
+    .then((res) => {
+      return res
+    })
+    .catch((err) => {
+      console.log('uploadGoodsImageBff err: ', err)
+    })
+}
