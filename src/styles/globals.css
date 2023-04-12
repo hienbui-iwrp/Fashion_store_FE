@@ -197,6 +197,10 @@ tr:hover td {
   background-color: var(--admin-green300);
 }
 
+.card-product-client div .ant-card-body::after {
+  display: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

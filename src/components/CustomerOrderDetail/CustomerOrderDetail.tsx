@@ -3,12 +3,13 @@ import Invoice from '@/components/Invoice';
 import { useRouter } from 'next/router';
 import { Typography, Button, Steps, Timeline, Row, Col, Image, Space, Table, Modal } from 'antd';
 import styles from './CustomerOrderDetail.module.css'
-import { FormatMoney } from '@/utils/formats';
-import { getOrderDetail } from '@/api/customer-order';
+import { FormatMoney, formatOrderDataXML } from '@/utils/formats';
+import { getOrderDetail, getOrderDetailBff } from '@/api/customer-order';
 import { OrderDetailProps } from '@/utils';
 import { useReactToPrint } from 'react-to-print';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
+import moment from 'moment';
 
 export interface CustomerOrderDetailProps {
 
@@ -16,38 +17,6 @@ export interface CustomerOrderDetailProps {
 
 const { Title, Text } = Typography
 
-const OrderDetail: OrderDetailProps = {
-  orderId: '',
-  paymentMethod: '',
-  listGoods: [{
-    goodsId: '',
-    image: '',
-    name: '',
-    unitPrice: 0,
-    price: 0,
-    quantity: 0,
-    goodsSize: '',
-    goodsColor: '',
-    discount: 0
-  }],
-  totalPrice: 0,
-  totalGoods: 0,
-  totalDiscount: 0,
-  isCompleted: false,
-  shipFee: 0,
-  totalOrder: 0,
-  status: 0,
-  nameReceiver: '',
-  phoneReceiver: '',
-  address: {
-    province: '',
-    district: '',
-    ward: '',
-    street: ''
-  },
-  statusShips: [],
-  transactionDate: ''
-}
 interface Item {
   key: string;
   name: string;
@@ -83,6 +52,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
 
   const [data, setData] = useState<OrderDetailProps>({
     orderId: '',
+    orderCode: '',
     paymentMethod: '',
     listGoods: [{
       goodsId: '',
@@ -104,6 +74,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
     status: 0,
     nameReceiver: '',
     phoneReceiver: '',
+    emailReceiver: '',
     address: {
       province: '',
       district: '',
@@ -111,7 +82,8 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
       street: ''
     },
     statusShips: [],
-    transactionDate: ''
+    transactionDate: '',
+    expectDate: ''
   })
   const [tablePayment, setTablePayment] = useState<Item[]>([
     {
@@ -159,9 +131,9 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
       render: (_: any, record: Item) => (
         record.key === '5' ?
           <div className='flex justify-end'>
-            {record.content === 'offline' && 'Thanh toán khi nhận hàng'}
-            {record.content === 'momo' && 'Ví điện tử Momo'}
-            {record.content === 'vnpay' && 'Ví điện tử VNpay'}
+            {String(record.content).toLowerCase() === 'offline' && 'Thanh toán khi nhận hàng'}
+            {String(record.content).toLowerCase() === 'momo' && 'Ví điện tử Momo'}
+            {String(record.content).toLowerCase() === 'vnpay' && 'Ví điện tử VNpay'}
           </div> :
           <div className='flex justify-end'>
             {typeof record.content === 'number' && FormatMoney(record.content)}
@@ -173,17 +145,27 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
   const orderId = route.asPath.split('/').at(-1);
   console.log(orderId);
   const fetchData = () => {
-    getOrderDetail(orderId || '')
+    getOrderDetailBff(orderId || '')
       .then((res) => {
-        setData(res?.data);
-        setTablePayment([
-          { ...tablePayment[0], content: res?.data.totalPrice },
-          { ...tablePayment[1], content: res?.data.shipFee },
-          { ...tablePayment[2], content: res?.data.totalDiscount },
-          { ...tablePayment[3], content: res?.data.totalOrder },
-          { ...tablePayment[4], content: res?.data.paymentMethod },
-        ])
-        setLoading(false)
+        if (res?.StatusCode === '200') {
+          const tempData = formatOrderDataXML(res?.Data);
+          setData(tempData);
+          let sumPromotion = 0;
+          tempData.listGoods.forEach((goods) => {
+            sumPromotion += goods.discount * goods.unitPrice;
+          })
+          setTablePayment([
+            { ...tablePayment[0], content: tempData.totalPrice },
+            { ...tablePayment[1], content: tempData.shipFee },
+            {
+              ...tablePayment[2], content: tempData.totalDiscount - sumPromotion < 0
+                ? 0 : tempData.totalDiscount - sumPromotion
+            },
+            { ...tablePayment[3], content: tempData.totalOrder },
+            { ...tablePayment[4], content: tempData.paymentMethod },
+          ])
+          setLoading(false)
+        }
       })
   }
   useEffect(() => {
@@ -191,10 +173,9 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
     fetchData();
   }, [])
 
-  const [orderData, setOrderData] = useState({ ...OrderDetail })
   return (
     loading ? <Loading /> :
-      <div className="w-[800px] m-auto">
+      <div className="w-[800px] m-auto mt-4 bg-white">
         <Modal
           title={null}
           closable
@@ -247,7 +228,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                 <Timeline mode='left'>
                   {data.statusShips.map((item, index: number) => {
                     return (
-                      <Timeline.Item key={index} label={item.time}>{item.status}</Timeline.Item>
+                      <Timeline.Item key={index} label={moment(item.time).format("DD-MM-YYYY, h:mm:ss a")}>{item.status}</Timeline.Item>
                     )
                   })}
                 </Timeline>
@@ -255,7 +236,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
             </Row>
             {data.listGoods.map((item, index) => {
               return (
-                <>
+                <div key={index}>
                   <div className="flex border-b-2 pb-1">
                     <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image} alt='' />
                     <div className='flex-1 pl-4'>
@@ -300,7 +281,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                       </Row>
                     </div>
                   </div>
-                </>
+                </div>
               )
             })}
           </div>
@@ -308,6 +289,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
             rowKey="name"
             className={styles.tablePrice}
             bordered
+            showHeader={false}
             pagination={false}
             dataSource={tablePayment}
             columns={columns} />
@@ -315,3 +297,4 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
       </div>
   );
 }
+

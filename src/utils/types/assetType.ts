@@ -105,6 +105,7 @@ export interface OrderProps {
 
 export interface OrderDetailProps {
   orderId: string
+  orderCode: string
   isCompleted: boolean
   paymentMethod: string //
   status: number
@@ -116,8 +117,10 @@ export interface OrderDetailProps {
   shipFee: number
   statusShips: StatusShip[]
   transactionDate: string
+  expectDate: string
   nameReceiver: string
   phoneReceiver: string
+  emailReceiver: string
   address: AddressProps
 }
 

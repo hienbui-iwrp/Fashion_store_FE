@@ -156,6 +156,7 @@ export const createOrder = async (orderData: any) => {
             </Address>
             <ExpectedDate>${orderData.expectedDate}</ExpectedDate>
     </soap:Body>`;
+  console.log(payload);
   return await customerBff
     .post('order-service/customer/make-order', payload)
     .then((res) => {

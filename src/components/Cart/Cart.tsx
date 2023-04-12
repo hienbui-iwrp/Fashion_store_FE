@@ -163,13 +163,13 @@ export default function Cart(props: CartProps) {
               <div className='mt-0'>
                 <Space>
                   <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{product.goodsColor}</Text>
+                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-24'>{product.goodsColor}</Text>
                 </Space>
               </div>
               <div className='mt-2'>
                 <Space>
                   <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-16'>{product.goodsSize}</Text>
+                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-24'>{product.goodsSize}</Text>
                 </Space>
               </div>
               <div className='flex justify-between items-center mt-10'>

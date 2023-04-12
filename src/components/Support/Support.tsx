@@ -19,7 +19,7 @@ export default function Support(props: SupportProps) {
   };
 
   return (
-    <div className="m-auto max-w-[700px]">
+    <div className="m-auto mt-2 max-w-[700px]">
       <Title level={4}>Hỗ trợ</Title>
       <Form
         name="basic"

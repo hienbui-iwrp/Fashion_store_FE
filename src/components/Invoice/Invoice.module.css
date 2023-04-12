@@ -1,0 +1,4 @@
+.tablePayment thead th,
+.tablePayment tbody td {
+  padding: 4px 4px !important;
+}

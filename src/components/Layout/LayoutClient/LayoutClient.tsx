@@ -150,29 +150,28 @@ export default function LayoutClient({
       style={{ minHeight: '100vh' }}
     >
       <Header
-        className='header-client !bg-white !p-0 z-50  fixed right-0	left-0	top-0 w-full '
+        // className='header-client !bg-white !p-0 z-50  fixed right-0	left-0	top-0 w-full '
+        className='header-client !bg-gradient-to-br to-green-400 from-emerald-700 !p-0 z-50  fixed right-0	left-0	top-0 w-full '
+        // className='header-client !bg-emerald-600 !p-0 z-50  fixed right-0	left-0	top-0 w-full '
         style={{ boxShadow: `0px 3px 4px 0px ${Colors.shadow}` }}
       >
         <Row align='middle'>
           <Col xs={6} sm={8} md={4} lg={4} xl={4}>
-            <a href='#' className='flex items-center px-4'>
+            <Link href='/' className='flex justify-center items-center px-4'>
               <Image
                 alt='img'
-                style={{ maxWidth: 180, width: '100%' }}
-                src='/logo_pth.png'
+                style={{ maxWidth: 180, width: '100%', maxHeight: 60 }}
+                src='/logo.png'
                 preview={false}
-                onClick={() => {
-                  router.replace('/')
-                }}
               />
-            </a>
+            </Link>
           </Col>
           <Col xs={0} sm={0} md={0} lg={6} xl={5}>
             <ul className='items-center justify-around  w-full hidden md:flex'>
               {primaryList.map((item, index) => {
                 const textColor =
                   item.link == router.pathname
-                    ? 'text-gray-700'
+                    ? 'text-white'
                     : 'text-gray-300'
                 return (
                   <li
@@ -181,9 +180,10 @@ export default function LayoutClient({
                     style={{ fontWeight: '600' }}
                   >
                     <Link
-                      className={`${textColor}	 hover:text-gray-700	 text-lg`}
+                      className={`${textColor}	 hover:text-white	 text-lg`}
+                      // className={`${textColor}	 hover:text-gray-700	 text-lg`}
                       // className='text-emerald-600 hover:text-emerald-400 text-lg	'
-                      href={`/${item.link}` || '/'}
+                      href={`${item.link}` || '/'}
                     >
                       {item.label}
                     </Link>
@@ -206,7 +206,7 @@ export default function LayoutClient({
           <Col xs={10} sm={6} md={5} lg={4} xl={3}>
             <div className='flex justify-around items-center w-full pr-4'>
               {logged && (
-                <Link href='/manage-orders' prefetch={false} passHref>
+                <Link href='/manage-orders' passHref>
                   <ButtonHeader
                     icon={
                       <FontAwesomeIcon
@@ -218,7 +218,7 @@ export default function LayoutClient({
                 </Link>
               )}
               {logged && (
-                <Link href='/cart' prefetch={false} passHref>
+                <Link href='/cart' passHref>
                   <ButtonHeader
                     icon={
                       <FontAwesomeIcon
@@ -281,22 +281,21 @@ export default function LayoutClient({
         >
           <div className='mx-auto md:items-center md:flex md:px-8 lg:px-16 '>
             <div
-              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${
-                navbar ? 'flex' : 'hidden'
-              }`}
+              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${navbar ? 'flex' : 'hidden'
+                }`}
             >
-              <ul className='justify-start w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 pb-2 hidden md:flex '>
+              <ul className='justify-start items-center w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 py-1 hidden md:flex '>
                 {secondaryList.map((item, index) => {
                   return (
                     <li
                       key={index}
-                      className='text-sm hover:cursor-pointer text-xs  hover:bg-gray-100	 px-2 rounded-full'
+                      className='text-sm hover:cursor-pointer text-xs  hover:bg-green-200	 px-2 rounded-full'
                       style={{ fontWeight: '600' }}
                     >
                       <Link
-                        className='text-gray-700 hover:text-gray-700 text-xs	'
+                        className='text-green-600 hover:text-emerald-700 text-sm	'
                         // className='text-emerald-600 hover:text-emerald-600 text-xs	'
-                        href={`/${item.link}` || '/'}
+                        href={`${item.link}` || '/'}
                       >
                         {item.label}
                       </Link>
@@ -314,7 +313,7 @@ export default function LayoutClient({
                     >
                       <Link
                         className='text-gray-700 hover:text-gray-700 text-xs	'
-                        href={`/${item.link}` || '/'}
+                        href={`${item.link}` || '/'}
                       >
                         {item.label}
                       </Link>
