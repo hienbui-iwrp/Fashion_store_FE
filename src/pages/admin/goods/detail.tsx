@@ -40,6 +40,7 @@ import {
 } from '@/utils'
 import { useRouter } from 'next/router'
 import {
+  addGoodsBFF,
   addGoodsBff,
   getGoodsDetailBFF,
   getGoodsInWarehouseBFF,
@@ -176,7 +177,7 @@ const Detail = () => {
           !goods.cost
         )
           throw new Error()
-        await addGoodsBff(goods, sizes, colors)
+        await addGoodsBFF(goods, sizes, colors)
           .then((res: any) => {
             if (res.StatusCode != 200) throw new Error('FAIL')
             dispatch(setNotificationValue('Đã thêm hàng mới'))

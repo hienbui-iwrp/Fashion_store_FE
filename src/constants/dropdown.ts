@@ -87,3 +87,22 @@ export const GoodsOptions = [
   ...GoodsTypes,
   ...GoodsAges,
 ]
+
+export const ShipStatus = [
+  {
+    value: 0,
+    label: 'Chuẩn bị hàng',
+  },
+  {
+    value: 1,
+    label: 'Chờ lấy hàng',
+  },
+  {
+    value: 2,
+    label: 'Đang giao',
+  },
+  {
+    value: 3,
+    label: 'Đã giao',
+  },
+]

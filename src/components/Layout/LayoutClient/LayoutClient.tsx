@@ -171,9 +171,7 @@ export default function LayoutClient({
             <ul className='items-center justify-around  w-full hidden md:flex'>
               {primaryList.map((item, index) => {
                 const textColor =
-                  item.link == router.pathname
-                    ? 'text-white'
-                    : 'text-gray-300'
+                  item.link == router.pathname ? 'text-white' : 'text-gray-300'
                 return (
                   <li
                     key={index}
@@ -282,8 +280,9 @@ export default function LayoutClient({
         >
           <div className='mx-auto md:items-center md:flex md:px-8 lg:px-16 '>
             <div
-              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${navbar ? 'flex' : 'hidden'
-                }`}
+              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${
+                navbar ? 'flex' : 'hidden'
+              }`}
             >
               <ul className='justify-start items-center w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 py-1 hidden md:flex '>
                 {secondaryList.map((item, index) => {
@@ -347,21 +346,21 @@ export default function LayoutClient({
                 <a
                   href='#'
                   className='hover:text-yellow-400 dark:hover:text-yellow-400'
-                  style={{ color: Colors.clientGreen700 }}
+                  style={{ color: Colors.clientEmerald700 }}
                 >
                   <FacebookIcon />
                 </a>
                 <a
                   href='#'
                   className=' hover:text-yellow-400 dark:hover:text-yellow-400'
-                  style={{ color: Colors.clientGreen700 }}
+                  style={{ color: Colors.clientEmerald700 }}
                 >
                   <InstagramIcon />
                 </a>
                 <a
                   href='#'
                   className='hover:text-yellow-400 dark:hover:text-yellow-400'
-                  style={{ color: Colors.clientGreen700 }}
+                  style={{ color: Colors.clientEmerald700 }}
                 >
                   <TwitterIcon />
                 </a>

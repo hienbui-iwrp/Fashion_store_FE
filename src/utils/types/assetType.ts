@@ -48,9 +48,9 @@ export interface ProductsDataProps {
 }
 
 export interface QuantityObj {
-  size: string
-  color: string
   quantity: number
+  color: string
+  size: string
 }
 
 export interface ProductDetailDataProps {
@@ -241,4 +241,40 @@ export type WarehouseProps = {
 export type Paging = {
   pageSize: number
   offset: number
+}
+
+export type OrderAdminData = {
+  id: string
+  publicId: string
+  goods: GoodsOrderAdminData[]
+  price: number
+  totalDiscount: number
+  totalGoods: number
+  totalPrice: number
+  transactionDate: Date
+  onlineData?: OnlineOrderAdminData
+  offlineData?: OfflineOrderAdminData
+  isOnline?: boolean
+}
+
+export interface GoodsOrderAdminData extends ProductInCartProps {
+  tax: number
+}
+
+export type OnlineOrderAdminData = {
+  paymentMethod: string
+  customerId: string
+  isCompleted: string
+  shipFee: string
+  expectDate: Date
+  status: number
+  nameReceiver: string
+  phoneReceiver: string
+  emailReceiver: string
+  address: AddressProps
+}
+
+export type OfflineOrderAdminData = {
+  staffId: string
+  branchhId: string
 }

@@ -1,45 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
-import { BASE_URL, Colors, Routes } from '@/constants'
-import axios from 'axios'
-import styles from '@/styles/Admin.module.css'
-import { Card, DatePicker, Space } from 'antd'
-import { AddButton, LayoutAdmin, TableList } from '@/components'
-import { formatDate, formatNumber, ModalAddEditStaff } from '@/utils'
+import { Routes } from '@/constants'
+import { DatePicker, Space } from 'antd'
+import { TableList } from '@/components'
+import {
+  OrderAdminData,
+  formatDate,
+  formatNumber,
+  formatOrderAdminDataXML,
+} from '@/utils'
 import { InputSearch } from '@/components'
-
-interface DataType {
-  id: string
-  user: string
-  total: number
-  createdDate: Date
-}
+import { getOnlineOrdersBFF } from '@/api'
+import { Dayjs } from 'dayjs'
 
 const Online = () => {
-  const [data, setData] = useState<DataType[]>([])
+  const [data, setData] = useState<OrderAdminData[]>([])
+  const [allData, setAllData] = useState<OrderAdminData[]>([])
   const [loading, setLoading] = useState(true)
+  const [minDate, setMinDate] = useState<Dayjs>()
+  const [maxDate, setMaxDate] = useState<Dayjs>()
 
-  const columns: ColumnsType<DataType> = []
+  const columns: ColumnsType<OrderAdminData> = []
   if (data) {
-    columns.push({
-      title: 'Người dùng',
-      dataIndex: 'user',
-      render(text: string, record: DataType, index: number) {
-        return text
-      },
-      onCell: (record) => {
-        return {
-          style: { minWidth: 110 },
-        }
-      },
-      sorter: (a: DataType, b: DataType) =>
-        a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1,
-    })
-
     columns.push({
       title: 'Mã đơn',
       dataIndex: 'id',
-      render(text: string, record: DataType, index: number) {
+      render(text: string, record: OrderAdminData, index: number) {
         return text
       },
       onCell: (record) => {
@@ -47,14 +33,57 @@ const Online = () => {
           style: { minWidth: 90 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
+      sorter: (a: OrderAdminData, b: OrderAdminData) =>
         a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1,
     })
 
     columns.push({
+      title: 'Mã công khai',
+      dataIndex: 'publicId',
+      render(text: string, record: OrderAdminData, index: number) {
+        return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+      sorter: (a: OrderAdminData, b: OrderAdminData) =>
+        a.publicId.toLowerCase() > b.publicId.toLowerCase() ? 1 : -1,
+    })
+
+    columns.push({
+      title: 'Tên đăng nhập',
+      dataIndex: '',
+      render(text: string, record: OrderAdminData, index: number) {
+        return record?.onlineData?.customerId
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+    })
+
+    columns.push({
+      title: 'Số hàng',
+      dataIndex: 'totalGoods',
+      render(text: string, record: OrderAdminData, index: number) {
+        return formatNumber(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 90 },
+        }
+      },
+      sorter: (a: OrderAdminData, b: OrderAdminData) =>
+        a.totalGoods > b.totalGoods ? 1 : -1,
+    })
+
+    columns.push({
       title: 'Ngày giao dịch',
-      dataIndex: 'createdDate',
-      render(text: string, record: DataType, index: number) {
+      dataIndex: 'transactionDate',
+      render(text: string, record: OrderAdminData, index: number) {
         return formatDate(text)
       },
       onCell: (record) => {
@@ -62,29 +91,52 @@ const Online = () => {
           style: { minWidth: 130 },
         }
       },
-      sorter: (a: DataType, b: DataType) =>
-        a.createdDate > b.createdDate ? 1 : -1,
+      sorter: (a: OrderAdminData, b: OrderAdminData) =>
+        a.transactionDate > b.transactionDate ? 1 : -1,
     })
 
     columns.push({
       title: 'Giá trị',
-      dataIndex: 'total',
-      render(text: string, record: DataType, index: number) {
+      dataIndex: 'totalPrice',
+      render(text: string, record: OrderAdminData, index: number) {
         return formatNumber(text)
       },
       onCell: (record) => {
         return {
-          style: { minWidth: 50 },
+          style: { minWidth: 90 },
         }
       },
-      sorter: (a: DataType, b: DataType) => (a.total > b.total ? 1 : -1),
+      sorter: (a: OrderAdminData, b: OrderAdminData) =>
+        a.totalPrice > b.totalPrice ? 1 : -1,
     })
   }
 
+  useEffect(() => {
+    if (minDate || maxDate) {
+      setData(
+        allData.filter(
+          (item: OrderAdminData) =>
+            (minDate?.toDate() ?? 0) <= item.transactionDate &&
+            (maxDate?.toDate() ?? new Date(9999, 11, 31)) >=
+              item.transactionDate
+        )
+      )
+    } else {
+      setData(allData)
+    }
+  }, [minDate, maxDate])
+
   const getData = async () => {
-    await axios.get(`${BASE_URL}/api/admin/orderOnlineData`).then((res) => {
-      setData(res.data)
-    })
+    await getOnlineOrdersBFF()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error()
+        const _data = res.Data.map((item: any) => formatOrderAdminDataXML(item))
+        setData(_data)
+        setAllData(_data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {
@@ -104,14 +156,38 @@ const Online = () => {
           }}
         >
           <Space size='large' style={{ marginBottom: 10 }}>
-            <DatePicker style={{ borderRadius: 12 }} />
-            <DatePicker style={{ borderRadius: 12 }} />
+            <DatePicker
+              style={{ borderRadius: 12 }}
+              onChange={(date) => {
+                setMinDate(date ?? undefined)
+              }}
+            />
+            <DatePicker
+              style={{ borderRadius: 12 }}
+              onChange={(date) => {
+                setMaxDate(date ?? undefined)
+              }}
+            />
           </Space>
-          <InputSearch />
+          <InputSearch
+            onEnter={(text) =>
+              setData(
+                allData.filter(
+                  (item: OrderAdminData) =>
+                    item.id.toLowerCase().includes(text.toLowerCase()) ||
+                    item.publicId.toLowerCase().includes(text.toLowerCase()) ||
+                    item.onlineData?.customerId
+                      .toLowerCase()
+                      .includes(text.toLowerCase())
+                )
+              )
+            }
+            onClear={() => setData(allData)}
+          />
         </div>
-        <TableList<DataType>
+        <TableList<OrderAdminData>
           data={data}
-          title='Danh sách nhân viên'
+          title='Danh sách đơn hàng'
           columns={columns}
           selectUrl={Routes.admin.orderDetail}
           loading={loading}
