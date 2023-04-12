@@ -1,8 +1,10 @@
 import * as React from 'react'
-import { Carousel, Divider } from 'antd'
+import { Carousel, Divider, Image } from 'antd'
 import FeaturedProducts from '../FeaturedProducts'
+import { getEventClientBff } from '@/api'
+import { formatEventDataXML } from '@/utils'
 
-export interface HomeClientProps {}
+export interface HomeClientProps { }
 
 const contentStyle: React.CSSProperties = {
   height: '450px',
@@ -13,15 +15,33 @@ const contentStyle: React.CSSProperties = {
 }
 
 export default function HomeClient(props: HomeClientProps) {
+  const [dataEvent, setDataEvent] = React.useState([]);
+
+  const fetchEventData = async () => {
+    await getEventClientBff()
+      .then((res) => {
+        console.log('???', res);
+        if (res?.StatusCode === '200') {
+          const tempData = res.Data.map((item: any) => formatEventDataXML(item));
+          console.log('temp data:', tempData);
+          setDataEvent(tempData);
+        }
+      })
+  }
+
+  React.useEffect(() => {
+    fetchEventData();
+  }, [])
+
   return (
     <div>
-      <Carousel autoplay className=' -mx-3 sm:-mx-6 md:-mx-14'>
-        <div>
-          <h3 style={contentStyle}>1</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
+      <Carousel autoplay className=' -mx-3 sm:-mx-6 md:-mx-14 !rounded-xl'>
+        {dataEvent.map((event: any) => {
+          return (<div key={event.id}>
+            <Image src={event.image} alt={event.name}
+              style={{ width: '100vw', height: 400, borderRadius: 20 }} />
+          </div>)
+        })}
       </Carousel>
       <div className=''>
         <FeaturedProducts name='SẢN PHẨM BÁN CHẠY NHẤT' />

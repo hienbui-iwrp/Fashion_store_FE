@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Typography, Input, Form } from 'antd'
 import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import { setNotificationValue, useAppDispatch } from '@/redux';
 
 const { Title, Text } = Typography
 export interface SupportProps {
@@ -9,9 +10,10 @@ export interface SupportProps {
 
 export default function Support(props: SupportProps) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const onFinish = (values: any) => {
-    console.log('Success:', values);
-    router.push('/login');
+    dispatch(setNotificationValue('Đã gửi thông tin, chúng tôi sẽ phản hồi đến bạn sớm nhất có thể.'))
+    router.push('/');
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -19,7 +21,7 @@ export default function Support(props: SupportProps) {
   };
 
   return (
-    <div className="m-auto mt-2 max-w-[700px]">
+    <div className="m-auto bg-white rounded-xl px-4 py-2 max-w-[700px]">
       <Title level={4}>Hỗ trợ</Title>
       <Form
         name="basic"

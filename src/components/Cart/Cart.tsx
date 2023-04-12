@@ -172,7 +172,7 @@ export default function Cart(props: CartProps) {
                   <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-24'>{product.goodsSize}</Text>
                 </Space>
               </div>
-              <div className='flex justify-between items-center mt-10'>
+              <div className='flex justify-between items-center mt-10'            >
                 {product.discount === 0 ? (
                   <Text strong className='text-lg'>
                     {FormatMoney(product.unitPrice)}
@@ -197,7 +197,7 @@ export default function Cart(props: CartProps) {
                         {FormatMoney(product.unitPrice)}
                       </Text>
                       <Text strong className='text-xs leading-none'>
-                        {product.discount}%
+                        -{product.discount}%
                       </Text>
                     </div>
                   </div>
@@ -206,6 +206,7 @@ export default function Cart(props: CartProps) {
                   <MinusCircleOutlined
                     className='cursor-pointer text-lg'
                     onClick={(e) => {
+                      e.stopPropagation();
                       e.preventDefault();
                       onChangeQuantity(
                         index,
@@ -226,6 +227,7 @@ export default function Cart(props: CartProps) {
                   <PlusCircleOutlined
                     className='cursor-pointer text-lg'
                     onClick={(e) => {
+                      e.stopPropagation();
                       e.preventDefault();
                       onChangeQuantity(
                         index,
@@ -264,10 +266,12 @@ export default function Cart(props: CartProps) {
   }, [loading])
 
   const onChange = (checkedValues: CheckboxValueType[]) => {
+    console.log('object changed', checkedValues);
     let sumTemp = 0;
     setProductsChecked(checkedValues.map((value: any, _) => {
       const product = JSON.parse(value);
-      sumTemp += product.price * product.quantity;
+      console.log(product);
+      sumTemp += product.unitPrice * (1 - product.discount / 100) * product.quantity;
       return product
     }));
     setSum(sumTemp);
@@ -303,7 +307,7 @@ export default function Cart(props: CartProps) {
               </Text>
             </div>
             <div className='px-4 pt-2 flex justify-end'>
-              <ButtonClientPrimary name='Thanh toán' onClick={handleToPayment} />
+              <ButtonClientPrimary disabled={!productsChecked.length} name='Thanh toán' onClick={handleToPayment} />
             </div>
           </div>
           :

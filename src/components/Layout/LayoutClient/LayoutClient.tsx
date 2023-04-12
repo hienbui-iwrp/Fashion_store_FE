@@ -115,6 +115,7 @@ export default function LayoutClient({
       key: '1',
       label: (
         <button
+          className='min-w-max'
           onClick={() => {
             localStorage.setItem('logged', '')
             router.push(Routes.login)
@@ -255,19 +256,19 @@ export default function LayoutClient({
                   className='p-2 text-black rounded-md outline-none border mr-4'
                   onClick={() => setNavbar(!navbar)}
                   style={{
-                    borderColor: Colors.clientBlack950,
+                    borderColor: Colors.white,
                     height: 'fit-content',
                   }}
                 >
                   {navbar ? (
                     <NavbarCloseIcon
-                      fill={Colors.clientBlack950}
-                      stroke={Colors.clientBlack950}
+                      fill={Colors.white}
+                      stroke={Colors.white}
                     />
                   ) : (
                     <NavbarIcon
-                      fill={Colors.clientBlack950}
-                      stroke={Colors.clientBlack950}
+                      fill={Colors.white}
+                      stroke={Colors.white}
                     />
                   )}
                 </button>
@@ -287,19 +288,18 @@ export default function LayoutClient({
               <ul className='justify-start items-center w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 py-1 hidden md:flex '>
                 {secondaryList.map((item, index) => {
                   return (
-                    <li
-                      key={index}
-                      className='text-sm hover:cursor-pointer text-xs  hover:bg-green-200	 px-2 rounded-full'
-                      style={{ fontWeight: '600' }}
+                    <Link key={index}
+                      className='text-green-600 hover:text-emerald-700 text-sm	'
+                      // className='text-emerald-600 hover:text-emerald-600 text-xs	'
+                      href={`${item.link}` || '/'}
                     >
-                      <Link
-                        className='text-green-600 hover:text-emerald-700 text-sm	'
-                        // className='text-emerald-600 hover:text-emerald-600 text-xs	'
-                        href={`${item.link}` || '/'}
+                      <li
+                        className='text-sm hover:cursor-pointer text-xs hover:bg-green-200 md:!ml-1.5 lg:!ml-2 xl:!ml-3	px-0 lg:px-1 xl:px-2 rounded-full'
+                        style={{ fontWeight: '600' }}
                       >
                         {item.label}
-                      </Link>
-                    </li>
+                      </li>
+                    </Link>
                   )
                 })}
               </ul>
@@ -335,7 +335,7 @@ export default function LayoutClient({
         <Row gutter={16}>
           <Col className='gutter-row' span={12}>
             <div>
-              <Title className='!text-white'>FASHION</Title>
+              <Title className='!text-white'>PTH FASHION</Title>
               <Typography className='text-white'>
                 268 Lý Thường Kiệt, Quận 10, Tp.HCM
               </Typography>
@@ -397,6 +397,9 @@ export default function LayoutClient({
                   >
                     Hỗ trợ
                   </Link>
+                </li>
+                <li className='mb-4'>
+                  <div>Logo created by <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo logo maker</a></div>
                 </li>
               </ul>
             </div>
