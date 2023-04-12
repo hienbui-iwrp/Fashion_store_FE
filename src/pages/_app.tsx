@@ -14,7 +14,6 @@ import {
 } from '@/redux/slices/notificationSlice'
 import { Colors, Routes } from '@/constants'
 import { LayoutAdmin } from '@/components'
-import NotFoundPage from './404'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -40,13 +39,6 @@ export default function App({ Component, pageProps }: AppProps) {
       }
     }
   }
-  // if (
-  //   router.pathname.startsWith(Routes.login) ||
-  //   router.pathname.startsWith(Routes.register) ||
-  //   router.pathname.startsWith(Routes.resetPassword) ||
-  //   router.pathname.startsWith(Routes.error)
-  // ) {
-  // }
 
   if (
     router.pathname === Routes.homepage ||
