@@ -10,6 +10,7 @@ import { useReactToPrint } from 'react-to-print';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
 import moment from 'moment';
+import Link from 'next/link';
 
 export interface CustomerOrderDetailProps {
 
@@ -175,7 +176,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
 
   return (
     loading ? <Loading /> :
-      <div className="w-[800px] m-auto mt-4 bg-white">
+      <div className="w-[800px] m-auto bg-white rounded-b-lg">
         <Modal
           title={null}
           closable
@@ -189,14 +190,14 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
           </Button>
           <Invoice {...data} ref={componentRef} />
         </Modal>
-        <div className='flex justify-between border-b-8 border-[#F1F1F1]'>
-          <Text className='font-bold'>ID Đơn hàng: {data.orderId}</Text>
+        <div className='px-2 flex justify-between border-b-8 border-[#F1F1F1]'>
+          <Text className='font-bold'>ID Đơn hàng: {data.orderCode}</Text>
           <Button type='text' onClick={showModal}>
             <Text className='text-red-600 underline font-bold'>Xuất hóa đơn</Text>
           </Button>
         </div>
-        <div className='px-2'>
-          <div className='mt-2'>
+        <div className='px-4 py-2'>
+          <div>
             <Steps
               current={data.status}
               labelPlacement="vertical"
@@ -217,7 +218,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
             />
           </div>
           <div>
-            <Title level={5}>Địa chỉ nhận hàng</Title>
+            <Title level={5}>Địa chỉ nhận hàng:</Title>
             <Row gutter={8}>
               <Col span={8} className='flex flex-col'>
                 <Text>{data.nameReceiver}</Text>
@@ -234,17 +235,23 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                 </Timeline>
               </Col>
             </Row>
+            <Title level={5}>Danh sách các sản phẩm:</Title>
             {data.listGoods.map((item, index) => {
               return (
                 <div key={index}>
                   <div className="flex border-b-2 pb-1">
-                    <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image} alt='' />
+                    <Link href={`/products/${item.goodsId}`}>
+                      <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image} alt='' />
+                    </Link>
                     <div className='flex-1 pl-4'>
                       <Row className='flex-1'>
                         <Col span={19}>
-                          <Text>
-                            {item.name}
-                          </Text>
+                          <Link href={`/products/${item.goodsId}`}>
+                            <Text>
+                              {item.name}
+                            </Text>
+                          </Link>
+
                           <div className='mt-2'>
                             <Space>
                               <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
@@ -267,7 +274,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                         <Col span={5}>
                           <div className='flex justify-between items-center mt-8'>
                             {item.discount === 0 ?
-                              <Text strong className="text-lg">{item.price} đ</Text> :
+                              <Text strong className="text-lg">{item.unitPrice} đ</Text> :
                               <div className='flex flex-col leading-none'>
                                 <Text strong className="text-lg text-red-600 leading-none">{item.price} đ</Text>
                                 <div>

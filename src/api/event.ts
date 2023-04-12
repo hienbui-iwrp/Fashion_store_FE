@@ -21,6 +21,21 @@ export const getEventBFF = async () => {
     })
 }
 
+export const getEventClientBff = async () => {
+  const payload = `
+    <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body/>
+    `
+  return await shareBff
+    .post(`/event-service/all-event`, payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getEvent err: ', err)
+    })
+}
+
 export const getEventDetailBFF = async (id: any) => {
   const payload = `
     <?xml version="1.0" encoding="utf-8"?>
@@ -45,9 +60,9 @@ export const updateEventBff = async (id: any, event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
-          ''
-        )
+        (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+        ''
+      )
       : '<Goods></Goods>'
 
   const payload = `
@@ -80,9 +95,9 @@ export const addEventBff = async (event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
-          ''
-        )
+        (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+        ''
+      )
       : '<Goods></Goods>'
 
   const payload = `

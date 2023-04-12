@@ -6,10 +6,11 @@ import type { TabsProps } from 'antd';
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary';
 import styles from './CustomerOrders.module.css'
 import { getListOrder, getListOrderBff } from '@/api/customer-order';
-import { FormatMoney, OrderProps, formatOrdersDataXML } from '@/utils';
+import { FormatMoney, OrderProps, ProductInCartProps, formatOrdersDataXML } from '@/utils';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
 import { ImageEmpty } from '@/constants/image';
+import { addGoodsBff } from '@/api';
 
 export interface CustomerOrdersProps {
 }
@@ -17,6 +18,22 @@ export interface CustomerOrdersProps {
 const { Title, Text } = Typography;
 
 function OrderItem(props: OrderProps) {
+
+  const handleReBuyOrder = () => {
+    const customerId = localStorage.getItem('userId');
+    props.listGoods.forEach((goods) => {
+      if (customerId) {
+        handleReBuy(customerId, goods);
+      }
+    })
+  }
+
+  const handleReBuy = async (customerId: string, goods: ProductInCartProps) => {
+    await addGoodsBff(customerId || '', goods);
+  }
+
+
+
   const router = useRouter()
   return (
     <div className='px-2 pb-4 pt-1 border-t-8 border-[#F1F1F1]'>
@@ -28,7 +45,10 @@ function OrderItem(props: OrderProps) {
           <Text strong className='text-red-600'>
             {props.statusShips.length > 0 ? props.statusShips[props.statusShips.length - 1].status : null}
           </Text>
-          <ButtonClientPrimary name='Mua lại' onClick={() => {
+          <ButtonClientPrimary name='Mua lại' onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handleReBuyOrder();
             router.push('/cart');
           }} />
         </div>
@@ -101,19 +121,19 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
     console.log(key);
   };
   const [received, setReceived] = useState(
-    <div>
-      Chưa có đơn hàng nào đã được nhận
+    <div className='text-xl h-32 flex justify-center items-center'>
+      Chưa có đơn hàng nào đã được nhận.
     </div>
   )
   const [nonReceived, setNonReceived] = useState(
-    <div>
-      Chưa có đơn hàng nào chưa nhận
+    <div className='text-xl h-32 flex justify-center items-center'>
+      Chưa có đơn hàng nào chưa nhận.
     </div>
   )
   const tabItems: TabsProps['items'] = [
     {
       key: '1',
-      label: 'CHƯA NHẬN HÀNG',
+      label: <Text className='pl-2'>CHƯA NHẬN HÀNG</Text>,
       children: nonReceived,
     },
     {
@@ -138,7 +158,7 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
           const completed: OrderProps[] = tempData.filter((item: OrderProps) => {
             return item.isCompleted === true
           })
-          setNonReceived(
+          nonCompleted.length ? setNonReceived(
             <div>
               {nonCompleted.map((item, index) => {
                 return (
@@ -146,8 +166,8 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
                 )
               })}
             </div>
-          )
-          setReceived(
+          ) : null;
+          completed.length ? setReceived(
             <div>
               {completed.map((item, index) => {
                 return (
@@ -155,7 +175,7 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
                 )
               })}
             </div>
-          )
+          ) : null;
           setLoading(false)
         }
       })
@@ -169,7 +189,7 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
   return (
     loading ? <Loading /> :
       <div className={styles.customerOrders}>
-        <Tabs defaultActiveKey="1" items={tabItems} onChange={onChangeTabs} />
+        <Tabs className='bg-white' defaultActiveKey="1" items={tabItems} onChange={onChangeTabs} />
       </div>
   );
 }

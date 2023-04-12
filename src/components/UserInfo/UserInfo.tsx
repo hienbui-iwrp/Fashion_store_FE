@@ -145,7 +145,7 @@ export default function UserInfo(props: UserInfoProps) {
           onFinishFailed={onFinishFailed}
         >
           <Row>
-            <Col span={15}>
+            <Col span={12}>
               <Form.Item
                 className='mb-1'
                 label={<Text strong>Tên</Text>}
@@ -226,7 +226,7 @@ export default function UserInfo(props: UserInfoProps) {
                 </div>
               </div>
             </Col>
-            <Col span={9} className="flex justify-center items-center">
+            <Col span={12} className="flex justify-center items-center">
               <div>
                 <Avatar size={128} src={<img src={'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'} alt="avatar" />} />
                 <Upload
