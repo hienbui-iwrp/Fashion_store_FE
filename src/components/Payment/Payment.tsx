@@ -96,7 +96,6 @@ export default function Payment(props: PaymentProps) {
     //@ts-ignore
     const formData = formRef.current.getFieldsValue();
     if (formData.province && formData.district && formData.ward && formData.street) {
-      setExpectedDate('2023-04-08');
       const orderData = {
         ...formData, goodsList: dataProductsPayment.listProductPayment,
         shipFee, totalPrice: dataProductsPayment.totalPrice,
@@ -108,7 +107,7 @@ export default function Payment(props: PaymentProps) {
           district: formData.district,
           province: formData.province
         },
-        expectedDate: expectedDate ? expectedDate : '2023-04-08'
+        expectedDate: expectedDate ? expectedDate : '2023-05-08'
       }
       sendOrderInfo(orderData);
     }
@@ -370,7 +369,7 @@ export default function Payment(props: PaymentProps) {
                   <Text strong>Tổng đơn</Text>
                   <Text className='text-[#6A983C]'>Nhận hàng: {expectedDate ? expectedDate : 'Vui lòng nhập đầy đủ thông tin'}</Text>
                 </div>
-                <Text strong className='text-[#6A983C] text-2xl'>{FormatMoney(totalOrder + shipFee)}</Text>
+                <Text strong className='text-[#6A983C] text-2xl'>{FormatMoney(totalOrder + (shipFee ? shipFee : 0))}</Text>
               </div>
             </div>
           </Col>

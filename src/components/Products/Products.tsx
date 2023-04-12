@@ -26,6 +26,7 @@ import { getAllProducts, getAllProductsBff } from '@/api/products'
 import { BASE_URL, Colors, GoodsOptions } from '@/constants'
 import styles from './Products.module.css'
 import { FilterTag } from '../FilterTag'
+import { useRouter } from 'next/router';
 
 const { Title, Text } = Typography
 
@@ -45,7 +46,9 @@ const plainOptions = [
 const defaultCheckedList: string[] = []
 
 export default function Products(props: ProductsProps) {
-  const dispatch = useAppDispatch()
+  console.log('object props filter: ', props.filter);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [loaded, setLoaded] = useState(false)
   const { setListProduct } = productsActions;
   const dataProducts: ProductsDataProps = useSelector(selectProducts);
@@ -93,9 +96,10 @@ export default function Products(props: ProductsProps) {
   })
   const [listValueFilter, setListValueFilter] = useState<string[]>(props.filter)
   const [checkedList, setCheckedList] =
-    useState<CheckboxValueType[]>(defaultCheckedList)
+    useState<CheckboxValueType[]>(defaultCheckedList);
 
   const filterProducts = (checklist: CheckboxValueType[], listValueFilter: string[]) => {
+    setLoaded(true);
     let listProduct: ProductDetailDataProps[] = [...dataProducts.listProduct]
     console.log('check', checklist, listValueFilter);
     if (listValueFilter.length !== 0) {
@@ -122,6 +126,7 @@ export default function Products(props: ProductsProps) {
       totalProducts: listProduct.length,
       listProduct: [...listProduct]
     })
+    setLoaded(false);
   }
 
   const onChangePrice = (list: CheckboxValueType[]) => {
@@ -199,19 +204,12 @@ export default function Products(props: ProductsProps) {
     //   dispatch(setListProduct(res?.data))
     //   setLoaded(true)
     // })
-    console.log('object redux', dataProducts);
     await getAllProductsBff({ pageSize: 100, offset: 1 }).then((res) => {
-      console.log(res)
-      console.log('object pre data', data);
       if (res?.StatusCode === '200') {
         console.log(res?.Data);
-        console.log('object check');
         const data = formatProductsDataXML(res?.Data);
-        console.log('object');
         setData({ totalProducts: 0, listProduct: data });
-        console.log('data', data);
         dispatch(setListProduct({ totalProducts: 0, listProduct: data }));
-        console.log('after redux', dataProducts);
         filterProducts(checkedList, listValueFilter);
         setLoaded(true);
       }
@@ -219,8 +217,13 @@ export default function Products(props: ProductsProps) {
   }
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [loaded])
+
+  useEffect(() => {
+    setListValueFilter([...props.filter]);
+    filterProducts(checkedList, listValueFilter);
+  }, [props.filter])
 
   return (
     <div className='products-content '>
@@ -236,9 +239,9 @@ export default function Products(props: ProductsProps) {
             onChange={handleChange}
             onSelect={handleSelectFilter}
             options={[
-              { value: 'man', label: 'Nam' },
-              { value: 'woman', label: 'Nữ' },
-              { value: 'unisex', label: 'Unisex' },
+              { value: '1', label: 'Nam' },
+              { value: '2', label: 'Nữ' },
+              { value: '3', label: 'Unisex' },
             ]}
             suffixIcon={
               <CaretDownOutlined
@@ -346,16 +349,6 @@ export default function Products(props: ProductsProps) {
           /> */}
         </div>
 
-        {/* <Space className='!my-2'>
-          <FilterTag
-            label='Nam'
-          // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
-          />
-          <FilterTag
-            label='Nữ'
-          // style={{ backgroundColor: Colors.adminGreen300, color: 'white' }}
-          />
-        </Space> */}
         <Select
           mode='multiple'
           allowClear
@@ -366,7 +359,10 @@ export default function Products(props: ProductsProps) {
           defaultValue={listValueFilter}
           value={listValueFilter}
           onDeselect={handleDeselect}
-          onClear={() => setListValueFilter([])}
+          onClear={() => {
+            setListValueFilter([]);
+            filterProducts(checkedList, listValueFilter);
+          }}
           options={options}
           dropdownRender={() => <></>}
           dropdownStyle={{ display: 'none' }}

@@ -24,5 +24,5 @@ export const Colors = {
   clientBlack950: '#030712',
   clientBackground: '#fafafa',
 
-  tranparent: '#10b98100',
+  transparent: '#10b98100',
 }

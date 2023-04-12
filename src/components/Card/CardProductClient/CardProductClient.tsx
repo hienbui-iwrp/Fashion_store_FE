@@ -66,52 +66,63 @@ export default function CardProductClient(props: ProductDetailDataProps) {
   }
 
   return (
-    <div className='w-1/4 px-3 pb-4 ' style={{ minWidth: 180, maxWidth: 300 }}>
+    <div className='card-product-client flex w-1/4 px-3 pb-4' style={{ minWidth: 180, maxWidth: 300 }}>
       <Card
         hoverable
         onClick={handleClickCard}
-        className='rounded-xl'
+        className='rounded-xl flex w-full'
         bodyStyle={{
           padding: '12px',
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
           boxShadow: '1px 5px 5px 1px #ddd',
           overflow: 'hidden',
           borderRadius: 12,
         }}
       >
-        <Image src={props.images[0] || 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} preview={false} className='pb-2' />
-        {/* <img className='' alt='example'  /> */}
-        <Text strong className='text-lg ' style={{ lineHeight: '1rem' }}>
-          {props.name}
-        </Text>
-        <div className='flex justify-between items-center pt-2'>
-          {props.discount === 0 ? (
-            <Text strong className='text-lg'>
-              {FormatMoney(props.unitPrice)}
+        <div className='pb-2 flex items-center justify-center'>
+          <Image src={props.images[0] || 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} preview={false} className='pb-2 !h-64' />
+        </div>
+        <div className='flex-1'>
+          <div className='flex flex-col justify-between h-full'>
+            <Text strong className='text-lg' style={{ lineHeight: '1.25rem' }}>
+              {props.name}
             </Text>
-          ) : (
-            <div className='flex flex-col leading-none'>
-              <Text strong className='text-lg text-red-600 leading-none'>
-                {FormatMoney(props.price)}
-              </Text>
-              <div className='mt-1'>
-                <Text
-                  strong
-                  className='text-xs line-through text-gray-400 pr-1 leading-none'
-                >
+            <div className='flex justify-between items-center pt-2'>
+              {props.discount === 0 ? (
+                <Text strong className='text-lg'>
                   {FormatMoney(props.unitPrice)}
                 </Text>
-                <Text strong className='text-xs leading-none'>
-                  -{props.discount}%
-                </Text>
-              </div>
+              ) : (
+                <div className='flex flex-col leading-none'>
+                  <Text strong className='text-lg text-red-600 leading-none'>
+                    {FormatMoney(props.price)}
+                  </Text>
+                  <div className='mt-1'>
+                    <Text
+                      strong
+                      className='text-xs line-through text-gray-400 pr-1 leading-none'
+                    >
+                      {FormatMoney(props.unitPrice)}
+                    </Text>
+                    <Text strong className='text-xs leading-none'>
+                      -{props.discount}%
+                    </Text>
+                  </div>
+                </div>
+              )}
+              <ButtonClientPrimary
+                disabled={quantity === 0}
+                onClick={handleAddToCart}
+                icon={<FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />}
+              />
             </div>
-          )}
-          <ButtonClientPrimary
-            disabled={quantity === 0}
-            onClick={handleAddToCart}
-            icon={<FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />}
-          />
+
+          </div>
         </div>
+
       </Card>
     </div>
   )

@@ -20,11 +20,12 @@ export default function ButtonHeader({
         setHover(false)
       }}
       style={{
-        backgroundColor: hover ? Colors.clientBlack100 : Colors.tranparent,
+        backgroundColor: hover ? Colors.clientBlack300 : Colors.transparent,
         borderRadius: 25,
         width: 42,
         height: 42,
-        color: Colors.clientBlack700,
+        // color: Colors.clientBlack700,
+        color: Colors.white,
         boxShadow: '0 0 0',
       }}
       icon={icon || null}

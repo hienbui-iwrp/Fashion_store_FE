@@ -81,7 +81,7 @@ export const GoodsAges = [
 ]
 
 export const GoodsOptions = [
-  GoodsGenders,
+  ...GoodsGenders,
   ...GoodsSizes,
   ...GoodsTypes,
   ...GoodsAges,
