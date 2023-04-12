@@ -49,7 +49,7 @@ export const getGoodsInWarehouseBFF = (id: any) => {
     })
 }
 
-export const addGoodsBff = (
+export const addGoodsBFF = (
   goods: GoodsProps,
   sizes: string[],
   colors: string[]

@@ -1,33 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useAppDispatch } from '@/redux/store'
-import { productsPaymentActions, setNotificationType, setNotificationValue } from '@/redux/slices'
-import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/router';
-import { Space, Typography, Image, Row, Col, Divider, Radio, InputNumber, Spin, Button } from 'antd';
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import { Checkbox } from 'antd';
-import ButtonClientPrimary from '../Button/ButtonClientPrimary';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import {
+  productsPaymentActions,
+  setNotificationType,
+  setNotificationValue,
+} from '@/redux/slices'
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import {
+  Space,
+  Typography,
+  Image,
+  Row,
+  Col,
+  Divider,
+  Radio,
+  InputNumber,
+  Spin,
+  Button,
+} from 'antd'
+import type { CheckboxValueType } from 'antd/es/checkbox/Group'
+import { Checkbox } from 'antd'
+import ButtonClientPrimary from '../Button/ButtonClientPrimary'
+import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { ProductInCartProps, formatCartDataXML, formatResponse } from '@/utils'
-import { deleteAllGoodsBff, deleteGoodsBff, getCart, getCartBff, updateCartBff } from '@/api/cart';
-import { FormatMoney } from '@/utils';
-import Loading from '@/components/Loading';
-import { checkLogin } from '@/utils/check';
+import {
+  deleteAllGoodsBff,
+  deleteGoodsBff,
+  getCart,
+  getCartBff,
+  updateCartBff,
+} from '@/api/cart'
+import { FormatMoney } from '@/utils'
+import Loading from '@/components/Loading'
+import { checkLogin } from '@/utils/check'
 import styles from './Cart.module.css'
-import { FormatMoneyD } from '@/utils/formats/FormatMoney';
-import { ImageEmpty } from '@/constants/image';
+import { FormatMoneyD } from '@/utils/formats/FormatMoney'
+import { ImageEmpty } from '@/constants/image'
+import { Colors } from '@/constants'
 
 const { Title, Text } = Typography
 
-export interface CartProps {
-}
+export interface CartProps {}
 
 interface Option {
-  label: JSX.Element;
-  key: string;
-  value: string;
-  disabled?: boolean;
+  label: JSX.Element
+  key: string
+  value: string
+  disabled?: boolean
 }
 
 export interface CartItemProps {
@@ -42,94 +63,102 @@ export interface CartItemProps {
 }
 
 export default function Cart(props: CartProps) {
-  const router = useRouter();
-  const dispatch: any = useAppDispatch();
-  const [cartId, setCartId] = useState<string>();
-  const { setProductsPayment } = productsPaymentActions;
-  const [loading, setLoading] = useState(true);
-  const [sum, setSum] = useState(0);
-  const [quantity, setQuantity] = useState<number>(1);
-  const maxQuantity: number = 1000;
-  const [data, setData] = useState<ProductInCartProps[]>([]);
-  const [productsChecked, setProductsChecked] = useState<ProductInCartProps[]>([])
+  const router = useRouter()
+  const dispatch: any = useAppDispatch()
+  const [cartId, setCartId] = useState<string>()
+  const { setProductsPayment } = productsPaymentActions
+  const [loading, setLoading] = useState(true)
+  const [sum, setSum] = useState(0)
+  const [quantity, setQuantity] = useState<number>(1)
+  const maxQuantity: number = 1000
+  const [data, setData] = useState<ProductInCartProps[]>([])
+  const [productsChecked, setProductsChecked] = useState<ProductInCartProps[]>(
+    []
+  )
 
-  const [options, setOptions] = useState<Option[]>([]);
+  const [options, setOptions] = useState<Option[]>([])
 
   const onSelectItemGoods = (e: CheckboxChangeEvent) => {
-    const product = JSON.parse(e.target.value);
+    const product = JSON.parse(e.target.value)
     const goodsId = product.goodsId
-    const index = productsChecked.findIndex((product) => product.goodsId === goodsId)
+    const index = productsChecked.findIndex(
+      (product) => product.goodsId === goodsId
+    )
     if (index === -1) {
-      setProductsChecked([...productsChecked, product]);
-      setSum(sum + product.price * product.quantity);
+      setProductsChecked([...productsChecked, product])
+      setSum(sum + product.price * product.quantity)
+    } else {
+      setProductsChecked(
+        productsChecked.filter((product) => product.goodsId !== goodsId)
+      )
+      setSum(sum - product.price * product.quantity)
     }
-    else {
-      setProductsChecked(productsChecked.filter((product) => product.goodsId !== goodsId))
-      setSum(sum - product.price * product.quantity);
-    }
-  };
+  }
 
   const updateCart = async () => {
     if (cartId) {
-      console.log('cartId: ', cartId);
-      console.log('cartData: ', data);
-      await updateCartBff(cartId, data)
-        .then((res) => {
-          console.log('res update', res);
-          if (res?.StatusCode === '200') {
-            setOptions(setForOptions(data));
-          } else {
-            dispatch(setNotificationType('error'))
-            dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
-          }
-        })
+      console.log('cartId: ', cartId)
+      console.log('cartData: ', data)
+      await updateCartBff(cartId, data).then((res) => {
+        console.log('res update', res)
+        if (res?.StatusCode === '200') {
+          setOptions(setForOptions(data))
+        } else {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
+        }
+      })
     }
   }
 
   const onChangeQuantity = (index: number, value: number) => {
     if (value > 0 && value < maxQuantity) {
-      data[index].quantity = value;
+      data[index].quantity = value
       updateCart()
     }
-  };
+  }
 
-  const onRemoveProductItem = async (index: number, goods: ProductInCartProps) => {
-    await deleteGoodsBff(cartId ?? '', [goods])
-      .then(res => {
-        if (res?.StatusCode === '200') {
-          data.splice(index, 1);
-          setOptions(setForOptions(data));
-        }
-        else {
-          dispatch(setNotificationType('error'))
-          dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
-        }
-      })
+  const onRemoveProductItem = async (
+    index: number,
+    goods: ProductInCartProps
+  ) => {
+    await deleteGoodsBff(cartId ?? '', [goods]).then((res) => {
+      if (res?.StatusCode === '200') {
+        data.splice(index, 1)
+        setOptions(setForOptions(data))
+      } else {
+        dispatch(setNotificationType('error'))
+        dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
+      }
+    })
   }
 
   const onRemoveAll = async () => {
-    await deleteAllGoodsBff(cartId ?? '')
-      .then(res => {
-        if (res?.StatusCode === '200') {
-          setData([]);
-          setOptions(setForOptions([]));
-        }
-        else {
-          dispatch(setNotificationType('error'))
-          dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
-        }
-      })
+    await deleteAllGoodsBff(cartId ?? '').then((res) => {
+      if (res?.StatusCode === '200') {
+        setData([])
+        setOptions(setForOptions([]))
+      } else {
+        dispatch(setNotificationType('error'))
+        dispatch(setNotificationValue('Có lỗi khi chỉnh sửa giỏ hàng'))
+      }
+    })
   }
 
   const handleToPayment = () => {
-    dispatch(setProductsPayment({ totalPrice: sum, listProductPayment: productsChecked }));
-    router.push('/payment');
+    dispatch(
+      setProductsPayment({
+        totalPrice: sum,
+        listProductPayment: productsChecked,
+      })
+    )
+    router.push('/payment')
   }
 
   const setForOptions = (products: ProductInCartProps[]) => {
     return products.map((product: ProductInCartProps, index: number) => {
       return {
-        label:
+        label: (
           <div className='flex w-[500px]'>
             <Image
               width={140}
@@ -151,10 +180,9 @@ export default function Cart(props: CartProps) {
                     className='!text-red-600 underline flex justify-end'
                     level={5}
                     onClick={(e) => {
-                      e.preventDefault();
-                      onRemoveProductItem(index, product);
-                    }
-                    }
+                      e.preventDefault()
+                      onRemoveProductItem(index, product)
+                    }}
                   >
                     Xóa
                   </Title>
@@ -163,26 +191,43 @@ export default function Cart(props: CartProps) {
               <div className='mt-0'>
                 <Space>
                   <Text className='text-[#A9A9A9] flex w-28'>Màu sắc:</Text>
-                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-24'>{product.goodsColor}</Text>
+                  <b>
+                    <Text
+                      className='bg-[#D9D9D9] text-white flex justify-center w-24'
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor: Colors.clientEmerald500,
+                      }}
+                    >
+                      {product.goodsColor}
+                    </Text>
+                  </b>
                 </Space>
               </div>
               <div className='mt-2'>
                 <Space>
                   <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-                  <Text className='bg-[#D9D9D9] text-red-600 flex justify-center w-24'>{product.goodsSize}</Text>
+                  <b>
+                    <Text
+                      className='bg-[#D9D9D9] text-white flex justify-center w-24'
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor: Colors.clientEmerald500,
+                      }}
+                    >
+                      {product.goodsSize}
+                    </Text>
+                  </b>
                 </Space>
               </div>
-              <div className='flex justify-between items-center mt-10'            >
+              <div className='flex justify-between items-center mt-10'>
                 {product.discount === 0 ? (
                   <Text strong className='text-lg'>
                     {FormatMoney(product.unitPrice)}
                   </Text>
                 ) : (
                   <div className='flex flex-col leading-none'>
-                    <Text
-                      strong
-                      className='text-lg text-red-600 leading-none'
-                    >
+                    <Text strong className='text-lg text-red-600 leading-none'>
                       {/* {(
                         product.unitPrice *
                         (1 - product.discount / 100)
@@ -206,12 +251,9 @@ export default function Cart(props: CartProps) {
                   <MinusCircleOutlined
                     className='cursor-pointer text-lg'
                     onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      onChangeQuantity(
-                        index,
-                        product.quantity - 1
-                      )
+                      e.stopPropagation()
+                      e.preventDefault()
+                      onChangeQuantity(index, product.quantity - 1)
                     }}
                   />
                   <InputNumber
@@ -220,44 +262,38 @@ export default function Cart(props: CartProps) {
                     min={1}
                     max={product.maxQuantity || 1000}
                     value={product.quantity}
-                    onChange={(value) =>
-                      onChangeQuantity(index, value || 0)
-                    }
+                    onChange={(value) => onChangeQuantity(index, value || 0)}
                   />
                   <PlusCircleOutlined
                     className='cursor-pointer text-lg'
                     onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      onChangeQuantity(
-                        index,
-                        product.quantity + 1
-                      )
+                      e.stopPropagation()
+                      e.preventDefault()
+                      onChangeQuantity(index, product.quantity + 1)
                     }}
                   />
                 </div>
               </div>
             </div>
-          </div>,
+          </div>
+        ),
         value: JSON.stringify({ ...product }),
-        key: product.goodsId
+        key: product.goodsId,
       }
-    }
-    )
+    })
   }
 
   const fetchData = async () => {
-    await getCartBff(localStorage.getItem('userId') || '')
-      .then((res) => {
-        if (res?.StatusCode === '200') {
-          const tempData = formatCartDataXML(res?.Data[0]);
-          console.log('object data', tempData);
-          setCartId(tempData.cartId);
-          setData(tempData.productsInCart);
-          setOptions(setForOptions(data));
-        }
-      })
-    setLoading(false);
+    await getCartBff(localStorage.getItem('userId') || '').then((res) => {
+      if (res?.StatusCode === '200') {
+        const tempData = formatCartDataXML(res?.Data[0])
+        console.log('object data', tempData)
+        setCartId(tempData.cartId)
+        setData(tempData.productsInCart)
+        setOptions(setForOptions(data))
+      }
+    })
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -266,59 +302,69 @@ export default function Cart(props: CartProps) {
   }, [loading])
 
   const onChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('object changed', checkedValues);
-    let sumTemp = 0;
-    setProductsChecked(checkedValues.map((value: any, _) => {
-      const product = JSON.parse(value);
-      console.log(product);
-      sumTemp += product.unitPrice * (1 - product.discount / 100) * product.quantity;
-      return product
-    }));
-    setSum(sumTemp);
-  };
+    console.log('object changed', checkedValues)
+    let sumTemp = 0
+    setProductsChecked(
+      checkedValues.map((value: any, _) => {
+        const product = JSON.parse(value)
+        console.log(product)
+        sumTemp +=
+          product.unitPrice * (1 - product.discount / 100) * product.quantity
+        return product
+      })
+    )
+    setSum(sumTemp)
+  }
 
-  return (
-    loading ? <Loading /> :
-      <div className='bg-white w-[550px] m-auto border mt-4 mb-8 rounded-xl p-2'>
-        <div className='flex justify-between'>
-          <Title level={3}>Giỏ hàng</Title>
-          {data.length ? <Button type="link" danger onClick={() => {
-            onRemoveAll();
-          }}>
+  return loading ? (
+    <Loading />
+  ) : (
+    <div className='bg-white w-[550px] m-auto border mt-4 mb-8 rounded-xl p-2'>
+      <div className='flex justify-between'>
+        <Title level={3}>Giỏ hàng</Title>
+        {data.length ? (
+          <Button
+            type='link'
+            danger
+            onClick={() => {
+              onRemoveAll()
+            }}
+          >
             Xóa tất cả
           </Button>
-            :
-            null}
-        </div>
-        {data.length ?
-          <div>
-            <div className={styles.listCartItem}>
-
-              <Checkbox.Group
-                options={options}
-                onChange={onChange}
-                className='flex flex-wrap'
-              />
-            </div>
-            <div className='px-4 flex justify-between'>
-              <Text strong>Tổng cộng</Text>
-              <Text strong className='text-red-600 text-lg'>
-                {FormatMoney(sum)}
-              </Text>
-            </div>
-            <div className='px-4 pt-2 flex justify-end'>
-              <ButtonClientPrimary disabled={!productsChecked.length} name='Thanh toán' onClick={handleToPayment} />
-            </div>
-          </div>
-          :
-          <div className='flex flex-col items-center'>
-            <Text >Bạn chưa có sản phẩm nào trong giỏ hàng.</Text>
-            <Link href={`/products`}>
-              <ButtonClientPrimary type='primary' name='Xem sản phẩm' />
-            </Link>
-          </div>
-        }
-
+        ) : null}
       </div>
+      {data.length ? (
+        <div>
+          <div className={styles.listCartItem}>
+            <Checkbox.Group
+              options={options}
+              onChange={onChange}
+              className='flex flex-wrap'
+            />
+          </div>
+          <div className='px-4 flex justify-between'>
+            <Text strong>Tổng cộng</Text>
+            <Text strong className='text-red-600 text-lg'>
+              {FormatMoney(sum)}
+            </Text>
+          </div>
+          <div className='px-4 pt-2 flex justify-end'>
+            <ButtonClientPrimary
+              disabled={!productsChecked.length}
+              name='Thanh toán'
+              onClick={handleToPayment}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className='flex flex-col items-center'>
+          <Text>Bạn chưa có sản phẩm nào trong giỏ hàng.</Text>
+          <Link href={`/products`}>
+            <ButtonClientPrimary type='primary' name='Xem sản phẩm' />
+          </Link>
+        </div>
+      )}
+    </div>
   )
 }

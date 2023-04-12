@@ -13,11 +13,14 @@ export const Colors = {
 
   shadow: '#ccc',
 
-  clientGreen700: '#047857',
-  clientGreen500: '#10b981',
-  clientGreen400: '#34d399',
-  clientGreen100: '#d1fae5',
-  clientGreen50: '#ecfdf5',
+  clientEmerald700: '#047857',
+  clientEmerald500: '#10b981',
+  clientEmerald400: '#34d399',
+  clientEmerald100: '#d1fae5',
+  clientEmerald50: '#ecfdf5',
+
+  clientGreen400: '#4ade80',
+
   clientBlack100: '#f3f4f6',
   clientBlack300: '#d1d5db',
   clientBlack700: '#374151',

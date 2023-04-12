@@ -39,7 +39,8 @@ export default function ButtonClientPrimary({
           ? undefined
           : hover
           ? Colors.clientGreen400
-          : Colors.clientGreen700,
+          : Colors.clientEmerald700,
+        border: 0,
       }}
     >
       {name ? (
