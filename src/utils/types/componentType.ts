@@ -27,7 +27,7 @@ export interface TableListProps<T> extends ComponentProps {
   pageSize?: number
   ellipsis?: boolean
   pagination?: boolean
-  onSelectRow?: () => void
+  onSelectRow?: (item?: any) => void
   rowSelection?: object
   rowKey?: string[]
   maxWidth?: string | number

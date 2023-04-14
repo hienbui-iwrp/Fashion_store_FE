@@ -63,6 +63,7 @@ const TableList = function <T extends object>(props: TableListProps<T>) {
         onRow={(record: any, index) => {
           return {
             onClick: (event) => {
+              props.onSelectRow && props.onSelectRow(record)
               props.callback && props.callback(record)
               props.selectUrl &&
                 router.push(props.selectUrl + `?id=${record.id}`)

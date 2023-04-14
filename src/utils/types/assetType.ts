@@ -197,9 +197,8 @@ export type EventProps = {
 
 export type GoodsProps = {
   id: string
+  classify: GoodsClassifyProps[]
   name: string
-  size: string
-  color: string
   type: string
   gender: string
   age: string
@@ -277,4 +276,10 @@ export type OnlineOrderAdminData = {
 export type OfflineOrderAdminData = {
   staffId: string
   branchhId: string
+}
+
+export type StatisticData = {
+  revenue?: number
+  profit?: number
+  date: Date
 }

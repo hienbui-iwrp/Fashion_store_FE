@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
 import { LineChartProps } from '@/utils/types/componentType'
@@ -16,7 +16,7 @@ interface DataType {
   category: string
 }
 
-const LineChart = (props: LineChartProps) => {
+const LineChart = memo((props: LineChartProps) => {
   const [data, setData] = useState<DataType[]>([])
 
   useEffect(() => {
@@ -26,13 +26,13 @@ const LineChart = (props: LineChartProps) => {
         if (props.revenue) {
           _data = [
             ..._data,
-            { date: item.date, value: item.revenue, category: 'revenue' },
+            { date: item.date, value: item.revenue, category: 'Doanh thu' },
           ]
         }
         if (props.profit) {
           _data = [
             ..._data,
-            { date: item.date, value: item.profit, category: 'profit' },
+            { date: item.date, value: item.profit, category: 'Lợi nhuận' },
           ]
         }
       })
@@ -111,5 +111,7 @@ const LineChart = (props: LineChartProps) => {
       <Line {...config} />
     </div>
   )
-}
+})
+
+LineChart.displayName = 'LineChart'
 export default LineChart

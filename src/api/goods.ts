@@ -7,7 +7,7 @@ import {
 } from '@/utils'
 
 export const getGoodsBFF = () => {
-  return shareBff
+  return adminBff
     .post('/goods-service/goods', '')
     .then((res) => {
       return formatResponse(res.data)
@@ -23,7 +23,7 @@ export const getGoodsDetailBFF = (id: any) => {
   <soap:Body>
       <GoodsCode>${id}</GoodsCode>
   </soap:Body>`
-  return shareBff
+  return adminBff
     .post('/goods-service/goods-detail', payload)
     .then((res) => {
       return formatResponse(res.data)
