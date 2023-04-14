@@ -108,8 +108,8 @@ const LineChart = memo((props: LineChartProps) => {
         className='flex justify-center items-center text-lg'
         style={{ minHeight: 300 }}
       >
-        {data[1] && <Line {...config} />}
-        {!data[1] && <b>Không có dữ liệu</b>}
+        {data[0] && <Line {...config} />}
+        {!data[0] && <b>Không có dữ liệu</b>}
       </div>
     </div>
   )
