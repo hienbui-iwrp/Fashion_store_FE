@@ -1,13 +1,19 @@
 import { FormatDateYearFirst, adminBff, formatResponse } from '@/utils'
 
-export const getStatisticAllBFF = (data: { start?: Date; end?: Date }) => {
+export const getStatisticAllBFF = (data: {
+  start?: Date
+  end?: Date
+  branch?: string
+}) => {
   const payload = `
-    <?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="utf-8"?>/
     <soap:Body>
         <Start>${FormatDateYearFirst(data.start)}</Start>
         <End>${FormatDateYearFirst(data.end)}</End>
+        ${data.branch ? `<BranchId>${data.branch}</BranchId>` : ''}
     </soap:Body>
   `
+  console.log(payload)
 
   return adminBff
     .post('/statistic-service/overall-stat', payload)

@@ -167,8 +167,6 @@ const Detail = () => {
         }
         if (
           !goods.name ||
-          !goods.color ||
-          !goods.size ||
           !goods.type ||
           !goods.gender ||
           !goods.age ||
@@ -198,24 +196,16 @@ const Detail = () => {
     await getGoodsDetailBFF(id)
       .then((res: any) => {
         if (res.StatusCode != 200) throw new Error('FAIL')
-        const _data = res.Data.map((item: GoodsProps) =>
-          formatGoodsDataXML(item)
+        const _data = formatGoodsDataXML(res.Data[0])
+        const size = Array.from(
+          new Set(_data?.classify?.map((item: any) => item.size))
         )
-        setData(_data[0])
-        setSizes(
-          _data.reduce(
-            (acc: string[], item: any) =>
-              acc.includes(item.size) ? acc : [...acc, item.size],
-            []
-          )
+        const color = Array.from(
+          new Set(_data?.classify?.map((item: any) => item.color))
         )
-        setColors(
-          _data.reduce(
-            (acc: string[], item: any) =>
-              acc.includes(item.color) ? acc : [...acc, item.color],
-            []
-          )
-        )
+        setData(_data)
+        setSizes(size)
+        setColors(color)
       })
       .catch((err) => console.log('err getGoodsDetailBFF: ', err))
 

@@ -132,6 +132,8 @@ export const updateGoodsBff = (
   )}
   </soap:Body>`
 
+  console.log('payload:', payload)
+
   return adminBff
     .post('/goods-service/goods/update', payload)
     .then((res) => {
@@ -185,7 +187,6 @@ export const exportGoodsBff = (
       <From>${supplier}</From>
       <To>${orderId}</To>
   </soap:Body>`
-  console.log(payload)
   return adminBff
     .post('/goods-service/goods/export', payload)
     .then((res) => {
@@ -289,7 +290,6 @@ export const uploadGoodsImageBff = (file: {
   form.append('goodsColor', file.goodsColor)
   form.append('isDefault', file.isDefault.toString())
 
-  console.log('form: ', form)
   return adminBff
     .post('/goods-service/goods/image', form)
     .then((res) => {

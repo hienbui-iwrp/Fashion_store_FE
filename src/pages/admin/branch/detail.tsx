@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { BASE_URL, Routes } from '@/constants'
 import axios from 'axios'
 import { EditFilled } from '@ant-design/icons'
@@ -8,30 +8,38 @@ import { LineChart } from '@/components/LineChart'
 import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
-import { BranchProps, formatAddress, formatDate, formatTime } from '@/utils'
+import {
+  BranchProps,
+  StatisticData,
+  formatAddress,
+  formatDate,
+  formatTime,
+} from '@/utils'
 import { useDispatch } from 'react-redux'
 import {
   setNotificationType,
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
-import { formatBranchDataXML } from '@/utils/formats/formatData'
-import { deleteBranchBff, getBranchDetailBff, getBranchStaffBff } from '@/api'
+import {
+  formatBranchDataXML,
+  formatStatisticDataXML,
+} from '@/utils/formats/formatData'
+import {
+  deleteBranchBff,
+  getBranchDetailBff,
+  getBranchStaffBff,
+  getStatisticAllBFF,
+} from '@/api'
 
 interface ItemType {
   name: string
   content: string
 }
 
-interface StatisticDataType {
-  revenue?: number
-  profit?: number
-  date: Date
-}
-
 const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [dataItems, setDataItems] = useState<ItemType[]>([])
-  const [statisticData, setStatisticData] = useState<StatisticDataType[]>([])
+  const [statisticData, setStatisticData] = useState<StatisticData[]>([])
   const [data, setData] = useState<BranchProps>()
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
 
@@ -39,6 +47,18 @@ const Detail = () => {
 
   const routes = useRouter()
   const { id } = routes.query
+
+  const getTime = () => {
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = currentDate.getMonth()
+    const startDate = new Date(year, month, 1) // Lưu ý: tháng trong JavaScript bắt đầu từ 0
+    const endDate = new Date(year, month + 1, 0)
+    return {
+      startOfMonth: startDate,
+      endOfMonth: endDate,
+    }
+  }
 
   const getData = async () => {
     let _data: BranchProps = {}
@@ -53,18 +73,25 @@ const Detail = () => {
       _data.staff = res.Data.length
     })
     setData(_data)
-  }
 
-  const getStatisticData = async () => {
-    await axios.get(`${BASE_URL}/api/admin/statisticData`).then((res) => {
-      setStatisticData(res.data)
+    await getStatisticAllBFF({
+      start: getTime().startOfMonth,
+      end: getTime().endOfMonth,
+      branch: id?.toString(),
     })
+      .then((res: any) => {
+        const _data = formatStatisticDataXML(res.Data)
+        setStatisticData(_data)
+        console.log(_data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {
     if (id) {
       getData()
-      getStatisticData()
       setLoading(false)
     }
   }, [id])

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { Colors } from '@/constants'
 import { LineChartProps } from '@/utils/types/componentType'
 import { Skeleton } from 'antd'
-import { formatNumber } from '@/utils'
+import { formatDate, formatNumber } from '@/utils'
 
 const Line = dynamic(
   () => import('@ant-design/charts').then(({ Line }) => Line),
@@ -53,9 +53,7 @@ const LineChart = memo((props: LineChartProps) => {
         },
         formatter: (value: any) => {
           const date = new Date(value)
-          return (
-            date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
-          )
+          return formatDate(date)
         },
       },
     },
@@ -93,22 +91,26 @@ const LineChart = memo((props: LineChartProps) => {
   return (
     <div {...props}>
       {props.showTotal && (
-        <h1>
-          <b>
-            {formatNumber(
-              (props.revenue
-                ? props.data?.reduce((sum, item) => {
-                    return sum + (item.revenue ?? 0)
-                  }, 0)
-                : props.data?.reduce((sum, item) => {
-                    return sum + (item.profit ?? 0)
-                  }, 0)) ?? 0
-            )}{' '}
-            VND
-          </b>
-        </h1>
+        <b>
+          {formatNumber(
+            (props.revenue
+              ? props.data?.reduce((sum, item) => {
+                  return sum + (item.revenue ?? 0)
+                }, 0)
+              : props.data?.reduce((sum, item) => {
+                  return sum + (item.profit ?? 0)
+                }, 0)) ?? 0
+          )}{' '}
+          VND
+        </b>
       )}
-      <Line {...config} />
+      <div
+        className='flex justify-center items-center text-lg'
+        style={{ minHeight: 300 }}
+      >
+        {data[1] && <Line {...config} />}
+        {!data[1] && <b>Không có dữ liệu</b>}
+      </div>
     </div>
   )
 })

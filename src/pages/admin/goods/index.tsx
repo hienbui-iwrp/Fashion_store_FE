@@ -94,11 +94,7 @@ const Goods = () => {
 
         const _data = res.Data.map((item: GoodsProps) =>
           formatGoodsDataXML(item)
-        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
-          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
-            return [...acc, item]
-          } else return acc
-        }, [])
+        )
 
         setData(_data)
         setAllData(_data)
