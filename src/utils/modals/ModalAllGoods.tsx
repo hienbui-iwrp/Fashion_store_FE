@@ -38,12 +38,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
         if (res.StatusCode != 200) throw new Error('FAIL')
         const _data = res.Data.map((item: GoodsProps) =>
           formatGoodsDataXML(item)
-        ).reduce((acc: GoodsProps[], item: GoodsProps) => {
-          if (!acc?.find((i: GoodsProps) => i.id == item.id)) {
-            return [...acc, item]
-          } else return acc
-        }, [])
-
+        )
         setData(_data)
         setAllData(_data)
       })
@@ -264,6 +259,11 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
           rowSelection={
             props.single ? undefined : { ...rowSelection, checkStrictly: true }
           }
+          onSelectRow={(record) => {
+            if (props.single) {
+              props.callback && props.callback(record)
+            }
+          }}
           rowKey={['id']}
           scroll={{ y: '50vh' }}
           maxWidth={'100%'}

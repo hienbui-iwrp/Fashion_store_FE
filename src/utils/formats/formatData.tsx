@@ -19,6 +19,7 @@ import {
   GoodsOrderAdminData,
   OfflineOrderAdminData,
   OnlineOrderAdminData,
+  StatisticData,
 } from '../types'
 import timeToDate from './timeToDate'
 
@@ -352,11 +353,17 @@ export const formatEventDataXML = (data: any): EventProps => {
 }
 
 export const formatGoodsDataXML = (data: any): GoodsProps => {
+  const classify = data.getElementsByTagName('Classify').map((item: any) => {
+    return {
+      size: item.getElementsByTagName('Size')[0]?.value,
+      color: item.getElementsByTagName('Color')[0]?.value,
+    }
+  })
+
   return {
-    id: data.getElementsByTagName('GoodsCode')[0]?.value,
+    id: data.getElementsByTagName('GoodsId')[0]?.value,
     name: data.getElementsByTagName('GoodsName')[0]?.value,
-    size: data.getElementsByTagName('GoodsSize')[0]?.value,
-    color: data.getElementsByTagName('GoodsColor')[0]?.value,
+    classify: classify,
     type: data.getElementsByTagName('GoodsType')[0]?.value,
     gender: data.getElementsByTagName('GoodsGender')[0]?.value,
     age: data.getElementsByTagName('GoodsAge')[0]?.value,
@@ -465,4 +472,14 @@ const formatOfflineOrderDataXML = (data: any): OfflineOrderAdminData => {
     staffId: data.getElementsByTagName('StaffId')[0]?.value,
     branchhId: data.getElementsByTagName('BranchId')[0]?.value,
   }
+}
+
+export const formatStatisticDataXML = (data: any[]): StatisticData[] => {
+  return data.map((item: any) => {
+    return {
+      revenue: Number(item.getElementsByTagName('Revenue')[0]?.value),
+      profit: Number(item.getElementsByTagName('Profit')[0]?.value),
+      date: new Date(item.getElementsByTagName('Date')[0]?.value),
+    }
+  })
 }
