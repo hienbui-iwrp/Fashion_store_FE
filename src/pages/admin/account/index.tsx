@@ -96,13 +96,18 @@ const Account = () => {
     })
 
     columns.push({
-      title: 'Địa chỉ',
-      dataIndex: '',
+      title: 'Email',
+      dataIndex: 'email',
       render(text: string, record: AccountProps, index: number) {
-        return formatAddress(record)
+        return text
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 80 },
+        }
       },
       sorter: (a: AccountProps, b: AccountProps) =>
-        formatAddress(a) > formatAddress(b) ? 1 : -1,
+        a.email > b.email ? 1 : -1,
     })
 
     columns.push({
@@ -168,9 +173,9 @@ const Account = () => {
           title='Danh sách nhân viên'
           columns={columns}
           callback={(record: any) => {
-            if (record.role == 1)
-              router.push(Routes.admin.accountDetail + `?id=${record.id}`)
-            else router.push(Routes.admin.staffDetail + `?id=${record.id}`)
+            if (record.role != 1)
+              router.push(Routes.admin.staffDetail + `?id=${record.id}`)
+            // else router.push(Routes.admin.accountDetail + `?id=${record.id}`)
           }}
           loading={loading}
           ellipsis={true}

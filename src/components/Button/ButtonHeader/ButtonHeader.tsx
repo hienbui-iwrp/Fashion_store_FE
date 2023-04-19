@@ -20,17 +20,18 @@ export default function ButtonHeader({
         setHover(false)
       }}
       style={{
-        backgroundColor: hover ? Colors.clientBlack300 : Colors.transparent,
+        // backgroundColor: hover ? Colors.clientEmerald400 : Colors.transparent,
+        backgroundColor: Colors.transparent,
         borderRadius: 25,
         width: 42,
         height: 42,
-        // color: Colors.clientBlack700,
-        color: Colors.white,
+        color: hover ? Colors.white : Colors.clientGray300,
+        // color: Colors.white,
         boxShadow: '0 0 0',
       }}
       icon={icon || null}
     >
-      {name ?? ''}
+      {name ? <b className='pl-2  '>{name}</b> : ''}
     </Button>
   )
 }

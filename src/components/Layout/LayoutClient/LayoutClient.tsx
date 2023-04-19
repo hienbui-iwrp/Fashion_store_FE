@@ -231,12 +231,14 @@ export default function LayoutClient({
               {!logged ? (
                 <Link
                   href='/login'
-                  className='hover:bg-gray-100 rounded-full h-10 pl-4 flex items-center hover:text-gray-700'
+                  // className='hover:bg-emerald-400 rounded-full h-10 pr-4 flex items-center hover:text-white text-white'
+                  className=' rounded-full h-10 pr-4 flex items-center text-gray-300 hover:text-white'
                 >
-                  <span className='w-max'>Đăng nhập</span>
                   <ButtonHeader
                     icon={<FontAwesomeIcon className='w-5 h-5' icon={faUser} />}
+                    name={'Đăng nhập'}
                   />
+                  {/* <span className='w-max text-md'>Đăng nhập</span> */}
                 </Link>
               ) : (
                 <Dropdown menu={{ items }} placement='bottom'>
@@ -264,10 +266,7 @@ export default function LayoutClient({
                       stroke={Colors.white}
                     />
                   ) : (
-                    <NavbarIcon
-                      fill={Colors.white}
-                      stroke={Colors.white}
-                    />
+                    <NavbarIcon fill={Colors.white} stroke={Colors.white} />
                   )}
                 </button>
               </div>
@@ -287,7 +286,8 @@ export default function LayoutClient({
               <ul className='justify-start items-center w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 py-1 hidden md:flex '>
                 {secondaryList.map((item, index) => {
                   return (
-                    <Link key={index}
+                    <Link
+                      key={index}
                       className='text-green-600 hover:text-emerald-700 text-sm	'
                       // className='text-emerald-600 hover:text-emerald-600 text-xs	'
                       href={`${item.link}` || '/'}
@@ -398,7 +398,15 @@ export default function LayoutClient({
                   </Link>
                 </li>
                 <li className='mb-4'>
-                  <div>Logo created by <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo logo maker</a></div>
+                  <div>
+                    Logo created by{' '}
+                    <a
+                      href='https://www.designevo.com/'
+                      title='Free Online Logo Maker'
+                    >
+                      DesignEvo logo maker
+                    </a>
+                  </div>
                 </li>
               </ul>
             </div>

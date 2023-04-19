@@ -113,7 +113,7 @@ const Staff = () => {
   }
 
   const getData = async (keyword?: string) => {
-    await getStaffBff('', keyword)
+    await getStaffBff(keyword)
       .then((res: any) => {
         const _data = res.Data.map((item: any) => formatStaffDataXML(item))
 
@@ -122,22 +122,29 @@ const Staff = () => {
             (item: StaffProps) => item.status == StaffStatus.approved
           )
         )
-
-        getBranchBff().then((res: any) => {
-          if (res.StatusCode != 200) throw new Error('FAIL')
-          const _data = res.Data.map((item: any) => {
-            return formatBranchDataXML(item)
-          })
-          setBranchData(_data)
-        })
       })
       .catch((err) => console.log(err))
 
     setLoading(false)
   }
 
+  const getBranchData = async () => {
+    await getBranchBff()
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: any) => {
+          return formatBranchDataXML(item)
+        })
+        setBranchData(_data)
+      })
+      .catch((err: any) => {
+        console.log(err)
+      })
+  }
+
   useEffect(() => {
     getData()
+    getBranchData()
   }, [])
 
   return (

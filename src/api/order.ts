@@ -45,3 +45,20 @@ export const getOrdersDetailBFF = (id: any) => {
       console.log('getOnlineOrdersBFF err: ', err)
     })
 }
+
+export const getOrderCustomerBFF = async (customerId: string) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body>
+        <CustomerId>${customerId}</CustomerId>
+    </soap:Body>
+  `
+  return adminBff
+    .post('/order-service/admin/customer-order', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('getOrderCustomerBFF err: ', err)
+    })
+}

@@ -27,5 +27,7 @@ export const Colors = {
   clientBlack950: '#030712',
   clientBackground: '#fafafa',
 
+  clientGray300: '#c9d3d6',
+
   transparent: '#10b98100',
 }

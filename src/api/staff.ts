@@ -1,11 +1,11 @@
 import { adminBff, formatResponse } from '@/utils'
 
-export const getStaffBff = async (id?: any, name?: any) => {
+export const getStaffBff = async (keyword?: any) => {
   const payload = `
   <?xml version="1.0" encoding="utf-8"?>
   <soap:Body>
-      <StaffId>${id ?? ''}</StaffId>
-      <StaffName>${name ?? ''}</StaffName>
+      <StaffId>${keyword ?? ''}</StaffId>
+      <StaffName>${keyword ?? ''}</StaffName>
   </soap:Body>
   `
 
