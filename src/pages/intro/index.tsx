@@ -30,7 +30,7 @@ export default function Intro(props: IntroProps) {
       <div>
         <Row gutter={{ xs: 8, sm: 16, md: 24, xl: 32 }}
           style={{ backgroundColor: Colors.clientGreen50 }}
-          className={`p-4 mt-2 rounded-lg`}>
+          className={`p-4 mt-8 rounded-lg`}>
           <Col className="gutter-row" span={6}>
             <div className='flex flex-col'>
               <FontAwesomeIcon icon={faTruckFast} className='text-2xl' />
