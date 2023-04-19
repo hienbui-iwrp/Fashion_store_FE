@@ -20,6 +20,7 @@ export const Colors = {
   clientEmerald50: '#ecfdf5',
 
   clientGreen400: '#4ade80',
+  clientGreen50: '#dcfce7',
 
   clientBlack100: '#f3f4f6',
   clientBlack300: '#d1d5db',
