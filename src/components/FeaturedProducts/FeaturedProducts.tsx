@@ -6,7 +6,8 @@ import { ProductDetailDataProps } from '@/utils'
 const { Title } = Typography
 
 export interface FeaturedProductsProps {
-  name: string
+  name: string,
+  listProducts: ProductDetailDataProps[]
 }
 
 const listFeaturedProduct = [
@@ -418,8 +419,8 @@ export default function FeaturedProducts(props: FeaturedProductsProps) {
       <Title level={3} className='!font-bold !mb-4 text-center'>
         {props.name}
       </Title>
-      <div className='flex w-full flex-wrap	justify-center'>
-        {listFeaturedProduct.map((item, index) => {
+      <div className={`flex w-full flex-wrap	${props.listProducts.length > 3 ? 'justify-between' : 'justify-start'}`}>
+        {props.listProducts.map((item, index) => {
           return <CardProductClient key={index} {...item} />
         })}
       </div>

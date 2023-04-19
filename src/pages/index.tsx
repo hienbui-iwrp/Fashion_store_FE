@@ -10,12 +10,8 @@ import HomeClient from '@/components/HomeClient'
 
 export default function App() {
   return (
-    <HomeClient />
+    <>
+      <HomeClient />
+    </>
   )
 }
-
-// export async function getStaticProps(context: any) {
-//   return {
-//     props: {}, // will be passed to the page component as props
-//   }
-// }

@@ -130,8 +130,8 @@ export default function ProductDetail(props: ProductDetailDataProps) {
   console.log('quantity', quantity);
 
   return (
-    <div className='mb-4 px-8'>
-      <Row className=''>
+    <div className='max-md:mt-2 max-lg:mt-8 max-xl:mt-4 mb-4 px-8'>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} className=''>
         <Col span={9}>
           <div className='flex justify-center'>
             <Image

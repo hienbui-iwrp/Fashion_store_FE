@@ -21,8 +21,9 @@ export default function InputSearch(props: InputSearchProps) {
         if (item.target.value != '')
           props?.onEnter && props?.onEnter(item.target.value)
       }}
+      onBlur={props.onBlur}
       allowClear
-      onChange={(item) => {
+      onChange={props.onChange ? props.onChange : (item) => {
         if (item.target.value == '') props.onClear && props.onClear()
       }}
       bordered={false}

@@ -16,6 +16,14 @@ const nextConfig = {
         destination: process.env.NEXT_PUBLIC_BPEL_CHECK_WAREHOUSE_SERVICE, // Proxy to Backend
       },
       {
+        source: '/share-bff/products-default',
+        destination: process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DEFAULT, // Proxy to Backend
+      },
+      {
+        source: '/share-bff/products-detail',
+        destination: process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DETAIL, // Proxy to Backend
+      },
+      {
         source: '/share-bff/:path*',
         destination: process.env.NEXT_PUBLIC_SHARE_BFF + '/:path*', // Proxy to Backend
       },
