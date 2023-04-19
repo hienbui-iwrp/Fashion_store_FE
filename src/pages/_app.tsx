@@ -1,5 +1,5 @@
 import '@/styles/globals.css'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, Image } from 'antd'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
 import LayoutClient from './../components/Layout/LayoutClient'
@@ -14,6 +14,7 @@ import {
 } from '@/redux/slices/notificationSlice'
 import { Colors, Routes } from '@/constants'
 import { LayoutAdmin } from '@/components'
+import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -65,6 +66,10 @@ export default function App({ Component, pageProps }: AppProps) {
             },
           }}
         >
+          <Head>
+            <link rel="icon" href="/logo.png" />
+            <title> PTH Fashion</title>
+          </Head>
           <LayoutClient>
             <Component {...pageProps} />
             <Notify />
@@ -95,6 +100,10 @@ export default function App({ Component, pageProps }: AppProps) {
   )
     return (
       <Provider store={store}>
+        <Head>
+          <link rel="icon" href="/logo.png" />
+          <title> PTH Fashion</title>
+        </Head>
         <LayoutAdmin>
           <Component {...pageProps} />
           <Notify />
@@ -104,6 +113,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store}>
+      <Head>
+        <link rel="icon" href="/logo.png" />
+        <title> PTH Fashion</title>
+      </Head>
       <Component {...pageProps} />
       <Notify />
     </Provider>

@@ -22,8 +22,8 @@ import { CaretDownOutlined, FilterOutlined } from '@ant-design/icons'
 import CardProductClient from '../Card/CardProductClient'
 import { ProductsDataProps, ProductDetailDataProps, formatProductsDataXML } from '@/utils'
 import axios from 'axios'
-import { getAllProducts, getAllProductsBff } from '@/api/products'
-import { BASE_URL, Colors, GoodsOptions } from '@/constants'
+import { getAllProducts, getAllProductsBff, getAllProductsBpel, searchProductsBff } from '@/api/products'
+import { BASE_URL, Colors, GoodsAccessory, GoodsClothes, GoodsFootwear, GoodsGenders, GoodsOptions } from '@/constants'
 import styles from './Products.module.css'
 import { FilterTag } from '../FilterTag'
 import { useRouter } from 'next/router';
@@ -32,6 +32,7 @@ const { Title, Text } = Typography
 
 export interface ProductsProps {
   filter: string[]
+  search: string
 }
 
 const CheckboxGroup = Checkbox.Group
@@ -46,7 +47,7 @@ const plainOptions = [
 const defaultCheckedList: string[] = []
 
 export default function Products(props: ProductsProps) {
-  console.log('object props filter: ', props.filter);
+  console.log('object props: ', props);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loaded, setLoaded] = useState(false)
@@ -197,16 +198,8 @@ export default function Products(props: ProductsProps) {
   }
 
   const fetchData = async () => {
-    // await getAllProducts().then((res) => {
-    //   console.log(res)
-    //   setData(res?.data)
-    //   filterProducts(checkedList, listValueFilter)
-    //   dispatch(setListProduct(res?.data))
-    //   setLoaded(true)
-    // })
-    await getAllProductsBff({ pageSize: 100, offset: 1 }).then((res) => {
+    await getAllProductsBpel({ pageSize: 100, offset: 1 }).then((res) => {
       if (res?.StatusCode === '200') {
-        console.log(res?.Data);
         const data = formatProductsDataXML(res?.Data);
         setData({ totalProducts: 0, listProduct: data });
         dispatch(setListProduct({ totalProducts: 0, listProduct: data }));
@@ -216,14 +209,38 @@ export default function Products(props: ProductsProps) {
     })
   }
 
+  const fetchDataSearch = async (value: string) => {
+    await searchProductsBff(value)
+      .then((res) => {
+        if (res?.StatusCode === '200') {
+          const data = formatProductsDataXML(res?.Data);
+          setData({ totalProducts: 0, listProduct: data });
+          dispatch(setListProduct({ totalProducts: 0, listProduct: data }));
+          filterProducts(checkedList, listValueFilter);
+          setLoaded(true);
+        }
+      })
+  }
+
   useEffect(() => {
-    fetchData();
+    if (!props.search) {
+      fetchData();
+    }
+    else {
+      fetchDataSearch(props.search);
+    }
   }, [loaded])
 
   useEffect(() => {
     setListValueFilter([...props.filter]);
     filterProducts(checkedList, listValueFilter);
   }, [props.filter])
+
+  useEffect(() => {
+    if (props.search) {
+      fetchDataSearch(props.search);
+    }
+  }, [props.search])
 
   return (
     <div className='products-content '>
@@ -238,11 +255,7 @@ export default function Products(props: ProductsProps) {
             style={{ width: 120 }}
             onChange={handleChange}
             onSelect={handleSelectFilter}
-            options={[
-              { value: '1', label: 'Nam' },
-              { value: '2', label: 'Nữ' },
-              { value: '3', label: 'Unisex' },
-            ]}
+            options={GoodsGenders}
             suffixIcon={
               <CaretDownOutlined
                 style={{
@@ -258,14 +271,7 @@ export default function Products(props: ProductsProps) {
             style={{ width: 120 }}
             onChange={handleChange}
             onSelect={handleSelectFilter}
-            options={[
-              { value: 'jacket', label: 'Áo khoác' },
-              { value: 'sweater', label: 'Áo len' },
-              { value: 'T-shirt', label: 'Áo thun' },
-              { value: 'Trousers', label: 'Quần tây' },
-              { value: 'kaki', label: 'Quần kaki' },
-              { value: 'short', label: 'Quần sọt' },
-            ]}
+            options={GoodsClothes}
             suffixIcon={
               <CaretDownOutlined
                 style={{
@@ -281,11 +287,7 @@ export default function Products(props: ProductsProps) {
             style={{ width: 120 }}
             onChange={handleChange}
             onSelect={handleSelectFilter}
-            options={[
-              { value: 'sport Shoes', label: 'Giày thể thao' },
-              { value: 'western shoes', label: 'Giày tây' },
-              { value: 'sandal', label: 'Dép' },
-            ]}
+            options={GoodsFootwear}
             suffixIcon={
               <CaretDownOutlined
                 style={{
@@ -301,11 +303,7 @@ export default function Products(props: ProductsProps) {
             style={{ width: 120 }}
             onChange={handleChange}
             onSelect={handleSelectFilter}
-            options={[
-              { value: 'ring', label: 'Nhẫn' },
-              { value: 'hat', label: 'Nón' },
-              { value: 'bag', label: 'Túi/balo' },
-            ]}
+            options={GoodsAccessory}
             suffixIcon={
               <CaretDownOutlined
                 style={{
@@ -316,37 +314,6 @@ export default function Products(props: ProductsProps) {
               />
             }
           />
-          {/* <Select
-            placeholder={<Text strong>Size</Text>}
-            style={{ width: 120 }}
-            onChange={handleChange}
-            onSelect={handleSelectFilter}
-            options={[
-              { value: '31', label: '31' },
-              { value: '32', label: '32' },
-              { value: '33', label: '33' },
-              { value: '34', label: '34' },
-              { value: '35', label: '35' },
-              { value: '36', label: '36' },
-              { value: '37', label: '37' },
-              { value: '38', label: '38' },
-              { value: '39', label: '39' },
-              { value: '40', label: '40' },
-              { value: '41', label: '41' },
-              { value: '42', label: '42' },
-              { value: '43', label: '43' },
-              { value: '44', label: '44' },
-            ]}
-            suffixIcon={
-              <CaretDownOutlined
-                style={{
-                  color: Colors.adminGreen700,
-                  marginLeft: 10,
-                  marginRight: -5,
-                }}
-              />
-            }
-          /> */}
         </div>
 
         <Select
@@ -399,6 +366,10 @@ export default function Products(props: ProductsProps) {
                 data.listProduct.map((item, index) => {
                   return <CardProductClient key={index} {...item} />
                 })}
+              {/* {dataProducts.listProduct &&
+                dataProducts.listProduct.map((item, index) => {
+                  return <CardProductClient key={index} {...item} />
+                })} */}
             </div>
           </Col>
         </Row>

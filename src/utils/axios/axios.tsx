@@ -52,6 +52,14 @@ export const shareBff = axios.create({
   },
 })
 
+export const shareBpel = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_SHARE_BFF_PROXY,
+  headers: {
+    'Content-Type': 'text/xml',
+    'Access-Control-Allow-Origin': '*',
+  },
+})
+
 export const customerBff = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CUSTOMER_BFF_PROXY,
   headers: {

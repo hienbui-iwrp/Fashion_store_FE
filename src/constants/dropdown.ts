@@ -36,20 +36,32 @@ export const GoodsGenders = [
   { value: '3', label: 'Unisex' },
 ]
 
-export const GoodsTypes = [
-  { value: 'jacket', label: 'Áo khoác' },
-  { value: 'sweater', label: 'Áo len' },
-  { value: 'T-shirt', label: 'Áo thun' },
-  { value: 'Trousers', label: 'Quần tây' },
-  { value: 'kaki', label: 'Quần kaki' },
-  { value: 'short', label: 'Quần sọt' },
-  { value: 'sport Shoes', label: 'Giày thể thao' },
-  { value: 'western shoes', label: 'Giày tây' },
-  { value: 'sandal', label: 'Dép' },
+export const GoodsAccessory = [
   { value: 'ring', label: 'Nhẫn' },
   { value: 'hat', label: 'Nón' },
   { value: 'bag', label: 'Túi/balo' },
+]
+
+export const GoodsFootwear = [
+  { value: 'sport Shoes', label: 'Giày thể thao' },
+  { value: 'western shoes', label: 'Giày tây' },
+  { value: 'sandal', label: 'Dép' },
+]
+
+export const GoodsClothes = [
+  { value: 'jacket', label: 'Áo khoác' },
+  { value: 'sweater', label: 'Áo len' },
+  { value: 'T-shirt', label: 'Áo thun' },
   { value: 'dress', label: 'Váy' },
+  { value: 'Trousers', label: 'Quần tây' },
+  { value: 'kaki', label: 'Quần kaki' },
+  { value: 'short', label: 'Quần sọt' },
+]
+
+export const GoodsTypes = [
+  ...GoodsClothes,
+  ...GoodsFootwear,
+  ...GoodsAccessory,
 ]
 
 export const GoodsSizes = [

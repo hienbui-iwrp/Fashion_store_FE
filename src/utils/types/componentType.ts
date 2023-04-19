@@ -47,6 +47,8 @@ export interface DropdownButtonProps extends ComponentProps {
 
 export interface InputSearchProps extends ComponentProps {
   onEnter?: (item?: any) => void
+  onChange?: (item?: any) => void
+  onBlur?: (item?: any) => void
   width?: string | number
   placeholder?: string
   onClear?: () => void

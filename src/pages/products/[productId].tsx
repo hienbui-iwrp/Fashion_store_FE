@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import ProductDetail from '@/components/ProductDetail'
 import { ProductDetailDataProps, formatProductDataXML } from '@/utils'
 import axios from 'axios'
-import { getProductDetail, getProductDetailBff } from '@/api/products';
+import { getProductDetail, getProductDetailBpel } from '@/api/products';
 import { BASE_URL } from '@/constants'
 import Loading from '@/components/Loading';
 
@@ -29,26 +29,20 @@ export default function ProductDetailPage(props: ProductDetailDataProps) {
 
   const fetchData = async () => {
     if (productId) {
-      await getProductDetailBff(String(productId))
+      await getProductDetailBpel(String(productId))
         .then((res) => {
-          if (res?.StatusCode === '200') {
-            const data = formatProductDataXML(res?.Data[0]);
-            setData(data);
-            setLoading(false);
-          }
+          // if (res?.StatusCode === '200') {
+          const data = formatProductDataXML(res?.Data[0]);
+          setData(data);
+          setLoading(false);
+          // }
         })
     }
-    // await axios
-    //   .get(`${BASE_URL}/api/product/detail`)
-    //   .then((res) => {
-    //     console.log(res)
-    //     setData(res.data);
-    //   })
   }
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, [productId])
   return (
     loading ? <Loading /> :
       <ProductDetail {...data} />

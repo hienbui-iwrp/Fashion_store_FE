@@ -5,16 +5,15 @@ import { GoodsGenderValue } from '@/constants';
 
 export default function ProductsPage() {
   const router = useRouter();
-  const { gender, type } = router.query;
+  const { gender, type, search } = router.query;
   const listFilter: string[] = []
-  console.log('gender', gender, 'type', type);
   if (gender || type) {
     //@ts-ignore
     gender ? listFilter.push(GoodsGenderValue[gender as string]) : null;
     type ? listFilter.push(type as string) : null;
   }
   return (
-    <Products filter={listFilter} />
+    <Products filter={listFilter} search={search as string} />
   )
 }
 
