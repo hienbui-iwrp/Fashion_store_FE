@@ -6,13 +6,10 @@ import {
   GoodsGenders,
   GoodsSizes,
   GoodsTypes,
+  IMAGE_URL,
   Routes,
 } from '@/constants'
-import {
-  CheckOutlined,
-  CloseOutlined,
-  FileImageOutlined,
-} from '@ant-design/icons'
+import { CheckOutlined, FileImageOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
 import {
   Card,
@@ -21,15 +18,18 @@ import {
   InputNumber,
   Row,
   Space,
-  Image,
   Button,
-  Form,
+  Modal,
+  Upload,
+  UploadProps,
+  UploadFile,
 } from 'antd'
 import { AddButton, DropdownButton, FilterTag, TableList } from '@/components'
 import {
   formatDate,
   formatGoodsDataXML,
   formatGoodsInWarehouseDataXML,
+  formatRouteImage,
   formatWarehouseDataXML,
   GoodsClassifyProps,
   GoodsInWarehouseProps,
@@ -41,7 +41,7 @@ import {
 import { useRouter } from 'next/router'
 import {
   addGoodsBFF,
-  addGoodsBff,
+  deleteGoodsImageBFF,
   getGoodsDetailBFF,
   getGoodsInWarehouseBFF,
   getWarehouseBFF,
@@ -49,6 +49,15 @@ import {
 } from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
+import { RcFile } from 'antd/lib/upload'
+
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = (error) => reject(error)
+  })
 
 const Detail = () => {
   const [data, setData] = useState<GoodsProps>()
@@ -62,6 +71,10 @@ const Detail = () => {
   const [curGoodsClassify, setCurGoodsClassify] = useState<GoodsClassifyProps>()
   const [modalTranferGoods, setModalTranferGoods] = useState(false)
   const [modalUploadGoodsImage, setModalUploadGoodsImage] = useState(false)
+
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+  const [fileList, setFileList] = useState<UploadFile[]>()
 
   const router = useRouter()
   const { id } = router.query
@@ -142,6 +155,29 @@ const Detail = () => {
     })
   }
 
+  const handleCancel = () => setPreviewOpen(false)
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile)
+    }
+
+    setPreviewImage(file.url || (file.preview as string))
+    setPreviewOpen(true)
+  }
+
+  const handleChange: UploadProps['onChange'] = async (e: any) => {
+    await deleteGoodsImageBFF(e.file.name)
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error('Fail')
+        console.log('Delete image success')
+      })
+      .catch(() => {
+        console.log('Delete image error')
+      })
+    setFileList(e.fileList)
+  }
+
   const onSave = async () => {
     if (id) {
       await updateGoodsBff(id, data ?? newGoods, sizes, colors)
@@ -204,6 +240,16 @@ const Detail = () => {
           new Set(_data?.classify?.map((item: any) => item.color))
         )
         setData(_data)
+        setFileList(
+          _data?.image?.map((item: string, index: number) => {
+            return {
+              uid: index.toString(),
+              name: item,
+              status: 'done',
+              url: formatRouteImage(item),
+            }
+          })
+        )
         setSizes(size)
         setColors(color)
       })
@@ -588,50 +634,37 @@ const Detail = () => {
             </div>
           </Row>
           {id && (
-            <div className='flex flex-wrap my-3'>
-              {data?.image?.map((img: string, index: number) => {
-                return (
-                  <span key={index} className='relative drop-shadow-md mx-2'>
-                    <Image
-                      style={{ maxWidth: 100, maxHeight: 100 }}
-                      src={img}
-                      alt='img'
-                    />
-                    <Button
-                      className='absolute flex items-center  justify-center'
-                      style={{
-                        top: -6,
-                        right: -6,
-                        width: 14,
-                        height: 14,
-                        fontSize: 8,
-                        borderRadius: 12,
-                        backgroundColor: Colors.adminRed900,
-                        color: Colors.white,
-                      }}
-                      icon={<CloseOutlined />}
-                    ></Button>
-                  </span>
-                )
-              })}
-              <Button
-                icon={<FileImageOutlined />}
-                style={{
-                  height: 100,
-                  marginLeft: 10,
-                  backgroundColor: Colors.adminGreen900,
-                  color: Colors.white,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-                onClick={() => {
-                  setModalUploadGoodsImage(true)
-                }}
+            <div className='flex '>
+              <Upload
+                className='flex'
+                action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+                listType='picture-card'
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
               >
-                Thêm ảnh
-              </Button>
+                <Button
+                  icon={<FileImageOutlined />}
+                  style={{
+                    height: 100,
+                    width: 100,
+                    marginLeft: 0,
+                    backgroundColor: Colors.adminGreen900,
+                    color: Colors.white,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setModalUploadGoodsImage(true)
+                  }}
+                >
+                  Thêm ảnh
+                </Button>
+              </Upload>
             </div>
           )}
           <p className='flex justify-end'>
@@ -711,9 +744,14 @@ const Detail = () => {
           open={modalUploadGoodsImage}
           cancel={() => setModalUploadGoodsImage(false)}
           extraData={{ colors: colors, id: data?.id }}
-          callback={(item) => {}}
+          callback={() => {
+            getData()
+          }}
         />
       )}
+      <Modal open={previewOpen} footer={null} onCancel={handleCancel} centered>
+        <img alt='example' style={{ width: '100%' }} src={previewImage} />
+      </Modal>
     </>
   )
 }

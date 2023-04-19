@@ -4,10 +4,7 @@ export interface AccountProps {
   role: number
   phoneNumber: string
   startDate: Date
-  street: string
-  ward: string
-  district: string
-  province: string
+  email: string
   name: string
   isActivated: boolean
   createdAt: Date

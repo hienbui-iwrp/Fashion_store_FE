@@ -13,7 +13,6 @@ export const getStatisticAllBFF = (data: {
         ${data.branch ? `<BranchId>${data.branch}</BranchId>` : ''}
     </soap:Body>
   `
-  console.log(payload)
 
   return adminBff
     .post('/statistic-service/overall-stat', payload)

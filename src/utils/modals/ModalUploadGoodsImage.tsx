@@ -1,41 +1,55 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { AddButton, DropdownButton } from '@/components'
-import { ModalSampleProps, ModalUploadGoodsImageProps } from '../types'
-import { Button, Modal, Space } from 'antd'
-import {
-  CheckOutlined,
-  FileImageOutlined,
-  PlusOutlined,
-} from '@ant-design/icons'
-import Upload, { RcFile, UploadFile, UploadProps } from 'antd/lib/upload'
+import { ModalUploadGoodsImageProps } from '../types'
+import { Button, Checkbox, Form, Modal, Space } from 'antd'
+import { CheckOutlined, FileImageOutlined } from '@ant-design/icons'
+import Upload, { UploadFile, UploadProps } from 'antd/lib/upload'
 import { Colors } from '@/constants'
 import { uploadGoodsImageBff } from '@/api'
 
 export const ModalUploadGoodsImage = (props: ModalUploadGoodsImageProps) => {
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [listColor, setListColor] = useState<string[]>()
-  const [curColor, setCurColor] = useState<string>()
+  const [form] = Form.useForm()
 
   useEffect(() => setListColor(props.extraData?.colors), [props?.extraData])
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    console.log('image: ', fileList)
-    setFileList(newFileList)
+    if (newFileList.length > 0) {
+      form.setFieldValue('image', true)
+      setFileList(newFileList)
+    } else {
+      form.setFieldValue('image', undefined)
+    }
   }
 
-  const onSave = () => {
-    if (curColor)
+  const onSave = async () => {
+    try {
+      const values = await form.validateFields()
+      let success = true
       fileList.forEach(async (file) => {
         await uploadGoodsImageBff({
           goodsId: props.extraData?.id,
-          goodsColor: curColor,
-          isDefault: false,
+          goodsColor: values.color,
+          isDefault: values.isDefault ?? false,
           file: file.originFileObj,
-        }).then((res) => {
-          props?.callback && props?.callback({})
-          props?.cancel()
         })
+          .then((res: any) => {
+            console.log('res: ', res)
+            if (res.StatusCode == 200) {
+              console.log('upload success:')
+            }
+          })
+          .catch((err) => {
+            success = false
+            console.log('upload error')
+          })
       })
+      if (success) {
+        props?.callback && props?.callback(fileList)
+        props?.cancel()
+      }
+    } catch {}
   }
 
   return (
@@ -61,37 +75,67 @@ export const ModalUploadGoodsImage = (props: ModalUploadGoodsImageProps) => {
           </Space>,
         ]}
       >
-        <div className='mb-4'>
-          <DropdownButton
-            label={'Màu sắc'}
-            callback={(item: any) => {
-              setCurColor(item)
-            }}
-            items={listColor?.map((item: any) => item)}
-          />
-        </div>
-        <Upload
-          listType='picture-card'
-          fileList={fileList}
-          onChange={handleChange}
-        >
-          <Button
-            icon={<FileImageOutlined style={{ padding: 0 }} />}
-            style={{
-              height: '100%',
-              width: '100%',
-              padding: 0,
-              backgroundColor: Colors.adminGreen900,
-              color: Colors.white,
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+        <Form layout={'vertical'} form={form}>
+          <Form.Item
+            label='Màu sắc'
+            name='color'
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập',
+              },
+            ]}
           >
-            Thêm ảnh
-          </Button>
-        </Upload>
+            <DropdownButton
+              label={'Màu sắc'}
+              callback={(item: any) => {
+                form.setFieldValue('color', item)
+              }}
+              items={listColor?.map((item: any) => item)}
+            />
+          </Form.Item>
+          <Form.Item name='isDefault'>
+            <Checkbox
+              onChange={(item) => {
+                form.setFieldValue('isDefault', item.target.checked)
+              }}
+            >
+              Đặt làm mặc định
+            </Checkbox>
+          </Form.Item>
+          <Form.Item
+            name='image'
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng thêm ảnh',
+              },
+            ]}
+          >
+            <Upload
+              listType='picture-card'
+              fileList={fileList}
+              onChange={handleChange}
+            >
+              <Button
+                icon={<FileImageOutlined style={{ padding: 0 }} />}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  padding: 0,
+                  backgroundColor: Colors.adminGreen900,
+                  color: Colors.white,
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                Thêm ảnh
+              </Button>
+            </Upload>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   )

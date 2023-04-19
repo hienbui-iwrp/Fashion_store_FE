@@ -29,7 +29,7 @@ export const getGoodsDetailBFF = (id: any) => {
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('getGoodsDetailBFF err: ', err)
     })
 }
 
@@ -45,7 +45,7 @@ export const getGoodsInWarehouseBFF = (id: any) => {
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('getGoodsInWarehouseBFF err: ', err)
     })
 }
 
@@ -91,7 +91,7 @@ export const addGoodsBFF = (
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('addGoodsBFF err: ', err)
     })
 }
 
@@ -140,7 +140,7 @@ export const updateGoodsBff = (
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('updateGoodsBff err: ', err)
     })
 }
 
@@ -167,7 +167,7 @@ export const importGoodsBff = (
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('importGoodsBff err: ', err)
     })
 }
 
@@ -193,7 +193,7 @@ export const exportGoodsBff = (
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('exportGoodsBff err: ', err)
     })
 }
 
@@ -220,7 +220,7 @@ export const tranferGoodsBff = (
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('tranferGoodsBff err: ', err)
     })
 }
 
@@ -247,7 +247,7 @@ export const returnGoodsBff = (
       return formatResponse(res.data)
     })
     .catch((err) => {
-      console.log('getGoodsBFF err: ', err)
+      console.log('returnGoodsBff err: ', err)
     })
 }
 
@@ -293,9 +293,26 @@ export const uploadGoodsImageBff = (file: {
   return adminBff
     .post('/goods-service/goods/image', form)
     .then((res) => {
-      return res
+      return res.data
     })
     .catch((err) => {
       console.log('uploadGoodsImageBff err: ', err)
+    })
+}
+
+export const deleteGoodsImageBFF = (url: string) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+  <soap:Body>
+      <Url>${url}</Url>
+  </soap:Body>`
+
+  return adminBff
+    .post('/goods-service/goods/image:delete', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('deleteGoodsImageBFF err: ', err)
     })
 }

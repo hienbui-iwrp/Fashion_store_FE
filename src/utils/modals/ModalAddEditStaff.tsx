@@ -289,42 +289,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                     )
                   }}
                 />
-                {/* {props.extraData ? (
-                  curBranch && (
-                    <DropdownButton
-                      label={curBranch.name}
-                      items={branchData?.map((item: BranchProps) => {
-                        return `${item.name} (${item.id})`
-                      })}
-                      callback={(branch: string) => {
-                        form.setFieldValue(
-                          'branchId',
-                          branchData?.find(
-                            (item: any) =>
-                              item.id == branch.split(')')[0].split('(')[1]
-                          )?.id
-                        )
-                      }}
-                    />
-                  )
-                ) : (
-                  <DropdownButton
-                    label={'Nơi làm việc'}
-                    items={branchData?.map((item: BranchProps) => {
-                      console.log(item)
-                      return `${item.name} (${item.id})`
-                    })}
-                    callback={(branch: string) => {
-                      form.setFieldValue(
-                        'branchId',
-                        branchData?.find(
-                          (item: any) =>
-                            item.id == branch.split(')')[0].split('(')[1]
-                        )?.id
-                      )
-                    }}
-                  />
-                )} */}
               </Form.Item>
               <Form.Item
                 label='Vị trí'
@@ -408,7 +372,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
           <Row>
             <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Form.Item
-                label='Huyện, thành phố'
+                label='Huyện, quận'
                 name='district'
                 rules={[
                   {

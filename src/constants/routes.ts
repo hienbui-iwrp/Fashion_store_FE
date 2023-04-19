@@ -1,5 +1,7 @@
 export const BASE_URL = 'http://localhost:3000'
 
+export const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL
+
 export const Routes = {
   login: '/login',
   register: '/register',

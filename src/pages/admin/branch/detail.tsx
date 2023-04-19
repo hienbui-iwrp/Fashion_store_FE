@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { BASE_URL, Routes } from '@/constants'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { Routes } from '@/constants'
 import { EditFilled } from '@ant-design/icons'
-import { Card, Col, Row, Image, List, Space } from 'antd'
+import { Card, Col, Row, Space } from 'antd'
 import { useRouter } from 'next/router'
 import { LineChart } from '@/components/LineChart'
-import { AddButton, LayoutAdmin, RemoveButton } from '@/components'
+import { AddButton, RemoveButton } from '@/components'
 import { ModalAddEditBranch } from '@/utils/modals'
 import { useModalConfirm } from '@/hooks'
 import {
@@ -22,12 +21,14 @@ import {
 } from '@/redux/slices/notificationSlice'
 import {
   formatBranchDataXML,
+  formatStaffDataXML,
   formatStatisticDataXML,
 } from '@/utils/formats/formatData'
 import {
   deleteBranchBff,
   getBranchDetailBff,
   getBranchStaffBff,
+  getStaffDetailBFF,
   getStatisticAllBFF,
 } from '@/api'
 
@@ -38,7 +39,6 @@ interface ItemType {
 
 const Detail = () => {
   const [loading, setLoading] = useState(true)
-  const [dataItems, setDataItems] = useState<ItemType[]>([])
   const [statisticData, setStatisticData] = useState<StatisticData[]>([])
   const [data, setData] = useState<BranchProps>()
   const [modalAddEditBranch, setModalAddEditBranch] = useState(false)
@@ -74,6 +74,15 @@ const Detail = () => {
     })
     setData(_data)
 
+    await getStaffDetailBFF(_data.manager)
+      .then((res: any) => {
+        const staff = formatStaffDataXML(res.Data[0])
+        _data.manager = staff.name + ' (' + staff.id + ')'
+      })
+      .catch((err) => {
+        _data.manager = 'Chưa có'
+      })
+
     await getStatisticAllBFF({
       start: getTime().startOfMonth,
       end: getTime().endOfMonth,
@@ -95,31 +104,6 @@ const Detail = () => {
       setLoading(false)
     }
   }, [id])
-
-  useEffect(() => {
-    if (data) {
-      setDataItems([
-        { name: 'Mã chi nhánh', content: data.id ?? '' },
-        { name: 'Địa chỉ', content: formatAddress(data) },
-        { name: 'Quản lý', content: data.manager ?? 'Chưa có' },
-        {
-          name: 'Nhân viên',
-          content: data?.staff?.toString() ?? '0',
-        },
-        {
-          name: 'Giờ hoạt động',
-          content:
-            formatTime(new Date(data.openTime ?? '')) +
-            ' - ' +
-            formatTime(new Date(data.closeTime ?? '')),
-        },
-        {
-          name: 'Ngày thành lập',
-          content: formatDate(new Date(data.createdAt ?? '')),
-        },
-      ])
-    }
-  }, [data])
 
   const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa chi nhánh',
@@ -148,49 +132,75 @@ const Detail = () => {
           bordered={false}
           loading={loading}
         >
-          <Row justify='center' align='middle'>
-            <Col xs={24} sm={12}>
-              <Image
-                alt='img'
-                preview={true}
-                src={
-                  data?.image ??
-                  'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
-                }
-                width={'80%'}
-              />
+          <Row justify='center' align='middle' className='px-4'>
+            <Col xs={24} sm={14}>
+              <Row className='m-4'>
+                <Col xs={24} lg={7}>
+                  <b>{'Mã chi nhánh'}</b>
+                </Col>
+                <Col xs={24} lg={17}>
+                  {data?.id}
+                </Col>
+              </Row>
+              <Row className='m-4'>
+                <Col xs={24} lg={7}>
+                  <b>{'Địa chỉ'}</b>
+                </Col>
+                <Col xs={24} lg={17}>
+                  {formatAddress(data)}
+                </Col>
+              </Row>
+              <Row className='m-4'>
+                <Col xs={24} lg={7}>
+                  <b>{'Quản lý'}</b>
+                </Col>
+                <Col xs={24} lg={17}>
+                  {data?.manager ?? 'Chưa có'}
+                </Col>
+              </Row>
             </Col>
-            <Col xs={24} sm={12}>
-              <List
-                bordered={false}
-                dataSource={dataItems ?? []}
-                renderItem={(item) => {
-                  return (
-                    <Row style={{ padding: 8 }}>
-                      <Col xs={24} lg={8}>
-                        <b>{item.name}</b>
-                      </Col>
-                      <Col xs={24} lg={16}>
-                        {item.content}
-                      </Col>
-                    </Row>
-                  )
-                }}
-              />
-              <Row justify='end' align='bottom'>
-                <Space size={20}>
-                  <RemoveButton onClick={showModelConfirm} />
-                  <AddButton
-                    label='Chỉnh sửa'
-                    icon={<EditFilled />}
-                    onClick={() => setModalAddEditBranch(true)}
-                  />
-                </Space>
+            <Col xs={24} sm={10}>
+              <Row className='m-4'>
+                <Col xs={24} lg={8}>
+                  <b>{'Số nhân viên'}</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {data?.staff?.toString() ?? '0'}
+                </Col>
+              </Row>
+              <Row className='m-4'>
+                <Col xs={24} lg={8}>
+                  <b>{'Giờ hoạt động'}</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {formatTime(new Date(data?.openTime ?? '')) +
+                    ' - ' +
+                    formatTime(new Date(data?.closeTime ?? ''))}
+                </Col>
+              </Row>
+              <Row className='m-4'>
+                <Col xs={24} lg={8}>
+                  <b>{'Ngày thành lập'}</b>
+                </Col>
+                <Col xs={24} lg={16}>
+                  {formatDate(new Date(data?.createdAt ?? ''))}
+                </Col>
               </Row>
             </Col>
           </Row>
+          <Row justify='end' align='bottom'>
+            <Space size={20}>
+              <RemoveButton onClick={showModelConfirm} />
+              <AddButton
+                label='Chỉnh sửa'
+                icon={<EditFilled />}
+                onClick={() => setModalAddEditBranch(true)}
+              />
+            </Space>
+          </Row>
         </Card>
         <Card className='!max-w-full-lg'>
+          <b>Hoạt động tháng này</b>
           <LineChart data={statisticData} revenue={true} profit={true} />
         </Card>
         {modalAddEditBranch && (

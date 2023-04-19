@@ -1,0 +1,3 @@
+GO TO /store-bpel
+goods image server: 
+     http-server ./bff/admin_bff/uploads/ -p 8080
