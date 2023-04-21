@@ -94,11 +94,14 @@ const Event = () => {
   }
 
   const getData = async () => {
-    await getEventBFF().then((res: any) => {
-      const _data = res.Data.map((item: any) => formatEventDataXML(item))
-      setData(_data)
-      setAllData(_data)
-    })
+    await getEventBFF()
+      .then((res: any) => {
+        if (res?.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: any) => formatEventDataXML(item))
+        setData(_data)
+        setAllData(_data)
+      })
+      .catch((err) => console.log(err))
   }
 
   useEffect(() => {

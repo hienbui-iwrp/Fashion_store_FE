@@ -127,18 +127,20 @@ const Account = () => {
   }
 
   const getData = async () => {
-    await getAllAccountBff().then((res) => {
-      if (res?.StatusCode == 200) {
-        const _data = res?.Data.map((item: any) => {
-          return formatAccountDataXML(item)
-        })
-        const allData = _data.filter(
-          (item: any) => item.isActivated == 'true' && item.role != 7
-        )
-        setAllData(allData)
-        setData(allData)
-      }
-    })
+    await getAllAccountBff()
+      .then((res) => {
+        if (res?.StatusCode == 200) {
+          const _data = res?.Data.map((item: any) => {
+            return formatAccountDataXML(item)
+          })
+          const allData = _data.filter(
+            (item: any) => item.isActivated == 'true' && item.role != 7
+          )
+          setAllData(allData)
+          setData(allData)
+        }
+      })
+      .catch((err) => console.log(err))
   }
 
   useEffect(() => {

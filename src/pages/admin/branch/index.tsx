@@ -85,13 +85,15 @@ const Branch = () => {
   }
 
   const getData = async () => {
-    await getBranchBff().then((res: any) => {
-      if (res.StatusCode != 200) throw new Error('FAIL')
-      const _data = res.Data.map((item: any) => {
-        return formatBranchDataXML(item)
+    await getBranchBff()
+      .then((res: any) => {
+        if (res?.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: any) => {
+          return formatBranchDataXML(item)
+        })
+        setData(_data)
       })
-      setData(_data)
-    })
+      .catch((err) => console.log(err))
   }
 
   // get data

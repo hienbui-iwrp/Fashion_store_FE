@@ -309,31 +309,37 @@ const Request = () => {
   }
 
   const getData = async () => {
-    await getListRequestBFF().then((res: any) => {
-      if (res.StatusCode != 200) throw new Error('FAIL')
-      const _data = res.Data.map((item: any) => {
-        return formatRequestDataXML(item)
-      }).filter((item: any) => item.status == RequestStatus.pending)
+    await getListRequestBFF()
+      .then((res: any) => {
+        if (res?.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: any) => {
+          return formatRequestDataXML(item)
+        }).filter((item: any) => item.status == RequestStatus.pending)
 
-      setData(_data)
-    })
+        setData(_data)
+      })
+      .catch((err: any) => {
+        console.log(err)
+      })
 
     await getStaffBff()
       .then((res: any) => {
-        if (res.StatusCode != 200) throw new Error('FAIL')
+        if (res?.StatusCode != 200) throw new Error('FAIL')
         const _data = res.Data.map((item: any) => formatStaffDataXML(item))
         console.log(_data)
         setStaffData(_data)
       })
       .catch((err) => console.log(err))
 
-    await getBranchBff().then((res: any) => {
-      if (res.StatusCode != 200) throw new Error('FAIL')
-      const _data = res.Data.map((item: any) => {
-        return formatBranchDataXML(item)
+    await getBranchBff()
+      .then((res: any) => {
+        if (res?.StatusCode != 200) throw new Error('FAIL')
+        const _data = res.Data.map((item: any) => {
+          return formatBranchDataXML(item)
+        })
+        setBranchData(_data)
       })
-      setBranchData(_data)
-    })
+      .catch((err) => console.log(err))
 
     setLoading(false)
   }

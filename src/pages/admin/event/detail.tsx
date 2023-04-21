@@ -17,6 +17,11 @@ import {
   TimePicker,
   Image,
   Form,
+  UploadFile,
+  UploadProps,
+  Upload,
+  Button,
+  Modal,
 } from 'antd'
 import { AddButton, RemoveButton, TableList } from '@/components'
 import {
@@ -25,6 +30,7 @@ import {
   FormatDateAndTime,
   formatEventDataXML,
   formatGoodsDataXML,
+  formatRouteImage,
   formatTime,
   GoodsProps,
   ModalAllGoods,
@@ -40,13 +46,22 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import {
   addEventBff,
+  deleteEventImageBFF,
   getEventDetailBFF,
   getGoodsBFF,
   updateEventBff,
+  uploadEventImageBFF,
 } from '@/api'
-import { GoodsAges, GoodsGenders, GoodsTypes, Routes } from '@/constants'
+import {
+  Colors,
+  GoodsAges,
+  GoodsGenders,
+  GoodsTypes,
+  Routes,
+} from '@/constants'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
+import { RcFile } from 'antd/lib/upload'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -66,6 +81,14 @@ type EventForm = {
   goods?: string[]
 }
 
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = (error) => reject(error)
+  })
+
 const Detail = () => {
   const [data, setData] = useState<EventProps>()
   const [goodsData, setGoodsData] = useState<GoodsProps[]>([])
@@ -74,6 +97,10 @@ const Detail = () => {
   const [modalAllGoods, setModalAllGoods] = useState(false)
   const dispatch = useDispatch()
   const [formData, setFormData] = useState<EventForm>({})
+
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+  const [fileList, setFileList] = useState<UploadFile[]>([])
 
   const router = useRouter()
   const { id } = router.query
@@ -228,6 +255,45 @@ const Detail = () => {
     })
   }
 
+  const handleCancel = () => setPreviewOpen(false)
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile)
+    }
+
+    setPreviewImage(file.url || (file.preview as string))
+    setPreviewOpen(true)
+  }
+
+  const handleChange: UploadProps['onChange'] = async (e: any) => {
+    if (fileList?.length > e.fileList.length) {
+      // delete
+      await deleteEventImageBFF({ id })
+        .then((res: any) => {
+          if (res.StatusCode != 200) throw new Error('Fail')
+          console.log('Delete image success')
+        })
+        .catch(() => {
+          console.log('Delete image error')
+        })
+    }
+
+    if (fileList?.length < e.fileList.length) {
+      await uploadEventImageBFF({ eventId: id, file: e.file.originFileObj })
+        .then((res: any) => {
+          console.log(res)
+          if (res.StatusCode != 200) throw new Error('Fail')
+          console.log('Upload image success')
+        })
+        .catch(() => {
+          console.log('Upload image error')
+        })
+    }
+
+    setFileList(e.fileList)
+  }
+
   const onSave = async () => {
     const event: EventProps = {
       id: '',
@@ -294,6 +360,16 @@ const Detail = () => {
     await getEventDetailBFF(id).then((res: any) => {
       const _data = formatEventDataXML(res.Data[0])
       setData(_data)
+      if (_data?.image != '')
+        setFileList([
+          ...[],
+          {
+            uid: '1',
+            name: _data?.image ?? '',
+            status: 'done',
+            url: formatRouteImage(_data?.image),
+          },
+        ])
     })
   }
   useEffect(() => {
@@ -364,32 +440,42 @@ const Detail = () => {
                 )}
               </Col>
             </Row>
-            <Row className={styles.adminRow}>
-              <Col span={8}>
-                <b>Ảnh</b>
-              </Col>
-              <Col span={16}>
-                <Space className='flex items-start justify-between items-center'>
-                  <Image
-                    alt='img'
-                    src={
-                      data?.image ??
-                      'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
-                    }
-                    preview={{
-                      src:
-                        data?.image ??
-                        'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
-                    }}
-                    style={{
-                      maxWidth: 130,
-                      boxShadow: '1px 1px 2px 1px #ccc',
-                    }}
-                  />
-                  <AddButton icon={<FileImageOutlined />} label={'Chọn ảnh'} />
-                </Space>
-              </Col>
-            </Row>
+            {id && (
+              <Row className={styles.adminRow} style={{ height: 110 }}>
+                <Col span={8}>
+                  <b>Ảnh</b>
+                </Col>
+                <Col span={16}>
+                  <Upload
+                    className='flex'
+                    listType='picture-card'
+                    fileList={fileList}
+                    onPreview={handlePreview}
+                    onChange={handleChange}
+                  >
+                    {fileList?.length == 0 && (
+                      <Button
+                        icon={<FileImageOutlined />}
+                        style={{
+                          height: 100,
+                          width: 100,
+                          marginLeft: 0,
+                          backgroundColor: Colors.adminGreen900,
+                          color: Colors.white,
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        Thêm ảnh
+                      </Button>
+                    )}
+                  </Upload>
+                </Col>
+              </Row>
+            )}
           </Col>
           <Col xs={24} sm={20} lg={11}>
             <Row className={styles.adminRow}>
@@ -549,6 +635,9 @@ const Detail = () => {
           allGoods={allGoodsData}
         />
       )}
+      <Modal open={previewOpen} footer={null} onCancel={handleCancel} centered>
+        <img alt='example' style={{ width: '100%' }} src={previewImage} />
+      </Modal>
     </>
   )
 }
