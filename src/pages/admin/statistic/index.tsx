@@ -26,6 +26,23 @@ import {
 dayjs.extend(customParseFormat)
 
 const Statistic = () => {
+  useMemo(async () => {
+    await getBranchBff()
+      .then((res: any) => {
+        if (res?.StatusCode != 200) throw new Error('FAIL')
+        const branchList = res.Data.map((item: any) => {
+          return formatBranchDataXML(item)
+        })
+        return branchList
+      })
+      .then((res) => {
+        setAllBranch([...res, { id: 'online', name: 'Trực tuyến' }])
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
   const curMonth = useMemo(getCurrentDate, [])
 
   const [startProfit, setStartProfit] = useState<Date>(curMonth.firstDayOfMonth)
@@ -104,9 +121,9 @@ const Statistic = () => {
 
   const getRevenue1Goods = async () => {
     await getRevenue1GoodsBFF({
-      goods: goodsProfit?.id ?? '',
-      start: startProfit,
-      end: endProfit,
+      goods: goodsRevenue?.id ?? '',
+      start: startRevenue,
+      end: endRevenue,
     })
       .then((res: any) => {
         const _data = formatStatisticDataXML(res.Data)
@@ -163,22 +180,21 @@ const Statistic = () => {
         const _data = formatStatisticDataXML(res.Data)
         setRevenueData(_data)
         setProfitData(_data)
-        console.log(_data)
       })
       .catch((err) => {
         console.log(err)
       })
-    await getBranchBff()
-      .then((res: any) => {
-        if (res?.StatusCode != 200) throw new Error('FAIL')
-        const _data = res.Data.map((item: any) => {
-          return formatBranchDataXML(item)
-        })
-        setAllBranch(_data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    // await getBranchBff()
+    //   .then((res: any) => {
+    //     if (res?.StatusCode != 200) throw new Error('FAIL')
+    //     const _data = res.Data.map((item: any) => {
+    //       return formatBranchDataXML(item)
+    //     })
+    //     setAllBranch(_data)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
   }
 
   useEffect(() => {
