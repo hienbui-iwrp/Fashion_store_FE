@@ -17,11 +17,13 @@ import {
 import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import Link from 'next/link'
+import { ModalChangePassword } from '@/utils'
 
 const { Header, Sider, Content } = Layout
 
 const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
+  const [modalChangePassword, setModalChangePassword] = useState(false)
 
   if (typeof window !== 'undefined') {
     if (localStorage.getItem('logged') === '') {
@@ -211,15 +213,16 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       label: (
         <a
           onClick={(e) => {
-            e.preventDefault()
-            console.log('Đổi mật khẩu')
+            e.stopPropagation()
+            setModalChangePassword(true)
           }}
         >
           <Button
             className='border-0'
             size={'small'}
-            onClick={() => {
-              console.log('DMK')
+            onClick={(e) => {
+              e.stopPropagation()
+              setModalChangePassword(true)
             }}
           >
             Đổi mật khẩu
@@ -342,6 +345,10 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
           <Content className='bg-emerald-50	!min-h-screen'>
             <div className={styles.adminContentContainer}>{children}</div>
           </Content>
+          <ModalChangePassword
+            open={modalChangePassword}
+            cancel={() => setModalChangePassword(false)}
+          />
         </Layout>
       </Layout>
     </ConfigProvider>

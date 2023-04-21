@@ -37,7 +37,7 @@ export const getEventClientBff = async () => {
 }
 
 export const getEventCurrentClientBff = async () => {
-  const numOfNextDate = 7;
+  const numOfNextDate = 7
   const payload = `
   <?xml version="1.0" encoding="utf-8"?>
   <soap:Body>
@@ -78,9 +78,9 @@ export const updateEventBff = async (id: any, event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-        (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
-        ''
-      )
+          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+          ''
+        )
       : '<Goods></Goods>'
 
   const payload = `
@@ -113,9 +113,9 @@ export const addEventBff = async (event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-        (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
-        ''
-      )
+          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+          ''
+        )
       : '<Goods></Goods>'
 
   const payload = `
@@ -138,5 +138,40 @@ export const addEventBff = async (event: EventProps) => {
     })
     .catch((err) => {
       console.log('getEvent err: ', err)
+    })
+}
+
+export const uploadEventImageBFF = async (file: {
+  file: any
+  eventId?: any
+}) => {
+  const form = new FormData()
+  form.append('images', file.file)
+  form.append('eventId', file.eventId ?? '')
+
+  return adminBff
+    .post('/event-service/image:upload', form)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('uploadEventImageBFF err: ', err)
+    })
+}
+
+export const deleteEventImageBFF = async (event: { id: any }) => {
+  const payload = `
+    <?xml version="1.0" encoding="utf-8"?>
+    <soap:Body>
+      <EventId>${event.id}</EventId>
+    </soap:Body>`
+
+  return adminBff
+    .post('/event-service/image:delete', payload)
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('deleteEventImageBFF err: ', err)
     })
 }

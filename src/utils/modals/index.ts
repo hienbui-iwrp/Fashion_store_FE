@@ -5,4 +5,6 @@ export { default as ModalOrderDetail } from './ModalOrderDetail'
 export { default as ModalAllGoods } from './ModalAllGoods'
 export { default as ModalAddEditWarehouse } from './ModalAddEditWarehouse'
 export { default as ModalTranferGoods } from './ModalTranferGoods'
+export { default as ModalChangePassword } from './ModalChangePassword'
+
 export * from './ModalUploadGoodsImage'

@@ -170,7 +170,7 @@ const Statistic = () => {
       })
     await getBranchBff()
       .then((res: any) => {
-        if (res.StatusCode != 200) throw new Error('FAIL')
+        if (res?.StatusCode != 200) throw new Error('FAIL')
         const _data = res.Data.map((item: any) => {
           return formatBranchDataXML(item)
         })
