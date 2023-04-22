@@ -17,6 +17,7 @@ import {
 import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import Link from 'next/link'
+import Loading from '@/components/Loading'
 
 const { Header, Sider, Content } = Layout
 
@@ -30,6 +31,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
   }
 
   const [title, setTitle] = useState('')
+  const [loading, setLoading] = useState<Boolean>(true)
   const [itemSelected, setItemSelected] = useState(
     [
       Routes.admin.homepage,
@@ -38,36 +40,36 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
     ].includes(router.pathname)
       ? 0
       : [Routes.admin.statistic].includes(router.pathname)
-      ? 1
-      : [
+        ? 1
+        : [
           Routes.admin.homepage,
           Routes.admin.branch,
           Routes.admin.branchDetail,
         ].includes(router.pathname)
-      ? 0
-      : [Routes.admin.staff, Routes.admin.staffDetail].includes(router.pathname)
-      ? 20
-      : [Routes.admin.staffRequest].includes(router.pathname)
-      ? 21
-      : [Routes.admin.account, Routes.admin.accountDetail].includes(
-          router.pathname
-        )
-      ? 3
-      : [Routes.admin.event, Routes.admin.eventDetail].includes(router.pathname)
-      ? 4
-      : [
-          Routes.admin.goods,
-          Routes.admin.goodsDetail,
-          Routes.admin.goodsTranfer,
-        ].includes(router.pathname)
-      ? 5
-      : [Routes.admin.warehouse].includes(router.pathname)
-      ? 6
-      : [Routes.admin.order].includes(router.pathname)
-      ? 70
-      : [Routes.admin.orderOnline].includes(router.pathname)
-      ? 71
-      : 7
+          ? 0
+          : [Routes.admin.staff, Routes.admin.staffDetail].includes(router.pathname)
+            ? 20
+            : [Routes.admin.staffRequest].includes(router.pathname)
+              ? 21
+              : [Routes.admin.account, Routes.admin.accountDetail].includes(
+                router.pathname
+              )
+                ? 3
+                : [Routes.admin.event, Routes.admin.eventDetail].includes(router.pathname)
+                  ? 4
+                  : [
+                    Routes.admin.goods,
+                    Routes.admin.goodsDetail,
+                    Routes.admin.goodsTranfer,
+                  ].includes(router.pathname)
+                    ? 5
+                    : [Routes.admin.warehouse].includes(router.pathname)
+                      ? 6
+                      : [Routes.admin.order].includes(router.pathname)
+                        ? 70
+                        : [Routes.admin.orderOnline].includes(router.pathname)
+                          ? 71
+                          : 7
   )
 
   const menuItem = [
@@ -286,65 +288,69 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
     ) {
       router.replace(Routes.error)
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 500)
   }, [router.pathname])
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: Colors.adminGreen500,
-          colorPrimaryBg: Colors.adminBackground,
-        },
-      }}
-    >
-      <Layout>
-        <Sider className={styles.adminSider}>
-          <div className={styles.adminContainer + ' z-20'}>
-            <Link
-              href='/'
-              className='flex justify-center items-center px-4 my-8'
-            >
-              <Image
-                alt='img'
-                style={{ maxWidth: 210, width: '100%', maxHeight: 90 }}
-                src='/logo.png'
-                preview={false}
+    loading ? <Loading /> :
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: Colors.adminGreen500,
+            colorPrimaryBg: Colors.adminBackground,
+          },
+        }}
+      >
+        <Layout>
+          <Sider className={styles.adminSider}>
+            <div className={styles.adminContainer + ' z-20'}>
+              <Link
+                href='/admin'
+                className='flex justify-center items-center px-4 my-8'
+              >
+                <Image
+                  alt='img'
+                  style={{ maxWidth: 210, width: '100%', maxHeight: 90 }}
+                  src='/logo.png'
+                  preview={false}
+                />
+              </Link>
+              <Menu
+                className={styles.adminMenu}
+                mode='inline'
+                defaultSelectedKeys={[itemSelected.toString()]}
+                items={siderItems}
               />
-            </Link>
-            <Menu
-              className={styles.adminMenu}
-              mode='inline'
-              defaultSelectedKeys={[itemSelected.toString()]}
-              items={siderItems}
-            />
-          </div>
-        </Sider>
-        <Layout className='relative !w-full'>
-          <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12 !sticky top-0 z-10'>
-            <span className='text-black font-bold	text-xl leading-none	'>
-              {title}
-            </span>
-            <Dropdown menu={{ items: avatarItems }} trigger={['click']}>
-              <Button
-                className='bg-emerald-50 border-0'
-                icon={
-                  <Image
-                    alt='img'
-                    width='30px'
-                    src='/Avatar.png'
-                    preview={false}
-                  />
-                }
-                size={'large'}
-              />
-            </Dropdown>
-          </Header>
-          <Content className='bg-emerald-50	!min-h-screen'>
-            <div className={styles.adminContentContainer}>{children}</div>
-          </Content>
+            </div>
+          </Sider>
+          <Layout className='relative !w-full'>
+            <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12 !sticky top-0 z-10'>
+              <span className='text-black font-bold	text-xl leading-none	'>
+                {title}
+              </span>
+              <Dropdown menu={{ items: avatarItems }} trigger={['click']}>
+                <Button
+                  className='bg-emerald-50 border-0'
+                  icon={
+                    <Image
+                      alt='img'
+                      width='30px'
+                      src='/Avatar.png'
+                      preview={false}
+                    />
+                  }
+                  size={'large'}
+                />
+              </Dropdown>
+            </Header>
+            <Content className='bg-emerald-50	!min-h-screen'>
+              <div className={styles.adminContentContainer}>{children}</div>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
-    </ConfigProvider>
+      </ConfigProvider>
   )
 }
 
