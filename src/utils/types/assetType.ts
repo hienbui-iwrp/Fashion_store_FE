@@ -180,6 +180,21 @@ export type RequestProps = {
   status: string
   type: string
   date: Date
+  name?: string
+  citizenId?: string
+  phone?: string
+  street?: string
+  ward?: string
+  district?: string
+  province?: string
+  birthdate?: Date
+  hometown?: string
+  branchId?: string
+  role?: string
+  salary?: number
+  startDate?: Date
+  email?: string
+  gender?: string
 }
 
 export type EventProps = {

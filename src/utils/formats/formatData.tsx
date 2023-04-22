@@ -333,6 +333,21 @@ export const formatRequestDataXML = (data: any): RequestProps => {
     status: data.getElementsByTagName('Status')[0]?.value,
     type: data.getElementsByTagName('RequestType')[0]?.value,
     date: new Date(data.getElementsByTagName('RequestDate')[0]?.value),
+    name: data.getElementsByTagName('StaffName')[0]?.value,
+    role: data.getElementsByTagName('Role')[0]?.value,
+    branchId: data.getElementsByTagName('BranchId')[0]?.value,
+    citizenId: data.getElementsByTagName('CitizenId')[0]?.value,
+    phone: data.getElementsByTagName('PhoneNumber')[0]?.value,
+    street: data.getElementsByTagName('Street')[0]?.value,
+    ward: data.getElementsByTagName('Ward')[0]?.value,
+    district: data.getElementsByTagName('District')[0]?.value,
+    province: data.getElementsByTagName('Province')[0]?.value,
+    hometown: data.getElementsByTagName('Hometown')[0]?.value,
+    salary: data.getElementsByTagName('Salary')[0]?.value,
+    email: data.getElementsByTagName('Email')[0]?.value,
+    gender: data.getElementsByTagName('Gender')[0]?.value,
+    birthdate: new Date(data.getElementsByTagName('Birthdate')[0]?.value),
+    startDate: new Date(data.getElementsByTagName('StartDate')[0]?.value),
   }
 }
 

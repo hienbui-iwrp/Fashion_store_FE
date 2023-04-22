@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ColumnsType } from 'antd/es/table'
 import { RequestStatus, RequestType, StaffRole, StaffStatus } from '@/constants'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
@@ -9,24 +9,17 @@ import {
   formatBranchDataXML,
   formatDate,
   formatRequestDataXML,
-  formatStaffDataXML,
   ModalStaffDetail,
   RequestProps,
   StaffProps,
 } from '@/utils'
 import { useModalConfirm } from '@/hooks'
-import {
-  getBranchBff,
-  getListRequestBFF,
-  getStaffBff,
-  updateRequestBFF,
-} from '@/api'
+import { getBranchBff, getListRequestBFF, updateRequestBFF } from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
 const Request = () => {
   const [data, setData] = useState<RequestProps[]>([])
-  const [staffData, setStaffData] = useState<StaffProps[]>([])
   const [loading, setLoading] = useState(true)
   const [modalStaffDetail, setModalStaffDetail] = useState(false)
   const [currentStaffData, setCurrentStaffData] = useState<StaffProps>()
@@ -80,24 +73,14 @@ const Request = () => {
     },
   })
 
-  const findStaff = (request: RequestProps) => {
-    return (
-      staffData.find((item: StaffProps) => item.id == request.staffId) ?? {}
-    )
-  }
-
-  const getDataAdd = (): any => {
-    const _data = data.filter(
-      (item: any) =>
-        item.type === RequestType.add &&
-        findStaff(item)?.status == StaffStatus.pending
-    )
+  const getDataAdd = useMemo((): any => {
+    const _data = data.filter((item: any) => item.type === RequestType.add)
     const columns: ColumnsType<RequestProps> = []
     columns.push({
       title: 'Tên nhân viên mới',
-      dataIndex: '',
+      dataIndex: 'name',
       sorter: (a: RequestProps, b: RequestProps) => {
-        return (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1
+        return (a.name ?? 1) > (b.name ?? 1) ? 1 : -1
       },
       onCell: (record: RequestProps) => {
         return {
@@ -105,20 +88,17 @@ const Request = () => {
         }
       },
       render(text: string, record: RequestProps, index: number) {
-        return findStaff(record)?.name
+        return text
       },
     })
     columns.push({
       title: 'Nơi công tác',
-      dataIndex: '',
+      dataIndex: 'branchId',
       sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.branchId ?? 1) > (findStaff(b)?.branchId ?? 1) ? 1 : -1,
+        (a?.branchId ?? 1) > (b?.branchId ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
         const name = branchData?.find((item: any) => {
-          return (
-            item.id.toString() ==
-            staffData.find((s: StaffProps) => s.id == record.staffId)?.branchId
-          )
+          return item.id.toString() == text
         })?.name
         return name
       },
@@ -131,12 +111,12 @@ const Request = () => {
 
     columns.push({
       title: 'Vị trí',
-      dataIndex: '',
+      dataIndex: 'role',
       sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
+        (a?.role ?? 1) > (b?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
         const roleName = StaffRole.find(
-          (item: any) => item.value == findStaff(record)?.role
+          (item: any) => item.value == text
         )?.content
         return roleName ?? 'Nhân viên'
       },
@@ -195,22 +175,18 @@ const Request = () => {
       },
     })
     return { data: _data, columns }
-  }
+  }, [data, branchData])
 
-  const getDataRemove = (): any => {
-    const _data = data.filter(
-      (item: any) =>
-        item.type === RequestType.delete &&
-        findStaff(item)?.status == StaffStatus.approved
-    )
+  const getDataRemove = useMemo((): any => {
+    const _data = data.filter((item: any) => item.type === RequestType.delete)
     const columns: ColumnsType<RequestProps> = []
     columns.push({
       title: 'Mã nhân viên',
-      dataIndex: '',
+      dataIndex: 'staffId',
       sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.id ?? 1) > (findStaff(b)?.id ?? 1) ? 1 : -1,
+        (a?.id ?? 1) > (b?.id ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return findStaff(record)?.id
+        return text
       },
       onCell: (record: RequestProps) => {
         return {
@@ -220,11 +196,11 @@ const Request = () => {
     })
     columns.push({
       title: 'Tên nhân viên',
-      dataIndex: '',
+      dataIndex: 'name',
       sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.name ?? 1) > (findStaff(b)?.name ?? 1) ? 1 : -1,
+        (a?.name ?? 1) > (b?.name ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
-        return findStaff(record)?.name
+        return text
       },
       onCell: (record: RequestProps) => {
         return {
@@ -235,15 +211,12 @@ const Request = () => {
 
     columns.push({
       title: 'Nơi làm việc',
-      dataIndex: '',
+      dataIndex: 'branchId',
       sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.branchId ?? 1) > (findStaff(b)?.branchId ?? 1) ? 1 : -1,
+        (a?.branchId ?? 1) > (b?.branchId ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
         const name = branchData?.find((item: any) => {
-          return (
-            item.id.toString() ==
-            staffData.find((s: StaffProps) => s.id == record.staffId)?.branchId
-          )
+          return item.id.toString() == text
         })?.name
         return name
       },
@@ -256,12 +229,12 @@ const Request = () => {
 
     columns.push({
       title: 'Vị trí',
-      dataIndex: '',
+      dataIndex: 'role',
       sorter: (a: RequestProps, b: RequestProps) =>
-        (findStaff(a)?.role ?? 1) > (findStaff(b)?.role ?? 1) ? 1 : -1,
+        (a?.role ?? 1) > (b?.role ?? 1) ? 1 : -1,
       render(text: string, record: RequestProps, index: number) {
         const roleName = StaffRole.find(
-          (item: any) => item.value == findStaff(record)?.role
+          (item: any) => item.value == text
         )?.content
         return roleName ?? 'Nhân viên'
       },
@@ -306,7 +279,7 @@ const Request = () => {
       },
     })
     return { data: _data, columns }
-  }
+  }, [data, branchData])
 
   const getData = async () => {
     await getListRequestBFF()
@@ -314,22 +287,14 @@ const Request = () => {
         if (res?.StatusCode != 200) throw new Error('FAIL')
         const _data = res.Data.map((item: any) => {
           return formatRequestDataXML(item)
-        }).filter((item: any) => item.status == RequestStatus.pending)
+        })
+        console.log('data:', _data)
 
         setData(_data)
       })
       .catch((err: any) => {
         console.log(err)
       })
-
-    await getStaffBff()
-      .then((res: any) => {
-        if (res?.StatusCode != 200) throw new Error('FAIL')
-        const _data = res.Data.map((item: any) => formatStaffDataXML(item))
-        console.log(_data)
-        setStaffData(_data)
-      })
-      .catch((err) => console.log(err))
 
     await getBranchBff()
       .then((res: any) => {
@@ -352,24 +317,60 @@ const Request = () => {
     <>
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <TableList<RequestProps>
-          data={getDataAdd().data}
+          data={getDataAdd.data}
           title='Yêu cầu thêm'
-          columns={getDataAdd().columns}
+          columns={getDataAdd.columns}
           loading={loading}
           ellipsis={true}
           callback={(i: RequestProps) => {
-            setCurrentStaffData(findStaff(i))
+            setCurrentStaffData({
+              id: i.staffId,
+              name: i.name,
+              citizenId: i.citizenId,
+              phone: i.phone,
+              street: i.street,
+              ward: i.ward,
+              district: i.district,
+              province: i.province,
+              birthdate: i.birthdate,
+              hometown: i.hometown,
+              branchId: i.branchId,
+              role: i.role,
+              salary: i.salary,
+              startDate: i.startDate,
+              status: i.status,
+              email: i.email,
+              gender: i.gender,
+            })
           }}
           onSelectRow={() => setModalStaffDetail(true)}
           rowKey={['id', 'type']}
         />
 
         <TableList<RequestProps>
-          data={getDataRemove().data}
+          data={getDataRemove.data}
           title='Yêu cầu xóa'
-          columns={getDataRemove().columns}
+          columns={getDataRemove.columns}
           callback={(i: RequestProps) => {
-            setCurrentStaffData(findStaff(i))
+            setCurrentStaffData({
+              id: i.staffId,
+              name: i.name,
+              citizenId: i.citizenId,
+              phone: i.phone,
+              street: i.street,
+              ward: i.ward,
+              district: i.district,
+              province: i.province,
+              birthdate: i.birthdate,
+              hometown: i.hometown,
+              branchId: i.branchId,
+              role: i.role,
+              salary: i.salary,
+              startDate: i.startDate,
+              status: i.status,
+              email: i.email,
+              gender: i.gender,
+            })
           }}
           onSelectRow={() => setModalStaffDetail(true)}
           loading={loading}
