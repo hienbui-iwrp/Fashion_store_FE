@@ -56,13 +56,10 @@ export const GoodsClothes = [
   { value: 'Trousers', label: 'Quần tây' },
   { value: 'kaki', label: 'Quần kaki' },
   { value: 'short', label: 'Quần sọt' },
+  { value: 'shirt', label: 'Áo sơ mi' },
 ]
 
-export const GoodsTypes = [
-  ...GoodsClothes,
-  ...GoodsFootwear,
-  ...GoodsAccessory,
-]
+export const GoodsTypes = [...GoodsClothes, ...GoodsFootwear, ...GoodsAccessory]
 
 export const GoodsSizes = [
   { value: '31', label: '31' },
