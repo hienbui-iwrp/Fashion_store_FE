@@ -62,6 +62,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
           .catch((error) => {
             dispatch(setNotificationType('error'))
             dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+            console.log('error:', error)
           })
       } else {
         await updateBranchBff(props.extraData.id, values)
@@ -72,6 +73,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
           .catch((error) => {
             dispatch(setNotificationType('error'))
             dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+            console.log('error:', error)
           })
       }
 
@@ -94,7 +96,7 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
         onCancel={props.cancel}
         onOk={() => props?.callback}
         style={{ maxWidth: '90%' }}
-        width={700}
+        width={400}
         footer={[
           <Space key='btn'>
             <RemoveButton
@@ -113,163 +115,143 @@ const ModalAddEditBranch = (props: ModalAddEditBranchProps) => {
           </Space>,
         ]}
       >
-        <Row>
-          <Col xs={24} sm={12}>
-            <Space direction='vertical' align='center'>
-              <Image
-                alt='img'
-                preview={true}
-                src={
-                  props.extraData?.image ??
-                  'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
-                }
-                width={'90%'}
-              />
-              <AddButton
-                key='add'
-                label='Chọn ảnh'
-                icon={<FileImageOutlined />}
-              />
-            </Space>
-          </Col>
-          <Col xs={24} sm={12}>
-            <Form
-              layout={'vertical'}
-              form={form}
-              onValuesChange={() => {}}
-              initialValues={initialValue}
+        <Form
+          layout={'vertical'}
+          form={form}
+          onValuesChange={() => {}}
+          initialValues={initialValue}
+        >
+          <Form.Item
+            label='Tên chi nhánh'
+            name='name'
+            rules={[
+              {
+                required: props.extraData ? false : true,
+                message: 'Vui lòng nhập',
+              },
+            ]}
+          >
+            <Input
+              placeholder='Nhập tên chi nhánh'
+              className={styles.adminInputShadow}
+              // defaultValue={props.extraData?.name}
+            />
+          </Form.Item>
+          <b>Địa chỉ</b>
+          <Space size='large'>
+            <Form.Item
+              label='Đường'
+              name='street'
+              rules={[
+                {
+                  required: props.extraData ? false : true,
+                  message: 'Vui lòng nhập',
+                },
+              ]}
             >
-              <Form.Item
-                label='Tên chi nhánh'
-                name='name'
-                rules={[
-                  {
-                    required: props.extraData ? false : true,
-                    message: 'Vui lòng nhập',
-                  },
-                ]}
-              >
-                <Input
-                  placeholder='Nhập tên chi nhánh'
-                  className={styles.adminInputShadow}
-                  // defaultValue={props.extraData?.name}
-                />
-              </Form.Item>
-              <b>Địa chỉ</b>
-              <Space size='large'>
-                <Form.Item
-                  label='Đường'
-                  name='street'
-                  rules={[
-                    {
-                      required: props.extraData ? false : true,
-                      message: 'Vui lòng nhập',
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder='Nhập tên đường'
-                    className={styles.adminInputShadow}
-                    // defaultValue={props.extraData?.street}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label='Xã, phường'
-                  name='ward'
-                  rules={[
-                    {
-                      required: props.extraData ? false : true,
-                      message: 'Vui lòng nhập',
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder='Nhập xã, phường'
-                    className={styles.adminInputShadow}
-                    // defaultValue={props.extraData?.ward}
-                  />
-                </Form.Item>
-              </Space>
-              <Space size='large'>
-                <Form.Item
-                  label='Quận, huyện'
-                  name='district'
-                  rules={[
-                    {
-                      required: props.extraData ? false : true,
-                      message: 'Vui lòng nhập',
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder='Nhập quận, huyện'
-                    className={styles.adminInputShadow}
-                    // defaultValue={props.extraData?.district}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label='Tỉnh, thành phố'
-                  name='province'
-                  rules={[
-                    {
-                      required: props.extraData ? false : true,
-                      message: 'Vui lòng nhập',
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder='Nhập tỉnh, thành phố'
-                    className={styles.adminInputShadow}
-                    // defaultValue={props.extraData?.province}
-                  />
-                </Form.Item>
-              </Space>
-              <b>Giờ hoạt động</b>
-              <Space size='large'>
-                <Form.Item
-                  label='Giờ mở cửa'
-                  name='openTime'
-                  rules={[
-                    {
-                      required: props.extraData ? false : true,
-                      message: 'Vui lòng nhập',
-                    },
-                  ]}
-                >
-                  <TimePicker
-                    // defaultValue={
-                    //   props.extraData?.openTime &&
-                    //   dayjs(formatTime(props.extraData?.openTime), 'HH:mm ')
-                    // }
-                    format={'HH:mm'}
-                    onOk={(item) => {}}
-                    className={styles.adminInputShadow}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label='Giờ đóng cửa'
-                  name='closeTime'
-                  rules={[
-                    {
-                      required: props.extraData ? false : true,
-                      message: 'Vui lòng nhập',
-                    },
-                  ]}
-                >
-                  <TimePicker
-                    // defaultValue={
-                    //   props.extraData?.closeTime &&
-                    //   dayjs(formatTime(props.extraData?.closeTime), 'HH:mm ')
-                    // }
-                    format={'HH:mm'}
-                    onOk={(item) => {}}
-                    className={styles.adminInputShadow}
-                  />
-                </Form.Item>
-              </Space>
-            </Form>
-          </Col>
-        </Row>
+              <Input
+                placeholder='Nhập tên đường'
+                className={styles.adminInputShadow}
+                // defaultValue={props.extraData?.street}
+              />
+            </Form.Item>
+            <Form.Item
+              label='Xã, phường'
+              name='ward'
+              rules={[
+                {
+                  required: props.extraData ? false : true,
+                  message: 'Vui lòng nhập',
+                },
+              ]}
+            >
+              <Input
+                placeholder='Nhập xã, phường'
+                className={styles.adminInputShadow}
+                // defaultValue={props.extraData?.ward}
+              />
+            </Form.Item>
+          </Space>
+          <Space size='large'>
+            <Form.Item
+              label='Quận, huyện'
+              name='district'
+              rules={[
+                {
+                  required: props.extraData ? false : true,
+                  message: 'Vui lòng nhập',
+                },
+              ]}
+            >
+              <Input
+                placeholder='Nhập quận, huyện'
+                className={styles.adminInputShadow}
+                // defaultValue={props.extraData?.district}
+              />
+            </Form.Item>
+            <Form.Item
+              label='Tỉnh, thành phố'
+              name='province'
+              rules={[
+                {
+                  required: props.extraData ? false : true,
+                  message: 'Vui lòng nhập',
+                },
+              ]}
+            >
+              <Input
+                placeholder='Nhập tỉnh, thành phố'
+                className={styles.adminInputShadow}
+                // defaultValue={props.extraData?.province}
+              />
+            </Form.Item>
+          </Space>
+          <b>Giờ hoạt động</b>
+          <Space size='large'>
+            <Form.Item
+              label='Giờ mở cửa'
+              name='openTime'
+              rules={[
+                {
+                  required: props.extraData ? false : true,
+                  message: 'Vui lòng nhập',
+                },
+              ]}
+            >
+              <TimePicker
+                // defaultValue={
+                //   props.extraData?.openTime &&
+                //   dayjs(formatTime(props.extraData?.openTime), 'HH:mm ')
+                // }
+                format={'HH:mm'}
+                onOk={(item) => {}}
+                className={styles.adminInputShadow}
+                style={{ minWidth: 164 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label='Giờ đóng cửa'
+              name='closeTime'
+              rules={[
+                {
+                  required: props.extraData ? false : true,
+                  message: 'Vui lòng nhập',
+                },
+              ]}
+            >
+              <TimePicker
+                // defaultValue={
+                //   props.extraData?.closeTime &&
+                //   dayjs(formatTime(props.extraData?.closeTime), 'HH:mm ')
+                // }
+                format={'HH:mm'}
+                onOk={(item) => {}}
+                className={styles.adminInputShadow}
+                style={{ minWidth: 164 }}
+              />
+            </Form.Item>
+          </Space>
+        </Form>
       </Modal>
     </>
   )

@@ -28,9 +28,7 @@ export const getBranchDetailBff = async (id: any) => {
   return await adminBff
     .post(`/branch-service/get`, xmls)
     .then((res) => {
-      const XMLParser = require('react-xml-parser')
-      const xml = new XMLParser().parseFromString(res.data)
-      return xml.getElementsByTagName('Data')[0]
+      return formatResponse(res.data)
     })
     .catch((err) => {
       console.log(err)
@@ -48,7 +46,7 @@ export const addBranchBff = async (branch: BranchProps) => {
       <Province>${branch?.province}</Province>
       <Open>${branch?.openTime && formatTime(branch?.openTime) + ':00'}</Open>
       <Close>${
-        branch?.closeTime && formatTime(branch?.openTime) + ':00'
+        branch?.closeTime && formatTime(branch?.closeTime) + ':00'
       }</Close>
   </soap:Body>`
 

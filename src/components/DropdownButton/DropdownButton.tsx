@@ -52,7 +52,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
             setIsHover(false)
           }}
         >
-          {label}
+          <span style={{ maxWidth: '90%', overflow: 'hidden' }}>{label}</span>
           <CaretDownOutlined
             style={{
               color: isHover ? Colors.adminGreen500 : Colors.adminGreen900,

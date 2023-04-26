@@ -131,7 +131,7 @@ const Branch = () => {
             setTimeout(() => {
               getData()
               setLoading(false)
-            }, 1000)
+            }, 1500)
           }}
         />
       )}

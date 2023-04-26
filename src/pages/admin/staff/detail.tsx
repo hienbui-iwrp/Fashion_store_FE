@@ -129,39 +129,6 @@ const Detail = () => {
     })
   }
 
-  const getData = async () => {
-    await getStaffDetailBFF(id)
-      .then((res: any) => {
-        const _data = formatStaffDataXML(res.Data[0])
-        setData(_data)
-        _data.branchId &&
-          getBranchDetailBff(_data.branchId).then((res: any) => {
-            const _branchData = formatBranchDataXML(
-              res.getElementsByTagName('Data')[0]
-            )
-            setBranchData(_branchData)
-          })
-      })
-
-      .catch((err) => console.log(err))
-    setLoading(false)
-  }
-
-  const getAttendacceData = () => {
-    getAttendaceBff(id).then((res: any) => {
-      const _attendacceData: AttendanceProps[] = res.Data.map((item: any) => {
-        return formatAttendanceDataXML(item)
-      })
-      setAttendanceShowData(
-        _attendacceData.filter((item: AttendanceProps) => {
-          return item.date?.getMonth() == new Date().getMonth()
-        })
-      )
-
-      setAttendanceData(_attendacceData)
-    })
-  }
-
   const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa nhân viên',
     content: 'Bạn có chắc  chắn muốn xóa nhân viên này?',
@@ -179,6 +146,45 @@ const Detail = () => {
     },
   })
 
+  const getData = async () => {
+    await getStaffDetailBFF(id)
+      .then((res: any) => {
+        const _data = formatStaffDataXML(res.Data[0])
+        setData(_data)
+      })
+
+      .catch((err) => console.log(err))
+    setLoading(false)
+  }
+
+  const getBranchData = async () => {
+    await getBranchDetailBff(data.branchId)
+      .then((res: any) => {
+        if (res.StatusCode != 200) throw new Error()
+        const _branchData = formatBranchDataXML(res.Data[0])
+        setBranchData(_branchData)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  // console.log('branch: --', data.branchId, branchData)
+
+  const getAttendacceData = () => {
+    getAttendaceBff(id).then((res: any) => {
+      const _attendacceData: AttendanceProps[] = res.Data.map((item: any) => {
+        return formatAttendanceDataXML(item)
+      })
+      setAttendanceShowData(
+        _attendacceData.filter((item: AttendanceProps) => {
+          return item.date?.getMonth() == new Date().getMonth()
+        })
+      )
+
+      setAttendanceData(_attendacceData)
+    })
+  }
+
   useEffect(() => {
     if (id) {
       getData()
@@ -188,12 +194,9 @@ const Detail = () => {
 
   useEffect(() => {
     if (data.branchId) {
-      getBranchDetailBff(data.branchId).then((res: any) => {
-        const _data = formatBranchDataXML(res)
-        // setListData(data, _data)
-      })
+      getBranchData()
     }
-  }, [data])
+  }, [data.branchId])
 
   return (
     <>
@@ -292,7 +295,7 @@ const Detail = () => {
                   <b>Nơi làm việc</b>
                 </Col>
                 <Col xs={24} lg={16}>
-                  {branchData.name ? branchData.name : 'Toàn hệ thống'}
+                  {branchData.name ?? 'Toàn hệ thống'}
                 </Col>
               </Row>
               <Row style={{ padding: 8 }}>
