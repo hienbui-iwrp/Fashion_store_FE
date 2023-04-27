@@ -3,7 +3,7 @@ import { Modal, Space, Image } from 'antd'
 import { ModalAllGoodsProps } from '../types/modalType'
 import { AddButton, InputSearch, RemoveButton, TableList } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { GoodsProps, formatGoodsDataXML } from '..'
+import { GoodsProps, formatGoodsDataXML, formatRouteImage } from '..'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -77,7 +77,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
             alt='img'
             src={
               record?.image
-                ? record?.image[0]
+                ? formatRouteImage(record?.image[0])
                 : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
             }
             style={{

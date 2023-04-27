@@ -130,12 +130,12 @@ const Detail = () => {
             alt='img'
             src={
               record?.image
-                ? record?.image[0]
+                ? formatRouteImage(record?.image[0])
                 : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
             }
             preview={{
               src: record?.image
-                ? record?.image[0]
+                ? formatRouteImage(record?.image[0])
                 : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
             }}
             style={{

@@ -691,18 +691,18 @@ const Detail = () => {
                     loading={loading}
                     header={
                       <div className='flex justify-between'>
-                        <div style={{ minWidth: 150 }}>
+                        <div style={{ minWidth: 200 }}>
                           <Row className='mb-2'>
-                            <Col span={18}>
+                            <Col span={12}>
                               <b>Màu</b>
                             </Col>
-                            <Col span={6}>{colorItem}</Col>
+                            <Col span={12}>{colorItem}</Col>
                           </Row>
                           <Row className='mb-2'>
-                            <Col span={18}>
+                            <Col span={12}>
                               <b>Kích thước</b>
                             </Col>
-                            <Col span={6}>{sizeItem}</Col>
+                            <Col span={12}>{sizeItem}</Col>
                           </Row>
                         </div>
                         <div>
@@ -745,7 +745,9 @@ const Detail = () => {
           cancel={() => setModalUploadGoodsImage(false)}
           extraData={{ colors: colors, id: data?.id }}
           callback={() => {
-            getData()
+            setTimeout(() => {
+              getData()
+            }, 1000)
           }}
         />
       )}
