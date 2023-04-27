@@ -5,9 +5,18 @@ import { Button, Card, Typography, Image } from 'antd'
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
-import { FormatMoney, formatNumber, ProductDetailDataProps } from '@/utils'
+import {
+  FormatMoney,
+  formatNumber,
+  formatRouteImage,
+  ProductDetailDataProps,
+} from '@/utils'
 import { addGoodsBff } from '@/api'
-import { setNotificationType, setNotificationValue, useAppDispatch } from '@/redux'
+import {
+  setNotificationType,
+  setNotificationValue,
+  useAppDispatch,
+} from '@/redux'
 
 const { Text } = Typography
 
@@ -23,23 +32,23 @@ export interface CardProductClientProps {
 }
 
 export default function CardProductClient(props: ProductDetailDataProps) {
-  const link = `/products/${props.goodsId}`;
-  const dispatch: any = useAppDispatch();
-  const router = useRouter();
-  var valueColor = '';
-  var valueSize = '';
-  var quantity = 0;
+  const link = `/products/${props.goodsId}`
+  const dispatch: any = useAppDispatch()
+  const router = useRouter()
+  var valueColor = ''
+  var valueSize = ''
+  var quantity = 0
   for (let i = 0; i < props.listQuantity?.length; i++) {
     if (props.listQuantity[i].quantity > 0) {
-      valueColor = props.listQuantity[i].color;
-      valueSize = props.listQuantity[i].size;
-      quantity = 1;
-      break;
+      valueColor = props.listQuantity[i].color
+      valueSize = props.listQuantity[i].size
+      quantity = 1
+      break
     }
   }
   const handleAddToCart = (e: any) => {
-    e.stopPropagation();
-    onAddToCart();
+    e.stopPropagation()
+    onAddToCart()
   }
   const handleClickCard = () => {
     router.replace(link)
@@ -47,26 +56,32 @@ export default function CardProductClient(props: ProductDetailDataProps) {
 
   const onAddToCart = async () => {
     if (localStorage.getItem('userId')) {
-      await addGoodsBff(localStorage.getItem('userId') ?? '',
-        {
-          ...props, goodsColor: valueColor ?? '',
-          goodsSize: valueSize ?? '',
-          quantity, image: '',
-        })
-        .then(res => {
-          if (res?.StatusCode === '200') {
-            dispatch(setNotificationValue('Thêm vào giỏ hàng thành công'))
-          }
-          else {
-            dispatch(setNotificationType('error'))
-            dispatch(setNotificationValue('Có lỗi khi thêm vào giỏ hàng, vui lòng thử lại'))
-          }
-        })
+      await addGoodsBff(localStorage.getItem('userId') ?? '', {
+        ...props,
+        goodsColor: valueColor ?? '',
+        goodsSize: valueSize ?? '',
+        quantity,
+        image: '',
+      }).then((res) => {
+        if (res?.StatusCode === '200') {
+          dispatch(setNotificationValue('Thêm vào giỏ hàng thành công'))
+        } else {
+          dispatch(setNotificationType('error'))
+          dispatch(
+            setNotificationValue(
+              'Có lỗi khi thêm vào giỏ hàng, vui lòng thử lại'
+            )
+          )
+        }
+      })
     }
   }
 
   return (
-    <div className='card-product-client flex w-1/4 px-3 pb-4' style={{ minWidth: 180, maxWidth: 300 }}>
+    <div
+      className='card-product-client flex w-1/4 px-3 pb-4'
+      style={{ minWidth: 180, maxWidth: 300 }}
+    >
       <Card
         hoverable
         onClick={handleClickCard}
@@ -83,7 +98,14 @@ export default function CardProductClient(props: ProductDetailDataProps) {
         }}
       >
         <div className='pb-2 flex items-center justify-center'>
-          <Image src={props.images[0] || 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'} preview={false} className='pb-2 !h-64' />
+          <Image
+            src={
+              formatRouteImage(props.images[0]) ||
+              'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
+            }
+            preview={false}
+            className='pb-2 !h-64'
+          />
         </div>
         <div className='flex-1'>
           <div className='flex flex-col justify-between h-full'>
@@ -116,13 +138,13 @@ export default function CardProductClient(props: ProductDetailDataProps) {
               <ButtonClientPrimary
                 disabled={quantity === 0}
                 onClick={handleAddToCart}
-                icon={<FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />}
+                icon={
+                  <FontAwesomeIcon className='text-xl p-2' icon={faCartPlus} />
+                }
               />
             </div>
-
           </div>
         </div>
-
       </Card>
     </div>
   )

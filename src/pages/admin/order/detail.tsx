@@ -15,6 +15,7 @@ import {
   formatDate,
   formatNumber,
   formatOrderAdminDataXML,
+  formatRouteImage,
   formatStaffDataXML,
 } from '@/utils'
 import { Card, Col, Divider, Row, Image } from 'antd'
@@ -70,7 +71,7 @@ const Detail = () => {
           <Image
             alt='img'
             src={
-              record?.image ??
+              formatRouteImage(record?.image) ??
               'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
             }
             style={{
@@ -204,6 +205,7 @@ const Detail = () => {
     const totalPrice = Number(data?.totalPrice) ?? 0
     const totalTax = Number(
       data?.goods.reduce((acc: number, item: GoodsOrderAdminData) => {
+        console.log('item: ', item)
         return acc + item.tax
       }, 0)
     )
