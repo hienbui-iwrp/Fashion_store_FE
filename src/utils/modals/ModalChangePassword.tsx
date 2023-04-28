@@ -7,6 +7,7 @@ import styles from '@/styles/Admin.module.css'
 
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
+import { changePasswordAdminBFF } from '@/api'
 
 const ModalChangePassword = (props: ModalSampleProps) => {
   const [form] = Form.useForm()
@@ -17,13 +18,20 @@ const ModalChangePassword = (props: ModalSampleProps) => {
       const values = await form.validateFields()
 
       //   call api
-      if (true) {
-        dispatch(setNotificationValue('Cập nhật mật khẩu thành công'))
-      } else {
-        dispatch(setNotificationType('error'))
-        dispatch(setNotificationValue('Có lỗi khi thực hiện'))
-      }
-
+      await changePasswordAdminBFF({
+        username: localStorage.getItem('userId'),
+        oldPass: values.oldPassword,
+        newPass: values.password,
+      })
+        .then((res) => {
+          if (res.StatusCode != 200) throw new Error('FAIL')
+          dispatch(setNotificationValue('Cập nhật mật khẩu thành công'))
+        })
+        .catch((err) => {
+          console.log(err)
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
       props.callback && props.callback({})
       props.cancel && props.cancel()
 

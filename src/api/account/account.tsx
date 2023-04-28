@@ -144,3 +144,26 @@ export const updateRoleBff = async (username: string, role: number) => {
       console.log('Error get all account: ', err)
     })
 }
+
+export const changePasswordAdminBFF = async (data: {
+  username?: string
+  oldPass: string
+  newPass: string
+}) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+<soap:Body>
+    <Username>${data.username ?? ''}</Username>
+    <OldPassword>${data.oldPass}</OldPassword>
+    <NewPassword>${data.newPass}</NewPassword>
+</soap:Body>`
+
+  return await adminBff
+    .post(`/account-service/account/change-password`, payload)
+    .then((res: any) => {
+      return formatResponse(res.data)
+    })
+    .catch((err: any) => {
+      console.log('Error get all account: ', err)
+    })
+}
