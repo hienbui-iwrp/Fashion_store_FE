@@ -19,11 +19,11 @@ const ModalChangePassword = (props: ModalSampleProps) => {
 
       //   call api
       await changePasswordAdminBFF({
-        username: localStorage.getItem('userId'),
+        username: localStorage.getItem('userId') ?? '',
         oldPass: values.oldPassword,
         newPass: values.password,
       })
-        .then((res) => {
+        .then((res: any) => {
           if (res.StatusCode != 200) throw new Error('FAIL')
           dispatch(setNotificationValue('Cập nhật mật khẩu thành công'))
         })
