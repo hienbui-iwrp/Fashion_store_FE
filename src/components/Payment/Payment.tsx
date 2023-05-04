@@ -9,7 +9,7 @@ import type { RadioChangeEvent } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import { useRouter } from 'next/router';
 import { FormatMoney, ProductInCartProps } from '@/utils';
-import { createOrder, makeOrder } from '@/api/customer-order';
+import { createOrder, createOrderBpel, makeOrder } from '@/api/customer-order';
 import { deleteGoodsBff } from '@/api';
 import Loading from '../Loading';
 import { useEffect } from 'react';
@@ -70,7 +70,8 @@ export default function Payment(props: PaymentProps) {
   };
 
   const completedOrder = async (orderData: any) => {
-    return await createOrder(orderData);
+    return await createOrderBpel(orderData);
+    // return await createOrder(orderData);
   }
 
   const removeProductBoughtInCart = async (orderData: any) => {
