@@ -1,27 +1,42 @@
-import React from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { Result } from 'antd'
 import Link from 'next/link'
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { Routes } from '@/constants'
 
 export default function NotFoundPage() {
+  const [route, setRoute] = useState('')
+  useEffect(() => {
+    if (localStorage.getItem('logged') != 'false') {
+      switch (localStorage.getItem('userRole')) {
+        case '1':
+          setRoute(Routes.homepage)
+          break
+        case '2':
+          setRoute(Routes.admin.homepage)
+          break
+        case '3':
+          setRoute(Routes.branchManager.homepage)
+          break
+        case '4':
+          break
+        case '5':
+          break
+        case '6':
+          break
+      }
+    }
+  }, [localStorage.getItem('logged')])
+
   return (
     <Result
       status='404'
       title='404'
       subTitle='Xin lỗi, trang hiện tại của bạn truy cập không tồn tại.'
       extra={
-        localStorage.getItem('logged') &&
-        localStorage.getItem('logged') != 'false' &&
-        localStorage.getItem('userRole') != '1' ? (
-          <Link href={Routes.admin.homepage} className='flex justify-center'>
-            <ButtonClientPrimary name='Về trang chủ' />
-          </Link>
-        ) : (
-          <Link href={Routes.homepage} className='flex justify-center'>
-            <ButtonClientPrimary name='Về trang chủ' />
-          </Link>
-        )
+        <Link href={route} className='flex justify-center'>
+          <ButtonClientPrimary name='Về trang chủ' />
+        </Link>
       }
     />
   )

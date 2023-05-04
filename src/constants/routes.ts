@@ -41,4 +41,15 @@ export const Routes = {
     orderDetail: '/admin/order/detail',
     orderOnline: '/admin/order/online',
   },
+  branchManager: {
+    homepage: '/branch-manager',
+    branch: '/branch-manager/branch',
+    branchDetail: '/branch-manager/branch/detail',
+    statistic: '/branch-manager/statistic',
+    staff: '/branch-manager/staff',
+    staffDetail: '/branch-manager/staff/detail',
+    staffRequest: '/branch-manager/staff/request',
+    order: '/branch-manager/order',
+    orderDetail: '/branch-manager/order/detail',
+  },
 }

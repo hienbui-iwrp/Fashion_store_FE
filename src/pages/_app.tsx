@@ -1,5 +1,5 @@
 import '@/styles/globals.css'
-import { ConfigProvider, Image } from 'antd'
+import { ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
 import LayoutClient from './../components/Layout/LayoutClient'
@@ -13,7 +13,7 @@ import {
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
 import { Colors, Routes } from '@/constants'
-import { LayoutAdmin } from '@/components'
+import { LayoutAdmin, LayoutBranchManager } from '@/components'
 import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -111,6 +111,29 @@ export default function App({ Component, pageProps }: AppProps) {
       </Provider>
     )
 
+    if (
+      router.pathname === Routes.branchManager.homepage ||
+      router.pathname === Routes.branchManager.branch ||
+      router.pathname === Routes.branchManager.branchDetail ||
+      router.pathname === Routes.branchManager.staff ||
+      router.pathname === Routes.branchManager.staffDetail ||
+      router.pathname === Routes.branchManager.staffRequest ||
+      router.pathname === Routes.branchManager.statistic ||
+      router.pathname === Routes.branchManager.order ||
+      router.pathname === Routes.branchManager.orderDetail
+    )
+      return (
+        <Provider store={store}>
+          <Head>
+            <link rel="icon" href="/logo.png" />
+            <title> PTH Fashion</title>
+          </Head>
+          <LayoutBranchManager>
+            <Component {...pageProps} />
+            <Notify />
+          </LayoutBranchManager>
+        </Provider>
+      )
   return (
     <Provider store={store}>
       <Head>

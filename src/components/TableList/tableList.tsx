@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import type { TableProps } from 'antd/es/table'
-import { BASE_URL, Colors, Routes } from '@/constants'
+import { Colors } from '@/constants'
 import { TableListProps } from '@/utils/types/componentType'
 import { useRouter } from 'next/router'
 

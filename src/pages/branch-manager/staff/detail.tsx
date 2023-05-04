@@ -44,6 +44,11 @@ dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
+interface ItemType {
+  name: string
+  content: string | number
+}
+
 const Detail = () => {
   const [loading, setLoading] = useState(true)
   const [attendanceData, setAttendanceData] = useState<AttendanceProps[]>([])
@@ -58,71 +63,71 @@ const Detail = () => {
   const router = useRouter()
   const { id } = router.query
 
-  // const columns: ColumnsType<AttendanceProps> = []
-  // if (attendanceShowData && attendanceShowData[0]) {
-  //   columns.push({
-  //     title: 'Ngày',
-  //     dataIndex: 'date',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       (a.date ?? 1) > (b.date ?? 1) ? 1 : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return formatDate(text)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 120 },
-  //       }
-  //     },
-  //   })
+  const columns: ColumnsType<AttendanceProps> = []
+  if (attendanceShowData && attendanceShowData[0]) {
+    columns.push({
+      title: 'Ngày',
+      dataIndex: 'date',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        (a.date ?? 1) > (b.date ?? 1) ? 1 : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return formatDate(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+    })
 
-  //   columns.push({
-  //     title: 'Thời điểm vào',
-  //     dataIndex: 'checkIn',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       (a.checkIn ?? 1) > (b.checkIn ?? 1) ? 1 : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return formatTime(text)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 140 },
-  //       }
-  //     },
-  //   })
+    columns.push({
+      title: 'Thời điểm vào',
+      dataIndex: 'checkIn',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        (a.checkIn ?? 1) > (b.checkIn ?? 1) ? 1 : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return formatTime(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 140 },
+        }
+      },
+    })
 
-  //   columns.push({
-  //     title: 'Thời điểm ra',
-  //     dataIndex: 'checkOut',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return formatTime(text)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 120 },
-  //       }
-  //     },
-  //   })
+    columns.push({
+      title: 'Thời điểm ra',
+      dataIndex: 'checkOut',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return formatTime(text)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+    })
 
-  //   columns.push({
-  //     title: 'Thời gian làm',
-  //     dataIndex: '',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       getWorkingTime(a.checkIn, a.checkOut) >
-  //       getWorkingTime(b.checkIn, b.checkOut)
-  //         ? 1
-  //         : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return getWorkingTime(record.checkIn, record.checkOut)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 120 },
-  //       }
-  //     },
-  //   })
-  // }
+    columns.push({
+      title: 'Thời gian làm',
+      dataIndex: '',
+      sorter: (a: AttendanceProps, b: AttendanceProps) =>
+        getWorkingTime(a.checkIn, a.checkOut) >
+        getWorkingTime(b.checkIn, b.checkOut)
+          ? 1
+          : -1,
+      render(text: any, record: AttendanceProps, index: number) {
+        return getWorkingTime(record.checkIn, record.checkOut)
+      },
+      onCell: (record) => {
+        return {
+          style: { minWidth: 120 },
+        }
+      },
+    })
+  }
 
   const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa nhân viên',
@@ -195,6 +200,7 @@ const Detail = () => {
 
   return (
     <>
+      {' '}
       <Space direction='vertical' style={{ width: '99%' }} size='large'>
         <Card
           className='max-w-full-lg'
@@ -330,7 +336,7 @@ const Detail = () => {
             </Space>
           </Row>
         </Card>
-        {/* <TableList<AttendanceProps>
+        <TableList<AttendanceProps>
           data={attendanceShowData ?? []}
           columns={columns}
           loading={loading}
@@ -361,7 +367,7 @@ const Detail = () => {
               </Col>
             </Row>
           }
-        /> */}
+        />
         {modalAddEditStaff && (
           <ModalAddEditStaff
             open={modalAddEditStaff}
@@ -379,28 +385,28 @@ Detail.displayName = 'Staff Detail'
 
 export default Detail
 
-// const getWorkingTime = (start: any, end: any) => {
-//   const time1 = new Date(start)
-//   const time2 = new Date(end)
+const getWorkingTime = (start: any, end: any) => {
+  const time1 = new Date(start)
+  const time2 = new Date(end)
 
-//   const hours1 = time1.getHours()
-//   const minutes1 = time1.getMinutes()
-//   const seconds1 = time1.getSeconds()
+  const hours1 = time1.getHours()
+  const minutes1 = time1.getMinutes()
+  const seconds1 = time1.getSeconds()
 
-//   const hours2 = time2.getHours()
-//   const minutes2 = time2.getMinutes()
-//   const seconds2 = time2.getSeconds()
+  const hours2 = time2.getHours()
+  const minutes2 = time2.getMinutes()
+  const seconds2 = time2.getSeconds()
 
-//   return (
-//     hours2 -
-//     hours1 +
-//     (minutes2 - minutes1) / 60 +
-//     (seconds2 - seconds1) / 3600
-//   ).toFixed(1)
-// }
+  return (
+    hours2 -
+    hours1 +
+    (minutes2 - minutes1) / 60 +
+    (seconds2 - seconds1) / 3600
+  ).toFixed(1)
+}
 
-// const countWorkingDate = (data: AttendanceProps[]) => {
-//   return data.filter((item: AttendanceProps) => {
-//     return item.date
-//   }).length
-// }
+const countWorkingDate = (data: AttendanceProps[]) => {
+  return data.filter((item: AttendanceProps) => {
+    return item.date
+  }).length
+}
