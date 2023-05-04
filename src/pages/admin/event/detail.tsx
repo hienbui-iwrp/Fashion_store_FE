@@ -404,6 +404,7 @@ const Detail = () => {
                     onChange={(e) => {
                       setFormData({ ...formData, name: e.target.value })
                     }}
+                    placeholder='Nhập tên sự kiện'
                   />
                 )}
                 {!id && (
@@ -412,6 +413,7 @@ const Detail = () => {
                     onChange={(e) => {
                       setFormData({ ...formData, name: e.target.value })
                     }}
+                    placeholder='Nhập tên sự kiện'
                   />
                 )}
               </Col>
@@ -428,6 +430,7 @@ const Detail = () => {
                     onChange={(e) => {
                       setFormData({ ...formData, discount: e ?? 0 })
                     }}
+                    placeholder='Nhập mức giảm'
                   />
                 )}
                 {!id && (
@@ -436,6 +439,7 @@ const Detail = () => {
                     onChange={(e: number | null) => {
                       setFormData({ ...formData, discount: e ?? 0 })
                     }}
+                    placeholder='Nhập mức giảm'
                   />
                 )}
               </Col>

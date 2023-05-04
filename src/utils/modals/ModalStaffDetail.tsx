@@ -75,13 +75,18 @@ const ModalStaffDetail = (props: ModalStaffDetailProps) => {
     ])
   }
 
+  const getData = async () => {
+    await getBranchDetailBff(props?.extraData?.branchId ?? 0).then(
+      (data: any) => {
+        const _data = formatBranchDataXML(data.Data[0])
+        updateData(_data)
+      }
+    )
+  }
+
   useEffect(() => {
     if (props.extraData) {
-      getBranchDetailBff(props.extraData.branchId).then((res: any) => {
-        console.log(res)
-        const _data = formatBranchDataXML(res.getElementsByTagName('Data')[0])
-        updateData(_data)
-      })
+      getData()
     }
   }, [props.open])
 

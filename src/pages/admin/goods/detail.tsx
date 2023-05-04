@@ -308,6 +308,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setData({ ...data, name: e.target.value })
                       }}
+                      placeholder='Nhập tên sản phẩm'
                     />
                   )}
                   {!id && (
@@ -316,6 +317,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setNewGoods({ ...newGoods, name: e.target.value })
                       }}
+                      placeholder='Nhập tên sản phẩm'
                     />
                   )}
                 </Col>
@@ -378,6 +380,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setData({ ...data, price: e.target.value })
                       }}
+                      placeholder='Nhập đơn giá'
                     />
                   )}
                   {!id && (
@@ -386,6 +389,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setNewGoods({ ...newGoods, price: e.target.value })
                       }}
+                      placeholder='Nhập đơn giá'
                     />
                   )}
                 </Col>
@@ -405,6 +409,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setData({ ...data, cost: e.target.value })
                       }}
+                      placeholder='Nhập giá nhập'
                     />
                   )}
                   {!id && (
@@ -413,6 +418,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setNewGoods({ ...newGoods, cost: e.target.value })
                       }}
+                      placeholder='Nhập giá nhập'
                     />
                   )}
                 </Col>
@@ -471,6 +477,7 @@ const Detail = () => {
                     <Input
                       defaultValue={data.supplier}
                       className={styles.adminInputShadow}
+                      placeholder='Nhập nhà cung cấp'
                     />
                   )}
                   {!id && (
@@ -479,6 +486,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setNewGoods({ ...newGoods, supplier: e.target.value })
                       }}
+                      placeholder='Nhập nhà cung cấp'
                     />
                   )}
                 </Col>
@@ -540,6 +548,7 @@ const Detail = () => {
                       onBlur={(e) => {
                         setData({ ...data, description: e.target.value })
                       }}
+                      placeholder='Nhập mô tả'
                     />
                   )}
                   {!id && (
@@ -551,6 +560,7 @@ const Detail = () => {
                           description: e.target.value,
                         })
                       }}
+                      placeholder='Nhập mô tả'
                     />
                   )}
                 </Col>
@@ -578,6 +588,7 @@ const Detail = () => {
                         setColors([...colors, e.target.value])
                       }
                     }}
+                    placeholder='Nhập màu sắc'
                   />
                 </Col>
               </Row>
@@ -607,7 +618,7 @@ const Detail = () => {
                 </Col>
                 <Col xs={14} sm={11}>
                   <DropdownButton
-                    label={''}
+                    label={'Kích thước'}
                     callback={(item: any) => {
                       if (sizes.indexOf(item) == -1) setSizes([...sizes, item])
                     }}

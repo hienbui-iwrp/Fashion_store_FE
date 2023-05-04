@@ -5,14 +5,10 @@ import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
 import { Colors } from '@/constants/colors'
 import {
-  AccountIcon,
   BranchIcon,
-  EventIcon,
-  GoodsIcon,
   OrderIcon,
   StaffIcon,
   StatisticIcon,
-  WarehouseIcon,
 } from '@/constants/asset/svg'
 import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
@@ -21,7 +17,11 @@ import { ModalChangePassword } from '@/utils'
 
 const { Header, Sider, Content } = Layout
 
-const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
+export const LayoutBranchManager = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
   const router = useRouter()
   const [modalChangePassword, setModalChangePassword] = useState(false)
 
@@ -34,42 +34,24 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
   const [title, setTitle] = useState('')
   const [itemSelected, setItemSelected] = useState(
     [
-      Routes.admin.homepage,
-      Routes.admin.branch,
-      Routes.admin.branchDetail,
+      Routes.branchManager.homepage,
+      Routes.branchManager.branch,
+      Routes.branchManager.branchDetail,
     ].includes(router.pathname)
       ? 0
-      : [Routes.admin.statistic].includes(router.pathname)
+      : [Routes.branchManager.statistic].includes(router.pathname)
       ? 1
       : [
-          Routes.admin.homepage,
-          Routes.admin.branch,
-          Routes.admin.branchDetail,
+          Routes.branchManager.homepage,
+          Routes.branchManager.branch,
+          Routes.branchManager.branchDetail,
         ].includes(router.pathname)
       ? 0
-      : [Routes.admin.staff, Routes.admin.staffDetail].includes(router.pathname)
+      : [Routes.branchManager.staff, Routes.branchManager.staffDetail].includes(router.pathname)
       ? 20
-      : [Routes.admin.staffRequest].includes(router.pathname)
+      : [Routes.branchManager.staffRequest].includes(router.pathname)
       ? 21
-      : [Routes.admin.account, Routes.admin.accountDetail].includes(
-          router.pathname
-        )
-      ? 3
-      : [Routes.admin.event, Routes.admin.eventDetail].includes(router.pathname)
-      ? 4
-      : [
-          Routes.admin.goods,
-          Routes.admin.goodsDetail,
-          Routes.admin.goodsTranfer,
-        ].includes(router.pathname)
-      ? 5
-      : [Routes.admin.warehouse].includes(router.pathname)
-      ? 6
-      : [Routes.admin.order].includes(router.pathname)
-      ? 70
-      : [Routes.admin.orderOnline].includes(router.pathname)
-      ? 71
-      : 7
+      : 3
   )
 
   const menuItem = [
@@ -106,50 +88,11 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       },
     },
     {
-      label: 'Tài khoản',
-      icon: AccountIcon,
+      label: 'Đơn hàng',
+      icon: OrderIcon,
       props: {
         size: itemSelected == 3 ? 25 : 18,
         stroke: itemSelected == 3 ? Colors.white : Colors.gray,
-      },
-    },
-    {
-      label: 'Sự kiện',
-      icon: EventIcon,
-      props: {
-        size: itemSelected == 4 ? 25 : 18,
-        stroke: itemSelected == 4 ? Colors.white : Colors.gray,
-      },
-    },
-    {
-      label: 'Hàng hóa',
-      icon: GoodsIcon,
-      props: {
-        size: itemSelected == 5 ? 25 : 18,
-        stroke: itemSelected == 5 ? Colors.white : Colors.gray,
-      },
-    },
-    {
-      label: 'Kho',
-      icon: WarehouseIcon,
-      props: {
-        size: itemSelected == 6 ? 25 : 18,
-        stroke: itemSelected == 6 ? Colors.white : Colors.gray,
-      },
-    },
-    {
-      label: 'Đơn hàng',
-      icon: OrderIcon,
-      children: ['Cửa hàng', 'Trực tuyến'],
-      props: {
-        size:
-          itemSelected == 70 || itemSelected == 71 || itemSelected == 7
-            ? 25
-            : 18,
-        stroke:
-          itemSelected == 70 || itemSelected == 71 || itemSelected == 7
-            ? Colors.white
-            : Colors.gray,
       },
     },
   ]
@@ -163,22 +106,13 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
         setItemSelected(index)
         switch (index) {
           case 0:
-            router.push(Routes.admin.branch)
+            router.push(Routes.branchManager.branch)
             break
           case 1:
-            router.push(Routes.admin.statistic)
+            router.push(Routes.branchManager.statistic)
             break
           case 3:
-            router.push(Routes.admin.account)
-            break
-          case 4:
-            router.push(Routes.admin.event)
-            break
-          case 5:
-            router.push(Routes.admin.goods)
-            break
-          case 6:
-            router.push(Routes.admin.warehouse)
+            router.push(Routes.branchManager.order)
             break
         }
       },
@@ -190,16 +124,10 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
           onClick: () => {
             switch (index + '' + childIndex) {
               case '20':
-                router.push(Routes.admin.staff)
+                router.push(Routes.branchManager.staff)
                 break
               case '21':
-                router.push(Routes.admin.staffRequest)
-                break
-              case '70':
-                router.push(Routes.admin.order)
-                break
-              case '71':
-                router.push(Routes.admin.orderOnline)
+                router.push(Routes.branchManager.staffRequest)
                 break
             }
           },
@@ -263,20 +191,6 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
         setTitle('Quản lý nhân viên')
         break
       case 3:
-        setTitle('Quản lý tài khoản')
-        break
-      case 4:
-        setTitle('Quản lý sự kiện')
-        break
-      case 5:
-        setTitle('Quản lý hàng hóa')
-        break
-      case 6:
-        setTitle('Quản lý kho')
-        break
-      case 7:
-      case 70:
-      case 71:
         setTitle('Quản lý đơn hàng')
         break
     }
@@ -285,7 +199,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (
       !localStorage.getItem('logged') ||
-      localStorage.getItem('userRole') != '2'
+      localStorage.getItem('userRole') != '3'
     ) {
       router.replace(Routes.error)
     }
@@ -354,7 +268,3 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
     </ConfigProvider>
   )
 }
-
-LayoutAdmin.displayName = 'Layout Admin'
-
-export default LayoutAdmin
