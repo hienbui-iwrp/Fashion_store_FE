@@ -3,14 +3,25 @@ import { Button, Checkbox, Form, Input, Typography, Empty } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import { confirmResetPasswordCustomerBFF } from '@/api';
 
 const { Title, Text } = Typography;
 
 export default function ConfirmOtp() {
-  const router = useRouter()
+  const router = useRouter();
+  const { username } = router.query;
+  const confirmOtp = async (otp: string) => {
+    console.log(username, otp);
+    return await confirmResetPasswordCustomerBFF(username as string, otp)
+  }
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    router.push('/reset-password/confirm-otp/new-password')
+    confirmOtp(values.otp)
+      .then(res => {
+        if (res?.StatusCode == 200) {
+          router.push('/login')
+        }
+      })
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -35,7 +46,7 @@ export default function ConfirmOtp() {
         <Form.Item
           className='mb-4'
           label={<Text strong>Mã OTP</Text>}
-          name="username"
+          name="otp"
           rules={[{ required: true, message: 'Vui lòng nhập mã OTP!' }]}
         >
           <Input className='' placeholder='Mã OTP' />

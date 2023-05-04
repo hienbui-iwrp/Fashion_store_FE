@@ -60,6 +60,14 @@ export const shareBpel = axios.create({
   },
 })
 
+export const customerBpel = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_CUSTOMER_BFF_PROXY,
+  headers: {
+    'Content-Type': 'text/xml',
+    'Access-Control-Allow-Origin': '*',
+  },
+})
+
 export const customerBff = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CUSTOMER_BFF_PROXY,
   headers: {
@@ -67,8 +75,12 @@ export const customerBff = axios.create({
     'Access-Control-Allow-Origin': '*',
   },
 })
+
 if (typeof window !== 'undefined') {
   customerBff.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${localStorage.getItem('token')}`
+  customerBpel.defaults.headers.common[
     'Authorization'
   ] = `Bearer ${localStorage.getItem('token')}`
 }
