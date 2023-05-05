@@ -115,3 +115,9 @@ export const ShipStatus = [
     label: 'Đã giao',
   },
 ]
+
+export const GoodsGenderValue = {
+  man: '1',
+  woman: '2',
+  unisex: '3',
+}
