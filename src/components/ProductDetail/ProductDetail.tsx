@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  PlusOutlined,
-  SearchOutlined,
-  PlusCircleOutlined,
-  MinusCircleOutlined,
-} from '@ant-design/icons'
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import {
   Col,
   Row,
@@ -25,25 +20,35 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import styles from './ProductDetail.module.css'
 import { Colors } from '@/constants'
 import { addGoodsBff } from '@/api'
-import { setNotificationType, setNotificationValue, useAppDispatch } from '@/redux'
+import {
+  setNotificationType,
+  setNotificationValue,
+  useAppDispatch,
+} from '@/redux'
 
 const { Title, Text } = Typography
 
 export default function ProductDetail(props: ProductDetailDataProps) {
   const dispatch = useAppDispatch()
   const [quantity, setQuantity] = useState<number>(1)
-  const [maxQuantity, setMaxQuantity] = useState<number>(props.listQuantity.length > 0 ? props.listQuantity[0].quantity : 0);
+  const [maxQuantity, setMaxQuantity] = useState<number>(
+    props.listQuantity.length > 0 ? props.listQuantity[0].quantity : 0
+  )
   const [imageShow, setImageShow] = useState<string>(props.images[0])
-  const [valueSize, setValueSize] = useState(props.listQuantity.length > 0 ? props.listQuantity[0].size : '0')
-  const [valueColor, setValueColor] = useState(props.listQuantity.length > 0 ? props.listQuantity[0].color : '0')
-  var listColor: string[] = [];
-  var listSize: string[] = [];
+  const [valueSize, setValueSize] = useState(
+    props.listQuantity.length > 0 ? props.listQuantity[0].size : '0'
+  )
+  const [valueColor, setValueColor] = useState(
+    props.listQuantity.length > 0 ? props.listQuantity[0].color : '0'
+  )
+  var listColor: string[] = []
+  var listSize: string[] = []
   props.listQuantity.map((itemQuantity, _) => {
     if (listColor.indexOf(itemQuantity.color) === -1) {
-      listColor = [...listColor, itemQuantity.color];
+      listColor = [...listColor, itemQuantity.color]
     }
     if (listSize.indexOf(itemQuantity.size) === -1) {
-      listSize = [...listSize, itemQuantity.size];
+      listSize = [...listSize, itemQuantity.size]
     }
   })
   const items: TabsProps['items'] = [
@@ -68,11 +73,11 @@ export default function ProductDetail(props: ProductDetailDataProps) {
     })
     if (checkQuantity.length > 0) {
       if (checkQuantity[0].quantity) {
-        setQuantity(1);
-        setMaxQuantity(checkQuantity[0].quantity);
+        setQuantity(1)
+        setMaxQuantity(checkQuantity[0].quantity)
       } else {
-        setQuantity(0);
-        setMaxQuantity(0);
+        setQuantity(0)
+        setMaxQuantity(0)
       }
     }
   }
@@ -85,16 +90,15 @@ export default function ProductDetail(props: ProductDetailDataProps) {
     })
     if (checkQuantity.length > 0) {
       if (checkQuantity[0].quantity) {
-        setQuantity(1);
-        setMaxQuantity(checkQuantity[0].quantity);
+        setQuantity(1)
+        setMaxQuantity(checkQuantity[0].quantity)
       } else {
-        setQuantity(0);
-        setMaxQuantity(0);
+        setQuantity(0)
+        setMaxQuantity(0)
       }
-
     } else {
-      setQuantity(0);
-      setMaxQuantity(0);
+      setQuantity(0)
+      setMaxQuantity(0)
     }
   }
 
@@ -108,17 +112,24 @@ export default function ProductDetail(props: ProductDetailDataProps) {
 
   const onAddToCart = async () => {
     if (localStorage.getItem('userId')) {
-      await addGoodsBff(localStorage.getItem('userId') ?? '',
-        { ...props, goodsColor: valueColor, goodsSize: valueSize, quantity, image: '' })
-        .then(res => {
-          if (res?.StatusCode === '200') {
-            dispatch(setNotificationValue('Thêm vào giỏ hàng thành công'))
-          }
-          else {
-            dispatch(setNotificationType('error'))
-            dispatch(setNotificationValue('Có lỗi khi thêm vào giỏ hàng, vui lòng thử lại'))
-          }
-        })
+      await addGoodsBff(localStorage.getItem('userId') ?? '', {
+        ...props,
+        goodsColor: valueColor,
+        goodsSize: valueSize,
+        quantity,
+        image: '',
+      }).then((res) => {
+        if (res?.StatusCode === '200') {
+          dispatch(setNotificationValue('Thêm vào giỏ hàng thành công'))
+        } else {
+          dispatch(setNotificationType('error'))
+          dispatch(
+            setNotificationValue(
+              'Có lỗi khi thêm vào giỏ hàng, vui lòng thử lại'
+            )
+          )
+        }
+      })
     }
   }
 
@@ -127,7 +138,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
     setValueColor(props.listQuantity[0].color)
     setValueSize(props.listQuantity[0].size)
   }, [props])
-  console.log('quantity', quantity);
+  console.log('quantity', quantity)
 
   return (
     <div className='max-md:mt-2 max-lg:mt-8 max-xl:mt-4 mb-4 px-8'>
@@ -176,7 +187,9 @@ export default function ProductDetail(props: ProductDetailDataProps) {
             </Space>
             <Space>
               <Text className='text-[#A9A9A9] flex w-28'>Tình trạng:</Text>
-              {props.listQuantity.find(elementQuantity => elementQuantity.quantity > 0) ? (
+              {props.listQuantity.find(
+                (elementQuantity) => elementQuantity.quantity > 0
+              ) ? (
                 <Text strong style={{ color: Colors.adminGreen700 }}>
                   Còn hàng
                 </Text>
