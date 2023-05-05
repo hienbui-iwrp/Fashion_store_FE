@@ -40,6 +40,7 @@ import { ProductDetailDataProps, formatProductsDataXML, formatUserDataXML } from
 import { InputSearch } from '@/components/Input'
 import styles from './LayoutClient.module.css'
 import ProductsSearch from '@/components/ProductsSearch'
+import Loading from '@/components/Loading'
 
 const { Header, Footer, Content } = Layout
 const { Search } = Input
@@ -106,6 +107,7 @@ export default function LayoutClient({
   const dispatch = useAppDispatch()
   const { setUserInfo } = userActions
   const dataCustomer = useSelector(selectUser)
+  const [loading, setLoading] = useState<Boolean>(true)
 
   const [navbar, setNavbar] = useState(false)
   const [logged, setLogged] = useState(false)
@@ -156,8 +158,10 @@ export default function LayoutClient({
 
   const fetchUserInfo = async () => {
     const res = await getCustomerInfoBff(localStorage.getItem('userId') || '')
-    const dataUser = formatUserDataXML(res?.Data[0])
-    dispatch(setUserInfo(dataUser))
+    if (res?.StatusCode == 200) {
+      const dataUser = formatUserDataXML(res?.Data[0])
+      dispatch(setUserInfo(dataUser))
+    }
   }
 
   useEffect(() => {
@@ -170,10 +174,13 @@ export default function LayoutClient({
         router.replace(Routes.error)
       }
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 500)
   }, [router.pathname])
 
   return (
-    <Layout
+    loading ? <Loading /> : <Layout
       className='m-auto bg-gray-200 relative'
       style={{ minHeight: '100vh' }}
     >
@@ -325,7 +332,7 @@ export default function LayoutClient({
                       href={`${item.link}` || '/'}
                     >
                       <li
-                        className='text-sm hover:cursor-pointer text-xs hover:bg-green-200 md:!ml-1.5 lg:!ml-2 xl:!ml-3	px-0 lg:px-1 xl:px-2 rounded-full'
+                        className='text-sm hover:cursor-pointer text-xs hover:bg-green-200 md:!ml-1.5 lg:!ml-2 xl:!ml-3	px-0 lg:px-1 rounded-full'
                         style={{ fontWeight: '600' }}
                       >
                         {item.label}

@@ -1,3 +1,6 @@
+const isProcessOrderBefore = true;
+const isProductDetailAfter = true;
+const isProductDefaultAfter = true;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -8,20 +11,24 @@ const nextConfig = {
         destination: process.env.NEXT_PUBLIC_ADMIN_BFF + '/:path*', // Proxy to Backend
       },
       {
+        source: '/customer-bff/create-order',
+        destination: isProcessOrderBefore ? process.env.NEXT_PUBLIC_BPEL_CREATE_ORDER : process.env.NEXT_PUBLIC_BPEL_CREATE_ORDER_AFTER, // Proxy to Backend
+      },
+      {
         source: '/customer-bff/:path*',
         destination: process.env.NEXT_PUBLIC_CUSTOMER_BFF + '/:path*', // Proxy to Backend
       },
       {
         source: '/share-bff/check-warehouse',
-        destination: process.env.NEXT_PUBLIC_BPEL_CHECK_WAREHOUSE_SERVICE, // Proxy to Backend
+        destination: isProcessOrderBefore ? process.env.NEXT_PUBLIC_BPEL_CHECK_WAREHOUSE_SERVICE : process.env.NEXT_PUBLIC_BPEL_CHECK_WAREHOUSE_SERVICE_AFTER, // Proxy to Backend
       },
       {
         source: '/share-bff/products-default',
-        destination: process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DEFAULT, // Proxy to Backend
+        destination: isProductDefaultAfter ? process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DEFAULT : process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DEFAULT_BEFORE, // Proxy to Backend
       },
       {
         source: '/share-bff/products-detail',
-        destination: process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DETAIL, // Proxy to Backend
+        destination: isProductDetailAfter ? process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DETAIL : process.env.NEXT_PUBLIC_BPEL_PRODUCTS_DETAIL_BEFORE, // Proxy to Backend
       },
       {
         source: '/share-bff/:path*',

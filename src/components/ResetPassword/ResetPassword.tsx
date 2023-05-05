@@ -3,14 +3,25 @@ import { Button, Checkbox, Form, Input, Typography, Empty } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
+import { resetPasswordCustomerBFF } from '@/api';
 
 const { Title, Text } = Typography;
 
 export default function ResetPassword() {
   const router = useRouter()
+
+  const resetPassword = async (username: string) => {
+    return await resetPasswordCustomerBFF(username);
+  }
+
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    router.push('/reset-password/confirm-otp')
+    resetPassword(values.username)
+      .then(res => {
+        if (res?.StatusCode == 200) {
+          router.push(`/reset-password/confirm-otp?username=${values.username}`)
+        }
+      })
   };
 
   const onFinishFailed = (errorInfo: any) => {

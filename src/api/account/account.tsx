@@ -1,4 +1,4 @@
-import { adminBff, formatResponse, shareBff } from '@/utils'
+import { adminBff, customerBff, formatResponse, shareBff } from '@/utils'
 import axios from 'axios'
 
 const baseUrl = 'http://localhost:3000'
@@ -160,6 +160,64 @@ export const changePasswordAdminBFF = async (data: {
 
   return await adminBff
     .post(`/account-service/account/change-password`, payload)
+    .then((res: any) => {
+      return formatResponse(res.data)
+    })
+    .catch((err: any) => {
+      console.log('Error get all account: ', err)
+    })
+}
+
+export const changePasswordCustomerBFF = async (data: {
+  username?: string
+  oldPass: string
+  newPass: string
+}) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+<soap:Body>
+    <Username>${data.username ?? ''}</Username>
+    <OldPassword>${data.oldPass}</OldPassword>
+    <NewPassword>${data.newPass}</NewPassword>
+</soap:Body>`
+
+  return await customerBff
+    .post(`/account-service/account/change-password`, payload)
+    .then((res: any) => {
+      return formatResponse(res.data)
+    })
+    .catch((err: any) => {
+      console.log('Error get all account: ', err)
+    })
+}
+
+export const resetPasswordCustomerBFF = async (username?: string) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+<soap:Body>
+    <Username>${username}</Username>
+</soap:Body>`
+
+  return await shareBff
+    .post(`/account-service/account/reset-password/create`, payload)
+    .then((res: any) => {
+      return formatResponse(res.data)
+    })
+    .catch((err: any) => {
+      console.log('Error get all account: ', err)
+    })
+}
+
+export const confirmResetPasswordCustomerBFF = async (username?: string, otp?: string) => {
+  const payload = `
+  <?xml version="1.0" encoding="utf-8"?>
+<soap:Body>
+    <Username>${username}</Username>
+    <Otp>${otp}</Otp>
+</soap:Body>`
+
+  return await shareBff
+    .post(`/account-service/account/reset-password/otp`, payload)
     .then((res: any) => {
       return formatResponse(res.data)
     })

@@ -2,8 +2,9 @@ import React from 'react'
 import { signInBff } from '@/api/account'
 import { Form, Input, Typography, notification } from 'antd'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import ButtonClientPrimary from '../Button/ButtonClientPrimary'
+import { Routes } from '@/constants'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error'
 
@@ -57,10 +58,23 @@ export default function Login() {
           content: '',
           type: 'success',
         })
-        if (res.Data[0].getElementsByTagName('Role')[0].value == 1) {
-          router.push('/')
-        } else {
-          router.push('/admin')
+        console.log('role: ', res.Data[0].getElementsByTagName('Role')[0].value)
+        switch (res.Data[0].getElementsByTagName('Role')[0].value) {
+          case '1':
+            router.push(Routes.homepage)
+            break
+          case '2':
+            router.push(Routes.admin.homepage)
+            break
+          case '3':
+            router.push(Routes.branchManager.homepage)
+            break
+          case '4':
+            break
+          case '5':
+            break
+          case '6':
+            break
         }
       } else {
         openNotificationWithIcon({

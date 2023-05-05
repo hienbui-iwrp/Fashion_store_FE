@@ -1,5 +1,13 @@
 import { api } from '../axios'
 import { Paging, formatResponse, shareBff, shareBpel } from '@/utils'
+import {
+  isProductDefaultAfter,
+  isProductDetailAfter,
+  namespaceProductDefaultAfter,
+  namespaceProductDefaultBefore,
+  namespaceProductDetailAfter,
+  namespaceProductDetailBefore,
+} from '@/constants'
 
 const products = '/api/products'
 const product = '/api/product'
@@ -18,17 +26,28 @@ export const getAllProducts = async () => {
 export const getAllProductsBpel = async (page?: Paging) => {
   const pageSizeProductsDefault = 1000
   const payload = `
-  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-    	<soap:Body>
-        		<ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/CallProductDefault/CallProductDefault">
-            			<ns1:PageSize>${
-                    page?.pageSize ? page?.pageSize : pageSizeProductsDefault
-                  }</ns1:PageSize>
-            			<ns1:PageNumber>${page?.offset ? page?.offset : 1}</ns1:PageNumber>
-        </ns1:Body>
-    </soap:Body>
-</soap:Envelope>
+  <${!isProductDefaultAfter ? 'soap:' : ''}Envelope xmlns${
+    !isProductDefaultAfter ? ':soap' : ''
+  }="http://schemas.xmlsoap.org/soap/envelope/">
+    	<${!isProductDefaultAfter ? 'soap:' : ''}Body>
+        		<${!isProductDefaultAfter ? 'ns1:' : ''}Body xmlns${
+    !isProductDefaultAfter ? ':ns1' : ''
+  }="${
+    isProductDefaultAfter
+      ? namespaceProductDefaultAfter
+      : namespaceProductDefaultBefore
+  }">
+            			<${!isProductDefaultAfter ? 'ns1:' : ''}PageSize>${
+    page?.pageSize ? page?.pageSize : pageSizeProductsDefault
+  }</${!isProductDefaultAfter ? 'ns1:' : ''}PageSize>
+            			<${!isProductDefaultAfter ? 'ns1:' : ''}PageNumber>${
+    page?.offset ? page?.offset : 1
+  }</${!isProductDefaultAfter ? 'ns1:' : ''}PageNumber>
+        </${!isProductDefaultAfter ? 'ns1:' : ''}Body>
+    </${!isProductDefaultAfter ? 'soap:' : ''}Body>
+</${!isProductDefaultAfter ? 'soap:' : ''}Envelope>
     `
+  console.log(payload)
   return await shareBpel
     .post(`/products-default`, payload)
     .then((res) => {
@@ -136,7 +155,11 @@ export const getProductDetailBpel = async (productId: string) => {
   const payload = `
   <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     	<soap:Body>
-        		<ns1:Body xmlns:ns1="http://xmlns.oracle.com/bpel_process/CallProductService/CallProductService">
+        		<ns1:Body xmlns:ns1="${
+              isProductDetailAfter
+                ? namespaceProductDetailAfter
+                : namespaceProductDetailBefore
+            }">
             			<ns1:GoodsId>${productId}</ns1:GoodsId>
         </ns1:Body>
     </soap:Body>

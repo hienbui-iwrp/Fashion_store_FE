@@ -302,7 +302,6 @@ const Request = () => {
         const _data = res.Data.map((item: any) => {
           return formatBranchDataXML(item)
         })
-        console.log('branch:', _data)
         setBranchData(_data)
       })
       .catch((err) => console.log(err))
