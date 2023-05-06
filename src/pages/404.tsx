@@ -7,26 +7,30 @@ import { Routes } from '@/constants'
 export default function NotFoundPage() {
   const [route, setRoute] = useState('')
   useEffect(() => {
-    if (localStorage.getItem('logged') != 'false') {
-      switch (localStorage.getItem('userRole')) {
-        case '1':
-          setRoute(Routes.homepage)
-          break
-        case '2':
-          setRoute(Routes.admin.homepage)
-          break
-        case '3':
-          setRoute(Routes.branchManager.homepage)
-          break
-        case '4':
-          break
-        case '5':
-          break
-        case '6':
-          break
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('logged') != 'false') {
+        switch (localStorage.getItem('userRole')) {
+          case '1':
+            setRoute(Routes.homepage)
+            break
+          case '2':
+            setRoute(Routes.admin.homepage)
+            break
+          case '3':
+            setRoute(Routes.branchManager.homepage)
+            break
+          case '4':
+            break
+          case '5':
+            break
+          case '6':
+            break
+        }
       }
     }
-  }, [localStorage.getItem('logged')])
+
+  }, [])
+  // }, [localStorage.getItem('logged')])
 
   return (
     <Result
