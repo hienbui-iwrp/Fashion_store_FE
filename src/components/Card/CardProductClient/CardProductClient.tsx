@@ -17,6 +17,7 @@ import {
   setNotificationValue,
   useAppDispatch,
 } from '@/redux'
+import { checkLogin } from '@/utils/check'
 
 const { Text } = Typography
 
@@ -48,6 +49,7 @@ export default function CardProductClient(props: { dataProduct: ProductDetailDat
   }
   const handleAddToCart = (e: any) => {
     e.stopPropagation()
+    checkLogin(router);
     onAddToCart()
   }
   const handleClickCard = () => {

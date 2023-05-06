@@ -124,10 +124,10 @@ const Detail = () => {
       render(text: string, record: OrderData, index: number) {
         return text
       },
-      onCell: (record, index: number) => {
+      onCell: (record, index: number | undefined) => {
         return {
           style: {
-            background: index % 2 ? Colors.white : Colors.adminBackground,
+            background: index ? (index % 2 ? Colors.white : Colors.adminBackground) : Colors.adminBackground,
             color:
               record.status == 'Đang giao' ? Colors.adminRed500 : Colors.black,
             minWidth: 100,

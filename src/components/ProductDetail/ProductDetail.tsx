@@ -26,10 +26,13 @@ import {
   setNotificationValue,
   useAppDispatch,
 } from '@/redux'
+import { checkLogin } from '@/utils/check'
+import { useRouter } from 'next/router'
 
 const { Title, Text } = Typography
 
 export default function ProductDetail(props: ProductDetailDataProps) {
+  const router = useRouter();
   const dispatch = useAppDispatch()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState<number>(1)
@@ -122,6 +125,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
   }
 
   const onAddToCart = async () => {
+    checkLogin(router);
     if (localStorage.getItem('userId')) {
       await addGoodsBff(localStorage.getItem('userId') ?? '', {
         ...props,
