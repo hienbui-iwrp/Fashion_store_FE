@@ -332,7 +332,7 @@ export default function LayoutClient({
                       href={`${item.link}` || '/'}
                     >
                       <li
-                        className='text-sm hover:cursor-pointer text-xs hover:bg-green-200 md:!ml-1.5 lg:!ml-2 xl:!ml-3	px-0 lg:px-1 rounded-full'
+                        className='text-sm hover:cursor-pointer text-xs hover:bg-green-200 md:!ml-1.5 px-0 lg:px-1 rounded-full'
                         style={{ fontWeight: '600' }}
                       >
                         {item.label}

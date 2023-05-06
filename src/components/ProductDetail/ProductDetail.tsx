@@ -9,11 +9,12 @@ import {
   Button,
   InputNumber,
   Tabs,
+  Modal,
 } from 'antd'
 import type { RadioChangeEvent } from 'antd'
 import type { TabsProps } from 'antd'
 import { Radio } from 'antd'
-import { FormatMoney, ProductDetailDataProps } from '@/utils'
+import { FormatMoney, ProductDetailDataProps, formatRouteImage } from '@/utils'
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
@@ -30,6 +31,7 @@ const { Title, Text } = Typography
 
 export default function ProductDetail(props: ProductDetailDataProps) {
   const dispatch = useAppDispatch()
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState<number>(1)
   const [maxQuantity, setMaxQuantity] = useState<number>(
     props.listQuantity.length > 0 ? props.listQuantity[0].quantity : 0
@@ -58,6 +60,15 @@ export default function ProductDetail(props: ProductDetailDataProps) {
       children: `${props.description}`,
     },
   ]
+
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const onChangeQuantity = (value: number | null) => {
     if (value !== null && value > 0 && value <= maxQuantity) {
@@ -149,7 +160,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
               width={350}
               height={400}
               className='py-2'
-              src={imageShow}
+              src={formatRouteImage(imageShow)}
               alt={props.name}
             />
           </div>
@@ -164,7 +175,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
                   width={60}
                   height={60}
                   onClick={() => handleChangeImage(item)}
-                  src={item}
+                  src={formatRouteImage(item)}
                   alt={props.name}
                 />
               )
@@ -220,23 +231,29 @@ export default function ProductDetail(props: ProductDetailDataProps) {
             </Space>
           </div>
           <div className='mt-8'>
-            <Space>
-              <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
-              <Radio.Group
-                buttonStyle='solid'
-                onChange={onChangeSize}
-                value={valueSize}
-                className={styles.productSize}
-              >
-                {listSize.map((item, index) => {
-                  return (
-                    <Radio.Button key={index} value={item}>
-                      {item}
-                    </Radio.Button>
-                  )
-                })}
-              </Radio.Group>
-            </Space>
+            <div className='flex justify-between'>
+              <Space>
+                <Text className='text-[#A9A9A9] flex w-28'>Size:</Text>
+                <Radio.Group
+                  buttonStyle='solid'
+                  onChange={onChangeSize}
+                  value={valueSize}
+                  className={styles.productSize}
+                >
+                  {listSize.map((item, index) => {
+                    return (
+                      <Radio.Button key={index} value={item}>
+                        {item}
+                      </Radio.Button>
+                    )
+                  })}
+                </Radio.Group>
+              </Space>
+              <Button type='link'
+                onClick={showModal}
+              >Hướng dẫn chọn size</Button>
+            </div>
+
           </div>
           <div className='flex justify-between items-center mt-10'>
             {props.discount === 0 ? (
@@ -295,6 +312,12 @@ export default function ProductDetail(props: ProductDetailDataProps) {
         </Col>
       </Row>
       <Tabs defaultActiveKey='1' items={items} onChange={onChangeTabs} />
+      <Modal title="Hướng dẫn chọn size" footer={null} open={isModalOpen} onCancel={handleCancel}>
+        <Image src='https://baoholongchau.com/image/34/images/bang-size-quan-ao.jpg' />
+        {/* <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p> */}
+      </Modal>
     </div>
   )
 }

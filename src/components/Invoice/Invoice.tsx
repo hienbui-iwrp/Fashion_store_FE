@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Typography, Button, Steps, Timeline, Row, Col, Image, Space, Table } from 'antd';
+import { Typography, Button, Steps, Timeline, Row, Col, Image, Space, Table, Divider, Watermark } from 'antd';
 import { FormatMoney } from '@/utils/formats';
 import styles from './Invoice.module.css'
 import { OrderDetailProps } from '@/utils';
 import { useReactToPrint } from 'react-to-print';
 import ReactToPrint from "react-to-print";
+import moment from 'moment';
 
 const { Title, Text } = Typography
 
@@ -163,28 +164,55 @@ const Invoice = React.forwardRef((props: OrderDetailProps, ref: any) => {
   return (
     <div className="invoice w-[800px] m-auto" ref={ref}>
       <div className='px-2'>
-        <div>
-          <Table
-            bordered
-            pagination={false}
-            className={styles.tablePayment}
-            dataSource={tableProduct}
-            columns={columnProduct} />
-          <Title className='mt-2' level={5}>Địa chỉ nhận hàng</Title>
-          <div className='flex flex-col'>
-            <Text>{props.nameReceiver}</Text>
-            <Text>{props.phoneReceiver}</Text>
-            <Text>{`${props.address?.street}, ${props.address?.ward} , ${props.address?.district}, ${props.address?.province}`}</Text>
-          </div>
+        <div className='flex justify-between'>
+          <Space direction='vertical'>
+            <Title level={2}>Hóa đơn</Title>
+            <Text> Mã đơn : {props.orderCode}</Text>
+            <Text> Ngày : {moment().format("DD/MM/YYYY")}</Text>
+          </Space>
+          <Image
+            alt='img'
+            style={{ maxWidth: 300, width: '100%', maxHeight: 150 }}
+            src='/logo-green.png'
+            preview={false}
+          />
         </div>
-        <Table
-          rowKey="name"
-          bordered
-          showHeader={false}
-          className={styles.tablePayment}
-          pagination={false}
-          dataSource={tablePayment}
-          columns={columnsPayment} />
+        <Space direction='vertical' className='' >
+          <Text strong>CÔNG TY TNHH PTH FASHION</Text>
+          <Text strong>Số điện thoại: 0867742135</Text>
+          <Text strong>Địa chỉ: 268 Lý Thường Kiệt, Quận 10, Tp.HCM</Text>
+        </Space>
+
+        <hr className='border-2 my-2' />
+
+        <Watermark
+          height={80}
+          width={80}
+          image="/logo-green.png"
+        >
+          <div>
+            <Table
+              bordered
+              pagination={false}
+              className={styles.tablePayment}
+              dataSource={tableProduct}
+              columns={columnProduct} />
+            <Title className='mt-2' level={5}>Địa chỉ nhận hàng</Title>
+            <div className='flex flex-col'>
+              <Text>{props.nameReceiver}</Text>
+              <Text>{props.phoneReceiver}</Text>
+              <Text>{`${props.address?.street}, ${props.address?.ward} , ${props.address?.district}, ${props.address?.province}`}</Text>
+            </div>
+          </div>
+          <Table
+            rowKey="name"
+            bordered
+            showHeader={false}
+            className={styles.tablePayment}
+            pagination={false}
+            dataSource={tablePayment}
+            columns={columnsPayment} />
+        </Watermark>
       </div>
     </div>
   );

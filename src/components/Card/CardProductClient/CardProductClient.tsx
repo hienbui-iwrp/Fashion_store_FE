@@ -31,17 +31,17 @@ export interface CardProductClientProps {
   discount: number
 }
 
-export default function CardProductClient(props: ProductDetailDataProps) {
-  const link = `/products/${props.goodsId}`
+export default function CardProductClient(props: { dataProduct: ProductDetailDataProps, className?: string }) {
+  const link = `/products/${props.dataProduct.goodsId}`
   const dispatch: any = useAppDispatch()
   const router = useRouter()
   var valueColor = ''
   var valueSize = ''
   var quantity = 0
-  for (let i = 0; i < props.listQuantity?.length; i++) {
-    if (props.listQuantity[i].quantity > 0) {
-      valueColor = props.listQuantity[i].color
-      valueSize = props.listQuantity[i].size
+  for (let i = 0; i < props.dataProduct.listQuantity?.length; i++) {
+    if (props.dataProduct.listQuantity[i].quantity > 0) {
+      valueColor = props.dataProduct.listQuantity[i].color
+      valueSize = props.dataProduct.listQuantity[i].size
       quantity = 1
       break
     }
@@ -57,7 +57,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
   const onAddToCart = async () => {
     if (localStorage.getItem('userId')) {
       await addGoodsBff(localStorage.getItem('userId') ?? '', {
-        ...props,
+        ...props.dataProduct,
         goodsColor: valueColor ?? '',
         goodsSize: valueSize ?? '',
         quantity,
@@ -79,7 +79,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
 
   return (
     <div
-      className='card-product-client flex w-1/4 px-3 pb-4'
+      className={`card-product-client flex w-1/4 px-3 pb-4 ${props.className}`}
       style={{ minWidth: 180, maxWidth: 300 }}
     >
       <Card
@@ -100,7 +100,7 @@ export default function CardProductClient(props: ProductDetailDataProps) {
         <div className='pb-2 flex items-center justify-center'>
           <Image
             src={
-              formatRouteImage(props.images[0]) ||
+              formatRouteImage(props.dataProduct.images[0]) ||
               'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
             }
             preview={false}
@@ -110,27 +110,27 @@ export default function CardProductClient(props: ProductDetailDataProps) {
         <div className='flex-1'>
           <div className='flex flex-col justify-between h-full'>
             <Text strong className='text-lg' style={{ lineHeight: '1.25rem' }}>
-              {props.name}
+              {props.dataProduct.name}
             </Text>
             <div className='flex justify-between items-center pt-2'>
-              {props.discount === 0 ? (
+              {props.dataProduct.discount === 0 ? (
                 <Text strong className='text-lg'>
-                  {FormatMoney(props.unitPrice)}
+                  {FormatMoney(props.dataProduct.unitPrice)}
                 </Text>
               ) : (
                 <div className='flex flex-col leading-none'>
                   <Text strong className='text-lg text-red-600 leading-none'>
-                    {FormatMoney(props.price)}
+                    {FormatMoney(props.dataProduct.price)}
                   </Text>
                   <div className='mt-1'>
                     <Text
                       strong
                       className='text-xs line-through text-gray-400 pr-1 leading-none'
                     >
-                      {FormatMoney(props.unitPrice)}
+                      {FormatMoney(props.dataProduct.unitPrice)}
                     </Text>
                     <Text strong className='text-xs leading-none'>
-                      -{props.discount}%
+                      -{props.dataProduct.discount * 100}%
                     </Text>
                   </div>
                 </div>

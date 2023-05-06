@@ -6,7 +6,7 @@ import type { TabsProps } from 'antd';
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary';
 import styles from './CustomerOrders.module.css'
 import { getListOrder, getListOrderBff } from '@/api/customer-order';
-import { FormatMoney, OrderProps, ProductInCartProps, formatOrdersDataXML } from '@/utils';
+import { FormatMoney, OrderProps, ProductInCartProps, formatOrdersDataXML, formatRouteImage } from '@/utils';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
 import { ImageEmpty } from '@/constants/image';
@@ -57,7 +57,7 @@ function OrderItem(props: OrderProps) {
             <div key={index}>
               <hr className='my-1 font-bold' />
               <div className="flex">
-                <Image width={100} height={120} preview={false} className='rounded-xl' src={item.image || ImageEmpty} alt={item.name} />
+                <Image width={100} height={120} preview={false} className='rounded-xl' src={formatRouteImage(item.image) || ImageEmpty} alt={item.name} />
                 <div className='flex-1 pl-4'>
                   <Row className='flex-1'>
                     <Col span={19}>

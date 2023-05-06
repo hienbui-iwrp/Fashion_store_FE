@@ -24,7 +24,7 @@ import type { CheckboxValueType } from 'antd/es/checkbox/Group'
 import { Checkbox } from 'antd'
 import ButtonClientPrimary from '../Button/ButtonClientPrimary'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { ProductInCartProps, formatCartDataXML, formatResponse } from '@/utils'
+import { ProductInCartProps, formatCartDataXML, formatResponse, formatRouteImage } from '@/utils'
 import {
   deleteAllGoodsBff,
   deleteGoodsBff,
@@ -42,7 +42,7 @@ import { Colors } from '@/constants'
 
 const { Title, Text } = Typography
 
-export interface CartProps {}
+export interface CartProps { }
 
 interface Option {
   label: JSX.Element
@@ -165,7 +165,7 @@ export default function Cart(props: CartProps) {
               height={160}
               preview={false}
               className=''
-              src={product.image ?? ImageEmpty}
+              src={formatRouteImage(product.image) ?? ImageEmpty}
               alt={product.name}
             />
             <div className='flex-1 pl-4'>

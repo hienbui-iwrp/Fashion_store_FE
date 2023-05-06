@@ -20,8 +20,8 @@ export default function ButtonHeader({
         setHover(false)
       }}
       style={{
-        backgroundColor: hover ? Colors.clientEmerald400 : Colors.transparent,
-        // backgroundColor: Colors.transparent,
+        // backgroundColor: hover ? Colors.clientEmerald400 : Colors.transparent,
+        backgroundColor: Colors.transparent,
         borderRadius: 25,
         width: 42,
         height: 42,
