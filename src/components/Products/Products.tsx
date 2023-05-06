@@ -32,7 +32,7 @@ const { Title, Text } = Typography
 
 export interface ProductsProps {
   filter: string[]
-  search: string
+  search?: string
 }
 
 const CheckboxGroup = Checkbox.Group
@@ -364,7 +364,7 @@ export default function Products(props: ProductsProps) {
             <div className='flex w-full flex-wrap'>
               {data.listProduct &&
                 data.listProduct.map((item, index) => {
-                  return <CardProductClient key={index} {...item} />
+                  return <CardProductClient key={index} dataProduct={{ ...item }} />
                 })}
               {/* {dataProducts.listProduct &&
                 dataProducts.listProduct.map((item, index) => {

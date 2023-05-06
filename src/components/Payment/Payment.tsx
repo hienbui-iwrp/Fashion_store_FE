@@ -8,7 +8,7 @@ import { Typography, Input, Row, Col, Form, Radio, Image, Checkbox, Button, Spac
 import type { RadioChangeEvent } from 'antd';
 import ButtonClientPrimary from '../Button/ButtonClientPrimary';
 import { useRouter } from 'next/router';
-import { FormatMoney, ProductInCartProps } from '@/utils';
+import { FormatMoney, ProductInCartProps, formatRouteImage } from '@/utils';
 import { createOrder, createOrderBpel, makeOrder } from '@/api/customer-order';
 import { deleteGoodsBff } from '@/api';
 import Loading from '../Loading';
@@ -326,7 +326,7 @@ export default function Payment(props: PaymentProps) {
                     >
                       <div className="flex">
                         <Link href={`/products/${item.goodsId}`}>
-                          <Image width={140} height={160} preview={false} className='rounded-xl' src={item.image} alt='' />
+                          <Image width={140} height={160} preview={false} className='rounded-xl' src={formatRouteImage(item.image)} alt='' />
                         </Link>
                         <div className='flex-1 pl-4'>
                           <Row className='flex-1'>
