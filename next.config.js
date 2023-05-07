@@ -1,4 +1,4 @@
-const isProcessOrderBefore = true;
+const isProcessOrderBefore = false;
 const isProductDetailAfter = true;
 const isProductDefaultAfter = true;
 /** @type {import('next').NextConfig} */

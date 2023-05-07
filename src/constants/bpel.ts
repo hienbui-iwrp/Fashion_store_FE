@@ -1,4 +1,4 @@
-export const isProcessOrderBefore = true;
+export const isProcessOrderBefore = false;
 export const isProductDetailAfter = true;
 export const isProductDefaultAfter = true;
 
