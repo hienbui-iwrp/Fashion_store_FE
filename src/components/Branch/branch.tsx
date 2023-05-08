@@ -84,22 +84,24 @@ export const Branch = (props?: { role?: number }) => {
     })
   }
 
-  const getData = async () => {
-    await getBranchBff()
-      .then((res: any) => {
-        if (res?.StatusCode != 200) throw new Error('FAIL')
-        const _data = res.Data.map((item: any) => {
-          return formatBranchDataXML(item)
+  const getData = () => {
+    setTimeout(async () => {
+      await getBranchBff()
+        .then((res: any) => {
+          if (res?.StatusCode != 200) throw new Error('FAIL')
+          const _data = res.Data.map((item: any) => {
+            return formatBranchDataXML(item)
+          })
+          setData(_data)
+          setLoading(false)
         })
-        setData(_data)
-      })
-      .catch((err) => console.log(err))
+        .catch((err) => console.log(err))
+    }, 500)
   }
 
   // get data
   useEffect(() => {
     getData()
-    setLoading(false)
   }, [])
 
   return (
