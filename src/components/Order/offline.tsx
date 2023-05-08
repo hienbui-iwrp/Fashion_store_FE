@@ -102,8 +102,23 @@ export const OrderOffline = (props: { role?: number }) => {
       .then((res: any) => {
         if (res.StatusCode != 200) throw new Error()
         const _data = res.Data.map((item: any) => formatOrderAdminDataXML(item))
-        setData(_data)
-        setAllData(_data)
+        if (props.role == 6) {
+          setData(
+            _data.filter(
+              (item: OrderAdminData) =>
+                item.offlineData?.branchId == localStorage.getItem('branchId')
+            )
+          )
+          setAllData(
+            _data.filter(
+              (item: OrderAdminData) =>
+                item.offlineData?.branchId == localStorage.getItem('branchId')
+            )
+          )
+        } else {
+          setData(_data)
+          setAllData(_data)
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -174,6 +189,8 @@ export const OrderOffline = (props: { role?: number }) => {
           selectUrl={
             props?.role == 3
               ? Routes.branchManager.orderDetail
+              : props?.role == 6
+              ? Routes.branchLeader.orderDetail
               : Routes.admin.orderDetail
           }
           loading={loading}

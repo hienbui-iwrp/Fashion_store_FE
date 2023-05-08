@@ -24,11 +24,11 @@ export default function NotFoundPage() {
           case '5':
             break
           case '6':
+            setRoute(Routes.branchLeader.homepage)
             break
         }
       }
     }
-
   }, [])
   // }, [localStorage.getItem('logged')])
 

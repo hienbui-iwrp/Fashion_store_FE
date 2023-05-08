@@ -8,3 +8,4 @@ export { default as ModalTranferGoods } from './ModalTranferGoods'
 export { default as ModalChangePassword } from './ModalChangePassword'
 
 export * from './ModalUploadGoodsImage'
+export * from './ModalAddStaffRequest'

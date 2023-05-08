@@ -41,36 +41,36 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
     ].includes(router.pathname)
       ? 0
       : [Routes.admin.statistic].includes(router.pathname)
-        ? 1
-        : [
+      ? 1
+      : [
           Routes.admin.homepage,
           Routes.admin.branch,
           Routes.admin.branchDetail,
         ].includes(router.pathname)
-          ? 0
-          : [Routes.admin.staff, Routes.admin.staffDetail].includes(router.pathname)
-            ? 20
-            : [Routes.admin.staffRequest].includes(router.pathname)
-              ? 21
-              : [Routes.admin.account, Routes.admin.accountDetail].includes(
-                router.pathname
-              )
-                ? 3
-                : [Routes.admin.event, Routes.admin.eventDetail].includes(router.pathname)
-                  ? 4
-                  : [
-                    Routes.admin.goods,
-                    Routes.admin.goodsDetail,
-                    Routes.admin.goodsTranfer,
-                  ].includes(router.pathname)
-                    ? 5
-                    : [Routes.admin.warehouse].includes(router.pathname)
-                      ? 6
-                      : [Routes.admin.order].includes(router.pathname)
-                        ? 70
-                        : [Routes.admin.orderOnline].includes(router.pathname)
-                          ? 71
-                          : 7
+      ? 0
+      : [Routes.admin.staff, Routes.admin.staffDetail].includes(router.pathname)
+      ? 20
+      : [Routes.admin.staffRequest].includes(router.pathname)
+      ? 21
+      : [Routes.admin.account, Routes.admin.accountDetail].includes(
+          router.pathname
+        )
+      ? 3
+      : [Routes.admin.event, Routes.admin.eventDetail].includes(router.pathname)
+      ? 4
+      : [
+          Routes.admin.goods,
+          Routes.admin.goodsDetail,
+          Routes.admin.goodsTranfer,
+        ].includes(router.pathname)
+      ? 5
+      : [Routes.admin.warehouse].includes(router.pathname)
+      ? 6
+      : [Routes.admin.order].includes(router.pathname)
+      ? 70
+      : [Routes.admin.orderOnline].includes(router.pathname)
+      ? 71
+      : 7
   )
 
   const menuItem = [
@@ -259,6 +259,7 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       case 1:
         setTitle('Quản lý hoạt động kinh doanh')
         break
+      case 2:
       case 20:
       case 21:
         setTitle('Quản lý nhân viên')
@@ -291,12 +292,14 @@ const LayoutAdmin = ({ children }: { children: React.ReactNode }) => {
       router.replace(Routes.error)
     }
     setTimeout(() => {
-      setLoading(false);
+      setLoading(false)
     }, 500)
   }, [router.pathname])
 
-  return (
-    loading ? <Loading /> : <ConfigProvider
+  return loading ? (
+    <Loading />
+  ) : (
+    <ConfigProvider
       theme={{
         token: {
           colorPrimary: Colors.adminGreen500,

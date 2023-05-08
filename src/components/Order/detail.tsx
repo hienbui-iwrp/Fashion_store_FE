@@ -181,7 +181,7 @@ export const OrderDetail = () => {
 
   const getMoreDate = async () => {
     if (!data?.isOnline) {
-      await getBranchDetailBff(data?.offlineData?.branchhId)
+      await getBranchDetailBff(data?.offlineData?.branchId)
         .then((data: any) => {
           const _data = formatBranchDataXML(data)
           setBranchData(_data)

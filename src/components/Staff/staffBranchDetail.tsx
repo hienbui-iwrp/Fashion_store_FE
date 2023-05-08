@@ -20,6 +20,7 @@ import {
 } from '@/utils'
 import { ColumnsType } from 'antd/es/table'
 import {
+  createDeleteRequest,
   deleteStaffBFF,
   getAttendaceBff,
   getBranchDetailBff,
@@ -44,97 +45,23 @@ dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
-export const StaffDetail = (props: { role?: number }) => {
+export const StaffBranchDetail = () => {
   const [loading, setLoading] = useState(true)
-  // const [attendanceData, setAttendanceData] = useState<AttendanceProps[]>([])
-  // const [attendanceShowData, setAttendanceShowData] = useState<
-  //   AttendanceProps[]
-  // >([])
   const [data, setData] = useState<StaffProps>({})
-  const [branchData, setBranchData] = useState<BranchProps>({})
-  const [modalAddEditStaff, setModalAddEditStaff] = useState(false)
   const dispatch = useDispatch()
 
   const router = useRouter()
   const { id } = router.query
 
-  // const columns: ColumnsType<AttendanceProps> = []
-  // if (attendanceShowData && attendanceShowData[0]) {
-  //   columns.push({
-  //     title: 'Ngày',
-  //     dataIndex: 'date',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       (a.date ?? 1) > (b.date ?? 1) ? 1 : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return formatDate(text)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 120 },
-  //       }
-  //     },
-  //   })
-
-  //   columns.push({
-  //     title: 'Thời điểm vào',
-  //     dataIndex: 'checkIn',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       (a.checkIn ?? 1) > (b.checkIn ?? 1) ? 1 : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return formatTime(text)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 140 },
-  //       }
-  //     },
-  //   })
-
-  //   columns.push({
-  //     title: 'Thời điểm ra',
-  //     dataIndex: 'checkOut',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       (a.checkOut ?? 1) > (b.checkOut ?? 1) ? 1 : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return formatTime(text)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 120 },
-  //       }
-  //     },
-  //   })
-
-  //   columns.push({
-  //     title: 'Thời gian làm',
-  //     dataIndex: '',
-  //     sorter: (a: AttendanceProps, b: AttendanceProps) =>
-  //       getWorkingTime(a.checkIn, a.checkOut) >
-  //       getWorkingTime(b.checkIn, b.checkOut)
-  //         ? 1
-  //         : -1,
-  //     render(text: any, record: AttendanceProps, index: number) {
-  //       return getWorkingTime(record.checkIn, record.checkOut)
-  //     },
-  //     onCell: (record) => {
-  //       return {
-  //         style: { minWidth: 120 },
-  //       }
-  //     },
-  //   })
-  // }
-
   const { showModelConfirm, contextModalComfirm } = useModalConfirm({
     title: 'Xóa nhân viên',
-    content: 'Bạn có chắc  chắn muốn xóa nhân viên này?',
+    content: 'Bạn có chắc chắn muốn yêu cầu xóa nhân viên này?',
     onOk: () => {
-      deleteStaffBFF(id)
+      createDeleteRequest(id)
         .then((res: any) => {
           if (res.StatusCode != 200) throw new Error('FAIL')
-          if (props.role == 3) {
-            router.push(Routes.branchManager.staff)
-          } else router.push(Routes.admin.staff)
-          dispatch(setNotificationValue('Xóa nhân viên thành công'))
+          router.push(Routes.branchLeader.staff)
+          dispatch(setNotificationValue('Đã gửi yêu cầu thành công'))
         })
         .catch((error) => {
           dispatch(setNotificationType('error'))
@@ -154,46 +81,11 @@ export const StaffDetail = (props: { role?: number }) => {
     setLoading(false)
   }
 
-  const getBranchData = async () => {
-    await getBranchDetailBff(data.branchId)
-      .then((res: any) => {
-        if (res.StatusCode != 200) throw new Error()
-        const _branchData = formatBranchDataXML(res.Data[0])
-        setBranchData(_branchData)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-  // console.log('branch: --', data.branchId, branchData)
-
-  // const getAttendacceData = () => {
-  //   getAttendaceBff(id).then((res: any) => {
-  //     const _attendacceData: AttendanceProps[] = res.Data.map((item: any) => {
-  //       return formatAttendanceDataXML(item)
-  //     })
-  //     setAttendanceShowData(
-  //       _attendacceData.filter((item: AttendanceProps) => {
-  //         return item.date?.getMonth() == new Date().getMonth()
-  //       })
-  //     )
-
-  //     setAttendanceData(_attendacceData)
-  //   })
-  // }
-
   useEffect(() => {
     if (id) {
       getData()
-      // getAttendacceData()
     }
   }, [id])
-
-  useEffect(() => {
-    if (data.branchId) {
-      getBranchData()
-    }
-  }, [data.branchId])
 
   return (
     <>
@@ -288,14 +180,6 @@ export const StaffDetail = (props: { role?: number }) => {
               </Row>
               <Row style={{ padding: 8 }}>
                 <Col xs={24} lg={8}>
-                  <b>Nơi làm việc</b>
-                </Col>
-                <Col xs={24} lg={16}>
-                  {branchData.name ?? 'Toàn hệ thống'}
-                </Col>
-              </Row>
-              <Row style={{ padding: 8 }}>
-                <Col xs={24} lg={8}>
                   <b>Vị trí</b>
                 </Col>
                 <Col xs={24} lg={16}>
@@ -324,58 +208,9 @@ export const StaffDetail = (props: { role?: number }) => {
           <Row justify='end' align='bottom'>
             <Space size={20}>
               <RemoveButton onClick={showModelConfirm} />
-              <AddButton
-                label='Chỉnh sửa'
-                icon={<EditFilled />}
-                onClick={() => setModalAddEditStaff(true)}
-              />
             </Space>
           </Row>
         </Card>
-        {/* <TableList<AttendanceProps>
-          data={attendanceShowData ?? []}
-          columns={columns}
-          loading={loading}
-          rowKey={['date']}
-          header={
-            <Row>
-              <Col xs={12} lg={6} className='mt-2'>
-                <b>Điểm danh</b>
-              </Col>
-              <Col xs={12} lg={14} className='mt-2'>
-                <span>Số ngày làm {countWorkingDate(attendanceShowData)}</span>
-              </Col>
-              <Col xs={12} sm={8} lg={4} className='mt-2'>
-                <DatePicker
-                  picker='month'
-                  placeholder='Month'
-                  format={'MM/YYYY'}
-                  defaultValue={dayjs(formatDate(new Date()), 'DD/MM/YYYY')}
-                  className={styles.adminInputShadow}
-                  onChange={(date, dateString) => {
-                    setAttendanceShowData(
-                      attendanceData.filter((item: AttendanceProps) => {
-                        return item.date?.getMonth() == date?.month()
-                      })
-                    )
-                  }}
-                />
-              </Col>
-            </Row>
-          }
-        /> */}
-        {modalAddEditStaff && (
-          <ModalAddEditStaff
-            open={modalAddEditStaff}
-            cancel={() => setModalAddEditStaff(false)}
-            callback={() => {
-              if (props.role == 3) {
-                router.push(Routes.branchManager.staff)
-              } else router.push(Routes.admin.staff)
-            }}
-            extraData={data}
-          />
-        )}
         {contextModalComfirm}
       </Space>
     </>

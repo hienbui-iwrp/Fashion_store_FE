@@ -74,6 +74,7 @@ export default function Login() {
           case '5':
             break
           case '6':
+            router.push(Routes.branchLeader.homepage)
             break
         }
       } else {

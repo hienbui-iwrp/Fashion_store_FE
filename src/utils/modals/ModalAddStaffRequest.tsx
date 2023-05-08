@@ -13,7 +13,7 @@ import { ModalAddEditStaffProps } from '../types/modalType'
 import { AddButton, DropdownButton, RemoveButton } from '@/components'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from '@/styles/Admin.module.css'
-import { BranchProps, formatBranchDataXML, formatDate } from '..'
+import { BranchProps, formatBranchDataXML } from '..'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -23,7 +23,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import { Gender, Routes, StaffRole } from '@/constants'
 import { useRouter } from 'next/router'
-import { addStaffBFF, getBranchBff, updateStaffBFF } from '@/api'
+import { addStaffBFF, createAddRequest, getBranchBff } from '@/api'
 import { useDispatch } from 'react-redux'
 import { setNotificationType, setNotificationValue } from '@/redux'
 
@@ -34,69 +34,25 @@ dayjs.extend(localeData)
 dayjs.extend(weekOfYear)
 dayjs.extend(weekYear)
 
-const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
-  const routes = useRouter()
+export const ModalAddStaffRequest = (props: ModalAddEditStaffProps) => {
   const [form] = Form.useForm()
-  const [branchData, setBranchData] = useState<BranchProps[]>()
-  const [curBranch, setCurBranch] = useState<BranchProps>()
   const dispatch = useDispatch()
-
-  const initialValues = {
-    ...props.extraData,
-    birthdate:
-      props.extraData?.birthdate &&
-      dayjs(formatDate(props.extraData?.birthdate), 'DD/MM/YYYY'),
-  }
-
-  const getData = () => {
-    getBranchBff().then((res: any) => {
-      const _data = res.Data.map((item: any) => {
-        if (res.StatusCode != 200) throw new Error('FAIL')
-        return formatBranchDataXML(item)
-      })
-      setBranchData(_data)
-      setCurBranch(
-        _data?.find((item: any) => {
-          return item.id.toString() == props.extraData?.branchId
-        })
-      )
-    })
-  }
-
-  // get data
-  useEffect(() => {
-    getData()
-  }, [])
 
   const onSave = async () => {
     try {
       const values = await form.validateFields()
-      // await addAccountBff('a', '123456', form.getFieldValue('role'))
-
-      if (!props.extraData) {
-        await addStaffBFF(values)
-          .then(async (res: any) => {
-            if (res.StatusCode != 200) throw new Error('FAIL')
-            dispatch(setNotificationValue('Đã thêm nhân viên mới'))
-            routes.push(Routes.admin.staff)
-          })
-          .catch((error) => {
-            dispatch(setNotificationType('error'))
-            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
-          })
-      } else {
-        await updateStaffBFF(props.extraData.id, values)
-          .then(async (res: any) => {
-            if (res.StatusCode != 200) throw new Error('FAIL')
-
-            dispatch(setNotificationValue('Đã cập nhật thông tin'))
-            routes.push(Routes.admin.staff)
-          })
-          .catch((error) => {
-            dispatch(setNotificationType('error'))
-            dispatch(setNotificationValue('Có lỗi khi thực hiện'))
-          })
-      }
+      await createAddRequest({
+        ...values,
+        branchId: localStorage.getItem('branchId'),
+      })
+        .then(async (res: any) => {
+          if (res.StatusCode != 200) throw new Error('FAIL')
+          dispatch(setNotificationValue('Đã gửi yêu cầu thêm mới'))
+        })
+        .catch((error) => {
+          dispatch(setNotificationType('error'))
+          dispatch(setNotificationValue('Có lỗi khi thực hiện'))
+        })
 
       props.callback && props.callback({})
       props.cancel && props.cancel()
@@ -132,12 +88,7 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
           </Space>,
         ]}
       >
-        <Form
-          layout={'vertical'}
-          form={form}
-          onValuesChange={() => {}}
-          initialValues={initialValues}
-        >
+        <Form layout={'vertical'} form={form} onValuesChange={() => {}}>
           <Row>
             <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Form.Item
@@ -206,6 +157,23 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   className={styles.adminInputShadow}
                 />
               </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Form.Item
+                label='Email'
+                name='email'
+                rules={[
+                  {
+                    required: props.extraData ? false : true,
+                    message: 'Vui lòng nhập',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder='Nhập email'
+                  className={styles.adminInputShadow}
+                />
+              </Form.Item>
               <Form.Item
                 label='Giới tính'
                 name='gender'
@@ -231,23 +199,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                   }}
                 />
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} style={{ paddingLeft: 10, paddingRight: 10 }}>
-              <Form.Item
-                label='Email'
-                name='email'
-                rules={[
-                  {
-                    required: props.extraData ? false : true,
-                    message: 'Vui lòng nhập',
-                  },
-                ]}
-              >
-                <Input
-                  placeholder='Nhập email'
-                  className={styles.adminInputShadow}
-                />
-              </Form.Item>
               <Form.Item
                 label='Điện thoại'
                 name='phone'
@@ -261,53 +212,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
                 <Input
                   placeholder='Nhập tên điện thoại'
                   className={styles.adminInputShadow}
-                />
-              </Form.Item>
-              <Form.Item
-                label='Nơi làm việc'
-                name='branchId'
-                rules={[
-                  {
-                    required: props.extraData ? false : true,
-                    message: 'Vui lòng nhập',
-                  },
-                ]}
-              >
-                <DropdownButton
-                  label={curBranch ? curBranch.name : 'Nơi làm việc'}
-                  items={branchData?.map((item: BranchProps) => {
-                    return `${item.name} (${item.id})`
-                  })}
-                  callback={(branch: string) => {
-                    form.setFieldValue(
-                      'branchId',
-                      branchData?.find(
-                        (item: any) =>
-                          item.id == branch.split(')')[0].split('(')[1]
-                      )?.id
-                    )
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
-                label='Vị trí'
-                name='role'
-                rules={[
-                  {
-                    required: props.extraData ? false : true,
-                    message: 'Vui lòng nhập',
-                  },
-                ]}
-              >
-                <DropdownButton
-                  label={form.getFieldValue('role') ?? 'Vị trí'}
-                  items={StaffRole.map((item: any) => item.content)}
-                  callback={(i: any) => {
-                    const role = StaffRole.find(
-                      (item: any) => item.content == i
-                    )?.value
-                    form.setFieldValue('role', role)
-                  }}
                 />
               </Form.Item>
               <Form.Item
@@ -411,5 +315,3 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
     </>
   )
 }
-
-export default ModalAddEditStaff
