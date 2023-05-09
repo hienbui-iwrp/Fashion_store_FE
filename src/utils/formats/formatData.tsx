@@ -481,7 +481,7 @@ const formatOnlineOrderDataXML = (data: any): OnlineOrderAdminData => {
 const formatOfflineOrderDataXML = (data: any): OfflineOrderAdminData => {
   return {
     staffId: data.getElementsByTagName('StaffId')[0]?.value,
-    branchhId: data.getElementsByTagName('BranchId')[0]?.value,
+    branchId: data.getElementsByTagName('BranchId')[0]?.value,
   }
 }
 

@@ -52,4 +52,21 @@ export const Routes = {
     order: '/branch-manager/order',
     orderDetail: '/branch-manager/order/detail',
   },
+  branchLeader: {
+    homepage: '/branch-leader',
+    staff: '/branch-leader/staff',
+    staffDetail: '/branch-leader/staff/detail',
+    statistic: '/branch-leader/statistic',
+    order: '/branch-leader/order',
+    orderDetail: '/branch-leader/order/detail',
+  },
+  goodsManager: {
+    homepage: '/goods-manager',
+    goods: '/goods-manager/goods',
+    goodsDetail: '/goods-manager/goods/detail',
+  },
+  warehouseManager: {
+    homepage: '/warehouse-manager',
+    warehouse: '/warehouse-manager/warehouse',
+  },
 }

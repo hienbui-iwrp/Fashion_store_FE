@@ -1,5 +1,5 @@
 import { BranchDetail } from '@/components'
 
 export default function BranchDetailManager() {
-  return <BranchDetail />
+  return <BranchDetail role={3} />
 }

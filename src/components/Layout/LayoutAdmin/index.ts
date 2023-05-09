@@ -1,2 +1,5 @@
 export { default as LayoutAdmin } from './LayoutAdmin'
 export * from './LayoutBranchManager'
+export * from './LayoutBranchLeader'
+export * from './LayoutGoodsManager'
+export * from './LayoutWarehouseManager'

@@ -2,7 +2,6 @@ import '@/styles/globals.css'
 import { ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
-import LayoutClient from './../components/Layout/LayoutClient'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { store } from '@/redux/store'
 import { selectNotification } from '@/redux/selectors'
@@ -13,7 +12,14 @@ import {
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
 import { Colors, Routes } from '@/constants'
-import { LayoutAdmin, LayoutBranchManager } from '@/components'
+import {
+  LayoutAdmin,
+  LayoutBranchManager,
+  LayoutBranchLeader,
+  LayoutClient,
+  LayoutGoodsManager,
+  LayoutWarehouseManager,
+} from '@/components'
 import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -67,7 +73,7 @@ export default function App({ Component, pageProps }: AppProps) {
           }}
         >
           <Head>
-            <link rel="icon" href="/logo.png" />
+            <link rel='icon' href='/logo.png' />
             <title> PTH Fashion</title>
           </Head>
           <LayoutClient>
@@ -101,7 +107,7 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
       <Provider store={store}>
         <Head>
-          <link rel="icon" href="/logo.png" />
+          <link rel='icon' href='/logo.png' />
           <title> PTH Fashion</title>
         </Head>
         <LayoutAdmin>
@@ -111,33 +117,90 @@ export default function App({ Component, pageProps }: AppProps) {
       </Provider>
     )
 
-    if (
-      router.pathname === Routes.branchManager.homepage ||
-      router.pathname === Routes.branchManager.branch ||
-      router.pathname === Routes.branchManager.branchDetail ||
-      router.pathname === Routes.branchManager.staff ||
-      router.pathname === Routes.branchManager.staffDetail ||
-      router.pathname === Routes.branchManager.staffRequest ||
-      router.pathname === Routes.branchManager.statistic ||
-      router.pathname === Routes.branchManager.order ||
-      router.pathname === Routes.branchManager.orderDetail
+  if (
+    router.pathname === Routes.branchManager.homepage ||
+    router.pathname === Routes.branchManager.branch ||
+    router.pathname === Routes.branchManager.branchDetail ||
+    router.pathname === Routes.branchManager.staff ||
+    router.pathname === Routes.branchManager.staffDetail ||
+    router.pathname === Routes.branchManager.staffRequest ||
+    router.pathname === Routes.branchManager.statistic ||
+    router.pathname === Routes.branchManager.order ||
+    router.pathname === Routes.branchManager.orderDetail
+  )
+    return (
+      <Provider store={store}>
+        <Head>
+          <link rel='icon' href='/logo.png' />
+          <title> PTH Fashion</title>
+        </Head>
+        <LayoutBranchManager>
+          <Component {...pageProps} />
+          <Notify />
+        </LayoutBranchManager>
+      </Provider>
     )
-      return (
-        <Provider store={store}>
-          <Head>
-            <link rel="icon" href="/logo.png" />
-            <title> PTH Fashion</title>
-          </Head>
-          <LayoutBranchManager>
-            <Component {...pageProps} />
-            <Notify />
-          </LayoutBranchManager>
-        </Provider>
-      )
+
+  if (
+    router.pathname === Routes.branchLeader.homepage ||
+    router.pathname === Routes.branchLeader.staff ||
+    router.pathname === Routes.branchLeader.staffDetail ||
+    router.pathname === Routes.branchLeader.statistic ||
+    router.pathname === Routes.branchLeader.order ||
+    router.pathname === Routes.branchLeader.orderDetail
+  )
+    return (
+      <Provider store={store}>
+        <Head>
+          <link rel='icon' href='/logo.png' />
+          <title> PTH Fashion</title>
+        </Head>
+        <LayoutBranchLeader>
+          <Component {...pageProps} />
+          <Notify />
+        </LayoutBranchLeader>
+      </Provider>
+    )
+
+  if (
+    router.pathname === Routes.goodsManager.homepage ||
+    router.pathname === Routes.goodsManager.goods ||
+    router.pathname === Routes.goodsManager.goodsDetail
+  )
+    return (
+      <Provider store={store}>
+        <Head>
+          <link rel='icon' href='/logo.png' />
+          <title> PTH Fashion</title>
+        </Head>
+        <LayoutGoodsManager>
+          <Component {...pageProps} />
+          <Notify />
+        </LayoutGoodsManager>
+      </Provider>
+    )
+
+  if (
+    router.pathname === Routes.warehouseManager.homepage ||
+    router.pathname === Routes.warehouseManager.warehouse
+  )
+    return (
+      <Provider store={store}>
+        <Head>
+          <link rel='icon' href='/logo.png' />
+          <title> PTH Fashion</title>
+        </Head>
+        <LayoutWarehouseManager>
+          <Component {...pageProps} />
+          <Notify />
+        </LayoutWarehouseManager>
+      </Provider>
+    )
+
   return (
     <Provider store={store}>
       <Head>
-        <link rel="icon" href="/logo.png" />
+        <link rel='icon' href='/logo.png' />
         <title> PTH Fashion</title>
       </Head>
       <Component {...pageProps} />

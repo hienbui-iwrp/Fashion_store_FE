@@ -287,7 +287,7 @@ export type OnlineOrderAdminData = {
 
 export type OfflineOrderAdminData = {
   staffId: string
-  branchhId: string
+  branchId: string
 }
 
 export type StatisticData = {

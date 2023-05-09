@@ -6,18 +6,7 @@ import { useAppDispatch } from '@/redux'
 import { selectUser } from '@/redux'
 import { userActions } from '@/redux'
 import type { MenuProps } from 'antd'
-import {
-  Layout,
-  Col,
-  Row,
-  Image,
-  Input,
-  Menu,
-  Typography,
-  Popover,
-  Button,
-  Dropdown,
-} from 'antd'
+import { Layout, Col, Row, Image, Input, Typography, Dropdown } from 'antd'
 import ButtonHeader from './../../Button/ButtonHeader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -36,7 +25,11 @@ import {
   TwitterIcon,
 } from '@/constants'
 import { getCustomerInfoBff, searchProductsBff } from '@/api'
-import { ProductDetailDataProps, formatProductsDataXML, formatUserDataXML } from '@/utils'
+import {
+  ProductDetailDataProps,
+  formatProductsDataXML,
+  formatUserDataXML,
+} from '@/utils'
 import { InputSearch } from '@/components/Input'
 import styles from './LayoutClient.module.css'
 import ProductsSearch from '@/components/ProductsSearch'
@@ -97,7 +90,6 @@ const primaryList: ItemNavProps[] = [
   },
 ]
 
-
 export default function LayoutClient({
   children,
 }: {
@@ -112,31 +104,32 @@ export default function LayoutClient({
   const [navbar, setNavbar] = useState(false)
   const [logged, setLogged] = useState(false)
   const [searching, setSearching] = useState(false)
-  const [dataProductsSearch, setDataProductsSearch] = useState<ProductDetailDataProps[]>([])
+  const [dataProductsSearch, setDataProductsSearch] = useState<
+    ProductDetailDataProps[]
+  >([])
 
   const handleSearch = async (e: any) => {
-    console.log(e.target.value);
-    const value = e.target.value.trim();
+    console.log(e.target.value)
+    const value = e.target.value.trim()
     if (value.length > 0) {
-      setSearching(true);
-      await searchProductsBff(value, 7)
-        .then((res) => {
-          if (res?.StatusCode === '200') {
-            const data = formatProductsDataXML(res?.Data);
-            setDataProductsSearch(data);
-          }
-        })
+      setSearching(true)
+      await searchProductsBff(value, 7).then((res) => {
+        if (res?.StatusCode === '200') {
+          const data = formatProductsDataXML(res?.Data)
+          setDataProductsSearch(data)
+        }
+      })
     }
   }
   const handleBlurSearch = () => {
     setTimeout(() => {
-      setSearching(false);
+      setSearching(false)
     }, 500)
   }
 
   const onSearch = (value: string) => {
-    setSearching(false);
-    router.push(`/products?search=${value}`);
+    setSearching(false)
+    router.push(`/products?search=${value}`)
   }
 
   const items: MenuProps['items'] = [
@@ -175,12 +168,14 @@ export default function LayoutClient({
       }
     }
     setTimeout(() => {
-      setLoading(false);
+      setLoading(false)
     }, 500)
   }, [router.pathname])
 
-  return (
-    loading ? <Loading /> : <Layout
+  return loading ? (
+    <Loading />
+  ) : (
+    <Layout
       className='m-auto bg-gray-200 relative'
       style={{ minHeight: '100vh' }}
     >
@@ -237,9 +232,9 @@ export default function LayoutClient({
                 onBlur={handleBlurSearch}
                 onEnter={onSearch}
               />
-              {
-                searching && <ProductsSearch productsSearch={dataProductsSearch} />
-              }
+              {searching && (
+                <ProductsSearch productsSearch={dataProductsSearch} />
+              )}
             </div>
           </Col>
           <Col xs={10} sm={6} md={5} lg={4} xl={3}>
@@ -319,8 +314,9 @@ export default function LayoutClient({
         >
           <div className='mx-auto md:items-center md:flex md:px-8 lg:px-16 '>
             <div
-              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${navbar ? 'flex' : 'hidden'
-                }`}
+              className={`flex-1 justify-self-center pb-3 w-full md:flex md:pb-0 md:mt-0 ${
+                navbar ? 'flex' : 'hidden'
+              }`}
             >
               <ul className='justify-start items-center w-full space-y-0 md:flex md:space-x-4 md:space-y-0 px-8 md:px-4 py-1 hidden md:flex '>
                 {secondaryList.map((item, index) => {

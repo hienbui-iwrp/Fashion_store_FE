@@ -100,7 +100,6 @@ const ModalAddEditStaff = (props: ModalAddEditStaffProps) => {
 
       props.callback && props.callback({})
       props.cancel && props.cancel()
-      routes.push(Routes.admin.staff)
 
       console.log('Success', values)
     } catch (errorInfo) {

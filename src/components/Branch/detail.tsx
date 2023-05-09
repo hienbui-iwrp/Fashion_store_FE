@@ -32,7 +32,7 @@ import {
   getStatisticAllBFF,
 } from '@/api'
 
-export const BranchDetail = () => {
+export const BranchDetail = (props: { role?: number }) => {
   const [loading, setLoading] = useState(true)
   const [statisticData, setStatisticData] = useState<StatisticData[]>([])
   const [data, setData] = useState<BranchProps>()
@@ -107,7 +107,9 @@ export const BranchDetail = () => {
         .then((res: any) => {
           if (res.StatusCode != 200) throw new Error('FAIL')
 
-          routes.push(Routes.admin.branch)
+          if (props?.role == 3) {
+            routes.push(Routes.branchManager.branch)
+          } else routes.push(Routes.admin.branch)
           dispatch(setNotificationValue('Xóa chi nhánh thành công'))
         })
         .catch((error) => {
@@ -202,6 +204,11 @@ export const BranchDetail = () => {
             open={modalAddEditBranch}
             cancel={() => setModalAddEditBranch(false)}
             extraData={data}
+            callback={() => {
+              if (props?.role == 3) {
+                routes.push(Routes.branchManager.branch)
+              } else routes.push(Routes.admin.branch)
+            }}
           />
         )}
         {contextModalComfirm}
