@@ -205,7 +205,7 @@ export const BranchDetail = (props: { role?: number }) => {
             cancel={() => setModalAddEditBranch(false)}
             extraData={data}
             callback={() => {
-              if (props.role == 3) {
+              if (props?.role == 3) {
                 routes.push(Routes.branchManager.branch)
               } else routes.push(Routes.admin.branch)
             }}

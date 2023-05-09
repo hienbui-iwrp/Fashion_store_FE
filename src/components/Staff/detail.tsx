@@ -131,7 +131,7 @@ export const StaffDetail = (props: { role?: number }) => {
       deleteStaffBFF(id)
         .then((res: any) => {
           if (res.StatusCode != 200) throw new Error('FAIL')
-          if (props.role == 3) {
+          if (props?.role == 3) {
             router.push(Routes.branchManager.staff)
           } else router.push(Routes.admin.staff)
           dispatch(setNotificationValue('Xóa nhân viên thành công'))
@@ -369,7 +369,7 @@ export const StaffDetail = (props: { role?: number }) => {
             open={modalAddEditStaff}
             cancel={() => setModalAddEditStaff(false)}
             callback={() => {
-              if (props.role == 3) {
+              if (props?.role == 3) {
                 router.push(Routes.branchManager.staff)
               } else router.push(Routes.admin.staff)
             }}

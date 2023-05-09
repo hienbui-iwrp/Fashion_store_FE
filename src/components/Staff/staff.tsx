@@ -116,7 +116,7 @@ export const Staff = (props: { role?: number }) => {
     await getStaffBff(keyword)
       .then((res: any) => {
         const _data = res.Data.map((item: any) => formatStaffDataXML(item))
-        if (props.role == 3) {
+        if (props?.role == 3) {
           setData(
             _data.filter(
               (item: StaffProps) => item.role == '7' || item.role == '6'

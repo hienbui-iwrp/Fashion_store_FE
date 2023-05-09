@@ -102,7 +102,7 @@ export const OrderOffline = (props: { role?: number }) => {
       .then((res: any) => {
         if (res.StatusCode != 200) throw new Error()
         const _data = res.Data.map((item: any) => formatOrderAdminDataXML(item))
-        if (props.role == 6) {
+        if (props?.role == 6) {
           setData(
             _data.filter(
               (item: OrderAdminData) =>
