@@ -20,8 +20,10 @@ export default function NotFoundPage() {
             setRoute(Routes.branchManager.homepage)
             break
           case '4':
+            setRoute(Routes.warehouseManager.homepage)
             break
           case '5':
+            setRoute(Routes.goodsManager.homepage)
             break
           case '6':
             setRoute(Routes.branchLeader.homepage)

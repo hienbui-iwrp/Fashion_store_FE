@@ -70,8 +70,10 @@ export default function Login() {
             router.push(Routes.branchManager.homepage)
             break
           case '4':
+            router.push(Routes.warehouseManager.homepage)
             break
           case '5':
+            router.push(Routes.goodsManager.homepage)
             break
           case '6':
             router.push(Routes.branchLeader.homepage)

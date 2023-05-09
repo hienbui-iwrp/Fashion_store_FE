@@ -107,7 +107,7 @@ export const BranchDetail = (props: { role?: number }) => {
         .then((res: any) => {
           if (res.StatusCode != 200) throw new Error('FAIL')
 
-          if (props.role == 3) {
+          if (props?.role == 3) {
             routes.push(Routes.branchManager.branch)
           } else routes.push(Routes.admin.branch)
           dispatch(setNotificationValue('Xóa chi nhánh thành công'))

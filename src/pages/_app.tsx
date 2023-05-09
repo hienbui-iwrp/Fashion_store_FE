@@ -2,7 +2,6 @@ import '@/styles/globals.css'
 import { ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
-import LayoutClient from './../components/Layout/LayoutClient'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { store } from '@/redux/store'
 import { selectNotification } from '@/redux/selectors'
@@ -13,9 +12,15 @@ import {
   setNotificationValue,
 } from '@/redux/slices/notificationSlice'
 import { Colors, Routes } from '@/constants'
-import { LayoutAdmin, LayoutBranchManager } from '@/components'
+import {
+  LayoutAdmin,
+  LayoutBranchManager,
+  LayoutBranchLeader,
+  LayoutClient,
+  LayoutGoodsManager,
+  LayoutWarehouseManager,
+} from '@/components'
 import Head from 'next/head'
-import { LayoutBranchLeader } from '@/components/Layout/LayoutAdmin/LayoutBranchLeader'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -154,6 +159,41 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <Notify />
         </LayoutBranchLeader>
+      </Provider>
+    )
+
+  if (
+    router.pathname === Routes.goodsManager.homepage ||
+    router.pathname === Routes.goodsManager.goods ||
+    router.pathname === Routes.goodsManager.goodsDetail
+  )
+    return (
+      <Provider store={store}>
+        <Head>
+          <link rel='icon' href='/logo.png' />
+          <title> PTH Fashion</title>
+        </Head>
+        <LayoutGoodsManager>
+          <Component {...pageProps} />
+          <Notify />
+        </LayoutGoodsManager>
+      </Provider>
+    )
+
+  if (
+    router.pathname === Routes.warehouseManager.homepage ||
+    router.pathname === Routes.warehouseManager.warehouse
+  )
+    return (
+      <Provider store={store}>
+        <Head>
+          <link rel='icon' href='/logo.png' />
+          <title> PTH Fashion</title>
+        </Head>
+        <LayoutWarehouseManager>
+          <Component {...pageProps} />
+          <Notify />
+        </LayoutWarehouseManager>
       </Provider>
     )
 

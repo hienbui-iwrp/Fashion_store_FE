@@ -4,7 +4,7 @@ import { LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Admin.module.css'
 import { Colors } from '@/constants/colors'
-import { WarehouseIcon } from '@/constants/asset/svg'
+import { GoodsIcon } from '@/constants/asset/svg'
 import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import Link from 'next/link'
@@ -13,7 +13,7 @@ import Loading from '@/components/Loading'
 
 const { Header, Sider, Content } = Layout
 
-export const LayoutWarehouseManager = ({
+export const LayoutGoodsManager = ({
   children,
 }: {
   children: React.ReactNode
@@ -30,8 +30,8 @@ export const LayoutWarehouseManager = ({
 
   const menuItem = [
     {
-      label: 'Kho',
-      icon: WarehouseIcon,
+      label: 'Hàng hóa',
+      icon: GoodsIcon,
       props: {
         size: 25,
         stroke: Colors.white,
@@ -45,7 +45,7 @@ export const LayoutWarehouseManager = ({
       icon: React.createElement(item.icon, item.props),
       label: item.label,
       onClick: () => {
-        router.push(Routes.warehouseManager.warehouse)
+        router.push(Routes.goodsManager.goods)
       },
     }
   })
@@ -95,7 +95,7 @@ export const LayoutWarehouseManager = ({
   useEffect(() => {
     if (
       !localStorage.getItem('logged') ||
-      localStorage.getItem('userRole') != '4'
+      localStorage.getItem('userRole') != '5'
     ) {
       router.replace(Routes.error)
     }
@@ -140,7 +140,7 @@ export const LayoutWarehouseManager = ({
         <Layout className='relative !w-full'>
           <Header className='!bg-white drop-shadow flex justify-between items-center	!h-12 !sticky top-0 z-10'>
             <span className='text-black font-bold	text-xl leading-none	'>
-              Quản lý kho
+              Quản lý hàng hóa
             </span>
             <Dropdown menu={{ items: avatarItems }} trigger={['click']}>
               <Button

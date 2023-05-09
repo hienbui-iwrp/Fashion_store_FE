@@ -60,4 +60,13 @@ export const Routes = {
     order: '/branch-leader/order',
     orderDetail: '/branch-leader/order/detail',
   },
+  goodsManager: {
+    homepage: '/goods-manager',
+    goods: '/goods-manager/goods',
+    goodsDetail: '/goods-manager/goods/detail',
+  },
+  warehouseManager: {
+    homepage: '/warehouse-manager',
+    warehouse: '/warehouse-manager/warehouse',
+  },
 }
