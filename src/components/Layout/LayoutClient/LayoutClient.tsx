@@ -170,7 +170,8 @@ export default function LayoutClient({
     setTimeout(() => {
       setLoading(false)
     }, 500)
-  }, [router.pathname])
+  }, [])
+  // }, [router.pathname])
 
   return loading ? (
     <Loading />
