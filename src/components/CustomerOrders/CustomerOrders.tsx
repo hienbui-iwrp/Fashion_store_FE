@@ -12,6 +12,7 @@ import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
 import { ImageEmpty } from '@/constants/image';
 import { addGoodsBff, deleteGoodsBff } from '@/api';
+import { Routes } from '@/constants';
 
 export interface CustomerOrdersProps {
 }
@@ -115,6 +116,7 @@ function OrderItem(props: OrderProps) {
 
 export default function CustomerOrders(props: CustomerOrdersProps) {
   const [data, setData] = useState<OrderProps[]>([])
+  const [reloadData, setReloadData] = useState(false);
   const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch();
   const router = useRouter()
@@ -137,6 +139,8 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
           console.log('res', resCompleteOrder);
           if (resCompleteOrder?.StatusCode === '200') {
             dispatch(setNotificationValue('Tạo đơn hàng thành công'));
+            setReloadData(true);
+            // router.push(Routes.manageOrders);
           } else {
             dispatch(setNotificationType('error'));
             dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
@@ -213,7 +217,7 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
   useEffect(() => {
     checkLogin(router)
     fetchData();
-  }, [])
+  }, [reloadData])
 
   return (
     loading ? <Loading /> :
