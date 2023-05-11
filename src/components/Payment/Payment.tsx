@@ -14,6 +14,7 @@ import { deleteGoodsBff } from '@/api';
 import Loading from '../Loading';
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { VNPay } from '@/api/payment';
 
 export interface PaymentProps {
 }
@@ -32,7 +33,7 @@ export default function Payment(props: PaymentProps) {
   const listCartItem: ProductInCartProps[] = dataProductsPayment.listProductPayment;
   // console.log('redux data products payment', dataProductsPayment);
   const [paymentMethod, setPaymentMethod] = React.useState('offline');
-  const [methodOnline, setMethodOnline] = React.useState('Momo');
+  const [methodOnline, setMethodOnline] = React.useState('vnpay');
   const [totalOrder, setTotalOrder] = React.useState(dataProductsPayment.totalPrice)
   const [shipFee, setShipFee] = React.useState<number | null>(null)
   const [expectedDate, setExpectedDate] = React.useState<string | null>(null)
@@ -50,7 +51,7 @@ export default function Payment(props: PaymentProps) {
       },
       expectedDate: expectedDate ? expectedDate : '2023-04-08'
     }
-    sendOrderInfo(orderData);
+    // sendOrderInfo(orderData);
     if (values.paymentMethod === 'offline') {
       Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
         .then(([resCompleteOrder, resRemove]) => {
@@ -65,7 +66,10 @@ export default function Payment(props: PaymentProps) {
         })
         .catch(err => console.log('có lỗi xảy ra:', err));
     } else {
-
+      if (window != undefined) {
+        localStorage.setItem('orderData', JSON.stringify(orderData));
+      }
+      VNPay(totalOrder + shipFee);
     }
   };
 
@@ -254,7 +258,7 @@ export default function Payment(props: PaymentProps) {
                       </Row>
                     </Radio.Group>
                   </Form.Item>
-                  {paymentMethod === 'online' ?
+                  {paymentMethod === 'online' || paymentMethod === 'vnpay' || paymentMethod === 'momo' ?
                     <div className='p-2 border rounded-xl'>
                       <Form.Item
                         className='mb-0'
@@ -262,7 +266,7 @@ export default function Payment(props: PaymentProps) {
                         rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán online!' }]}
                       >
                         <Radio.Group className='w-full' onChange={handleChangeMethodOnline} value={methodOnline}>
-                          <Radio value="vnpal" className='w-full p-2 border rounded-xl font-bold mb-2 w-full'>
+                          <Radio value="vnpay" className='w-full p-2 border rounded-xl font-bold mb-2 w-full'>
                             <div className='flex justify-between'>
                               <Text>VNPal</Text>
                               <Image height={24} preview={false}

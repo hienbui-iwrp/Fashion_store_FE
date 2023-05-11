@@ -37,7 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
     }
     if (
       router.pathname === Routes.cart ||
-      router.pathname === Routes.payment ||
+      router.pathname.startsWith(Routes.payment) ||
       router.pathname === Routes.manageOrders ||
       router.pathname === Routes.userInfo
     ) {
@@ -51,10 +51,10 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname === Routes.homepage ||
     router.pathname.startsWith(Routes.productsDetail) ||
     router.pathname.startsWith(Routes.manageOrdersDetail) ||
+    router.pathname.startsWith(Routes.payment) ||
     router.pathname === Routes.products ||
     router.pathname === Routes.intro ||
     router.pathname === Routes.cart ||
-    router.pathname === Routes.payment ||
     router.pathname === Routes.manageOrders ||
     router.pathname === Routes.userInfo ||
     router.pathname === Routes.man ||

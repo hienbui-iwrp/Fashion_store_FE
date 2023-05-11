@@ -5,12 +5,13 @@ import { useRouter } from 'next/router';
 import type { TabsProps } from 'antd';
 import ButtonClientPrimary from '@/components/Button/ButtonClientPrimary';
 import styles from './CustomerOrders.module.css'
-import { getListOrder, getListOrderBff } from '@/api/customer-order';
+import { createOrderBpel, getListOrder, getListOrderBff } from '@/api/customer-order';
 import { FormatMoney, OrderProps, ProductInCartProps, formatOrdersDataXML, formatRouteImage } from '@/utils';
+import { setNotificationType, setNotificationValue, useAppDispatch } from '@/redux';
 import Loading from '@/components/Loading';
 import { checkLogin } from '@/utils/check';
 import { ImageEmpty } from '@/constants/image';
-import { addGoodsBff } from '@/api';
+import { addGoodsBff, deleteGoodsBff } from '@/api';
 
 export interface CustomerOrdersProps {
 }
@@ -115,7 +116,35 @@ function OrderItem(props: OrderProps) {
 export default function CustomerOrders(props: CustomerOrdersProps) {
   const [data, setData] = useState<OrderProps[]>([])
   const [loading, setLoading] = useState(true)
+  const dispatch = useAppDispatch();
   const router = useRouter()
+
+  const completedOrder = async (orderData: any) => {
+    return await createOrderBpel(orderData);
+    // return await createOrder(orderData);
+  }
+
+  const removeProductBoughtInCart = async (orderData: any) => {
+    return await deleteGoodsBff(orderData.customerId, orderData.goodsList);
+  }
+
+  if (window != undefined) {
+    if (localStorage.getItem('orderStatus') == 'true') {
+      localStorage.setItem('orderStatus', '');
+      const orderData = JSON.parse(localStorage.getItem('orderData') as string);
+      Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
+        .then(([resCompleteOrder, resRemove]) => {
+          console.log('res', resCompleteOrder);
+          if (resCompleteOrder?.StatusCode === '200') {
+            dispatch(setNotificationValue('Tạo đơn hàng thành công'));
+          } else {
+            dispatch(setNotificationType('error'));
+            dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
+          }
+        })
+        .catch(err => console.log('có lỗi xảy ra:', err));
+    }
+  }
 
   const onChangeTabs = (key: string) => {
     console.log(key);

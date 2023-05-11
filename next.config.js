@@ -15,6 +15,10 @@ const nextConfig = {
         destination: isProcessOrderBefore ? process.env.NEXT_PUBLIC_BPEL_CREATE_ORDER : process.env.NEXT_PUBLIC_BPEL_CREATE_ORDER_AFTER, // Proxy to Backend
       },
       {
+        source: '/payment/vn-pay',
+        destination: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', // Proxy to Backend
+      },
+      {
         source: '/customer-bff/:path*',
         destination: process.env.NEXT_PUBLIC_CUSTOMER_BFF + '/:path*', // Proxy to Backend
       },
