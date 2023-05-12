@@ -130,29 +130,6 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
     return await deleteGoodsBff(orderData.customerId, orderData.goodsList);
   }
 
-  if (window != undefined) {
-    if (localStorage.getItem('orderStatus') == 'true') {
-      localStorage.setItem('orderStatus', '');
-      const orderData = JSON.parse(localStorage.getItem('orderData') as string);
-      Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
-        .then(([resCompleteOrder, resRemove]) => {
-          console.log('res', resCompleteOrder);
-          if (resCompleteOrder?.StatusCode === '200') {
-            dispatch(setNotificationValue('Tạo đơn hàng thành công'));
-            setReloadData(true);
-            // router.push(Routes.manageOrders);
-          } else {
-            dispatch(setNotificationType('error'));
-            dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
-          }
-        })
-        .catch(err => console.log('có lỗi xảy ra:', err));
-    }
-  }
-
-  const onChangeTabs = (key: string) => {
-    console.log(key);
-  };
   const [received, setReceived] = useState(
     <div className='text-xl h-32 flex justify-center items-center'>
       Chưa có đơn hàng nào đã được nhận.
@@ -176,6 +153,9 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
     },
   ]
 
+  const onChangeTabs = (key: string) => {
+    console.log(key);
+  };
   const fetchData = async () => {
     await getListOrderBff(localStorage.getItem('userId') || '')
       .then((res) => {
@@ -216,8 +196,26 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
 
   useEffect(() => {
     checkLogin(router)
-    fetchData();
-  }, [reloadData])
+    if (localStorage.getItem('orderStatus') == 'true') {
+      localStorage.setItem('orderStatus', '');
+      const orderData = JSON.parse(localStorage.getItem('orderData') as string);
+      Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
+        .then(([resCompleteOrder, resRemove]) => {
+          console.log('res', resCompleteOrder);
+          if (resCompleteOrder?.StatusCode === '200') {
+            dispatch(setNotificationValue('Tạo đơn hàng thành công'));
+            fetchData();
+          } else {
+            dispatch(setNotificationType('error'));
+            dispatch(setNotificationValue('Có lỗi xảy ra, tạo đơn hàng thất bại'));
+          }
+        })
+        .catch(err => console.log('có lỗi xảy ra:', err));
+    }
+    else {
+      fetchData();
+    }
+  }, [])
 
   return (
     loading ? <Loading /> :
