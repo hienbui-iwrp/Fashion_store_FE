@@ -22,7 +22,7 @@ export default function PaymentConfirmPage(props: PaymentConfirmPageProps) {
       }
     } else {
       count++;
-      if (count < 1) {
+      if (count < 2) {
         dispatch(setNotificationType('error'));
         dispatch(setNotificationValue('Thanh toán thất bại, vui lòng thực hiện thanh toán lại'));
         router.push(Routes.cart);
