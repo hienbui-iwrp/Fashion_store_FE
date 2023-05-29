@@ -241,7 +241,7 @@ export default function CustomerOrderDetail(props: CustomerOrderDetailProps) {
                 <div key={index}>
                   <div className="flex border-b-2 pb-1">
                     <Link href={`/products/${item.goodsId}`}>
-                      <Image width={100} height={120} preview={false} className='rounded-xl' src={formatRouteImage(item.image)} alt='' />
+                      <Image width={100} height={120} preview={false} className='rounded-xl' src={(item.image)} alt='' />
                     </Link>
                     <div className='flex-1 pl-4'>
                       <Row className='flex-1'>

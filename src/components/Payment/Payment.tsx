@@ -330,7 +330,7 @@ export default function Payment(props: PaymentProps) {
                     >
                       <div className="flex">
                         <Link href={`/products/${item.goodsId}`}>
-                          <Image width={140} height={160} preview={false} className='rounded-xl' src={formatRouteImage(item.image)} alt='' />
+                          <Image width={140} height={160} preview={false} className='rounded-xl' src={(item.image)} alt='' />
                         </Link>
                         <div className='flex-1 pl-4'>
                           <Row className='flex-1'>

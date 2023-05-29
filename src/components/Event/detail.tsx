@@ -129,12 +129,12 @@ export const EventDetail = () => {
             alt='img'
             src={
               record?.image
-                ? formatRouteImage(record?.image[0])
+                ? (record?.image[0])
                 : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
             }
             preview={{
               src: record?.image
-                ? formatRouteImage(record?.image[0])
+                ? (record?.image[0])
                 : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
             }}
             style={{
@@ -366,7 +366,7 @@ export const EventDetail = () => {
             uid: '1',
             name: _data?.image ?? '',
             status: 'done',
-            url: formatRouteImage(_data?.image),
+            url: (_data?.image),
           },
         ])
     })

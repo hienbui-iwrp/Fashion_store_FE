@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Empty, List } from 'antd';
-import { ProductDetailDataProps } from '@/utils';
+import { ProductDetailDataProps, formatRouteImage } from '@/utils';
 import Link from 'next/link';
 
 export interface IProductsSearchProps {
@@ -19,7 +19,7 @@ export default function ProductsSearch(props: IProductsSearchProps) {
               <List.Item>
                 <Link href={`/products/${item.goodsId}`} className="w-full" >
                   <List.Item.Meta
-                    avatar={<Avatar src={`${item.images[0]}`} />}
+                    avatar={<Avatar src={(item.images[0])} />}
                     title={<p>{item.name}</p>}
                   />
                 </Link>

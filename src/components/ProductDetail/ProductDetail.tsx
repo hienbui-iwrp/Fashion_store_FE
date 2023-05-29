@@ -164,7 +164,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
               width={350}
               height={400}
               className='py-2'
-              src={formatRouteImage(imageShow)}
+              src={(imageShow)}
               alt={props.name}
             />
           </div>
@@ -179,7 +179,7 @@ export default function ProductDetail(props: ProductDetailDataProps) {
                   width={60}
                   height={60}
                   onClick={() => handleChangeImage(item)}
-                  src={formatRouteImage(item)}
+                  src={(item)}
                   alt={props.name}
                 />
               )
