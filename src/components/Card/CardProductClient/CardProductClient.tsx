@@ -102,7 +102,7 @@ export default function CardProductClient(props: { dataProduct: ProductDetailDat
         <div className='pb-2 flex items-center justify-center'>
           <Image
             src={
-              formatRouteImage(props.dataProduct.images[0]) ||
+              (props.dataProduct.images[0]) ||
               'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
             }
             preview={false}

@@ -249,7 +249,7 @@ export const GoodsDetail = (props: { role?: number }) => {
               uid: index.toString(),
               name: item,
               status: 'done',
-              url: formatRouteImage(item),
+              url: (item),
             }
           })
         )

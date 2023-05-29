@@ -165,7 +165,7 @@ export default function Cart(props: CartProps) {
               height={160}
               preview={false}
               className=''
-              src={formatRouteImage(product.image) ?? ImageEmpty}
+              src={(product.image) ?? ImageEmpty}
               alt={product.name}
             />
             <div className='flex-1 pl-4'>

@@ -77,7 +77,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
             alt='img'
             src={
               record?.image
-                ? formatRouteImage(record?.image[0])
+                ? (record?.image[0])
                 : 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
             }
             style={{
@@ -175,7 +175,7 @@ const ModalAllGoods = (props: ModalAllGoodsProps) => {
   }
 
   const rowSelection: TableRowSelection<GoodsProps> = {
-    onChange: (selectedRowKeys, selectedRows) => {},
+    onChange: (selectedRowKeys, selectedRows) => { },
     onSelect: (record, selected, selectedRows) => {
       let _rowSelected = rowSelected
       if (selected) {

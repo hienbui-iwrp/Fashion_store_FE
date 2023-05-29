@@ -22,7 +22,7 @@ import { selectProducts } from '@/redux/selectors'
 import { productsActions, useAppDispatch } from '@/redux'
 import { GoodsAccessory } from '@/constants'
 
-export interface HomeClientProps {}
+export interface HomeClientProps { }
 
 const contentStyle: React.CSSProperties = {
   height: '450px',
@@ -146,7 +146,7 @@ export default function HomeClient(props: HomeClientProps) {
             return (
               <div key={event.id}>
                 <Image
-                  src={formatRouteImage(event.image)}
+                  src={(event.image)}
                   alt={event.name}
                   style={{ width: '100vw', height: 400, borderRadius: 20 }}
                 />

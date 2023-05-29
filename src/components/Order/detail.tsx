@@ -71,7 +71,7 @@ export const OrderDetail = () => {
           <Image
             alt='img'
             src={
-              formatRouteImage(record?.image) ??
+              (record?.image) ??
               'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
             }
             style={{
