@@ -130,7 +130,7 @@ export default function Login() {
           name='Password'
           rules={[
             { required: true, message: 'Vui lòng nhập mật khẩu!' },
-            ({}) => ({
+            ({ }) => ({
               validator(_, value) {
                 if (!value || value.length > 5) {
                   return Promise.resolve()

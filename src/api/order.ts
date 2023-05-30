@@ -6,7 +6,7 @@ export const getOnlineOrdersBFF = () => {
     <soap:Body>  
     </soap:Body>`
   return adminBff
-    .post('/order-service/admin/get-online-orders', payload)
+    .post('/order-service/admin/get-online-orders', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -21,7 +21,7 @@ export const getOfflineOrdersBFF = () => {
     <soap:Body>  
     </soap:Body>`
   return adminBff
-    .post('/order-service/admin/get-offline-orders', payload)
+    .post('/order-service/admin/get-offline-orders', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -37,7 +37,7 @@ export const getOrdersDetailBFF = (id: any) => {
         <OrderId>${id}</OrderId>
     </soap:Body>`
   return adminBff
-    .post('/order-service/admin/get-order-detail', payload)
+    .post('/order-service/admin/get-order-detail', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -54,7 +54,7 @@ export const getOrderCustomerBFF = async (customerId: string) => {
     </soap:Body>
   `
   return adminBff
-    .post('/order-service/admin/customer-order', payload)
+    .post('/order-service/admin/customer-order', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })

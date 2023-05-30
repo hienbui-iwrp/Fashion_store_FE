@@ -76,7 +76,7 @@ export const getAllAccount = async () => {
 </soap:Envelope>`
   return await axios
     .post(baseUrl + accountService, xmls, {
-      headers: { 'Content-Type': 'text/xml' },
+      headers: { 'Content-Type': 'text/xml', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     })
     .then((res) => {
       formatResponse(res.data)
@@ -92,7 +92,7 @@ export const getAllAccountBff = async () => {
   <soap:Body/>`
 
   return await adminBff
-    .post(`/account-service/account/get`, payload)
+    .post(`/account-service/account/get`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res: any) => {
       return formatResponse(res.data)
     })
@@ -117,7 +117,7 @@ export const addAccountBff = async (
   console.log('payload:', payload)
 
   return await adminBff
-    .post(`/account-service/account/add`, payload)
+    .post(`/account-service/account/add`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res: any) => {
       console.log('res:', res)
       return formatResponse(res.data)
@@ -136,7 +136,7 @@ export const updateRoleBff = async (username: string, role: number) => {
   </soap:Body>`
 
   return await adminBff
-    .post(`/account-service/account/role/update`, payload)
+    .post(`/account-service/account/role/update`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res: any) => {
       return formatResponse(res.data)
     })
@@ -159,7 +159,7 @@ export const changePasswordAdminBFF = async (data: {
 </soap:Body>`
 
   return await adminBff
-    .post(`/account-service/account/change-password`, payload)
+    .post(`/account-service/account/change-password`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res: any) => {
       return formatResponse(res.data)
     })
@@ -182,7 +182,7 @@ export const changePasswordCustomerBFF = async (data: {
 </soap:Body>`
 
   return await customerBff
-    .post(`/account-service/account/change-password`, payload)
+    .post(`/account-service/account/change-password`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res: any) => {
       return formatResponse(res.data)
     })

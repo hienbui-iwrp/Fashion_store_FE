@@ -97,10 +97,7 @@ export default function Cart(props: CartProps) {
 
   const updateCart = async () => {
     if (cartId) {
-      console.log('cartId: ', cartId)
-      console.log('cartData: ', data)
       await updateCartBff(cartId, data).then((res) => {
-        console.log('res update', res)
         if (res?.StatusCode === '200') {
           setOptions(setForOptions(data))
         } else {
@@ -287,10 +284,9 @@ export default function Cart(props: CartProps) {
     await getCartBff(localStorage.getItem('userId') || '').then((res) => {
       if (res?.StatusCode === '200') {
         const tempData = formatCartDataXML(res?.Data[0])
-        console.log('object data', tempData)
         setCartId(tempData.cartId)
         setData(tempData.productsInCart)
-        setOptions(setForOptions(data))
+        setOptions(setForOptions(tempData.productsInCart))
       }
     })
     setLoading(false)
@@ -299,15 +295,14 @@ export default function Cart(props: CartProps) {
   useEffect(() => {
     checkLogin(router)
     fetchData()
-  }, [loading])
+  }, [])
 
   const onChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('object changed', checkedValues)
+    // console.log('object changed', checkedValues)
     let sumTemp = 0
     setProductsChecked(
       checkedValues.map((value: any, _) => {
         const product = JSON.parse(value)
-        console.log(product)
         sumTemp +=
           product.unitPrice * (1 - product.discount / 100) * product.quantity
         return product

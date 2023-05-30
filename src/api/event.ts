@@ -78,9 +78,9 @@ export const updateEventBff = async (id: any, event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
-          ''
-        )
+        (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+        ''
+      )
       : '<Goods></Goods>'
 
   const payload = `
@@ -97,7 +97,7 @@ export const updateEventBff = async (id: any, event: EventProps) => {
       `
 
   return await adminBff
-    .post(`/event-service/update-event`, payload)
+    .post(`/event-service/update-event`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -113,9 +113,9 @@ export const addEventBff = async (event: EventProps) => {
   const goodsXml =
     event?.goods && event.goods.length > 0
       ? event.goods.reduce(
-          (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
-          ''
-        )
+        (acc: string, item: string) => `${acc}\n<Goods>${item}</Goods>`,
+        ''
+      )
       : '<Goods></Goods>'
 
   const payload = `
@@ -132,7 +132,7 @@ export const addEventBff = async (event: EventProps) => {
       `
 
   return await adminBff
-    .post(`/event-service/add-event`, payload)
+    .post(`/event-service/add-event`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -150,7 +150,7 @@ export const uploadEventImageBFF = async (file: {
   form.append('eventId', file.eventId ?? '')
 
   return adminBff
-    .post('/event-service/image:upload', form)
+    .post('/event-service/image:upload', form, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -167,7 +167,7 @@ export const deleteEventImageBFF = async (event: { id: any }) => {
     </soap:Body>`
 
   return adminBff
-    .post('/event-service/image:delete', payload)
+    .post('/event-service/image:delete', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
