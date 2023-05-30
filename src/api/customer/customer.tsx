@@ -27,7 +27,7 @@ export const getCustomerInfoBff = async (customerId: string) => {
     </soap:Body>
   `
   return await customerBff
-    .post(service + get, payload)
+    .post(service + get, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       const XMLParser = require('react-xml-parser')
       const xml = new XMLParser().parseFromString(res.data)
@@ -57,7 +57,7 @@ export const addCustomerInfo = async (info: CustomerInfoProps) => {
 export const updateCustomerInfo = async (info: CustomerInfoProps) => {
   return await api
     // .get(service + customer + `/${customerId}`)
-    .put(service + customer, { ...info })
+    .put(service + customer, { ...info }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return res;
     })
@@ -83,7 +83,7 @@ export const updateCustomerInfoBff = async (info: CustomerInfoProps) => {
     </soap:Body>
   `
   return await customerBff
-    .post(service + update, payload)
+    .post(service + update, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       const XMLParser = require('react-xml-parser')
       const xml = new XMLParser().parseFromString(res.data)

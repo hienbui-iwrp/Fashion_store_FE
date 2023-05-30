@@ -29,7 +29,7 @@ export const getCartBff = async (customerId: string) => {
     </soap:Body>
   `
   return await customerBff
-    .post(cartService + get, payload)
+    .post(cartService + get, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -56,7 +56,7 @@ export const addGoodsBff = async (
   `
   console.log('payload', payload)
   return await customerBff
-    .post(cartService + add, payload)
+    .post(cartService + add, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -74,19 +74,19 @@ export const updateCartBff = async (
   <soap:Body>
       <CartId>${cartId}</CartId>
       ${products
-        .map((product) => {
-          return `<Goods>
+      .map((product) => {
+        return `<Goods>
           <GoodsId>${product.goodsId}</GoodsId>
           <GoodsColor>${product.goodsColor}</GoodsColor>
           <GoodsSize>${product.goodsSize}</GoodsSize>
           <Quantity>${product.quantity}</Quantity>
       </Goods>`
-        })
-        .join()}
+      })
+      .join()}
   </soap:Body>
   `
   return await customerBff
-    .post(cartService + update, payload)
+    .post(cartService + update, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -104,18 +104,18 @@ export const deleteGoodsBff = async (
   <soap:Body>
       <CartId>${cartId}</CartId>
       ${products
-        .map((product) => {
-          return `<Goods>
+      .map((product) => {
+        return `<Goods>
           <GoodsId>${product.goodsId}</GoodsId>
           <GoodsColor>${product.goodsColor}</GoodsColor>
           <GoodsSize>${product.goodsSize}</GoodsSize>
       </Goods>`
-        })
-        .join()}
+      })
+      .join()}
   </soap:Body>
   `
   return await customerBff
-    .post(cartService + deleteGoods, payload)
+    .post(cartService + deleteGoods, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -132,7 +132,7 @@ export const deleteAllGoodsBff = async (cartId: string) => {
     </soap:Body>
   `
   return await customerBff
-    .post(cartService + deleteAll, payload)
+    .post(cartService + deleteAll, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -144,7 +144,7 @@ export const deleteAllGoodsBff = async (cartId: string) => {
 export const addToCart = async (product: ProductInCartProps) => {
   return await api
     // .get(product + `/${productId}`, {})
-    .post(cart + `/detail`, { ...product })
+    .post(cart + `/detail`, { ...product }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       return response
     })

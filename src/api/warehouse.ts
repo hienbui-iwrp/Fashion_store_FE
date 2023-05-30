@@ -2,7 +2,7 @@ import { WarehouseProps, adminBff, formatResponse } from '@/utils'
 
 export const getWarehouseBFF = () => {
   return adminBff
-    .post('/warehouse-service/get-all-warehouse', '')
+    .post('/warehouse-service/get-all-warehouse', '', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -19,7 +19,7 @@ export const getWarehouseManagerBFF = (id: any) => {
     </soap:Body>
     `
   return adminBff
-    .post('/warehouse-service/get-manager', payload)
+    .post('/warehouse-service/get-manager', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -36,7 +36,7 @@ export const getWarehouseStaffBFF = (id: any) => {
     </soap:Body>
     `
   return adminBff
-    .post('/warehouse-service/get-staff', payload)
+    .post('/warehouse-service/get-staff', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -58,7 +58,7 @@ export const addWarehouseBFF = (warehouse: WarehouseProps) => {
     </soap:Body>
     `
   return adminBff
-    .post('/warehouse-service/add-warehouse', payload)
+    .post('/warehouse-service/add-warehouse', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -82,7 +82,7 @@ export const updateWarehouseBFF = (id: any, warehouse: WarehouseProps) => {
     `
   console.log('payload: ', payload)
   return adminBff
-    .post('/warehouse-service/update-warehouse', payload)
+    .post('/warehouse-service/update-warehouse', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })

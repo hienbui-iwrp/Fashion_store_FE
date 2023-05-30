@@ -31,7 +31,7 @@ export const getListOrderBff = async (customerId: string) => {
     </soap:Body>
   `
   return await customerBff
-    .post(orderService + getList, payload)
+    .post(orderService + getList, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data);
     })
@@ -48,7 +48,7 @@ export const getOrderDetailBff = async (orderId: string) => {
     </soap:Body>
   `
   return await customerBff
-    .post(orderService + getDetail, payload)
+    .post(orderService + getDetail, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data);
     })
@@ -104,7 +104,7 @@ export const makeOrder = async (orderData: any) => {
 </soap:Envelope>`
   console.log(payload);
   return await shareBffCheckWh
-    .post('', payload)
+    .post('', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       const XMLParser = require('react-xml-parser')
       const xml = new XMLParser().parseFromString(res.data)
@@ -158,7 +158,7 @@ export const createOrder = async (orderData: any) => {
     </soap:Body>`;
   console.log(payload);
   return await customerBff
-    .post('order-service/customer/make-order', payload)
+    .post('order-service/customer/make-order', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       const XMLParser = require('react-xml-parser')
       const xml = new XMLParser().parseFromString(res.data)
@@ -214,7 +214,7 @@ export const createOrderBpel = async (orderData: any) => {
 </soap:Envelope>`;
   console.log(payload);
   return await customerBpel
-    .post('create-order', payload)
+    .post('create-order', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       console.log(res.data);
       const XMLParser = require('react-xml-parser')

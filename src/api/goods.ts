@@ -8,7 +8,7 @@ import {
 
 export const getGoodsBFF = () => {
   return adminBff
-    .post('/goods-service/goods', '')
+    .post('/goods-service/goods', '', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -24,7 +24,7 @@ export const getGoodsDetailBFF = (id: any) => {
       <GoodsCode>${id}</GoodsCode>
   </soap:Body>`
   return adminBff
-    .post('/goods-service/goods-detail', payload)
+    .post('/goods-service/goods-detail', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -40,7 +40,7 @@ export const getGoodsInWarehouseBFF = (id: any) => {
       <GoodsCode>${id}</GoodsCode>
   </soap:Body>`
   return adminBff
-    .post('/goods-service/goods/get-warehouse', payload)
+    .post('/goods-service/goods/get-warehouse', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -86,7 +86,7 @@ export const addGoodsBFF = (
   </soap:Body>`
 
   return adminBff
-    .post('/goods-service/goods/add', payload)
+    .post('/goods-service/goods/add', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -135,7 +135,7 @@ export const updateGoodsBff = (
   console.log('payload:', payload)
 
   return adminBff
-    .post('/goods-service/goods/update', payload)
+    .post('/goods-service/goods/update', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -162,7 +162,7 @@ export const importGoodsBff = (
   </soap:Body>`
 
   return adminBff
-    .post('/goods-service/goods/import', payload)
+    .post('/goods-service/goods/import', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -188,7 +188,7 @@ export const exportGoodsBff = (
       <To>${orderId}</To>
   </soap:Body>`
   return adminBff
-    .post('/goods-service/goods/export', payload)
+    .post('/goods-service/goods/export', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -242,7 +242,7 @@ export const returnGoodsBff = (
 </soap:Body>`
 
   return adminBff
-    .post('/goods-service/goods/return-manufact', payload)
+    .post('/goods-service/goods/return-manufact', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -269,7 +269,7 @@ export const customerReturnGoodsBff = (
 </soap:Body>`
 
   return adminBff
-    .post('/goods-service/goods/cust-return', payload)
+    .post('/goods-service/goods/cust-return', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -291,7 +291,7 @@ export const uploadGoodsImageBff = (file: {
   form.append('isDefault', file.isDefault.toString())
 
   return adminBff
-    .post('/goods-service/goods/image', form)
+    .post('/goods-service/goods/image', form, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return res.data
     })
@@ -308,7 +308,7 @@ export const deleteGoodsImageBFF = (url: string) => {
   </soap:Body>`
 
   return adminBff
-    .post('/goods-service/goods/image:delete', payload)
+    .post('/goods-service/goods/image:delete', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })

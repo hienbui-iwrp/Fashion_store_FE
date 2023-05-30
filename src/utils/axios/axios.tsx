@@ -80,6 +80,7 @@ if (typeof window !== 'undefined') {
   customerBff.defaults.headers.common[
     'Authorization'
   ] = `Bearer ${localStorage.getItem('token')}`
+  // ] = `Bearer ${getToken()}`
   customerBpel.defaults.headers.common[
     'Authorization'
   ] = `Bearer ${localStorage.getItem('token')}`

@@ -15,7 +15,7 @@ export const getStatisticAllBFF = (data: {
   `
 
   return adminBff
-    .post('/statistic-service/overall-stat', payload)
+    .post('/statistic-service/overall-stat', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -55,7 +55,7 @@ export const getRevenueBFF = (data: {
   `
 
   return adminBff
-    .post('/statistic-service/revenue', payload)
+    .post('/statistic-service/revenue', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -95,7 +95,7 @@ export const getProfitBFF = (data: {
   `
 
   return adminBff
-    .post('/statistic-service/profit', payload)
+    .post('/statistic-service/profit', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -119,7 +119,7 @@ export const getRevenue1GoodsBFF = (data: {
   `
 
   return adminBff
-    .post('/statistic-service/revenue-goods', payload)
+    .post('/statistic-service/revenue-goods', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -143,7 +143,7 @@ export const getProfit1GoodsBFF = (data: {
   `
 
   return adminBff
-    .post('/statistic-service/profit-goods', payload)
+    .post('/statistic-service/profit-goods', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })

@@ -9,7 +9,7 @@ export const getBranchBff = async () => {
   `
 
   return await adminBff
-    .post('/branch-service/get-all', xmls)
+    .post('/branch-service/get-all', xmls, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -26,7 +26,7 @@ export const getBranchDetailBff = async (id: any) => {
   </soap:Body>
   `
   return await adminBff
-    .post(`/branch-service/get`, xmls)
+    .post(`/branch-service/get`, xmls, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -45,14 +45,13 @@ export const addBranchBff = async (branch: BranchProps) => {
       <District>${branch?.district}</District>
       <Province>${branch?.province}</Province>
       <Open>${branch?.openTime && formatTime(branch?.openTime) + ':00'}</Open>
-      <Close>${
-        branch?.closeTime && formatTime(branch?.closeTime) + ':00'
-      }</Close>
+      <Close>${branch?.closeTime && formatTime(branch?.closeTime) + ':00'
+    }</Close>
   </soap:Body>`
 
   return await adminBff
     .post(`/branch-service/add`, xmls, {
-      headers: { 'Content-Type': 'text/xml' },
+      headers: { 'Content-Type': 'text/xml', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     })
     .then((res) => {
       return formatResponse(res.data)
@@ -81,7 +80,7 @@ export const updateBranchBff = async (id: any, branch: any) => {
   `
   return await adminBff
     .post(`/branch-service/update`, xmls, {
-      headers: { 'Content-Type': 'text/xml' },
+      headers: { 'Content-Type': 'text/xml', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     })
     .then((res) => {
       return formatResponse(res.data)
@@ -100,7 +99,7 @@ export const deleteBranchBff = async (id: any) => {
   `
   return await adminBff
     .post(`/branch-service/delete`, xmls, {
-      headers: { 'Content-Type': 'text/xml' },
+      headers: { 'Content-Type': 'text/xml', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     })
     .then((res) => {
       return formatResponse(res.data)
@@ -119,7 +118,7 @@ export const getBranchStaffBff = async (id: any) => {
   `
   return await adminBff
     .post(`/branch-service/staff/get`, xmls, {
-      headers: { 'Content-Type': 'text/xml' },
+      headers: { 'Content-Type': 'text/xml', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     })
     .then((res) => {
       return formatResponse(res.data)

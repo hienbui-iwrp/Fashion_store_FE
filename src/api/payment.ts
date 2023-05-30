@@ -10,7 +10,7 @@ export const getOnlineOrdersBFF = () => {
     <soap:Body>  
     </soap:Body>`
   return adminBff
-    .post('/order-service/admin/get-online-orders', payload)
+    .post('/order-service/admin/get-online-orders', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })

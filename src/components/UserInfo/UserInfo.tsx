@@ -228,7 +228,8 @@ export default function UserInfo(props: UserInfoProps) {
             </Col>
             <Col span={12} className="flex justify-center items-center">
               <div>
-                <Avatar size={128} src={<img src={'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'} alt="avatar" />} />
+                {info.avatar ? <Avatar size={128} src={<img src={'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'} alt="avatar" />} /> : null}
+
                 <Upload
                   className="avatar-uploader !flex justify-center mt-2"
                   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -256,6 +257,7 @@ export default function UserInfo(props: UserInfoProps) {
         </Form>
         <Modal title="Đổi mật khẩu"
           open={isModalOpen}
+          onCancel={handleCancel}
           footer={null}
         >
           <Form

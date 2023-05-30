@@ -10,7 +10,7 @@ export const getStaffBff = async (keyword?: any) => {
   `
 
   return await adminBff
-    .post('staff-service/get-staff', payload)
+    .post('staff-service/get-staff', payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -27,7 +27,7 @@ export const getAttendaceBff = async (id: any) => {
   </soap:Body>
   `
   return await adminBff
-    .post(`staff-service/get-staff-attendance`, payload)
+    .post(`staff-service/get-staff-attendance`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -44,7 +44,7 @@ export const getStaffDetailBFF = async (id: any) => {
   </soap:Body>
   `
   return await adminBff
-    .post(`staff-service/get-staff-detail`, payload)
+    .post(`staff-service/get-staff-detail`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -82,7 +82,7 @@ export const addStaffBFF = async (staff: any) => {
   `
 
   return await adminBff
-    .post(`/staff-service/add-staff`, payload)
+    .post(`/staff-service/add-staff`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -120,7 +120,7 @@ export const updateStaffBFF = async (id: any, staff: any) => {
   `
 
   return await adminBff
-    .post(`/staff-service/update-staff`, payload)
+    .post(`/staff-service/update-staff`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -135,7 +135,7 @@ export const getListRequestBFF = async () => {
   <soap:Body/>
   `
   return await adminBff
-    .post(`/staff-service/get-request-list`, payload)
+    .post(`/staff-service/get-request-list`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -153,7 +153,7 @@ export const updateRequestBFF = async (id: any, status: string) => {
     </soap:Body>
   `
   return await adminBff
-    .post(`/staff-service/update-request-status`, payload)
+    .post(`/staff-service/update-request-status`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -170,7 +170,7 @@ export const deleteStaffBFF = async (id: any) => {
     </soap:Body>
   `
   return await adminBff
-    .post(`/staff-service/delete-staff`, payload)
+    .post(`/staff-service/delete-staff`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -180,7 +180,7 @@ export const deleteStaffBFF = async (id: any) => {
 }
 
 
-export const createAddRequest = (staff:any) => {
+export const createAddRequest = (staff: any) => {
   const birthdate =
     staff.birthdate?.year() +
     '-' +
@@ -207,7 +207,7 @@ export const createAddRequest = (staff:any) => {
   </soap:Body>
   `
   return adminBff
-    .post(`/staff-service/create-add-request`, payload)
+    .post(`/staff-service/create-add-request`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
@@ -216,7 +216,7 @@ export const createAddRequest = (staff:any) => {
     })
 }
 
-export const createDeleteRequest = (id:any) => {
+export const createDeleteRequest = (id: any) => {
   const payload = `
   <?xml version="1.0" encoding="utf-8"?>
   <soap:Body>
@@ -224,7 +224,7 @@ export const createDeleteRequest = (id:any) => {
   </soap:Body>
   `
   return adminBff
-    .post(`/staff-service/create-delete-request`, payload)
+    .post(`/staff-service/create-delete-request`, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
