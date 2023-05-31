@@ -36,7 +36,7 @@ const LineChart = memo((props: LineChartProps) => {
           ]
         }
       })
-      setData(_data)
+      setData(_data.sort((a: DataType, b: DataType) => b.date.getMilliseconds() - a.date.getMilliseconds()))
     }
   }, [props.data])
 
@@ -95,11 +95,11 @@ const LineChart = memo((props: LineChartProps) => {
           {formatNumber(
             (props.revenue
               ? props.data?.reduce((sum, item) => {
-                  return sum + (item.revenue ?? 0)
-                }, 0)
+                return sum + (item.revenue ?? 0)
+              }, 0)
               : props.data?.reduce((sum, item) => {
-                  return sum + (item.profit ?? 0)
-                }, 0)) ?? 0
+                return sum + (item.profit ?? 0)
+              }, 0)) ?? 0
           )}{' '}
           VND
         </b>

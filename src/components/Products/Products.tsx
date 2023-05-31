@@ -48,7 +48,6 @@ const plainOptions = [
 const defaultCheckedList: string[] = []
 
 export default function Products(props: ProductsProps) {
-  // console.log('object props: ', props);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -56,44 +55,7 @@ export default function Products(props: ProductsProps) {
   const { setListProduct } = productsActions;
   const dataProducts: ProductsDataProps = useSelector(selectProducts);
   const options = GoodsOptions;
-  // const options: SelectProps['options'] = [
-  //   { value: 'man', label: 'Nam' },
-  //   { value: 'woman', label: 'Nữ' },
-  //   { value: 'unisex', label: 'Unisex' },
-  //   { value: 'jacket', label: 'Áo khoác' },
-  //   { value: 'sweater', label: 'Áo len' },
-  //   { value: 'T-shirt', label: 'Áo thun' },
-  //   { value: 'Trousers', label: 'Quần tây' },
-  //   { value: 'kaki', label: 'Quần kaki' },
-  //   { value: 'short', label: 'Quần sọt' },
-  //   { value: 'sport Shoes', label: 'Giày thể thao' },
-  //   { value: 'western shoes', label: 'Giày tây' },
-  //   { value: 'sandal', label: 'Dép' },
-  //   { value: 'ring', label: 'Nhẫn' },
-  //   { value: 'hat', label: 'Nón' },
-  //   { value: 'bag', label: 'Túi/balo' },
-  //   { value: '31', label: '31' },
-  //   { value: '32', label: '32' },
-  //   { value: '33', label: '33' },
-  //   { value: '34', label: '34' },
-  //   { value: '35', label: '35' },
-  //   { value: '36', label: '36' },
-  //   { value: '37', label: '37' },
-  //   { value: '38', label: '38' },
-  //   { value: '39', label: '39' },
-  //   { value: '40', label: '40' },
-  //   { value: '41', label: '41' },
-  //   { value: '42', label: '42' },
-  //   { value: '43', label: '43' },
-  //   { value: '44', label: '44' },
-  //   { value: 'S', label: 'S' },
-  //   { value: 'M', label: 'M' },
-  //   { value: 'L', label: 'L' },
-  //   { value: 'XL', label: 'XL' },
-  //   { value: 'XXL', label: 'XXL' },
-  //   { value: 'XXXL', label: 'XXXL' },
-  // ]
-  const [value, setValue] = useState('default')
+  const [valueSort, setValueSort] = useState('default')
   const [data, setData] = useState<ProductsDataProps>({
     ...dataProducts
   })
@@ -102,36 +64,85 @@ export default function Products(props: ProductsProps) {
     useState<CheckboxValueType[]>(defaultCheckedList);
 
   const filterProducts = (checklist: CheckboxValueType[], listValueFilter: string[]) => {
-    setLoaded(true);
+    // setLoaded(true);
     setLoading(true);
-    let listProduct: ProductDetailDataProps[] = [...dataProducts.listProduct]
-    console.log('check', checklist, listValueFilter);
-    if (listValueFilter.length !== 0) {
-      listProduct = listProduct.filter((item) => {
-        return listValueFilter.includes(item.type) || listValueFilter.includes(item.gender) || listValueFilter.includes(item.age)
-      })
+    if (listValueFilter.length === 0 && checklist.length === 0) {
+      setData({ ...dataProducts })
     }
-    if (checklist.length > 0 && checklist.length < 5) {
-      listProduct = listProduct.filter(item => {
-        if (item.price <= 500000 && checklist.includes('lt5h'))
-          return true;
-        if (item.price > 500000 && item.price <= 1000000 && checklist.includes('5hTo1m'))
-          return true;
-        if (item.price > 1000000 && item.price <= 3000000 && checklist.includes('1mTo3m'))
-          return true;
-        if (item.price > 3000000 && item.price <= 5000000 && checklist.includes('3mTo5m'))
-          return true;
-        if (item.price > 5000000 && checklist.includes('gt5m'))
-          return true;
-        return false
-      })
+    else {
+      let listProduct: ProductDetailDataProps[] = [...dataProducts.listProduct];
+      // let listProduct: ProductDetailDataProps[] = listValueFilter.length === 0 ? [...dataProducts.listProduct] : [...data.listProduct];
+      console.log('check', checklist, listValueFilter);
+      if (checklist.length > 0 && checklist.length < 5) {
+        listProduct = listProduct.filter(item => {
+          if (item.price <= 500000 && checklist.includes('lt5h'))
+            return true;
+          if (item.price > 500000 && item.price <= 1000000 && checklist.includes('5hTo1m'))
+            return true;
+          if (item.price > 1000000 && item.price <= 3000000 && checklist.includes('1mTo3m'))
+            return true;
+          if (item.price > 3000000 && item.price <= 5000000 && checklist.includes('3mTo5m'))
+            return true;
+          if (item.price > 5000000 && checklist.includes('gt5m'))
+            return true;
+          return false
+        })
+      }
+      if (listValueFilter.length !== 0) {
+        listProduct = listProduct.filter((item) => {
+          return listValueFilter.includes(item.type) || listValueFilter.includes(item.gender) || listValueFilter.includes(item.age)
+        })
+      }
+      switch (valueSort) {
+        case 'a-z':
+          const dataSortAlphaBetIncrease = listProduct.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return a.name.localeCompare(b.name) })
+          setData({
+            totalProducts: dataSortAlphaBetIncrease.length,
+            listProduct: dataSortAlphaBetIncrease
+          })
+          break
+        case 'z-a':
+          let dataSortAlphaBetDecrease = listProduct.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return b.name.localeCompare(a.name) })
+          setData({
+            totalProducts: dataSortAlphaBetDecrease.length,
+            listProduct: dataSortAlphaBetDecrease
+          })
+          break
+        case 'increase':
+          let dataSortIncrease = listProduct.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return a.price - b.price })
+          setData({
+            totalProducts: dataSortIncrease.length,
+            listProduct: dataSortIncrease
+          })
+          break
+        case 'decrease':
+          let dataSortDecrease = listProduct.sort((a: ProductDetailDataProps, b: ProductDetailDataProps) => { return b.price - a.price })
+          setData({
+            totalProducts: dataSortDecrease.length,
+            listProduct: dataSortDecrease
+          })
+          break
+        default:
+          let dataDefault = dataProducts.listProduct.filter(item => {
+            for (let i = 0; i < listProduct.length; i++) {
+              if (listProduct[i].goodsId === item.goodsId) {
+                return true;
+              }
+            }
+            return false;
+          });
+          setData({
+            totalProducts: dataDefault.length,
+            listProduct: dataDefault
+          })
+      }
+      // setData({
+      //   totalProducts: listProduct.length,
+      //   listProduct: [...listProduct]
+      // })
     }
-    setData({
-      totalProducts: listProduct.length,
-      listProduct: [...listProduct]
-    })
-    setLoaded(false);
-    setLoading(true);
+    // setLoaded(false);
+    setLoading(false);
   }
 
   const onChangePrice = (list: CheckboxValueType[]) => {
@@ -140,7 +151,7 @@ export default function Products(props: ProductsProps) {
   }
 
   const onChangeSort = (e: RadioChangeEvent) => {
-    setValue(e.target.value)
+    setValueSort(e.target.value)
     // const dataShow = listValueFilter.length === 0 ? [...dataProducts.listProduct ] : [...data.listProduct ]
     const dataShow = [...data.listProduct]
     switch (e.target.value) {
@@ -173,7 +184,18 @@ export default function Products(props: ProductsProps) {
         })
         break
       default:
-        setData(dataProducts)
+        let dataDefault = dataProducts.listProduct.filter(item => {
+          for (let i = 0; i < data.listProduct.length; i++) {
+            if (data.listProduct[i].goodsId === item.goodsId) {
+              return true;
+            }
+          }
+          return false;
+        });
+        setData({
+          totalProducts: dataDefault.length,
+          listProduct: dataDefault
+        })
     }
   }
 
@@ -243,7 +265,7 @@ export default function Products(props: ProductsProps) {
     if (props.filter.length > 0) {
       console.log('yes filter', props.filter);
       setListValueFilter([...props.filter]);
-      filterProducts(checkedList, listValueFilter);
+      filterProducts(checkedList, props.filter);
     }
   }, [props.filter])
 
@@ -351,7 +373,7 @@ export default function Products(props: ProductsProps) {
           <Col className='products-sort ' span={5}>
             <div>
               <Title level={4}>Sắp xếp</Title>
-              <Radio.Group onChange={onChangeSort} value={value}>
+              <Radio.Group onChange={onChangeSort} value={valueSort}>
                 <Space direction='vertical'>
                   <Radio value={'default'}>Mặc định</Radio>
                   <Radio value={'a-z'}>từ A - Z</Radio>
@@ -379,10 +401,6 @@ export default function Products(props: ProductsProps) {
                     data.listProduct.map((item, index) => {
                       return <CardProductClient key={index} dataProduct={{ ...item }} />
                     })}
-                  {/* {dataProducts.listProduct &&
-                dataProducts.listProduct.map((item, index) => {
-                  return <CardProductClient key={index} {...item} />
-                })} */}
                 </div>
             }
           </Col>
