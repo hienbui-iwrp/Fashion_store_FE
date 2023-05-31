@@ -295,7 +295,8 @@ export default function Cart(props: CartProps) {
   useEffect(() => {
     checkLogin(router)
     fetchData()
-  }, [])
+  }, [loading])
+
 
   const onChange = (checkedValues: CheckboxValueType[]) => {
     // console.log('object changed', checkedValues)
