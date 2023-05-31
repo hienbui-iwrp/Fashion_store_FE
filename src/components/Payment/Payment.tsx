@@ -49,7 +49,7 @@ export default function Payment(props: PaymentProps) {
         district: values.district,
         province: values.province
       },
-      expectedDate: expectedDate ? expectedDate : '2023-04-08'
+      expectedDate: expectedDate ? expectedDate : '2023-06-08'
     }
     // sendOrderInfo(orderData);
     if (values.paymentMethod === 'offline') {
@@ -116,7 +116,7 @@ export default function Payment(props: PaymentProps) {
           district: formData.district,
           province: formData.province
         },
-        expectedDate: expectedDate ? expectedDate : '2023-05-08'
+        expectedDate: expectedDate ? expectedDate : '2023-06-08'
       }
       sendOrderInfo(orderData);
     }
@@ -268,18 +268,18 @@ export default function Payment(props: PaymentProps) {
                         <Radio.Group className='w-full' onChange={handleChangeMethodOnline} value={methodOnline}>
                           <Radio value="vnpay" className='w-full p-2 border rounded-xl font-bold mb-2 w-full'>
                             <div className='flex justify-between'>
-                              <Text>VNPal</Text>
+                              <Text>VNPay</Text>
                               <Image height={24} preview={false}
-                                src='https://vnpay.vn/_nuxt/img/scan-to-pay.be02e1e.svg' alt='logo VNPay' />
+                                src='/vnpay-logo-inkythuatso-01.jpg' alt='logo VNPay' />
                             </div>
                           </Radio>
-                          <Radio value="momo" className='w-full p-2 border rounded-xl font-bold'>
+                          {/* <Radio value="momo" className='w-full p-2 border rounded-xl font-bold'>
                             <div className='flex justify-between'>
                               <Text>Momo</Text>
                               <Image height={28} preview={false}
                                 src='https://img.mservice.com.vn/app/img/portal_documents/mini-app_design-guideline_branding-guide-2-2.png' alt='logo momo' />
                             </div>
-                          </Radio>
+                          </Radio> */}
                         </Radio.Group>
                       </Form.Item>
                     </div>
