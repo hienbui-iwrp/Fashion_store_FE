@@ -27,6 +27,7 @@ import { BASE_URL, Colors, GoodsAccessory, GoodsClothes, GoodsFootwear, GoodsGen
 import styles from './Products.module.css'
 import { FilterTag } from '../FilterTag'
 import { useRouter } from 'next/router';
+import Loading from '../Loading';
 
 const { Title, Text } = Typography
 
@@ -47,8 +48,9 @@ const plainOptions = [
 const defaultCheckedList: string[] = []
 
 export default function Products(props: ProductsProps) {
-  console.log('object props: ', props);
+  // console.log('object props: ', props);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const [loaded, setLoaded] = useState(false)
   const { setListProduct } = productsActions;
@@ -101,6 +103,7 @@ export default function Products(props: ProductsProps) {
 
   const filterProducts = (checklist: CheckboxValueType[], listValueFilter: string[]) => {
     setLoaded(true);
+    setLoading(true);
     let listProduct: ProductDetailDataProps[] = [...dataProducts.listProduct]
     console.log('check', checklist, listValueFilter);
     if (listValueFilter.length !== 0) {
@@ -128,6 +131,7 @@ export default function Products(props: ProductsProps) {
       listProduct: [...listProduct]
     })
     setLoaded(false);
+    setLoading(true);
   }
 
   const onChangePrice = (list: CheckboxValueType[]) => {
@@ -198,6 +202,7 @@ export default function Products(props: ProductsProps) {
   }
 
   const fetchData = async () => {
+    setLoading(true);
     await getAllProductsBpel({ pageSize: 100, offset: 1 }).then((res) => {
       if (res?.StatusCode === '200') {
         const data = formatProductsDataXML(res?.Data);
@@ -207,9 +212,11 @@ export default function Products(props: ProductsProps) {
         setLoaded(true);
       }
     })
+    setLoading(false);
   }
 
   const fetchDataSearch = async (value: string) => {
+    setLoading(true);
     await searchProductsBff(value)
       .then((res) => {
         if (res?.StatusCode === '200') {
@@ -220,6 +227,7 @@ export default function Products(props: ProductsProps) {
           setLoaded(true);
         }
       })
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -232,8 +240,11 @@ export default function Products(props: ProductsProps) {
   }, [loaded])
 
   useEffect(() => {
-    setListValueFilter([...props.filter]);
-    filterProducts(checkedList, listValueFilter);
+    if (props.filter.length > 0) {
+      console.log('yes filter', props.filter);
+      setListValueFilter([...props.filter]);
+      filterProducts(checkedList, listValueFilter);
+    }
   }, [props.filter])
 
   useEffect(() => {
@@ -361,16 +372,19 @@ export default function Products(props: ProductsProps) {
             </div>
           </Col>
           <Col className='products-list-product' span={19}>
-            <div className='flex w-full flex-wrap'>
-              {data.listProduct &&
-                data.listProduct.map((item, index) => {
-                  return <CardProductClient key={index} dataProduct={{ ...item }} />
-                })}
-              {/* {dataProducts.listProduct &&
+            {
+              loading ? <Loading /> :
+                <div className='flex w-full flex-wrap'>
+                  {data.listProduct &&
+                    data.listProduct.map((item, index) => {
+                      return <CardProductClient key={index} dataProduct={{ ...item }} />
+                    })}
+                  {/* {dataProducts.listProduct &&
                 dataProducts.listProduct.map((item, index) => {
                   return <CardProductClient key={index} {...item} />
                 })} */}
-            </div>
+                </div>
+            }
           </Col>
         </Row>
       </div>
