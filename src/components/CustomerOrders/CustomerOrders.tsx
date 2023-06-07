@@ -202,7 +202,7 @@ export default function CustomerOrders(props: CustomerOrdersProps) {
       Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
         .then(([resCompleteOrder, resRemove]) => {
           console.log('res', resCompleteOrder);
-          if (resCompleteOrder?.StatusCode === '200') {
+          if (resCompleteOrder?.StatusCode === '200' && resRemove?.StatusCode === '200') {
             dispatch(setNotificationValue('Tạo đơn hàng thành công'));
             fetchData();
           } else {
