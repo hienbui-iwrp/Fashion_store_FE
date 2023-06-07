@@ -259,8 +259,8 @@ export default function Products(props: ProductsProps) {
     else {
       fetchDataSearch(props.search);
     }
-  }, [])
-  // }, [loaded])
+    // }, [])
+  }, [loaded])
 
   useEffect(() => {
     if (props.filter.length > 0) {
