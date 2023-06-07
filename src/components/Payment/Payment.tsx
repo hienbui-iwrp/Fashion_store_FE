@@ -56,7 +56,7 @@ export default function Payment(props: PaymentProps) {
       Promise.all([completedOrder(orderData), removeProductBoughtInCart(orderData)])
         .then(([resCompleteOrder, resRemove]) => {
           console.log('res', resCompleteOrder);
-          if (resCompleteOrder?.StatusCode === '200') {
+          if (resCompleteOrder?.StatusCode === '200' && resRemove?.StatusCode === '200') {
             dispatch(setNotificationValue('Tạo đơn hàng thành công'));
             router.push('/manage-orders');
           } else {

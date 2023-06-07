@@ -30,6 +30,7 @@ import {
   deleteGoodsBff,
   getCart,
   getCartBff,
+  getCartBpel,
   updateCartBff,
 } from '@/api/cart'
 import { FormatMoney } from '@/utils'
@@ -281,7 +282,7 @@ export default function Cart(props: CartProps) {
   }
 
   const fetchData = async () => {
-    await getCartBff(localStorage.getItem('userId') || '').then((res) => {
+    await getCartBpel(localStorage.getItem('userId') || '').then((res) => {
       if (res?.StatusCode === '200') {
         const tempData = formatCartDataXML(res?.Data[0])
         setCartId(tempData.cartId)
@@ -289,6 +290,14 @@ export default function Cart(props: CartProps) {
         setOptions(setForOptions(tempData.productsInCart))
       }
     })
+    // await getCartBff(localStorage.getItem('userId') || '').then((res) => {
+    //   if (res?.StatusCode === '200') {
+    //     const tempData = formatCartDataXML(res?.Data[0])
+    //     setCartId(tempData.cartId)
+    //     setData(tempData.productsInCart)
+    //     setOptions(setForOptions(tempData.productsInCart))
+    //   }
+    // })
     setLoading(false)
   }
 

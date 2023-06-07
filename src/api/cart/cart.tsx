@@ -1,5 +1,5 @@
 import { api } from '../axios'
-import { ProductInCartProps, customerBff, formatResponse } from '@/utils'
+import { ProductInCartProps, customerBff, customerBpel, formatResponse } from '@/utils'
 
 const cartService = '/cart-service'
 const get = '/get-cart'
@@ -30,6 +30,26 @@ export const getCartBff = async (customerId: string) => {
   `
   return await customerBff
     .post(cartService + get, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+    .then((res) => {
+      return formatResponse(res.data)
+    })
+    .catch((err) => {
+      console.log('get cart err: ', err)
+    })
+}
+
+export const getCartBpel = async (customerId: string) => {
+  const payload = `
+  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    	<soap:Body>
+        		<ns1:process xmlns:ns1="http://xmlns.oracle.com/bpel_process/callCartService/callCartService">
+            			<ns1:UserId>${customerId}</ns1:UserId>
+        </ns1:process>
+    </soap:Body>
+</soap:Envelope>
+  `
+  return await customerBpel
+    .post(get, payload, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
     .then((res) => {
       return formatResponse(res.data)
     })
